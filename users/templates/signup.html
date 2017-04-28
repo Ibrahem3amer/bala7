@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Bala7</title>
+</head>
+<body>
+	<h1>num of signup stage: {{ stage_num }}</h1>
+	<form id="id_registeration_form">
+		<select id="id_select_university">
+			{% for university in universities %}
+				<option></option>
+			{% endfor%}
+		</select>
+		<select id="id_select_faculty"></select>
+		<select id="id_select_department"></select>
+		<input type="submit" name="submit_signup_data" id="id_submit_signup_data" />
+	</form>
+</body>
+</html>
