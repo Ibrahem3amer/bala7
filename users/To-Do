@@ -1,0 +1,16 @@
+Users system:
+============
+- Adding faculties
+- Adding departments 
+- Adding relationships among University, Faculty, Department
+- Universities, faculties, departments RESTful API
+- Adding User model and extending its attributes
+- Registeration module
+	- Registeration form
+	- Registeration view
+- User profile
+	- Profile RESTful API
+- Login module
+	- Login view
+	- Login RESTful API
+- Third-party integeration
