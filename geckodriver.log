@@ -234,3 +234,6 @@
 1493406177936	Marionette	INFO	New connections will no longer be accepted
 [Child 4880] WARNING: pipe error (3): Connection reset by peer: file /build/firefox-4Fdt0Z/firefox-53.0+build6/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 346
 [GFX1-]: Receive IPC close with reason=AbnormalShutdown
+1493540683833	geckodriver	INFO	Listening on 127.0.0.1:44693
+1493541079531	geckodriver	INFO	Listening on 127.0.0.1:52680
+1493541313264	geckodriver	INFO	Listening on 127.0.0.1:35739

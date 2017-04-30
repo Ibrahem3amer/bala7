@@ -70,4 +70,30 @@ class UniversityModelTest(TestCase):
 
 		# Assert test
 		self.assertEqual('a public university', saved_university.bio)
-		
+
+	def test_retreive_university_with_multiple_values(self):
+		# Setup test
+		mansoura_university = University()
+		mansoura_university.bio = 'a public university'
+		mansoura_university.save()
+		kfs_university = University()
+		kfs_university.bio = 'private'
+		kfs_university.save()
+
+		# Exercise test
+		saved_university = University.objects.filter(bio='private').get()
+
+		# Assert test
+		self.assertEqual('private', saved_university.bio)
+
+	def test_save_university_with_no_values(self):
+		# Setup test
+		mansoura_university = University()
+		mansoura_university.save()
+
+		# Exercise test
+		saved_university = University.objects.get()
+
+		# Assert test
+		self.assertEqual('no data initialized', saved_university.bio)
+		self.assertEqual('public', saved_university.uni_type)
