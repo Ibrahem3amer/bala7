@@ -2,12 +2,17 @@ from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from django.test import LiveServerTestCase
 from selenium.webdriver.common.keys import Keys
+from users.models import University
 import unittest
 import time
+
 
 MAX_WAIT = 5
 
 class test_anonymous_visits_website(LiveServerTestCase):
+
+	fixtures = ['data.json']
+
 	# Method that waits for page to load explicitly. 
 	def wait_for_element_by_id(self, element_id):
 		start_time = time.time()
@@ -15,6 +20,17 @@ class test_anonymous_visits_website(LiveServerTestCase):
 			try:
 				element = self.browser.find_element_by_id(element_id)
 				return element
+			except (AssertionError, WebDriverException) as e:
+				if time.time() - start_time > MAX_WAIT:
+					raise e
+				time.sleep(0.5)
+
+	def wait_for_element_by_class(self, element_class):
+		start_time = time.time()
+		while True:
+			try:
+				elements = self.browser.find_elements_by_class_name(element_class)
+				return elements
 			except (AssertionError, WebDriverException) as e:
 				if time.time() - start_time > MAX_WAIT:
 					raise e
@@ -61,13 +77,20 @@ class test_anonymous_visits_website(LiveServerTestCase):
 		faculty_field 		= self.wait_for_element_by_id('id_select_faculty')
 		department_field 	= self.wait_for_element_by_id('id_select_department')
 		self.assertIn(university_field.text, registeration_form.text)
+
 		# He finds a description for each field to the nature of data wanted.
 		for input_field in registeration_form.find_elements_by_tag_name('lable'):
 			self.assertNotEqual(input_field.get_attribute('for'), '')
+
 		# He searches for his own matching data (university, faculty, department)
-		self.assertNotEqual(len(self.browser.find_elements_by_id('id_university_name')), 0)
-		self.assertNotEqual(len(self.browser.find_elements_by_id('id_faculty_name')), 0)
-		self.assertNotEqual(len(self.browser.find_elements_by_id('id_department_name')), 0)
+		self.assertNotEqual(len(self.browser.find_elements_by_class_name('university_name')), 0)
+		self.assertNotEqual(len(self.browser.find_elements_by_class_name('faculty_name')), 0)
+		self.assertNotEqual(len(self.browser.find_elements_by_class_name('department_name')), 0)
+
+		# He finds faculties that relate to some university.
+		self.fail('build relationships!')
+
+		# He finds departments that relate to some faculty.
 
 		# If he can't find his goal, he's register his data to be notified.
 		# He finds a form where he can enter his name, email, password and its confirmation.

@@ -8,11 +8,19 @@
 	<form id="id_registeration_form">
 		<select id="id_select_university">
 			{% for university in universities %}
-				<option></option>
-			{% endfor%}
+				<option class="university_name">{{ university.name }}</option>
+			{% endfor %}
 		</select>
-		<select id="id_select_faculty"></select>
-		<select id="id_select_department"></select>
+		<select id="id_select_faculty">
+			{% for faculty in faculties %}
+				<option class="faculty_name">{{ faculty.name }}</option>
+			{% endfor %}
+		</select>
+		<select id="id_select_department">\
+			{% for department in departments %}
+				<option class="department_name">{{ department.name }}</option>
+			{% endfor %}
+		</select>
 		<input type="submit" name="submit_signup_data" id="id_submit_signup_data" />
 	</form>
 </body>
