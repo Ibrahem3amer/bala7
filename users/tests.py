@@ -102,7 +102,7 @@ class UniversityModelTest(TestCase):
 
 class FacultyModelTest(TestCase):
 	
-	def test_save_university(self):
+	def test_save_faculty(self):
 		# Setup test
 		fac1 		= Faculty()
 		fac1.name 	= 'engineering'
@@ -117,7 +117,7 @@ class FacultyModelTest(TestCase):
 		# Assert test
 		self.assertEqual(saved_faculty.count(), 2)
 
-	def test_retreive_university(self):
+	def test_retreive_faculty(self):
 		# Setup test
 		fac1 		= Faculty()
 		fac1.name 	= 'law'
@@ -129,7 +129,7 @@ class FacultyModelTest(TestCase):
 		# Assert test
 		self.assertEqual('law', saved_faculty.name)
 
-	def test_save_university_with_no_values(self):
+	def test_save_faculty_with_no_values(self):
 		# Setup test
 		mansoura_university = Faculty()
 		mansoura_university.save()
@@ -140,3 +140,16 @@ class FacultyModelTest(TestCase):
 		# Assert test
 		self.assertEqual('no data initialized', saved_faculty.bio)
 		self.assertEqual('no name', saved_faculty.name)
+
+	def test_attach_faculty_to_given_university(self):
+		# Setup test
+		fac1 = Faculty()
+		uni1 = University()
+		fac1.university = uni1
+		fac1.save()
+
+		# Exercise test
+		db_university = University.objects.first()
+
+		# Assert test
+		self.assertIn(fac1, db_university.faculties.all())
