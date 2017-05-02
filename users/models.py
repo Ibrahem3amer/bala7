@@ -15,7 +15,7 @@ class University(Entity):
 	uni_type 	= models.CharField(max_length=10, default='public')
 
 class Faculty(Entity):
-	university 	= models.ForeignKey(University, related_name='faculties', on_delete=models.CASCADE, )
+	university 	= models.ForeignKey(University, related_name='faculties', on_delete=models.CASCADE, default=1)
 
 class Department(Entity):
 	dep_type 	= models.CharField(max_length=10, default='normal')

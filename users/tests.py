@@ -145,11 +145,12 @@ class FacultyModelTest(TestCase):
 		# Setup test
 		fac1 = Faculty()
 		uni1 = University()
+		uni1.save()
 		fac1.university = uni1
 		fac1.save()
 
 		# Exercise test
-		db_university = University.objects.first()
+		db_university = University.objects.get()
 
 		# Assert test
 		self.assertIn(fac1, db_university.faculties.all())
