@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from django.test import LiveServerTestCase
+from django.conf.urls import url
 from selenium.webdriver.common.keys import Keys
 from users.models import University
 import unittest
@@ -71,6 +72,40 @@ class test_anonymous_visits_website(LiveServerTestCase):
 		# He’s to be moved to sign up page that contains registration options.
 		sign_up_btn.click()
 
+		# He's on the right page
+		self.assertIn('signup', self.browser.current_url)
+
+		
+class user_sign_up_using_form(LiveServerTestCase):
+	#special method that is started by the beginning of a test runner.	
+	def setUp(self):
+		self.browser = webdriver.Firefox()
+
+	#special method that is fired by the end of a test runner.
+	def tearDown(self):
+		self.browser.quit()
+
+	def test_user_fill_first_form(self):
+		self.fail('build registeration form!')
+
+	# He finds 2 buttons to social media auth.
+
+
+	# System verifies name validity, E-mail uniqueness, and password matching.
+				# System raises an error with details if any found. 
+	# System validates the incoming data and then signing in the user and moves him back to home page.
+	# More on that later. 
+
+class user_sign_up_using_third_party(LiveServerTestCase):
+	#special method that is started by the beginning of a test runner.	
+	def setUp(self):
+		self.browser = webdriver.Firefox()
+
+	#special method that is fired by the end of a test runner.
+	def tearDown(self):
+		self.browser.quit()
+
+	def test_user_fill_first_form(self):
 		# Browsing the all available universities and faculties to choose his own. 
 		registeration_form 	= self.wait_for_element_by_id('id_registeration_form')
 		university_field 	= self.wait_for_element_by_id('id_select_university')
@@ -88,45 +123,27 @@ class test_anonymous_visits_website(LiveServerTestCase):
 		self.assertNotEqual(len(self.browser.find_elements_by_class_name('department_name')), 0)
 
 		# He finds faculties that relate to some university.
-		self.fail('build relationships!')
+		faculties_names = self.browser.find_elements_by_class_name('faculty_name')
+		for faculty in faculties_names:
+			self.assertIn('Mansoura', faculty.get_attribute('name'))
 
 		# He finds departments that relate to some faculty.
+		departments_names = self.browser.find_elements_by_class_name('department_name')
+		for dep in departments_names:
+			self.assertIn('science', dep.get_attribute('name'))
 
 		# If he can't find his goal, he's register his data to be notified.
-		# He finds a form where he can enter his name, email, password and its confirmation.
-		notify_form = self.browser.find_element_by_id('id_notify_form')
-		future_notification_email = self.browser.find_element_by_id('id_future_notify')
-		self.assertIn(future_notification_email, notify_form)
+		notify_form 				= self.browser.find_element_by_id('id_notify_form')
+		future_notification_email 	= self.browser.find_element_by_id('id_future_notify')
+		self.assertIn(future_notification_email.text, notify_form.text)
 
-		# He finds 2 buttons to social media auth.
-		fb 		= self.browser.find_element_by_id('id_fb_auth')
-		twitter = self.browser.find_element_by_id('id_twitter_auth')
+		# He submits his data and sees a welfare message
+		future_form_submit = self.browser.find_element_by_id('id_future_form_submit')
+		# Assure the destinantion of the button
+		self.assertIn('thankyou', notify_form.get_attribute('action'))
 
 		# He finds a side button to sign in with.
-		self.assertEqual(self.browser.find_element_by_id('id_signin_side'), self.browser.current_url + self.signin_url)
-
-class user_sign_up_using_form(LiveServerTestCase):
-	#special method that is started by the beginning of a test runner.	
-	def setUp(self):
-		self.browser = webdriver.Firefox()
-
-	#special method that is fired by the end of a test runner.
-	def tearDown(self):
-		self.browser.quit()
-
-	# System verifies name validity, E-mail uniqueness, and password matching.
-				# System raises an error with details if any found. 
-	# System validates the incoming data and then signing in the user and moves him back to home page.
-	# More on that later. 
-
-class user_sign_up_using_third_party(LiveServerTestCase):
-	#special method that is started by the beginning of a test runner.	
-	def setUp(self):
-		self.browser = webdriver.Firefox()
-
-	#special method that is fired by the end of a test runner.
-	def tearDown(self):
-		self.browser.quit()
+		self.assertIn(self.signin_url, self.browser.find_element_by_id('id_signin_side').get_attribute('href'))
 
 	# System verifies name validity, E-mail uniqueness, and password matching.
 				# System raises an error with details if any found. 

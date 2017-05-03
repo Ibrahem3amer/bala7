@@ -1,8 +1,9 @@
 Users system:
 ============
-- Adding faculties
-- Adding departments 
-- Adding relationships among University, Faculty, Department
+- Adding faculties [done]
+- Adding departments [done]
+- Adding relationships among University, Faculty, Department [done]
+- include urls by name not by path in functional test
 - Universities, faculties, departments RESTful API
 - Adding User model and extending its attributes
 - Registeration module
