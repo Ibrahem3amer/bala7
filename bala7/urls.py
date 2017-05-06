@@ -22,6 +22,6 @@ urlpatterns = [
     url(r'^$', views.home_visitor, name = 'home_visitor'),
     url(r'^users/signin', views.display_signup, name = 'web_signin'),
     url(r'^users/signup', views.display_signup, name = 'web_signup'),
+    url(r'^users/signup/user_details', views.display_signup_second_form, name = 'web_signup_second_form'),
     url(r'^users/thankyou', views.display_signup, name = 'thankyou'),
-    url(r'^users/signup/user_info', views.display_signup, name = 'web_signup_info'),
 ]

@@ -2,8 +2,10 @@ from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from django.test import LiveServerTestCase
 from django.conf.urls import url
+from django.urls import reverse
 from selenium.webdriver.common.keys import Keys
 from users.models import University
+from unittest import skip
 import unittest
 import time
 
@@ -41,8 +43,8 @@ class test_anonymous_visits_website(LiveServerTestCase):
 	# Special method that is started by the beginning of a test runner.	
 	def setUp(self):
 		self.browser 	= webdriver.Firefox()
-		self.signin_url = 'users/signin'
-		self.signup_url	= 'users/signup'
+		self.signin_url = reverse('web_signin')
+		self.signup_url	= reverse('web_signup')
 
 	# Special method that is fired by the end of a test runner.
 	def tearDown(self):
@@ -72,46 +74,57 @@ class test_anonymous_visits_website(LiveServerTestCase):
 		# He’s to be moved to sign up page that contains registration options.
 		sign_up_btn.click()
 
+		time.sleep(0.5)
 		# He's on the right page
 		self.assertIn('signup', self.browser.current_url)
 
 		
 class user_sign_up_using_form(LiveServerTestCase):
+	fixtures = ['data.json']
+
+	# Method that waits for page to load explicitly. 
+	def wait_for_element_by_id(self, element_id):
+		start_time = time.time()
+		while True:
+			try:
+				element = self.browser.find_element_by_id(element_id)
+				return element
+			except (AssertionError, WebDriverException) as e:
+				if time.time() - start_time > MAX_WAIT:
+					raise e
+				time.sleep(0.5)
+
+	def wait_for_element_by_class(self, element_class):
+		start_time = time.time()
+		while True:
+			try:
+				elements = self.browser.find_elements_by_class_name(element_class)
+				return elements
+			except (AssertionError, WebDriverException) as e:
+				if time.time() - start_time > MAX_WAIT:
+					raise e
+				time.sleep(0.5)
+
 	#special method that is started by the beginning of a test runner.	
 	def setUp(self):
 		self.browser = webdriver.Firefox()
+		self.signin_url = reverse('web_signin')
+		self.signup_url	= reverse('web_signup')
 
 	#special method that is fired by the end of a test runner.
 	def tearDown(self):
 		self.browser.quit()
 
 	def test_user_fill_first_form(self):
-		self.fail('build registeration form!')
+		self.browser.get(self.live_server_url+self.signup_url)
 
-	# He finds 2 buttons to social media auth.
-
-
-	# System verifies name validity, E-mail uniqueness, and password matching.
-				# System raises an error with details if any found. 
-	# System validates the incoming data and then signing in the user and moves him back to home page.
-	# More on that later. 
-
-class user_sign_up_using_third_party(LiveServerTestCase):
-	#special method that is started by the beginning of a test runner.	
-	def setUp(self):
-		self.browser = webdriver.Firefox()
-
-	#special method that is fired by the end of a test runner.
-	def tearDown(self):
-		self.browser.quit()
-
-	def test_user_fill_first_form(self):
 		# Browsing the all available universities and faculties to choose his own. 
 		registeration_form 	= self.wait_for_element_by_id('id_registeration_form')
 		university_field 	= self.wait_for_element_by_id('id_select_university')
 		faculty_field 		= self.wait_for_element_by_id('id_select_faculty')
 		department_field 	= self.wait_for_element_by_id('id_select_department')
 		self.assertIn(university_field.text, registeration_form.text)
+		self.assertIn('details', registeration_form.get_attribute('action'))
 
 		# He finds a description for each field to the nature of data wanted.
 		for input_field in registeration_form.find_elements_by_tag_name('lable'):
@@ -144,6 +157,29 @@ class user_sign_up_using_third_party(LiveServerTestCase):
 
 		# He finds a side button to sign in with.
 		self.assertIn(self.signin_url, self.browser.find_element_by_id('id_signin_side').get_attribute('href'))
+
+	def test_user_fill_second_form(self):
+		self.browser.get(self.live_server_url+self.signup_url)
+
+
+	# He finds 2 buttons to social media auth.
+
+
+	# System verifies name validity, E-mail uniqueness, and password matching.
+				# System raises an error with details if any found. 
+	# System validates the incoming data and then signing in the user and moves him back to home page.
+	# More on that later. 
+
+class user_sign_up_using_third_party(LiveServerTestCase):
+	#special method that is started by the beginning of a test runner.	
+	def setUp(self):
+		self.browser = webdriver.Firefox()
+
+	#special method that is fired by the end of a test runner.
+	def tearDown(self):
+		self.browser.quit()
+
+
 
 	# System verifies name validity, E-mail uniqueness, and password matching.
 				# System raises an error with details if any found. 

@@ -11,3 +11,6 @@ def display_signup(request):
 	faculties 		= Faculty.objects.all()
 	departments		= Department.objects.all()
 	return render(request, 'signup.html', {'stage_num': 1, 'universities': universities, 'faculties': faculties, 'departments': departments})
+
+def display_signup_second_form(request):
+	return render(request, 'signup_second_form.html')

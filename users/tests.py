@@ -1,4 +1,5 @@
 from django.core.urlresolvers import resolve
+from django.urls import reverse
 from django.template.loader import render_to_string
 from django.test import TestCase
 from django.http import HttpRequest
@@ -28,7 +29,7 @@ class user_vists_homepage(TestCase):
 
 	def test_user_finds_signup(self):
 		# Setup test
-		request = resolve('/users/signup/')
+		request = resolve(reverse('web_signup'))
 
 		# Exercise test
 		# Assert test
@@ -36,11 +37,33 @@ class user_vists_homepage(TestCase):
 
 	def test_signup_returns_correct_output(self):
 		# Setup test
-		response = self.client.get('/users/signup')
+		response = self.client.get(reverse('web_signup'))
 
 		# Exercise test
 		# Assert test
 		self.assertTemplateUsed(response, 'signup.html')
+
+class user_sign_up(TestCase):
+	def setUp(self):
+		self.signup_module = self.client.get(reverse('web_signup'))
+
+	def test_user_submit_first_form(self):
+		# Setup test
+		first_stage_response = self.client.post(reverse('web_signup_second_form'), {'selected_university':'Mansoura', 'selected_faculty':'fci', 'selected_department':'general'})
+
+		# Exercise test
+		# Assert test
+		self.assertEqual(200, first_stage_response.status_code)
+		self.assertTemplateUsed(first_stage_response, 'signup_second_form.html')
+
+	def test_second_form_with_empty_values(self):
+		# Setup test
+		form = self.client.post(reverse('web_signup_second_form'))
+
+		# Exercise test
+		# Assert error
+		# Assert test
+		self.assertNotIn('details', form.)
 
 
 class UniversityModelTest(TestCase):

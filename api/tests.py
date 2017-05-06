@@ -5,7 +5,7 @@ from django.core.urlresolvers import resolve
 
 
 # Create your tests here.
-class apiviewtest(TestCase):
+'''class apiviewtest(TestCase):
 	def setUp(self):
 		self.client 			= APIClient()
 		self.university_data 	= {'name':'test university', 'bio':'dadaadad', 'rank':'100'}
@@ -19,4 +19,4 @@ class apiviewtest(TestCase):
 		# Setup test
 		# Exercise test
 		# Assert test
-		self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
+		self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)'''

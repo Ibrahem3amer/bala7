@@ -5,18 +5,18 @@
 </head>
 <body>
 	<h1>num of signup stage: {{ stage_num }}</h1>
-	<form id="id_registeration_form">
-		<select id="id_select_university">
+	<form id="id_registeration_form" action="{% url 'web_signup_second_form'%}" method="post">
+		<select id="id_select_university" name="selected_university">
 			{% for university in universities %}
 				<option class="university_name">{{ university.name }}</option>
 			{% endfor %}
 		</select>
-		<select id="id_select_faculty">
+		<select id="id_select_faculty" name="selected_faculty">
 			{% for faculty in faculties %}
 				<option class="faculty_name" name="{{ faculty.university.name }}_{{ faculty.name }}" id="{{ faculty.id }}">{{ faculty.name }}</option>
 			{% endfor %}
 		</select>
-		<select id="id_select_department">
+		<select id="id_select_department" name="selected_department">
 			{% for department in departments %}
 				<option class="department_name" id="{{ department.id }}" name="{{ department.faculty.name }}_{{ department.name }}">{{ department.name }}</option>
 			{% endfor %}
