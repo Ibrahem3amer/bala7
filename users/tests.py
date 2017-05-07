@@ -49,7 +49,7 @@ class user_sign_up(TestCase):
 
 	def test_user_submit_first_form(self):
 		# Setup test
-		first_stage_response = self.client.post(reverse('web_signup_second_form'), {'selected_university':'Mansoura', 'selected_faculty':'fci', 'selected_department':'general'})
+		first_stage_response = self.client.post(reverse('web_signup_second_form'), data ={'selected_university':'Mansoura', 'selected_faculty':'fci', 'selected_department':'general'})
 
 		# Exercise test
 		# Assert test
@@ -61,9 +61,10 @@ class user_sign_up(TestCase):
 		form = self.client.post(reverse('web_signup_second_form'))
 
 		# Exercise test
-		# Assert error
+		expected_error 	= 'You should select your university, faculty and department.'
+		erorr 			= form.context['error']
 		# Assert test
-		self.assertNotIn('details', form.)
+		self.assertEqual(expected_error, error)
 
 
 class UniversityModelTest(TestCase):

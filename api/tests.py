@@ -1,11 +1,11 @@
-from django.test import TestCase
+'''from django.test import TestCase
 from rest_framework import status 
 from rest_framework.test import APIClient
 from django.core.urlresolvers import resolve
 
 
 # Create your tests here.
-'''class apiviewtest(TestCase):
+class apiviewtest(TestCase):
 	def setUp(self):
 		self.client 			= APIClient()
 		self.university_data 	= {'name':'test university', 'bio':'dadaadad', 'rank':'100'}
