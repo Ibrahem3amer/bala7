@@ -3,8 +3,10 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 from django.test import TestCase
 from django.http import HttpRequest
+from unittest import skip
 from users.views import home_visitor, display_signup
 from users.models import University, Faculty, Department
+from users.forms import SignupForm
 
 class user_vists_homepage(TestCase):
 	def test_user_find_homepage(self):
@@ -56,6 +58,7 @@ class user_sign_up(TestCase):
 		self.assertEqual(200, first_stage_response.status_code)
 		self.assertTemplateUsed(first_stage_response, 'signup_second_form.html')
 
+	@skip
 	def test_second_form_with_empty_values(self):
 		# Setup test
 		form = self.client.post(reverse('web_signup_second_form'))
@@ -292,3 +295,16 @@ class DepartmentModelTest(TestCase):
 
 		# Assert test
 		self.assertIn(fac1, db_university.faculties.all())
+
+class FormsTest(TestCase):
+
+
+	def test_save_Forms(self):
+		# Setup test
+		form = SignupForm()
+
+		# Exercise test
+
+		# Assert test
+		self.fail(form.as_p())
+
