@@ -306,5 +306,6 @@ class FormsTest(TestCase):
 		# Exercise test
 
 		# Assert test
+		self.assertIn('placeholder=', form.as_p())
 		self.fail(form.as_p())
 
