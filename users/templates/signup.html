@@ -5,8 +5,7 @@
 </head>
 <body>
 	<h1>num of signup stage: {{ stage_num }}</h1>
-	<form id="id_registeration_form" action="{% url 'web_signup_second_form'%}" method="post">
-		{% csrf_token %}
+	<form id="id_registeration_form" action="{% url 'web_signup_second_form' %}" method="get">
 		<select id="id_select_university" name="selected_university">
 			{% for university in universities %}
 				<option class="university_name">{{ university.name }}</option>

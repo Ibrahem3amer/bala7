@@ -5,7 +5,14 @@
 </head>
 	<body>
 		<h1>num of signup stage: {{ stage_num }}</h1>
-		<form id="id_registeration_form">
+
+		<form id="id_registeration_form" action="{% url 'web_signup_second_form' %}" method="post">
+			{% csrf_token %}
+			<ul>
+				{{ form.as_ul }}
+			</ul>
+
+			<input type="submit" name="submit_second_form" />
 		</form>
 		<hr />
 		<a href="{% url 'web_signin' %}" id="id_signin_side"></a>

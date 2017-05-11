@@ -6,7 +6,7 @@ from django.http import HttpRequest
 from unittest import skip
 from users.views import home_visitor, display_signup
 from users.models import University, Faculty, Department
-from users.forms import SignupForm
+from users.forms import SignupForm, UserSignUpForm
 
 class user_vists_homepage(TestCase):
 	def test_user_find_homepage(self):
@@ -298,14 +298,20 @@ class DepartmentModelTest(TestCase):
 
 class FormsTest(TestCase):
 
-
 	def test_save_Forms(self):
 		# Setup test
-		form = SignupForm()
+		form = UserSignUpForm()
 
 		# Exercise test
 
 		# Assert test
-		self.assertIn('placeholder=', form.as_p())
-		self.fail(form.as_p())
+		
+	def test_form_saves_empty_values(self):
+		# Setup test
+		form = UserSignUpForm(data={'first_name': ''})
+		
+		# Exercise test
+		form.save()
+
+		# Assert test
 
