@@ -11,7 +11,9 @@
 			<ul>
 				{{ form.as_ul }}
 			</ul>
-
+			<input type="hidden" name="university" value="{{ first_form['university'] }}" />
+			<input type="hidden" name="faculty" value="{{ first_form['faculty'] }}" />
+			<input type="hidden" name="department" value="{{ first_form['department'] }}" />
 			<input type="submit" name="submit_second_form" />
 		</form>
 		<hr />

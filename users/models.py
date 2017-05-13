@@ -23,7 +23,7 @@ class Department(Entity):
 	faculty 	= models.ForeignKey(Faculty, related_name = 'departments', on_delete = models.CASCADE, default = 1)
 
 class UserProfile(models.Model):
-	user 				= models.OneToOneField(User, on_delete = models.CASCADE)
+	user 				= models.OneToOneField(User,related_name = 'profile', on_delete = models.CASCADE)
 	department 			= models.ForeignKey(Department, related_name = 'users', on_delete = models.SET_NULL, null = True)
 	level				= models.IntegerField(default = 1)
 	gender 				= models.CharField(max_length = 8, default = 'unset')
@@ -36,5 +36,21 @@ class UserProfile(models.Model):
 	#posts 				= 'relationship with posts'
 	#replies 			= 'relationship with replies'
 
+	def make_form_new_profile(self, user, department):
+		"""
+		Accepts user object and creates his corresponding profile due to his form data. Returns error if existing. 
 
+		>>>make_form_new_profile(user, department)
+		<UserProfile object>
+
+		>>>make_form_new_profile()
+		Error: expected two paramater
+		
+		>>>make_form_new_profile(user)
+		<UserProfile object> with department = null
+		
+		>>>make_form_new_profile(existing_user)
+		Error: Existing profile
+		"""
+		
 
