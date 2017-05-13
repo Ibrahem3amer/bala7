@@ -20,6 +20,7 @@ from users import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home_visitor, name = 'home_visitor'),
+    url(r'^users/home', views.home_user, name = 'home_user'),
     url(r'^users/signin', views.display_signup, name = 'web_signin'),
     url(r'^users/signup/user_details', views.signup_second_form, name = 'web_signup_second_form'),
     url(r'^users/signup/user_finish', views.signup_second_form, name = 'web_signup_third_form'),

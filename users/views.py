@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from users.models import University, Faculty, Department 
 from users.forms import UserSignUpForm
 
 
 def home_visitor(request):
+	return render(request, 'home_visitor.html')
+
+def home_user(request):
 	return render(request, 'home_visitor.html')
 
 def display_signup(request):
@@ -19,7 +22,7 @@ def signup_second_form(request):
 		signup_form = UserSignUpForm(request.POST)
 		if signup_form.is_valid():
 			signup_form.save(commit=True)
-			return home_visitor(request)
+			return redirect('home_user')
 	else:
 		# Todo: accept university and faculty detials.
 		signup_form = UserSignUpForm()
