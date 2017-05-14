@@ -23,7 +23,7 @@ def signup_second_form(request):
 		if signup_form.is_valid():
 			user = signup_form.save(commit=False)
 			# Todo: pass university and faculty as ids and not names. 
-			form_department = Department.objects.get(name = request.POST['department'])
+			form_department = Department.objects.get(id = request.POST['department'])
 			user_profile = UserProfile.make_new_profile(user)
 			return redirect('home_user')
 	else:
@@ -31,7 +31,7 @@ def signup_second_form(request):
 		university 		= request.GET['selected_university']
 		faculty 		= request.GET['selected_faculty']
 		department 		= request.GET['selected_department']
-		first_form_data = [university, faculty, department]
+		first_form_data = {'university':university, 'faculty':faculty, 'department':department}
 		signup_form 	= UserSignUpForm()
 
 	return render(request, 'signup_second_form.html', {'stage_num':2, 'form': signup_form, 'first_form':first_form_data})

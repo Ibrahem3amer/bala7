@@ -24,7 +24,9 @@ class Department(Entity):
 
 class UserProfile(models.Model):
 	user 				= models.OneToOneField(User,related_name = 'profile', on_delete = models.CASCADE)
-	department 			= models.ForeignKey(Department, related_name = 'users', on_delete = models.SET_NULL, null = True)
+	department 			= models.ForeignKey(Department, related_name = 'depart_users', on_delete = models.SET_NULL, null = True)
+	faculty  			= models.ForeignKey(Faculty, related_name = 'fac_users', on_delete = models.SET_NULL, null = True)
+	university 			= models.ForeignKey(University, related_name = 'uni_users', on_delete = models.SET_NULL, null = True)
 	level				= models.IntegerField(default = 1)
 	gender 				= models.CharField(max_length = 8, default = 'unset')
 	count_of_posts 		= models.IntegerField()
