@@ -1,11 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html dir="rtl" lang="ar">
 <head>
-	<title>Bala7</title>
+    {% load staticfiles %}
+    
+	<meta charset="utf-8">
+    <title>Najiba | نجيبه</title>
+    <!-- Internet Explorer meta -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- First Mobile meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> 
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/home-visitor.css' %}" rel="stylesheet">
+    <link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
+    <!--[if lt IE 9]>
+        <script src="js/html5shiv.min.js"></script>
+        <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    
+    
+    
 </head>
 <body>
-	<p id="id_description">description</p>
-	<a href="{% url 'web_signup' %}" id="id_sign_up">sign up</a>
-	<a href="{% url 'web_signin' %}" id="id_sign_in">sign up</a>
+    <!-- start navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        
+    </nav>
+    <!-- end navbar -->
+    
+    <!-- start content -->
+    
+    <!-- end content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 nj-box  content-div ">
+                <p id="id_description"> نلفت انتباه حضراتكم ان الاعلانات فى هذا الموقع ليست للمنفعة الشخصية و انما تتوجه لدعم الفقراء من العاملين بهذا الموقع</p>
+                <a href="{% url 'web_signup' %}" id="id_sign_up" class="nj-btn btns-pos">انشاء حساب</a><br>
+                <a href="{% url 'web_signin' %}" id="id_sign_in" class="nj-btn btns-pos">تسجيل دخول</a>
+            </div>
+        </div>
+    </div>
+    
 </body>
 </html>
