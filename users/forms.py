@@ -1,10 +1,13 @@
 from django import forms
+from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 
+username_validator = RegexValidator(r'^\d', 'Name cannot start with digit, should consist of characters.')
+
 class SignupForm(forms.Form):
-	user_name	 			= forms.CharField(widget = forms.TextInput(attrs={
-			'placeholder':'Enter your Name'
-		}))
+	user_name	 			= forms.CharField(
+		widget = forms.TextInput(attrs={'placeholder':'Enter your Name'}),
+		)
 	user_mail				= forms.EmailField(widget = forms.TextInput(attrs={
 			'placeholder':'Enter your E-mail'
 		}))
@@ -20,6 +23,7 @@ class UserSignUpForm(forms.ModelForm):
 		model 	= User
 		fields 	= ['username', 'first_name', 'last_name', 'email', 'password']
 		widgets = {'password':forms.PasswordInput}
+		validators = {'username':username_validator}
 
 	def clean(self):
 		"""
@@ -48,19 +52,3 @@ class UserSignUpForm(forms.ModelForm):
 		if email and User.objects.filter(email=email).exclude(username=username).exists():
 		    raise forms.ValidationError("Email address must be unique.")
 		return email
-
-	def clean_username(self):
-		"""
-		cleaned_data['username'] -> username or ValidationError
-
-		Returns Validation error if and only if username isn't start with letter or contains only digits.
-		>>>cleaned_data['username'] = 1234
-		False
-		>>>cleaned_data['username'] = '_______'
-		False
-		>>>cleaned_data['username'] = he__
-		True
-		>>>cleaned_data['username'] = he123
-		True
-		"""
-		username = self.cleaned_data['username']

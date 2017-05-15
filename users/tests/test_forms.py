@@ -27,7 +27,7 @@ class signup_form_test(TestCase):
 	def test_users_submits_invalid_username(self):
 		# Setup test
 		u = User()
-		u.username = '___'
+		u.username = '123'
 		u.email = 'ibrahem3amer@fff.com'
 		data = {'username':u.username, 'email':u.email, 'password':'123', 'password_confirm':'123'}
 
@@ -35,4 +35,5 @@ class signup_form_test(TestCase):
 		form = UserSignUpForm(data=data)
 		
 		# Assert test
+		self.fail('write regex to check username validator.')
 		self.assertFalse(form.is_valid())
