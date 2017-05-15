@@ -29,8 +29,8 @@ class UserProfile(models.Model):
 	university 			= models.ForeignKey(University, related_name = 'uni_users', on_delete = models.SET_NULL, null = True)
 	level				= models.IntegerField(default = 1)
 	gender 				= models.CharField(max_length = 8, default = 'unset')
-	count_of_posts 		= models.IntegerField()
-	count_of_replies 	= models.IntegerField()
+	count_of_posts 		= models.IntegerField(default = 0)
+	count_of_replies 	= models.IntegerField(default = 0)
 	academic_stats 		= models.CharField(max_length = 20, default = 'unset')
 	last_active_device 	= models.CharField(max_length = 200)
 	#topics				= 'relationship with topics'
@@ -38,7 +38,8 @@ class UserProfile(models.Model):
 	#posts 				= 'relationship with posts'
 	#replies 			= 'relationship with replies'
 
-	def make_form_new_profile(self, user, department):
+	@classmethod
+	def make_form_new_profile(cls, user_obj, department=None, faculty=None, university=None):
 		"""
 		Accepts user object and creates his corresponding profile due to his form data. Returns error if existing. 
 
@@ -54,5 +55,8 @@ class UserProfile(models.Model):
 		>>>make_form_new_profile(existing_user)
 		Error: Existing profile
 		"""
+		user_profile = UserProfile(user=user_obj, department=department, faculty=faculty, university=university)
+		user_profile.save()
+		return user_profile
 		
 

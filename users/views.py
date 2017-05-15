@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from users.models import University, Faculty, Department, UserProfile 
 from users.forms import UserSignUpForm
@@ -17,24 +17,31 @@ def display_signup(request):
 	return render(request, 'signup.html', {'stage_num': 1, 'universities': universities, 'faculties': faculties, 'departments': departments})
 
 def signup_second_form(request):
-	if request.method == 'POST':
-		# Todo: passing university and faculty details to user instance. 
+	first_form_data = {}
+	if request.method == 'POST': 
+		first_form_data = request.session.get('first_form_data')
 		signup_form = UserSignUpForm(request.POST)
 		if signup_form.is_valid():
-			user = signup_form.save(commit=False)
-			# Todo: pass university and faculty as ids and not names. 
-			form_department = Department.objects.get(id = request.POST['department'])
-			user_profile = UserProfile.make_new_profile(user)
+			user 				= signup_form.save(commit=True)
+			# In case that request has some problems with session object, return pk = 1.
+			form_department 	= get_object_or_404(Department, pk = max(first_form_data['department'], 1))
+			form_faculty 		= get_object_or_404(Faculty, pk = max(first_form_data['faculty'], 1))
+			form_university 	= get_object_or_404(University, pk = max(first_form_data['university'], 1))
+			user_profile 		= UserProfile.make_form_new_profile(user)
 			return redirect('home_user')
 	else:
-		# Todo: accept university and faculty detials.
-		university 		= request.GET['selected_university']
-		faculty 		= request.GET['selected_faculty']
-		department 		= request.GET['selected_department']
-		first_form_data = {'university':university, 'faculty':faculty, 'department':department}
-		signup_form 	= UserSignUpForm()
+		university 							= request.GET.get('selected_university', None)
+		faculty 							= request.GET.get('selected_faculty', None)
+		department 							= request.GET.get('selected_department', None)
 
-	return render(request, 'signup_second_form.html', {'stage_num':2, 'form': signup_form, 'first_form':first_form_data})
+		# Redirect user to first form with error of he didn't entered data.
+		if university is None or faculty is None or department is None:
+			return redirect('web_signup')
+		first_form_data 					= {'university':university, 'faculty':faculty, 'department':department}
+		request.session['first_form_data'] 	= first_form_data
+		signup_form 						= UserSignUpForm()
+
+	return render(request, 'signup_second_form.html', {'stage_num':2, 'form': signup_form})
 
 def signup_third_form(request):
 	return ('third_form')

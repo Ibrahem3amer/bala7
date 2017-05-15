@@ -8,68 +8,6 @@ from users.views import home_visitor, display_signup
 from users.models import University, Faculty, Department
 from users.forms import SignupForm, UserSignUpForm
 
-class user_vists_homepage(TestCase):
-	def test_user_find_homepage(self):
-		# Setup test
-		request = resolve('/')
-
-		# Exercise test
-
-		# Assert test
-		self.assertEqual(request.func, home_visitor)
-
-	def test_home_visitor_returns_correct_html(self):
-		# Setup test
-		request = HttpRequest()
-
-		# Exercise test
-		response = self.client.get('/')
-		expected_html = response.content.decode('utf-8')
-
-		# Assert test
-		self.assertTemplateUsed(response, 'home_visitor.html')
-
-	def test_user_finds_signup(self):
-		# Setup test
-		request = resolve(reverse('web_signup'))
-
-		# Exercise test
-		# Assert test
-		self.assertEqual(request.func, display_signup)
-
-	def test_signup_returns_correct_output(self):
-		# Setup test
-		response = self.client.get(reverse('web_signup'))
-
-		# Exercise test
-		# Assert test
-		self.assertTemplateUsed(response, 'signup.html')
-
-class user_sign_up(TestCase):
-	def setUp(self):
-		self.signup_module = self.client.get(reverse('web_signup'))
-
-	def test_user_submit_first_form(self):
-		# Setup test
-		first_stage_response = self.client.post(reverse('web_signup_second_form'), data ={'selected_university':'Mansoura', 'selected_faculty':'fci', 'selected_department':'general'})
-
-		# Exercise test
-		# Assert test
-		self.assertEqual(200, first_stage_response.status_code)
-		self.assertTemplateUsed(first_stage_response, 'signup_second_form.html')
-
-	@skip
-	def test_second_form_with_empty_values(self):
-		# Setup test
-		form = self.client.post(reverse('web_signup_second_form'))
-
-		# Exercise test
-		expected_error 	= 'You should select your university, faculty and department.'
-		erorr 			= form.context['error']
-		# Assert test
-		self.assertEqual(expected_error, error)
-
-
 class UniversityModelTest(TestCase):
 	
 	def test_save_university(self):
@@ -295,23 +233,3 @@ class DepartmentModelTest(TestCase):
 
 		# Assert test
 		self.assertIn(fac1, db_university.faculties.all())
-
-class FormsTest(TestCase):
-
-	def test_save_Forms(self):
-		# Setup test
-		form = UserSignUpForm()
-
-		# Exercise test
-
-		# Assert test
-		
-	def test_form_saves_empty_values(self):
-		# Setup test
-		form = UserSignUpForm(data={'first_name': ''})
-		
-		# Exercise test
-		form.save()
-
-		# Assert test
-
