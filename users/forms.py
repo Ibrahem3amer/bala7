@@ -48,3 +48,19 @@ class UserSignUpForm(forms.ModelForm):
 		if email and User.objects.filter(email=email).exclude(username=username).exists():
 		    raise forms.ValidationError("Email address must be unique.")
 		return email
+
+	def clean_username(self):
+		"""
+		cleaned_data['username'] -> username or ValidationError
+
+		Returns Validation error if and only if username isn't start with letter or contains only digits.
+		>>>cleaned_data['username'] = 1234
+		False
+		>>>cleaned_data['username'] = '_______'
+		False
+		>>>cleaned_data['username'] = he__
+		True
+		>>>cleaned_data['username'] = he123
+		True
+		"""
+		username = self.cleaned_data['username']

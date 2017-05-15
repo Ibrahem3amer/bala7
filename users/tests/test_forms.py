@@ -7,27 +7,32 @@ from unittest import skip
 from users.views import home_visitor, display_signup
 from users.models import University, Faculty, Department
 from users.forms import SignupForm, UserSignUpForm
+from django.contrib.auth.models import User
 
-class user_sign_up(TestCase):
-	def setUp(self):
-		self.signup_module = self.client.get(reverse('web_signup'))
 
-	def test_user_submit_first_form(self):
+class signup_form_test(TestCase):
+	def test_user_submits_valid_form(self):
 		# Setup test
-		first_stage_response = self.client.get(reverse('web_signup_second_form'), data ={'selected_university':'1', 'selected_faculty':'1', 'selected_department':'1'})
+		u = User()
+		u.username = 'waaaaeeel'
+		u.email = 'waeeel@hotmail.com'
+		data = {'username':u.username, 'email':u.email, 'password':'123', 'password_confirm':'123'}
+		
+		# Exercise test
+		form = UserSignUpForm(data=data)
+		
+		# Assert test
+		self.assertTrue(form.is_valid())
+
+	def test_users_submits_invalid_username(self):
+		# Setup test
+		u = User()
+		u.username = '___'
+		u.email = 'ibrahem3amer@fff.com'
+		data = {'username':u.username, 'email':u.email, 'password':'123', 'password_confirm':'123'}
 
 		# Exercise test
+		form = UserSignUpForm(data=data)
+		
 		# Assert test
-		self.assertEqual(200, first_stage_response.status_code)
-		self.assertTemplateUsed(first_stage_response, 'signup_second_form.html')
-
-	@skip
-	def test_second_form_with_empty_values(self):
-		# Setup test
-		form = self.client.get(reverse('web_signup_second_form'))
-
-		# Exercise test
-		expected_error 	= 'You should select your university, faculty and department.'
-		erorr 			= form.context['error']
-		# Assert test
-		self.assertEqual(expected_error, error)
+		self.assertFalse(form.is_valid())
