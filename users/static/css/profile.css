@@ -1,0 +1,262 @@
+
+/*------------------------------------------- start content-section ------------------------------------------*/
+/*------- start adv part -------*/
+.content-section .adv-part{
+    padding-top: 15px;
+}
+.content-section .adv-part .ad-block{
+    border: 3px solid #E9EBEE;
+    box-shadow: 1px 1px 5px #333;
+}
+.content-section .adv-part .ad-block img{
+    width: 100%;
+}
+/*------- end adv part ---------*/
+
+/*------- start content part -------*/
+
+
+/*- start adv-xs -*/
+.adv-xs{
+    width: 320px;
+    max-width: 100%;
+    height: 100px;
+    margin: auto;
+    margin-top: 15px;
+}
+.adv-xs img{
+    width: 100%;
+    height: 100%;
+}
+/*- end adv-xs -*/
+
+.content-part{
+    padding-bottom: 30px;
+}
+
+.small-ele-div{
+    margin-top: 15px;
+    padding: 0px;
+    overflow: hidden;
+    box-shadow: 1px 1px 10px #dedede;
+    
+}
+.small-ele-head{
+    position: relative;
+    background-color: #d9edf7;
+    padding: 5px 15px;
+    font-weight: bold;
+    font-size: 28px;
+}
+.small-ele-head i{
+    position: absolute;
+    top: 10px;
+    left: 15px;
+}
+.small-ele-head i:hover{
+    cursor: pointer;
+}
+.small-ele-head p{
+    margin: 0px;
+}
+.small-ele-content{
+    position: relative;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 15px;
+    font-weight: bold;
+    text-align: center;
+}
+.small-ele-content:hover{
+    background-color: #efffef;
+}
+.small-ele-content:last-of-type{
+    border-bottom: 0px solid #ddd;
+}
+.small-ele-content:last-of-type:hover{
+    border-bottom: 0px solid #ddd;
+}
+.small-ele-content i{
+    position: absolute;
+    left: 15px;
+    top: 15px;
+}
+.small-ele-content i:hover{
+    cursor: pointer;
+}
+.small-ele-content .form-group{
+    margin: 0px;
+}
+.small-ele-content .form-group label{
+    width: 120px;
+    text-align: right;
+    float: right;
+}
+.small-ele-content input{
+    text-align: center;
+    min-width: 350px;
+    margin-left: 120px;
+}
+.small-ele-content select{
+    text-align: center;
+    width: 350px;
+    margin-left: 120px;
+}
+
+/*sm*/
+@media (min-width:768px) and (max-width:991px){
+   .small-ele-content input{
+        min-width: 250px;
+    }    
+    .small-ele-content select{
+        width: 250px;
+    }
+}
+/*xs*/
+@media (max-width:767px){
+    .small-ele-content input{
+        display: block;
+        min-width: 250px;
+        max-width: 100%;
+        margin: auto;
+    }
+    .small-ele-content select{
+        display: block;
+        width: 250px;
+        max-width: 100%;
+        margin: auto;
+    }
+}
+
+/* start choose university */
+
+.choose-univ{
+    display: none;
+}
+/* end choose university */
+/* start chose material */
+.materials{
+    text-align: center;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    
+}
+.materials label{
+    padding: 5px 10px;    
+    background-color: #8fd7ff;
+    color: #333;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.materials label:hover{
+    cursor: pointer;
+}
+.choose-materials{
+    display: none;
+}
+.panel-group{
+    margin: 0px;
+    
+}
+.panel-group .panel{
+    border-radius: 0px;
+}
+.panel-group .panel + .panel{
+    margin: 0px;
+}
+.panel-heading{
+    background-color: #a6bfcc;
+    border-radius: 0px;
+}
+.panel-heading:hover{
+    cursor: pointer;
+    background-color: #d9edf7;
+}
+.panel-body{
+    text-align: center;
+}
+.checkbox label{
+    padding: 5px 10px;    
+    background-color: #E1E2E1;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.active-checkbox{
+    background-color: #8fd7ff!important;
+}
+.radio input[type="radio"], 
+.radio-inline input[type="radio"], 
+.checkbox input[type="checkbox"], 
+.checkbox-inline input[type="checkbox"]{
+    margin-left: 0px;
+    
+    width: 1px;
+}
+
+
+/* end chose material */
+
+
+/*--- modal style --*/
+.modal-header{
+    text-align: right;
+    padding: 10px 15px;
+    background-color: #d9edf7;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+.modal-header p{
+    font-weight: bold;
+    font-size: 28px;
+    margin: 0px;
+}
+.modal-header button{
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+
+.modal-dialog{
+    max-width: 450px;
+    margin: auto;
+    margin-top: 75px;
+}
+.modal-body{
+    text-align: center;
+}
+.modal-body label{
+    width: 120px;
+    text-align: right;
+}
+.modal-body input{
+    margin-right:0px;
+    width: 250px;
+    max-width: 100%;
+}
+.modal-body input:focus {
+  border-color: #66AFE9;
+  outline: none;
+  box-shadow: 0px 0px 6px #66AFE9;
+}
+.modal-footer{
+    padding: 10px 15px;
+    text-align: left;
+    font-weight: bold;
+}
+.modal-footer a{
+    font-size: 20px;
+    padding: 0px 25px;
+    font-weight: 500;
+}
+/*xs*/
+@media (max-width:767px){
+    .modal-body label{
+        float: right;
+    }
+}
+/*------- end content part ---------*/
+
+/*------------------------------------------- end content-section --------------------------------------------*/
