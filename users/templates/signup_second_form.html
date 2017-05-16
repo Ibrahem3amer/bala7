@@ -13,8 +13,8 @@
 			</ul>
 			<input type="submit" name="submit_second_form" />
 		</form>
-		<a href="{% url 'social:begin' 'facebook' %}">facebook login</a>
-		<a href="{% url 'social:begin' 'twitter' %}">twiiter login</a>
+		<a href="{% url 'social:begin' 'facebook' %}?next={% url 'home_user'%}">facebook login</a>
+		<a href="{% url 'social:begin' 'twitter' %}?next={% url 'home_user'%}">twiiter login</a>
 		<hr />
 		<a href="{% url 'web_signin' %}" id="id_signin_side">signin</a>
 	</body>

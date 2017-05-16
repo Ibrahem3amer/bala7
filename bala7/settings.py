@@ -25,7 +25,7 @@ SECRET_KEY = 'm7^#9xc=e#82hf*itg)wlkpem^elq3-1&m88q&i9ke-%+olw4&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['local.ibrahem3amer.me', '127.0.0.1', 'www.najiba.com']
 
 
 # Application definition
@@ -143,3 +143,15 @@ SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.user.user_details',
     'social_core.pipeline.social_auth.associate_by_email',
 ]
+
+# Facebook auth settings
+SOCIAL_AUTH_FACEBOOK_KEY = '1907562042790610'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'fde167caab46638679c0672194ccc2fe'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+'fields': 'id, name, email, age_range'
+}
+
+# Twiiter auth settings
+SOCIAL_AUTH_TWITTER_KEY = 'lHt8gjwWyvYWSkEdxkSc5C2C8'
+SOCIAL_AUTH_TWITTER_SECRET = 'cZEuXckDnJbZvQt4TM4QwbUFS4oGF8z35mzOYwT531HHkvEnCy'
