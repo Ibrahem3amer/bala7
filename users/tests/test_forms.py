@@ -35,5 +35,18 @@ class signup_form_test(TestCase):
 		form = UserSignUpForm(data=data)
 		
 		# Assert test
-		self.fail('write regex to check username validator.')
+		self.assertFalse(form.is_valid())
+		self.fail('invalid username cause failure in email validation as it check for key that is not true.')
+
+	def test_users_submits_unmatched_password(self):
+		# Setup test
+		u = User()
+		u.username = 'iige13'
+		u.email = 'ibrahem3amer@fff.com'
+		data = {'username':u.username, 'email':u.email, 'password':'555', 'password_confirm':'123'}
+		
+		# Exercise test
+		form = UserSignUpForm(data=data)
+
+		# Assert test
 		self.assertFalse(form.is_valid())
