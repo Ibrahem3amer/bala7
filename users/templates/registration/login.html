@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Bala7</title>
-</head>
+	<head>
+		<title>Bala7</title>
+	</head>
 	<body>
-		<h1>num of signup stage: {{ stage_num }}</h1>
-
-		<form id="id_registeration_form" action="{% url 'web_signup_second_form' %}" method="post">
+		<form action="{% url 'login' %}?next={% url 'home_user' %}" method="post" >
 			{% csrf_token %}
 			<ul>
 				{{ form.as_ul }}
 			</ul>
-			<input type="submit" name="submit_second_form" />
+			<input type="submit" name="login" />
 		</form>
 		<a href="{% url 'social:begin' 'facebook' %}?next={% url 'home_user'%}">facebook login</a>
 		<a href="{% url 'social:begin' 'twitter' %}?next={% url 'home_user'%}">twiiter login</a>
 		<hr />
-		<a href="{% url 'web_signin' %}" id="id_signin_side">signin</a>
+		<a href="{% url 'password_reset' %}" id="id_signin_side">forget password?</a>
+	</body>
 	</body>
 </html>

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from users.models import University, Faculty, Department, UserProfile 
 from users.forms import UserSignUpForm
@@ -7,14 +8,15 @@ from users.forms import UserSignUpForm
 def home_visitor(request):
 	return render(request, 'home_visitor.html')
 
+@login_required
 def home_user(request):
-	return render(request, 'home_visitor.html')
+	return render(request, 'home_user.html')
 
 def display_signup(request):
 	universities 	= University.objects.all()
 	faculties 		= Faculty.objects.all()
 	departments		= Department.objects.all()
-	return render(request, 'signup.html', {'stage_num': 1, 'universities': universities, 'faculties': faculties, 'departments': departments})
+	return render(request, 'registration/signup.html', {'stage_num': 1, 'universities': universities, 'faculties': faculties, 'departments': departments})
 
 def signup_second_form(request):
 	first_form_data = {}
@@ -24,9 +26,9 @@ def signup_second_form(request):
 		if signup_form.is_valid():
 			user 				= signup_form.save(commit=True)
 			# In case that request has some problems with session object, return pk = 1.
-			form_department 	= get_object_or_404(Department, pk = max(first_form_data['department'], 1))
-			form_faculty 		= get_object_or_404(Faculty, pk = max(first_form_data['faculty'], 1))
-			form_university 	= get_object_or_404(University, pk = max(first_form_data['university'], 1))
+			form_department 	= get_object_or_404(Department, pk = first_form_data['department'])
+			form_faculty 		= get_object_or_404(Faculty, pk = first_form_data['faculty'])
+			form_university 	= get_object_or_404(University, pk = first_form_data['university'])
 			user_profile 		= UserProfile.make_form_new_profile(user)
 			return redirect('home_user')
 	else:
@@ -41,7 +43,7 @@ def signup_second_form(request):
 		request.session['first_form_data'] 	= first_form_data
 		signup_form 						= UserSignUpForm()
 
-	return render(request, 'signup_second_form.html', {'stage_num':2, 'form': signup_form})
+	return render(request, 'registration/signup_second_form.html', {'stage_num':2, 'form': signup_form})
 
 def signup_third_form(request):
 	return ('third_form')
