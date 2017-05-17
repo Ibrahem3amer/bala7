@@ -23,6 +23,10 @@ def home_user(request):
 		profile_error = 'Please complete your profile.'
 	return render(request, 'home_user.html', {'profile_error': profile_error})
 
+@login_required
+def user_profile(request):
+	return render(request, 'profile/profile.html')	
+
 def display_signup(request):
 	universities 	= University.objects.all()
 	faculties 		= Faculty.objects.all()
