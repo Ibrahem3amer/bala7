@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+    <head>
+        {% load staticfiles %}
+
+        <meta charset="utf-8">
+        <title>Najiba | نجيبه</title>
+        <!-- Internet Explorer meta -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- First Mobile meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Bootstrap -->
+        <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> 
+        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        <link href="{% static 'css/reg.css' %}" rel="stylesheet">
+        <link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
+        <!--[if lt IE 9]>
+            <script src="js/html5shiv.min.js"></script>
+            <script src="js/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    </head>
+	<body>
+        <!-- start navbar -->
+        {% include "public/navbar1.html" %}
+        <!-- end navbar -->
+        
+        
+        <!-- start content -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 nj-box  login-outer-div ">
+                    <div class="title"><i class="fa fa-plus-square new-symbol" aria-hidden="true"></i> إنشاء حساب المرحلة "{{ stage_num }}" </div>
+                    <form id="id_registeration_form" action="{% url 'web_signup_second_form' %}" method="post">
+                        {% csrf_token %}
+                        <ul>
+                            {{ form.as_ul }}
+                        </ul>
+                        <div class="form-group">
+                            <label class="nj-label" for="name">الاسم</label>
+                            <input type="text" class="form-control nj-input" id="name" placeholder="الاسم">
+                        </div>
+                        <div class="form-group">
+                            <label class="nj-label" for="email">البريد الالكتروني</label>
+                            <input type="email" class="form-control nj-input" id="email" placeholder="البريد الإلكتروني">
+                        </div>
+                        <div class="form-group">
+                            <label class="nj-label" for="pass">كلمة السر</label>
+                            <input type="password" class="form-control nj-input" id="pass" placeholder="كلمة السر">
+                        </div>
+                        <div class="form-group">
+                            <label class="nj-label" for="pass">اعادة كلمة السر</label>
+                            <input type="password" class="form-control nj-input" id="pass" placeholder="كلمة السر">
+                        </div>
+                        <div class="log-option">
+                            <div class="title-2">أو أكمل بياناتك بواسطة</div>
+                            <div class="social-log">    
+                                <a href="{% url 'social:begin' 'facebook' %}?next={% url 'home_user'%}"><i class="fa fa-facebook-square fb" aria-hidden="true"></i></a>
+                                <a href="{% url 'social:begin' 'twitter' %}?next={% url 'home_user'%}"><i class="fa fa-twitter-square tw" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                        <input type="submit" name="submit_second_form" value="التالى"  class="nj-btn next-btn"/>
+                        <a class="nj-btn back-btn" href="#">السابق</a>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end content -->
+        
+        
+        
+        
+		<a href="{% url 'login' %}" id="id_signin_side">signin</a>
+	</body>
+</html>

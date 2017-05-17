@@ -27,6 +27,7 @@
     <!-- start navbar -->
     {% include "public/navbar1.html" %}
     <!-- end navbar -->
+    
     <div class="container">
         <div class="row">
             <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 nj-box ">
@@ -37,7 +38,7 @@
                         <select id="id_select_university" name="selected_university"  class="form-control select nj-select">
                             <option value="" disabled selected>اختر الجامعة</option>
                             {% for university in universities %}
-                                <option class="university_name">{{ university.name }}</option>
+                                <option class="university_name" value="{{ university.id }}">{{ university.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -46,7 +47,7 @@
                         <select id="id_select_faculty" name="selected_faculty" class="form-control select nj-select">
                             <option value="" disabled selected>اختر الكلية</option>
                             {% for faculty in faculties %}
-                                <option class="faculty_name" name="{{ faculty.university.name }}_{{ faculty.name }}" id="{{ faculty.id }}">{{ faculty.name }}</option>
+                                <option class="faculty_name" name="{{ faculty.university.name }}_{{ faculty.name }}" value="{{ faculty.id }}" id="{{ faculty.id }}">{{ faculty.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -63,7 +64,7 @@
                         <select id="id_select_department" name="selected_department" class="form-control select nj-select">
                             <option value="" disabled selected>اختر القسم</option>
                             {% for department in departments %}
-                                <option class="department_name" id="{{ department.id }}" name="{{ department.faculty.name }}_{{ department.name }}">{{ department.name }}</option>
+                                <option class="department_name" id="{{ department.id }}" value="{{ department.id }}" name="{{ department.faculty.name }}_{{ department.name }}">{{ department.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -76,7 +77,7 @@
                         </select>
                     </div>
                     <div class="have-acc">لديك حساب بالفعل؟
-                        <a class="have-acc-link" href="#">سجل دخول الآن</a>
+                        <a class="have-acc-link" href="{% url 'login' %}" id="id_signin_side">سجل دخول الآن</a>
                     </div>
                     <input type="submit" name="submit_signup_data" id="id_submit_signup_data" class="nj-btn next-btn" value="التالى">
                 </form>
@@ -104,6 +105,6 @@
             </div>
         </div>
     </div>
-   
+    
 </body>
 </html>

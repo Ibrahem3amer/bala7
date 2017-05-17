@@ -2,7 +2,7 @@ from django import forms
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 
-username_validator = RegexValidator(r'^\d', 'Name cannot start with digit, should consist of characters.')
+username_validator = RegexValidator(r'^\D\s*', 'Name cannot start with digit, should consist of characters.')
 
 class SignupForm(forms.Form):
 	user_name	 			= forms.CharField(
@@ -16,6 +16,7 @@ class SignupForm(forms.Form):
 		
 class UserSignUpForm(forms.ModelForm):
 
+	username 			= forms.CharField(widget = forms.TextInput, required = True, validators = [username_validator])
 	password_confirm 	= forms.CharField(widget = forms.PasswordInput, required = True)
 	email 				= forms.EmailField(required = True)
 	
@@ -47,8 +48,10 @@ class UserSignUpForm(forms.ModelForm):
 		Returns Validation error if and only if email already exists with different username.
 
 		"""
-		email 		= self.cleaned_data['email']
-		username 	= self.cleaned_data['username']
+		# Using self.cleaned_data as it's already cleaned. and we clean specific attribute. 
+		email 			= self.cleaned_data['email']
+		# Username can be none due to regex validation.
+		username 		= self.cleaned_data['username']
 		if email and User.objects.filter(email=email).exclude(username=username).exists():
 		    raise forms.ValidationError("Email address must be unique.")
 		return email
