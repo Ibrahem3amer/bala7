@@ -12,8 +12,16 @@ def home_visitor(request):
 
 @login_required
 def home_user(request):
-
-	return render(request, 'home_user.html')
+	user = request.user
+	profile_error = ''
+	try:
+		user_profile = user.profile
+	except AttributeError:
+		new_profile = UserProfile()
+		new_profile.user = user
+		new_profile.save()
+		profile_error = 'Please complete your profile.'
+	return render(request, 'home_user.html', {'profile_error': profile_error})
 
 def display_signup(request):
 	universities 	= University.objects.all()
@@ -31,7 +39,7 @@ def signup_second_form(request):
 			form_department = get_object_or_404(Department, pk = first_form_data['department'])
 			form_faculty 	= get_object_or_404(Faculty, pk = first_form_data['faculty'])
 			form_university = get_object_or_404(University, pk = first_form_data['university'])
-			user_profile 	= UserProfile.make_form_new_profile(user)
+			user_profile 	= UserProfile.make_form_new_profile(user, form_department, form_faculty, form_university)
 			return redirect('home_user')
 	else:
 		university 	= request.GET.get('selected_university', None)

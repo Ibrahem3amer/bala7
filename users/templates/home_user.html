@@ -7,7 +7,22 @@
 	<p id="id_description">description</p>
 	{% if user.is_authenticated %}
     	<p>Welcome, {{ user.username }}. Welcome in Najiba.</p>
-    	{{ user.profile }}
+    	{% if profile_error %}
+    		<h1>{{ profile_error }}</h1>
+    	{% endif%}
+    	<ul>
+    		<li><a href="{% url 'home_user' %}">home</a></li>
+    		<li><a href="#">table</a></li>
+    		<li><a href="#">topics</a></li>
+    		<li><a href="#">notifications</a></li>
+    	</ul>
+    	<hr />
+    	<ul>
+    		<li><a href="{% url 'home_user' %}">home</a></li>
+    		<li><a href="#">table</a></li>
+    		<li><a href="#">topics</a></li>
+    		<li><a href="#">notifications</a></li>
+    	</ul>
 	{% else %}
 	    <p>Welcome, new user. Please log in.</p>
 		<a href="{% url 'web_signup' %}" id="id_sign_up">sign up</a>

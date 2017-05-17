@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.http import Http404
+
 
 # Create your models here.
 class Entity(models.Model):
@@ -39,7 +41,7 @@ class UserProfile(models.Model):
 	#replies 			= 'relationship with replies'
 
 	@classmethod
-	def make_form_new_profile(cls, user_obj, department=None, faculty=None, university=None):
+	def make_form_new_profile(cls, user_obj=None, department=None, faculty=None, university=None):
 		"""
 		Accepts user object and creates his corresponding profile due to his form data. Returns error if existing. 
 
@@ -55,7 +57,10 @@ class UserProfile(models.Model):
 		>>>make_form_new_profile(existing_user)
 		Error: Existing profile
 		"""
-		user_profile = UserProfile(user=user_obj, department=department, faculty=faculty, university=university)
+		if not user_obj:
+			user_profile = UserProfile(department=department, faculty=faculty, university=university)
+		else:
+			UserProfile.link_profile_to_user(user_obj, user_profile)
 		return user_profile
 
 	@classmethod
@@ -73,6 +78,24 @@ class UserProfile(models.Model):
 		>>>link_profile_to_user(existing_linked_user, profile)
 		False
 		"""
-		pass
+		if not user_obj or not user_obj.profile or not profile_obj:
+			return False
 		
+		profile_obj.user = user_obj
+		return True
+
+	@classmethod
+	def make_social_new_profile(backend, user, response, *args, **kwargs):
+		"""
+		Customize the python_social_auth pipeline flow by saving user profile.
+		"""
+		first_form_data = request.session.get('first_form_data')
+		try:
+			department = Department.objects.get(pk = first_form_data['department'])
+			faculty 	= Faculty.objects.get(pk = first_form_data['faculty'])
+			university = University.objects.get(pk = first_form_data['university'])
+		except ObjectDoesNotExist as e:
+			raise Http404("An Error encounterd. Please select proper University, Facutly, and Department.")
+
+		UserProfile.objects.create(user=user, department=department, faculty=faculty, university=university)
 
