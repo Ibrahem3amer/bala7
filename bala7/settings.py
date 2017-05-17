@@ -131,6 +131,10 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+# URL that redirected to after logout, unauthorized page.
+LOGIN_REDIRECT_URl  = '/users/login'
+LOGIN_URL           = '/users/login'
+
 # Social media auth pipline settings
 SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.social_details',

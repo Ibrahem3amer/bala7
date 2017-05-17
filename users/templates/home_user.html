@@ -18,10 +18,8 @@
     	</ul>
     	<hr />
     	<ul>
-    		<li><a href="{% url 'home_user' %}">home</a></li>
-    		<li><a href="#">table</a></li>
-    		<li><a href="#">topics</a></li>
-    		<li><a href="#">notifications</a></li>
+    		<li><a href="{% url 'web_user_profile' %}">profile</a></li>
+    		<li><a href="{% url 'logout' %}?next={% url 'home_visitor' %}">logout</a></li>
     	</ul>
 	{% else %}
 	    <p>Welcome, new user. Please log in.</p>
