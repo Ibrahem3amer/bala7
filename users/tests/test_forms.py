@@ -50,3 +50,9 @@ class signup_form_test(TestCase):
 
 		# Assert test
 		self.assertFalse(form.is_valid())
+
+	def test_password_strength(self):
+		# Setup test
+		self.fail('write me!')
+		# Exercise test
+		# Assert test

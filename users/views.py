@@ -6,10 +6,13 @@ from users.forms import UserSignUpForm
 
 
 def home_visitor(request):
+	if request.user.is_authenticated:
+		return home_user(request)
 	return render(request, 'home_visitor.html')
 
 @login_required
 def home_user(request):
+
 	return render(request, 'home_user.html')
 
 def display_signup(request):
@@ -22,19 +25,18 @@ def signup_second_form(request):
 	first_form_data = {}
 	if request.method == 'POST': 
 		first_form_data = request.session.get('first_form_data')
-		signup_form = UserSignUpForm(request.POST)
+		signup_form 	= UserSignUpForm(request.POST)
 		if signup_form.is_valid():
-			user 				= signup_form.save(commit=True)
-			# In case that request has some problems with session object, return pk = 1.
-			form_department 	= get_object_or_404(Department, pk = first_form_data['department'])
-			form_faculty 		= get_object_or_404(Faculty, pk = first_form_data['faculty'])
-			form_university 	= get_object_or_404(University, pk = first_form_data['university'])
-			user_profile 		= UserProfile.make_form_new_profile(user)
+			user 			= signup_form.save(commit=True)
+			form_department = get_object_or_404(Department, pk = first_form_data['department'])
+			form_faculty 	= get_object_or_404(Faculty, pk = first_form_data['faculty'])
+			form_university = get_object_or_404(University, pk = first_form_data['university'])
+			user_profile 	= UserProfile.make_form_new_profile(user)
 			return redirect('home_user')
 	else:
-		university 							= request.GET.get('selected_university', None)
-		faculty 							= request.GET.get('selected_faculty', None)
-		department 							= request.GET.get('selected_department', None)
+		university 	= request.GET.get('selected_university', None)
+		faculty 	= request.GET.get('selected_faculty', None)
+		department 	= request.GET.get('selected_department', None)
 
 		# Redirect user to first form with error of he didn't entered data.
 		if university is None or faculty is None or department is None:

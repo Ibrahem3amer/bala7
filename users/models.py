@@ -23,7 +23,7 @@ class Department(Entity):
 	faculty 	= models.ForeignKey(Faculty, related_name = 'departments', on_delete = models.CASCADE, default = 1)
 
 class UserProfile(models.Model):
-	user 				= models.OneToOneField(User,related_name = 'profile', on_delete = models.CASCADE)
+	user 				= models.OneToOneField(User,related_name = 'profile', on_delete = models.CASCADE, null = True)
 	department 			= models.ForeignKey(Department, related_name = 'depart_users', on_delete = models.SET_NULL, null = True)
 	faculty  			= models.ForeignKey(Faculty, related_name = 'fac_users', on_delete = models.SET_NULL, null = True)
 	university 			= models.ForeignKey(University, related_name = 'uni_users', on_delete = models.SET_NULL, null = True)
@@ -47,7 +47,7 @@ class UserProfile(models.Model):
 		<UserProfile object>
 
 		>>>make_form_new_profile()
-		Error: expected two paramater
+		Error: expected one paramater
 		
 		>>>make_form_new_profile(user)
 		<UserProfile object> with department = null
@@ -56,7 +56,23 @@ class UserProfile(models.Model):
 		Error: Existing profile
 		"""
 		user_profile = UserProfile(user=user_obj, department=department, faculty=faculty, university=university)
-		user_profile.save()
 		return user_profile
+
+	@classmethod
+	def link_profile_to_user(cls, user_obj, profile_obj):
+		"""(user, profile) -> Boolean
+
+		Accepts User object and profile object and link them together. Returns false if already linked or error.
+		
+		>>>link_profile_to_user(user, profile)
+		True
+		>>>link_profile_to_user(user)
+		Error, expected 2 paramaters.
+		>>>link_profile_to_user(user, profile=none)
+		False
+		>>>link_profile_to_user(existing_linked_user, profile)
+		False
+		"""
+		pass
 		
 

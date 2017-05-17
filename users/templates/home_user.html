@@ -7,6 +7,7 @@
 	<p id="id_description">description</p>
 	{% if user.is_authenticated %}
     	<p>Welcome, {{ user.username }}. Welcome in Najiba.</p>
+    	{{ user.profile }}
 	{% else %}
 	    <p>Welcome, new user. Please log in.</p>
 		<a href="{% url 'web_signup' %}" id="id_sign_up">sign up</a>
