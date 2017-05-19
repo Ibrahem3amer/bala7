@@ -54,20 +54,19 @@ class UserProfile(models.Model):
 		>>>make_form_new_profile(user)
 		<UserProfile object> with department = null
 		
-		>>>make_form_new_profile(existing_user)
-		Error: Existing profile
 		"""
-		if not user_obj:
-			user_profile = UserProfile(department=department, faculty=faculty, university=university)
-		else:
-			UserProfile.link_profile_to_user(user_obj, user_profile)
+		user_profile = UserProfile(department=department, faculty=faculty, university=university)
+		if not UserProfile.link_profile_to_user(user_obj, user_profile):
+			# Existing profile.
+			user_profile = user_obj.profile
+
 		return user_profile
 
 	@classmethod
 	def link_profile_to_user(cls, user_obj, profile_obj):
 		"""(user, profile) -> Boolean
 
-		Accepts User object and profile object and link them together. Returns false if already linked or error.
+		Accepts User object and profile object and link them together. Returns false if no profile object or error.
 		
 		>>>link_profile_to_user(user, profile)
 		True
@@ -78,10 +77,13 @@ class UserProfile(models.Model):
 		>>>link_profile_to_user(existing_linked_user, profile)
 		False
 		"""
-		if not user_obj or not user_obj.profile or not profile_obj:
+
+		# Missed parameter
+		if profile_obj is None:
 			return False
 		
-		profile_obj.user = user_obj
+		user_obj.profile = profile_obj
+		user_obj.save()
 		return True
 
 	@classmethod

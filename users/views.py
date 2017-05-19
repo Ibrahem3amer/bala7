@@ -39,7 +39,7 @@ def signup_second_form(request):
 		first_form_data = request.session.get('first_form_data')
 		signup_form 	= UserSignUpForm(request.POST)
 		if signup_form.is_valid():
-			user 			= signup_form.save(commit=True)
+			user 			= signup_form.save()
 			form_department = get_object_or_404(Department, pk = first_form_data['department'])
 			form_faculty 	= get_object_or_404(Faculty, pk = first_form_data['faculty'])
 			form_university = get_object_or_404(University, pk = first_form_data['university'])
