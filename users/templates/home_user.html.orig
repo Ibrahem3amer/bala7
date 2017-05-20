@@ -23,8 +23,34 @@
     <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     
+    
+    
 </head>
 <body>
+<<<<<<< HEAD
+	<p id="id_description">description</p>
+	{% if user.is_authenticated %}
+    	<p>Welcome, {{ user.username }}. Welcome in Najiba.</p>
+    	{% if profile_error %}
+    		<h1>{{ profile_error }}</h1>
+    	{% endif%}
+    	<ul>
+    		<li><a href="{% url 'home_user' %}">home</a></li>
+    		<li><a href="#">table</a></li>
+    		<li><a href="#">topics</a></li>
+    		<li><a href="#">notifications</a></li>
+    	</ul>
+    	<hr />
+    	<ul>
+    		<li><a href="{% url 'web_user_profile' %}">profile</a></li>
+    		<li><a href="{% url 'logout' %}?next={% url 'home_visitor' %}">logout</a></li>
+    	</ul>
+	{% else %}
+	    <p>Welcome, new user. Please log in.</p>
+		<a href="{% url 'web_signup' %}" id="id_sign_up">sign up</a>
+		<a href="{% url 'login' %}" id="id_sign_in">sign in</a>
+	{% endif %}
+=======
     <!-- start navbar -->
     {% include "public/navbar1.html" %}
     <!-- end navbar -->
@@ -50,5 +76,6 @@
     </div>
     <!-- end content -->
     
+>>>>>>> banna
 </body>
 </html>
