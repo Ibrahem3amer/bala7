@@ -14,6 +14,9 @@ class Entity(models.Model):
 	class Meta:
 		abstract = True
 
+	def __unicode__(self):
+		return self.name
+
 class University(Entity):
 	uni_type 	= models.CharField(max_length = 10, default = 'public')
 
@@ -25,7 +28,7 @@ class Department(Entity):
 	faculty 	= models.ForeignKey(Faculty, related_name = 'departments', on_delete = models.CASCADE, default = 1)
 
 class UserProfile(models.Model):
-	user 				= models.OneToOneField(User,related_name = 'profile', on_delete = models.CASCADE)
+	user 				= models.OneToOneField(User,related_name = 'profile', on_delete = models.CASCADE, null = True)
 	department 			= models.ForeignKey(Department, related_name = 'depart_users', on_delete = models.SET_NULL, null = True)
 	faculty  			= models.ForeignKey(Faculty, related_name = 'fac_users', on_delete = models.SET_NULL, null = True)
 	university 			= models.ForeignKey(University, related_name = 'uni_users', on_delete = models.SET_NULL, null = True)
@@ -103,4 +106,7 @@ class UserProfile(models.Model):
 			raise Http404("An Error encounterd. Please select proper University, Facutly, and Department.")
 
 		UserProfile.objects.create(user=user, department=department, faculty=faculty, university=university)
+
+	def __unicode__(self):
+		return self.user.name
 
