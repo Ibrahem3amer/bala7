@@ -82,9 +82,7 @@ class UserSignUpForm(forms.ModelForm):
 		Creates new user and associate an empty profile to it. 
 		"""
 		form 				= self.cleaned_data
-		usr 				= User.objects.create_user(username = form['username'], email = form['email'], password = hashers.make_password(form['password']))
-		usr_profile 		= UserProfile()
-		usr_profile.user 	= usr 
-		usr_profile.save()
-
+		usr 				= User(username = form['username'], email = form['email'], password = form['password'])
+		usr.set_password(form['password'])
+		usr.save()
 		return usr

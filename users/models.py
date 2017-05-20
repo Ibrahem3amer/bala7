@@ -59,6 +59,7 @@ class UserProfile(models.Model):
 		if not UserProfile.link_profile_to_user(user_obj, user_profile):
 			# Existing profile.
 			user_profile = user_obj.profile
+		user_profile.save()
 
 		return user_profile
 

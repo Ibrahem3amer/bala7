@@ -132,7 +132,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # URL that redirected to after logout, unauthorized page.
-LOGIN_REDIRECT_URl  = '/users/login'
+LOGIN_REDIRECT_URl  = '/'
 LOGIN_URL           = '/users/login'
 
 # Social media auth pipline settings
