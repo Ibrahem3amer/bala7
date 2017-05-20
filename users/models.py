@@ -25,7 +25,7 @@ class Department(Entity):
 	faculty 	= models.ForeignKey(Faculty, related_name = 'departments', on_delete = models.CASCADE, default = 1)
 
 class UserProfile(models.Model):
-	user 				= models.OneToOneField(User,related_name = 'profile', on_delete = models.CASCADE, null = True)
+	user 				= models.OneToOneField(User,related_name = 'profile', on_delete = models.CASCADE)
 	department 			= models.ForeignKey(Department, related_name = 'depart_users', on_delete = models.SET_NULL, null = True)
 	faculty  			= models.ForeignKey(Faculty, related_name = 'fac_users', on_delete = models.SET_NULL, null = True)
 	university 			= models.ForeignKey(University, related_name = 'uni_users', on_delete = models.SET_NULL, null = True)
@@ -41,7 +41,7 @@ class UserProfile(models.Model):
 	#replies 			= 'relationship with replies'
 
 	@classmethod
-	def make_form_new_profile(cls, user_obj=None, department=None, faculty=None, university=None):
+	def make_form_new_profile(cls, user_obj, department=None, faculty=None, university=None):
 		"""
 		Accepts user object and creates his corresponding profile due to his form data. Returns error if existing. 
 
@@ -49,11 +49,13 @@ class UserProfile(models.Model):
 		<UserProfile object>
 
 		>>>make_form_new_profile()
-		Error: expected one paramater
+		Error: expected two paramater
 		
 		>>>make_form_new_profile(user)
 		<UserProfile object> with department = null
 		
+		>>>make_form_new_profile(existing_user)
+		Error: Existing profile
 		"""
 		user_profile = UserProfile(department=department, faculty=faculty, university=university)
 		if not UserProfile.link_profile_to_user(user_obj, user_profile):

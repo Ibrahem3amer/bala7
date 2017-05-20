@@ -1,20 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html dir="rtl" lang="ar">
 	<head>
-		<title>Bala7</title>
+		{% load staticfiles %}
+    
+        <meta charset="utf-8">
+        <title>Najiba | نجيبه</title>
+        <!-- Internet Explorer meta -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- First Mobile meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Bootstrap -->
+        <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> 
+        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        <link href="{% static 'css/log.css' %}" rel="stylesheet">
+        <link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
+        <!--[if lt IE 9]>
+            <script src="js/html5shiv.min.js"></script>
+            <script src="js/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
 	</head>
 	<body>
-		<form action="{% url 'login' %}?next={% url 'home_user' %}" method="post" >
-			{% csrf_token %}
-			<ul>
-				{{ form.as_ul }}
-			</ul>
-			<input type="submit" name="login" />
-		</form>
-		<a href="{% url 'social:begin' 'facebook' %}?next={% url 'home_user'%}">facebook login</a>
-		<a href="{% url 'social:begin' 'twitter' %}?next={% url 'home_user'%}">twiiter login</a>
-		<hr />
-		<a href="{% url 'password_reset' %}" id="id_signin_side">forget password?</a>
-	</body>
+        <!-- start navbar -->
+        {% include "public/navbar1.html" %}
+        <!-- end navbar -->
+        
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 nj-box  login-outer-div ">
+                    <div class="title"><i class="fa fa-user" aria-hidden="true"></i> تسجيل الدخول</div>
+                    <form action="{% url 'login' %}?next={% url 'home_user' %}" method="post" >
+                        {% csrf_token %}
+                        <ul>
+                            {{ form.as_ul }}
+                        </ul>
+                        <div class="form-group">
+                            <label class="log-label" for="email">البريد الالكتروني</label>
+                            <input type="email" class="form-control nj-input" id="email" placeholder="البريد الإلكتروني">
+                        </div>
+                        <div class="form-group">
+                            <label class="log-label" for="pass">كلمة السر</label>
+                            <input type="password" class="form-control nj-input" id="pass" placeholder="كلمة السر">
+                        </div>
+                        <div id="remember-check">
+                            <label class="log-label remember-label"></label>
+                            <input type="checkbox"> تذكرني 
+                        </div>
+                        
+                        <input type="submit" name="login" value="دخول"  class="nj-btn log-btn" />
+
+                        <div class="log-option">
+                            <div class="title-2">أو دخول بواسطة</div>
+                            <div class="social-log">    
+                                <a href="{% url 'social:begin' 'facebook' %}?next={% url 'home_user'%}"><i class="fa fa-facebook-square fb" aria-hidden="true"></i></a>
+                                <a href="{% url 'social:begin' 'twitter' %}?next={% url 'home_user'%}"><i class="fa fa-twitter-square tw" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+
+
+                        <div class="break-line"></div>
+                        <a href="{% url 'password_reset' %}" id="id_signin_side" class="pass-forget-link">هل نسيت كلمة السر؟</a>
+                        <a href="#" class="new-acc-link" href="#">انشاء حساب جديد</a>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        
 	</body>
 </html>
+
