@@ -131,6 +131,10 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+# URL that redirected to after logout, unauthorized page.
+LOGIN_REDIRECT_URl  = '/'
+LOGIN_URL           = '/users/login'
+
 # Social media auth pipline settings
 SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.social_details',
@@ -142,6 +146,7 @@ SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
     'social_core.pipeline.social_auth.associate_by_email',
+    'users.models.UserProfile.make_social_new_profile',
 ]
 
 # Facebook auth settings

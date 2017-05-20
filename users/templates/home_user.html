@@ -1,56 +1,87 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
-<head>
-    {% load staticfiles %}
+    <head>
+        {% load staticfiles %}
     
-	<meta charset="utf-8">
-    <title>Najiba | نجيبه</title>
-    <!-- Internet Explorer meta -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- First Mobile meta -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap -->
-    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> 
-    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
-    <link href="{% static 'css/home-visitor.css' %}" rel="stylesheet">
-    <link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
-    <!--[if lt IE 9]>
-        <script src="js/html5shiv.min.js"></script>
-        <script src="js/respond.min.js"></script>
-    <![endif]-->
+        <meta charset="utf-8">
+        <title>Najiba | نجيبه</title>
+        <!-- Internet Explorer meta -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- First Mobile meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Bootstrap -->
+        <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> 
+        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        <link href="{% static 'css/home.css' %}" rel="stylesheet">
+        <link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
+        <!--[if lt IE 9]>
+            <script src="js/html5shiv.min.js"></script>
+            <script src="js/respond.min.js"></script>
+        <![endif]-->
 
-    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    
-    
-    
-</head>
-<body>
-    <!-- start navbar -->
-    {% include "public/navbar1.html" %}
-    <!-- end navbar -->
-    
-    
-    <!-- start content -->
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 nj-box  content-div ">
-                <p id="id_description"> نلفت انتباه حضراتكم ان الاعلانات فى هذا الموقع ليست للمنفعة الشخصية و انما تتوجه لدعم الفقراء من العاملين بهذا الموقع</p>
-                {% if user.is_authenticated %}
-                    <p>Welcome, {{ user.username }}. Welcome in Najiba.</p>
-                {% else %}
-                    <!--<p>Welcome, new user. Please log in.</p>-->
-                    <p>مرحبا بك , من فضلك قم بتسجيل الدخول</p>
-                    <a href="{% url 'web_signup' %}" id="id_sign_up" class="nj-btn btns-pos">انشاء حساب</a><br>
-                    <a href="{% url 'login' %}" id="id_sign_in" class="nj-btn btns-pos">تسجيل دخول</a>
-                {% endif %}
-                
-                
-            </div>
-        </div>
-    </div>
-    <!-- end content -->
-    
-</body>
+        <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    </head>
+    <body>
+        
+        {% if user.is_authenticated %}
+        
+            {% if profile_error %}
+                <h1>{{ profile_error }}</h1>
+            {% endif%}
+
+            <!-- start navbar -->
+            {% include "public/navbar-user.html" %}
+            <!-- end navbar -->
+            <!-- start page content -->
+            <section class="home-section">
+                <div class="container">                
+                    <div class="row">
+                        <div class="adv-part col-sm-3 hidden-xs">
+                            <div class="ad-block">
+                                <a href="#"><img src="{% static 'pic/adv.jpg' %}"></a> 
+                            </div>
+                        </div>
+                        <div class="content-part col-sm-9">
+
+                            <div class="note-element">
+                                <div class="note-head">
+                                    <p>اختبار نظم تشغيل</p>
+                                    <p class="note-time">2017/4/25<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </p>
+                                </div>
+                                <div class="note-content">
+                                    <p>تم تحديد موعد اختبار نظم التشغيل يوم الثلاثاء</p>
+                                </div>
+                            </div>
+
+                            <div class="adv-xs visible-xs">
+                                <img src="{% static 'pic/adv-xs.jpg' %}">
+                            </div>
+
+                            <div class="content-element">
+                                <div class="head">
+                                    <p>الاسبوع الاول | ذكاء صناعى</p>
+                                </div>
+                                <div class="content">
+                                    <div class="row">
+                                        <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                        <div class="col-xs-4"><p>عنوان المحاضرة</p></div>
+                                        <div class="col-xs-4"><p>المحاضرة</p></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- end page content -->
+
+        {% else %}
+                <p>Welcome, new user. Please log in.</p>
+                <a href="{% url 'web_signup' %}" id="id_sign_up">sign up</a>
+                <a href="{% url 'login' %}" id="id_sign_in">sign in</a>
+        {% endif %}
+    </body>
 </html>
