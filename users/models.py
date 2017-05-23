@@ -98,10 +98,7 @@ class UserProfile(models.Model):
 
 
 # Pipeline customization method to complete user profile. 
-<<<<<<< HEAD
 # I mdae it oustide of class so that it can be valid package path --> users.models."Function_name" not "class_name"
-=======
->>>>>>> bb82b5f7d9f15a290811e01987941cb8e6a69e0e
 def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
 	"""
 	Customize the python_social_auth pipeline flow by saving user profile.
