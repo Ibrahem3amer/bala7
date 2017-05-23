@@ -12,7 +12,10 @@ body{
     min-height: calc(100vh - 80px);
     margin-top: 80px;
 }
-
+button{
+    border: 0px;
+    font-weight: normal;
+}
 a:hover, a:active, a:open, a:visited{
     text-decoration: none;   
 }
@@ -251,4 +254,9 @@ a:hover, a:active, a:open, a:visited{
     outline: none;
     border-color: #66afe9;
     box-shadow: 0px 0px 6px #66afe9;
+}
+
+.form-error-p{
+    color: red;
+    text-align: center;
 }

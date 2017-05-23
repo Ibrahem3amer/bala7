@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.http import Http404
+from django.core.exceptions import ObjectDoesNotExist
 
 
 # Create your models here.
@@ -91,22 +92,27 @@ class UserProfile(models.Model):
 		user_obj.profile = profile_obj
 		user_obj.save()
 		return True
-
-	@classmethod
-	def make_social_new_profile(backend, user, response, *args, **kwargs):
-		"""
-		Customize the python_social_auth pipeline flow by saving user profile.
-		"""
-		first_form_data = request.session.get('first_form_data')
-		try:
-			department = Department.objects.get(pk = first_form_data['department'])
-			faculty 	= Faculty.objects.get(pk = first_form_data['faculty'])
-			university = University.objects.get(pk = first_form_data['university'])
-		except ObjectDoesNotExist as e:
-			raise Http404("An Error encounterd. Please select proper University, Facutly, and Department.")
-
-		UserProfile.objects.create(user=user, department=department, faculty=faculty, university=university)
-
+	
 	def __unicode__(self):
 		return self.user.name
+
+
+# Pipeline customization method to complete user profile. 
+def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
+	"""
+	Customize the python_social_auth pipeline flow by saving user profile.
+	"""
+	try:
+		if not user.profile:
+			first_form_data = strategy.session_get('first_form_data')
+			try:
+				department = Department.objects.get(pk = first_form_data['department'])
+				faculty 	= Faculty.objects.get(pk = first_form_data['faculty'])
+				university = University.objects.get(pk = first_form_data['university'])
+			except ObjectDoesNotExist as e:
+				raise Http404("An Error encounterd. Please select proper University, Facutly, and Department.")
+
+			UserProfile.objects.create(user=user, department=department, faculty=faculty, university=university)
+	except AttributeError:
+		pass
 

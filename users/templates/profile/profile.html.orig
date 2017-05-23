@@ -1,4 +1,24 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
+<html>
+<head>
+	<title>Bala7</title>
+</head>
+<body>
+	<p id="id_description">description</p>
+    <h1>Basic info</h1>
+        <h2>name: {{ user.username }}</h2>
+        <h2>email: {{ user.email }}</h2>
+        <h2>password: *****</h2>
+        <hr />
+    <h1>Student info</h1>
+        <h2>univesity: {{ user.profile.university.name }}</h2>
+        <h2>faculty: {{ user.profile.faculty.name }}</h2>
+        <h2>department: {{ user.profile.department.name }}</h2>
+    <hr />
+    <h1>topics</h1>
+</body>
+=======
 <html dir="rtl" lang="ar">
     <head>
         {% load staticfiles %}
@@ -111,8 +131,7 @@
 
                             </div>
                             <div class="choose-univ">
-                                <form>
-                                    <div class="small-ele-content">
+                                <div class="small-ele-content">
                                     <div class="form-group">
                                         <label class="nj-label" for="univ">الجامعة</label>
                                         <select  class="nj-select">
@@ -162,8 +181,6 @@
                                         </select>
                                     </div>
                                 </div>
-                                    <button class="true-submit-btn" type="submit"><i class="fa fa-check"></i></button>
-                                </form>
                             </div>
 
                         </div>
@@ -183,7 +200,7 @@
                                 <a href="#"><label>اساسيات البرمجة</label></a> 
                             </div>
                             <div class="choose-materials">
-                                <form>
+
                                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                   <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="headingOne" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -294,8 +311,6 @@
                                   </div>
 
                                 </div>
-                                    <button class="true-submit-btn" type="submit"><i class="fa fa-check"></i></button>
-                                </form>
                             </div>
 
                         </div>
@@ -315,7 +330,6 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <p class="modal-title">تغيير الإسم</p>
               </div>
-              <form>
               <div class="modal-body">
                 <div class="form-group">
                     <label for="name">الإسم الجديد</label>
@@ -327,9 +341,8 @@
                  </div>
               </div>
               <div class="modal-footer">
-                  <input type="submit" class="nj-btn save-btn" value="حفظ">
+                <a class="nj-btn">حفظ</a>
               </div>
-              </form>
             </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
@@ -343,7 +356,6 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <p class="modal-title">تغيير البريد الإلكترونى</p>
               </div>
-              <form>
               <div class="modal-body">
                 <div class="form-group">
                     <label for="name">البريد الجديد</label>
@@ -359,9 +371,8 @@
                  </div>
               </div>
               <div class="modal-footer">
-                <input type="submit" class="nj-btn save-btn" value="حفظ">
-              </div> 
-              </form>
+                <a class="nj-btn">حفظ</a>
+              </div>
             </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
@@ -375,7 +386,6 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <p class="modal-title">تغيير البريد الإلكترونى</p>
               </div>
-              <form>
               <div class="modal-body">
 
                   <div class="form-group">
@@ -393,9 +403,8 @@
                  </div>
               </div>
               <div class="modal-footer">
-                <input type="submit" class="nj-btn save-btn" value="حفظ">
+                <a class="nj-btn">حفظ</a>
               </div>
-              </form>
             </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
@@ -404,4 +413,5 @@
 
         <script src="{% static 'js/profile.js' %}"></script>
     </body>
+>>>>>>> b6bab4e181780ee2a8ab40a97a5fc8d539ad8dab
 </html>
