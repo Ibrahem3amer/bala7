@@ -1,4 +1,7 @@
-
+.save-btn{
+    border:0px; 
+    font-weight: normal;
+}
 /*------------------------------------------- start content-section ------------------------------------------*/
 /*------- start adv part -------*/
 .content-section .adv-part{
@@ -32,6 +35,7 @@
 
 .content-part{
     padding-bottom: 30px;
+    padding-left: 0px;
 }
 
 .small-ele-div{
@@ -131,6 +135,15 @@
 
 .choose-univ{
     display: none;
+    position: relative;
+}
+.true-submit-btn{
+    position: absolute;
+    left: 10px;
+    top: -42px;
+    
+    background: none;
+    font-size: 28px;
 }
 /* end choose university */
 /* start chose material */
@@ -154,6 +167,7 @@
 }
 .choose-materials{
     display: none;
+    position: relative;
 }
 .panel-group{
     margin: 0px;
