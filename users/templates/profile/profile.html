@@ -44,6 +44,9 @@
                             <img src="{% static 'pic/adv-xs.jpg' %}">
                         </div>
 
+                        {% if error %}
+                            <h1>{{ error }}</h1>
+                        {% endif %}
                         <div class="small-ele-div nj-box">
                             <div class="small-ele-head">
                                 <p>البيانات الشخصية</p>
@@ -315,16 +318,13 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <p class="modal-title">تغيير الإسم</p>
               </div>
-              <form>
+              <form action="{% url 'web_change_username' %}" method="post">
+              {% csrf_token %}
               <div class="modal-body">
                 <div class="form-group">
                     <label for="name">الإسم الجديد</label>
-                    <input class="nj-input" type="text" id="name">
+                    <input class="nj-input" type="text" id="name" name="new_username" required="required">
                 </div>
-                  <div class="form-group">
-                    <label for="password">كلمة السر</label>
-                    <input class="nj-input" type="password" id="password" >
-                 </div>
               </div>
               <div class="modal-footer">
                   <input type="submit" class="nj-btn save-btn" value="حفظ">
@@ -343,20 +343,17 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <p class="modal-title">تغيير البريد الإلكترونى</p>
               </div>
-              <form>
+              <form action="{% url 'web_change_email' %}" method="post">
+              {% csrf_token %}
               <div class="modal-body">
                 <div class="form-group">
                     <label for="name">البريد الجديد</label>
-                    <input class="nj-input" type="email" id="new-email">
+                    <input class="nj-input" type="email" id="new-email" name="new_usermail">
                 </div>
                 <div class="form-group">
                     <label for="name">تأكيد البريد</label>
-                    <input class="nj-input" type="email" id="new-email">
+                    <input class="nj-input" type="email" id="new-email" name="new_usermail_confirmation">
                 </div>
-                  <div class="form-group">
-                    <label for="password">كلمة السر</label>
-                    <input class="nj-input" type="password" id="password" >
-                 </div>
               </div>
               <div class="modal-footer">
                 <input type="submit" class="nj-btn save-btn" value="حفظ">
@@ -375,21 +372,22 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <p class="modal-title">تغيير البريد الإلكترونى</p>
               </div>
-              <form>
+              <form action="{% url 'web_change_password' %}" method="post">
+              {% csrf_token %}
               <div class="modal-body">
 
                   <div class="form-group">
                     <label for="password">كلمة السر الحاليه</label>
-                    <input class="nj-input" type="password" id="old-password" >
+                    <input class="nj-input" type="password" id="old-password" name="old_password">
                  </div>
 
                   <div class="form-group">
                     <label for="password">كلمة السر الجديدة</label>
-                    <input class="nj-input" type="password" id="new-password1" >
+                    <input class="nj-input" type="password" id="new-password1" name="new_password">
                  </div>
                   <div class="form-group">
                     <label for="password">تأكيد كلمة السر</label>
-                    <input class="nj-input" type="password" id="new-password2" >
+                    <input class="nj-input" type="password" id="new-password2" name="new_password_confirm">
                  </div>
               </div>
               <div class="modal-footer">

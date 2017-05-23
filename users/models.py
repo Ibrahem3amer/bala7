@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.http import Http404
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.password_validation import validate_password
+import re
 
 
 # Create your models here.
@@ -92,6 +95,109 @@ class UserProfile(models.Model):
 		user_obj.profile = profile_obj
 		user_obj.save()
 		return True
+
+	@classmethod
+	def validate_name(cls, new_username):
+		"""
+		Takes new user name and validates it against emptiness or exsiting. 
+
+		>>>validate_name(blank_username)
+		False
+		>>>validate_name(vaild_username)
+		True
+		>>>validate_name(existing_username)
+		False
+		"""
+		if not new_username or new_username in ['', ' ']:
+			return False 
+		if User.objects.filter(username = new_username).exists():
+			return False
+		if not re.match(r'^[a-zA-Z][a-zA-Z0-9]*[._-]?[a-zA-Z0-9]+$', new_username):
+			return False
+
+		return True
+
+	@classmethod
+	def change_username(cls, new_username, user_obj):
+		"""
+		Takes a validated new username and assigns it to the user. 
+		"""
+		user_obj.username = new_username
+		user_obj.save()
+		return True
+
+	@classmethod
+	def validate_mail(cls, new_email, new_email_confirmation):
+		"""
+		Takes new usermail and its confirmation and validates them.
+
+		>>>validate_mail(email, unmatched_confirm)
+		False
+		>>>validate_mail(email, confirm)
+		True
+		>>>validate_mail(existing_email, confirm)
+		False
+		>>>validate_mail(unvalid_email, confirm)
+		False
+		"""
+		if new_email != new_email_confirmation:
+			return False
+		if User.objects.filter(email = new_email).exists():
+			return False
+		if not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", new_email):
+			return False
+
+		# Valid email
+		return True
+
+	@classmethod
+	def change_mail(cls, new_email, user_obj):
+		"""
+		Takes a validated email and user and changes the latter's
+		"""
+		user_obj.email = new_email
+		user_obj.save()
+
+		return
+
+	@classmethod
+	def validate_new_password(cls, old_password, new_password, new_password_confirmation, user_obj):
+		"""
+		Takes old, new userpassword and its confirmation, hashes and validates them.
+
+		>>>validate_mail(right_old, new, confirm)
+		True
+		>>>validate_mail(wrong_old, new, confirm)
+		False
+		>>>validate_mail(right_old, new, unmatched)
+		False
+		>>>validate_mail(right_old, invalid_new, confirm)
+		False
+		"""
+
+		
+		if not check_password(old_password, user_obj.password):
+			return False
+		else:
+			if new_password != new_password_confirmation:
+				return False
+			try:
+				validate_password(new_password)
+			except ValidationError:
+				return False
+
+		# Valid password
+		return True
+
+	@classmethod
+	def change_password(cls, new_password, user_obj):
+		"""
+		Takes a validated email and user and changes the latter's
+		"""
+		user_obj.set_password(new_password)
+		user_obj.save()
+
+		return
 	
 	def __unicode__(self):
 		return self.user.name

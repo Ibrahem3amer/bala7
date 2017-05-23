@@ -7,6 +7,8 @@ from unittest import skip
 from users.views import home_visitor, display_signup
 from users.models import University, Faculty, Department
 from users.forms import SignupForm, UserSignUpForm
+from django.contrib.auth.models import User
+
 
 class UniversityModelTest(TestCase):
 	
@@ -237,6 +239,7 @@ class DepartmentModelTest(TestCase):
 class UserProfileTest(TestCase):
 	def test_insert_new_profile_with_user(self):
 		# Setup test
+
 		self.fail('write me!')
 		# Exercise test
 		# Assert test
