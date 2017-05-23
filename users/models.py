@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.http import Http404
+from django.core.exceptions import ObjectDoesNotExist
+
 
 # Create your models here.
 class Entity(models.Model):
@@ -11,6 +14,9 @@ class Entity(models.Model):
 
 	class Meta:
 		abstract = True
+
+	def __unicode__(self):
+		return self.name
 
 class University(Entity):
 	uni_type 	= models.CharField(max_length = 10, default = 'public')
@@ -47,7 +53,7 @@ class UserProfile(models.Model):
 		<UserProfile object>
 
 		>>>make_form_new_profile()
-		Error: expected one paramater
+		Error: expected two paramater
 		
 		>>>make_form_new_profile(user)
 		<UserProfile object> with department = null
@@ -55,14 +61,19 @@ class UserProfile(models.Model):
 		>>>make_form_new_profile(existing_user)
 		Error: Existing profile
 		"""
-		user_profile = UserProfile(user=user_obj, department=department, faculty=faculty, university=university)
+		user_profile = UserProfile(department=department, faculty=faculty, university=university)
+		if not UserProfile.link_profile_to_user(user_obj, user_profile):
+			# Existing profile.
+			user_profile = user_obj.profile
+		user_profile.save()
+
 		return user_profile
 
 	@classmethod
 	def link_profile_to_user(cls, user_obj, profile_obj):
 		"""(user, profile) -> Boolean
 
-		Accepts User object and profile object and link them together. Returns false if already linked or error.
+		Accepts User object and profile object and link them together. Returns false if no profile object or error.
 		
 		>>>link_profile_to_user(user, profile)
 		True
@@ -73,6 +84,35 @@ class UserProfile(models.Model):
 		>>>link_profile_to_user(existing_linked_user, profile)
 		False
 		"""
-		pass
+
+		# Missed parameter
+		if profile_obj is None:
+			return False
 		
+		user_obj.profile = profile_obj
+		user_obj.save()
+		return True
+	
+	def __unicode__(self):
+		return self.user.name
+
+
+# Pipeline customization method to complete user profile. 
+def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
+	"""
+	Customize the python_social_auth pipeline flow by saving user profile.
+	"""
+	try:
+		if not user.profile:
+			first_form_data = strategy.session_get('first_form_data')
+			try:
+				department = Department.objects.get(pk = first_form_data['department'])
+				faculty 	= Faculty.objects.get(pk = first_form_data['faculty'])
+				university = University.objects.get(pk = first_form_data['university'])
+			except ObjectDoesNotExist as e:
+				raise Http404("An Error encounterd. Please select proper University, Facutly, and Department.")
+
+			UserProfile.objects.create(user=user, department=department, faculty=faculty, university=university)
+	except AttributeError:
+		pass
 

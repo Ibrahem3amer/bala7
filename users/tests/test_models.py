@@ -233,3 +233,11 @@ class DepartmentModelTest(TestCase):
 
 		# Assert test
 		self.assertIn(fac1, db_university.faculties.all())
+
+class UserProfileTest(TestCase):
+	def test_insert_new_profile_with_user(self):
+		# Setup test
+		self.fail('write me!')
+		# Exercise test
+		# Assert test
+		

@@ -44,7 +44,7 @@ class user_vists_homepage(TestCase):
 		# Exercise test
 		# Assert test
 		self.assertEqual(200, response.status_code)
-		self.assertTemplateUsed(response, 'signup.html')
+		self.assertTemplateUsed(response, 'registration/signup.html')
 	
 	def test_second_form_get_with_data(self):
 		# Setup test
@@ -69,10 +69,10 @@ class user_vists_homepage(TestCase):
 		session.save()
 
 		# Exercise test
-		response = self.client.post(reverse('web_signup_second_form'), data={'username':'ibrahem', 'first_name':'ibrahem', 'last_name':'amer', 'email':'ibrahem@hotmail.com', 'password':123, 'password_confirm':123})
+		response = self.client.post(reverse('web_signup_second_form'), data={'username':'test', 'first_name':'ibrahem', 'last_name':'amer', 'email':'ibrahem@hotmail.com', 'password':'12345678abc', 'password_confirm':'12345678abc'})
 
 
 		# Assert test
-		# 404 due to get_object_or_404, and database isn't populated.
-		self.assertEqual(404, response.status_code)
+		# 200 but form not submitted. Becuase it has invalid password.
+		self.assertEqual(200, response.status_code)
 		

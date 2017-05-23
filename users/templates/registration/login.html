@@ -35,16 +35,23 @@
                     <div class="title"><i class="fa fa-user" aria-hidden="true"></i> تسجيل الدخول</div>
                     <form action="{% url 'login' %}?next={% url 'home_user' %}" method="post" >
                         {% csrf_token %}
-                        <ul>
-                            {{ form.as_ul }}
-                        </ul>
+                            {% if form.username.errors %}
+                                {% for error in form.username.errors %}
+                                    <p class="form-error-p">{{ error|escape }}</p>
+                                {% endfor %}
+                            {% endif %}
+                            {% if form.password.errors %}
+                                {% for error in form.password.errors %}
+                                    <p class="form-error-p">{{ error|escape }}</p>
+                                {% endfor %}
+                            {% endif %}
                         <div class="form-group">
-                            <label class="log-label" for="email">البريد الالكتروني</label>
-                            <input type="email" class="form-control nj-input" id="email" placeholder="البريد الإلكتروني">
+                            <label class="log-label" for="{{ form.username.id_for_label }}">اسم المستخدم</label>
+                            {{ form.username }}
                         </div>
                         <div class="form-group">
-                            <label class="log-label" for="pass">كلمة السر</label>
-                            <input type="password" class="form-control nj-input" id="pass" placeholder="كلمة السر">
+                            <label class="log-label" for="{{ form.password.id_for_label }}">كلمة السر</label>
+                            {{ form.password }}
                         </div>
                         <div id="remember-check">
                             <label class="log-label remember-label"></label>
