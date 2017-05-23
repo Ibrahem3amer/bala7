@@ -37,24 +37,30 @@
                     <div class="title"><i class="fa fa-plus-square new-symbol" aria-hidden="true"></i> إنشاء حساب المرحلة "{{ stage_num }}" </div>
                     <form id="id_registeration_form" action="{% url 'web_signup_second_form' %}" method="post">
                         {% csrf_token %}
-                        <ul>
-                            {{ form.as_ul }}
-                        </ul>
+                                                
                         <div class="form-group">
-                            <label class="nj-label" for="name">الاسم</label>
-                            <input type="text" class="form-control nj-input" id="name" placeholder="الاسم">
+                            <label class="nj-label" for="{{ form.username.id_for_label }}">الاسم</label>
+                            {{ form.username }}
                         </div>
                         <div class="form-group">
-                            <label class="nj-label" for="email">البريد الالكتروني</label>
-                            <input type="email" class="form-control nj-input" id="email" placeholder="البريد الإلكتروني">
+                            <label class="nj-label" for="{{ form.first_name.id_for_label }}">الاسم الاول</label>
+                            {{ form.first_name }}
                         </div>
                         <div class="form-group">
-                            <label class="nj-label" for="pass">كلمة السر</label>
-                            <input type="password" class="form-control nj-input" id="pass" placeholder="كلمة السر">
+                            <label class="nj-label" for="{{ form.last_name.id_for_label }}">اسم العائله</label>
+                            {{ form.last_name }}
                         </div>
                         <div class="form-group">
-                            <label class="nj-label" for="pass">اعادة كلمة السر</label>
-                            <input type="password" class="form-control nj-input" id="pass" placeholder="كلمة السر">
+                            <label class="nj-label" for="{{ form.email.id_for_label }}">البريد الالكتروني</label>
+                            {{ form.email }}
+                        </div>
+                        <div class="form-group">
+                            <label class="nj-label" for="{{ form.password.id_for_label }}">كلمة السر</label>
+                            {{ form.password }}
+                        </div>
+                        <div class="form-group">
+                            <label class="nj-label" for="{{ form.password_confirm.id_for_label }}">اعادة كلمة السر</label>
+                            {{ form.password_confirm }}
                         </div>
                         <div class="log-option">
                             <div class="title-2">أو أكمل بياناتك بواسطة</div>
@@ -64,7 +70,7 @@
                             </div>
                         </div>
                         <input type="submit" name="submit_second_form" value="التالى"  class="nj-btn next-btn"/>
-                        <a class="nj-btn back-btn" href="#">السابق</a>
+                        <!-- <a class="nj-btn back-btn" href="#">السابق</a> -->
 
                     </form>
                 </div>
@@ -75,6 +81,5 @@
         
         
         
-		<a href="{% url 'login' %}" id="id_signin_side">signin</a>
 	</body>
 </html>

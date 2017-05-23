@@ -1,4 +1,24 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
+<html>
+<head>
+	<title>Bala7</title>
+</head>
+<body>
+	<p id="id_description">description</p>
+    <h1>Basic info</h1>
+        <h2>name: {{ user.username }}</h2>
+        <h2>email: {{ user.email }}</h2>
+        <h2>password: *****</h2>
+        <hr />
+    <h1>Student info</h1>
+        <h2>univesity: {{ user.profile.university.name }}</h2>
+        <h2>faculty: {{ user.profile.faculty.name }}</h2>
+        <h2>department: {{ user.profile.department.name }}</h2>
+    <hr />
+    <h1>topics</h1>
+</body>
+=======
 <html dir="rtl" lang="ar">
     <head>
         {% load staticfiles %}
@@ -393,4 +413,5 @@
 
         <script src="{% static 'js/profile.js' %}"></script>
     </body>
+>>>>>>> b6bab4e181780ee2a8ab40a97a5fc8d539ad8dab
 </html>
