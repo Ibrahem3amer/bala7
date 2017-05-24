@@ -89,6 +89,25 @@ def update_user_password(request):
 		
 		return redirect('home_user')
 
+@login_required
+def update_user_education_info(request):
+	"""
+	Takes post request that contains updated info to be replaced with the old one.
+	"""
+	if request.method == 'POST':
+		new_info = {}
+		try:
+			new_info['new_university_id'] 	= request.POST['new_university_id']
+			new_info['new_faculty_id'] 		= request.POST['new_faculty_id']
+			new_info['new_department_id'] 	= request.POST['new_department_id']
+		except AttributeError:
+			msg = 'University, faculty and department cannot be empty.'
+			return render(request, 'profile/profile.html', {'error':msg})
+
+		if UserProfile.update_education_info(new_info):
+			msg = 'Your educational info updated successfully.'
+			return render(request, 'profile/profile.html', {'error':msg})
+
 
 def display_signup(request):
 	universities 	= University.objects.all()

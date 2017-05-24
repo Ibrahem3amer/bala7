@@ -1,13 +1,14 @@
 from django.core.urlresolvers import resolve
 from django.urls import reverse
 from django.template.loader import render_to_string
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.http import HttpRequest
 from unittest import skip
-from users.views import home_visitor, display_signup
-from users.models import University, Faculty, Department
+from users.views import *
+from users.models import University, Faculty, Department, UserProfile
 from users.forms import SignupForm, UserSignUpForm
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import check_password
 
 
 class UniversityModelTest(TestCase):
@@ -237,10 +238,134 @@ class DepartmentModelTest(TestCase):
 		self.assertIn(fac1, db_university.faculties.all())
 
 class UserProfileTest(TestCase):
+	
 	def test_insert_new_profile_with_user(self):
 		# Setup test
+		user = User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
 
-		self.fail('write me!')
 		# Exercise test
-		# Assert test
+		profile 		= UserProfile()
+		profile.user 	= user
 		
+		# Assert test
+		self.assertEqual(profile, user.profile)
+
+	def test_insert_profile_with_data(self):
+		# Setup test
+		user 	= User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		uni 	= University.objects.create(name = 'Test university')
+		fac 	= Faculty.objects.create(name = 'Test faculty')
+		dep 	= Department.objects.create(name = 'Test dep')
+
+		# Exercise test
+		profile 		= UserProfile.objects.create(university = uni, faculty = fac, department = dep)
+		profile.user 	= user
+		
+		# Assert test
+		self.assertEqual('Test university', user.profile.university.name)
+		self.assertEqual('Test faculty', user.profile.faculty.name)
+		self.assertEqual('Test dep', user.profile.department.name)
+
+	def test_profile_will_be_changed_when_user_change_it(self):
+		# Setup test
+		user = User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		profile 		= UserProfile()
+		profile.user 	= user
+
+		# Exercise test
+		another_profile = UserProfile()
+		user.profile 	= another_profile
+
+		
+		# Assert test
+		self.assertNotEqual(profile, user.profile)
+
+	def test_update_vaild_username(self):
+		# Setup test
+		user 			= User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		request 		= RequestFactory()
+		request 		= request.post(reverse('web_change_username'), data={'new_username':'Ibraheeeeeeem'})
+		request.user 	= user
+
+
+		# Exercise test
+		update_user_username(request)
+
+		# Assert test
+		self.assertEqual('Ibraheeeeeeem', user.username)
+
+	def test_update_invalide_username(self):
+		# Setup test
+		user 			= User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		request 		= RequestFactory()
+		request 		= request.post(reverse('web_change_username'), data={'new_username':'13Ibraheeeem'})
+		request.user 	= user
+
+
+		# Exercise test
+		update_user_username(request)
+
+		# Assert test
+		self.assertNotEqual('13Ibraheeeem', user.username)
+
+	def test_update_existing_username(self):
+		# Setup test
+		existing_user 	= User.objects.create(username = 'ibrahem3amer', email = 'dddddd@test.com', password = 'secrettt23455')
+		user 			= User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		request 		= RequestFactory()
+		request 		= request.post(reverse('web_change_username'), data={'new_username':'ibrahem3amer'})
+		request.user 	= user
+
+
+		# Exercise test
+		update_user_username(request)
+
+		# Assert test
+		self.assertNotEqual('ibrahem3amer', user.username)
+
+	def test_update_valid_mail(self):
+		# Setup test
+		user 			= User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		request 		= RequestFactory()
+		request 		= request.post(reverse('web_change_email'), data={'new_usermail':'ibrahem3amer@hotmail.com', 'new_usermail_confirmation':'ibrahem3amer@hotmail.com'})
+		request.user 	= user
+
+
+		# Exercise test
+		update_user_email(request)
+
+		# Assert test
+		self.assertEqual('ibrahem3amer@hotmail.com', user.email)
+
+	def test_update_invalid_mail(self):
+		# Setup test
+		user 			= User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		request 		= RequestFactory()
+		request 		= request.post(reverse('web_change_email'), data={'new_usermail':'ibrahem3amer.com', 'new_usermail_confirmation':'ibrahem3amer.com'})
+		request.user 	= user
+
+
+		# Exercise test
+		update_user_email(request)
+
+		# Assert test
+		self.assertNotEqual('ibrahem3amer.com', user.email)
+
+	def test_update_valid_password(self):
+		# Setup test
+		user 			= User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		request 		= RequestFactory()
+		request 		= request.post(reverse('web_change_password'), data={
+			'old_password':'secrettt23455', 
+			'new_password':'seeeeeecccccrrrrrrrrtttttt2222222333',
+			'new_password_confirm':'seeeeeecccccrrrrrrrrtttttt2222222333'
+			})
+		request.user 	= user
+
+
+		# Exercise test
+		update_user_password(request)
+
+		# Assert test
+		self.fail('fix_me')
+		self.assertTrue(check_password('seeeeeecccccrrrrrrrrtttttt2222222333', user.password))
