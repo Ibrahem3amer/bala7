@@ -104,8 +104,11 @@ def update_user_education_info(request):
 			msg = 'University, faculty and department cannot be empty.'
 			return render(request, 'profile/profile.html', {'error':msg})
 
-		if UserProfile.update_education_info(new_info):
+		if UserProfile.update_education_info(new_info, request.user):
 			msg = 'Your educational info updated successfully.'
+			return render(request, 'profile/profile.html', {'error':msg})
+		else:
+			msg = 'Invalid educational info. Try again.'
 			return render(request, 'profile/profile.html', {'error':msg})
 
 

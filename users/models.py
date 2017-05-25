@@ -198,6 +198,30 @@ class UserProfile(models.Model):
 		user_obj.save()
 
 		return
+
+	@classmethod
+	def update_education_info(cls, info, user_obj):
+		"""
+		Takes a dict that contains new universiy, faculty and department ids. validates them and change them in user. 
+
+		>>>update_education_info(info, user)
+		True
+		>>>update_education_info(non-existing_info, user)
+		False
+		"""
+		try:
+			new_univeristy 	= University.objects.get(id = info['new_university_id'])
+			new_faculty 	= Faculty.objects.get(id = info['new_faculty_id'])
+			new_dep 		= Department.objects.get( id = info['new_department_id'])
+		except ObjectDoesNotExist:
+			return False
+
+		user_obj.profile.university = new_univeristy
+		user_obj.profile.faculty 	= new_faculty
+		user_obj.profile.department = new_dep
+		user_obj.save()
+
+		return True
 	
 	def __unicode__(self):
 		return self.user.name
