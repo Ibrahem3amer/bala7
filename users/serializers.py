@@ -18,7 +18,7 @@ class FacultySerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model 	= Faculty
-		fields 	= ('name', 'bio', 'headmaster', 'university')
+		fields 	= ('id', 'name', 'bio', 'headmaster', 'university')
 
 
 class UniversitySerializer(serializers.ModelSerializer):
