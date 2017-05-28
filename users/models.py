@@ -22,6 +22,7 @@ class Entity(models.Model):
 		return self.name
 
 class University(Entity):
+	# Determines the type of the university: public, private, ... etc.
 	uni_type 	= models.CharField(max_length = 10, default = 'public')
 
 class Faculty(Entity):
