@@ -145,6 +145,12 @@
     background: none;
     font-size: 28px;
 }
+.choose-univ .small-ele-content{
+    display: none;
+}
+.choose-univ .true-submit-btn{
+    display: none;
+}
 /* end choose university */
 /* start chose material */
 .materials{

@@ -34,6 +34,9 @@
                 <div class="title"><i class="fa fa-plus-square new-symbol" aria-hidden="true"></i> إنشاء حساب المرحلة "{{ stage_num }}" </div>
                 <form id="id_registeration_form" action="{% url 'web_signup_second_form' %}" method="get">
                     <div class="form-group">
+                        {% if error %}
+                            <h1>{{ error }}</h1>
+                        {% endif %}
                         <label class="nj-label" for="id_select_university">الجامعة</label>
                         <select id="id_select_university" name="selected_university"  class="form-control select nj-select">
                             <option value="" disabled selected>اختر الجامعة</option>
