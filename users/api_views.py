@@ -58,20 +58,6 @@ def universities_list(request, format = None):
 	else:
 		return Response(status = status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
-def universities_linked_instance(request, pk, format = None):
-	"""
-	Returns a university instance with its linked faculties and departments if GET, 400-bad-request otherwise.
-	"""
-	try:
-		university_obj = University.objects.get(pk = pk)
-	except University.DoesNotExist:
-		return Response(status = status.HTTP_404_NOT_FOUND)
-
-	if request.method == 'GET':
-		university_serialized = UniversityLinkedSerializer(university_obj)
-		return Response(university_serialized.data)
-
 
 @api_view(['GET'])
 def univerisity_instance(request, pk, format = None):
@@ -100,6 +86,23 @@ def faculties_list(request, format = None):
 		return Response(status = status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+def faculties_university_list(request, uni_pk, format = None):
+	"""
+	Returns a list of faculties that associates to specific university if GET, 400-bad-request otherwise.
+	"""
+	try:
+		university = University.objects.get(pk = uni_pk)
+	except University.DoesNotExist:
+		return Response(status = status.HTTP_400_BAD_REQUEST)
+
+	if request.method == 'GET':
+		faculties 				= Faculty.objects.filter(university = university)
+		faculties_serialized 	= FacultySerializer(faculties, many = True)
+		return Response(faculties_serialized.data)
+	else:
+		return Response(status = status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
 def faculty_instance(request, pk, format = None):
 	"""
 	Returns a faculty instance if GET, 400-bad-request otherwise.
@@ -112,3 +115,62 @@ def faculty_instance(request, pk, format = None):
 	if request.method == 'GET':
 		faculties_serialized = FacultySerializer(faculty_obj)
 		return Response(faculties_serialized.data)
+
+
+@api_view(['GET'])
+def departments_list(request, format = None):
+	"""
+	Returns a list of departments if GET, 400-bad-request otherwise.
+	"""
+	if request.method == 'GET':
+		departments 			= Department.objects.all()
+		departments_serialized 	= DepratmentSerializer(departments, many = True)
+		return Response(departments_serialized.data)
+	else:
+		return Response(status = status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def departments_faculty_list(request, fac_pk, format = None):
+	"""
+	Returns a list of departments that associates to specific faculty if GET, 400-bad-request otherwise.
+	"""
+	try:
+		faculty = Faculty.objects.get(pk = fac_pk)
+	except Faculty.DoesNotExist:
+		return Response(status = status.HTTP_400_BAD_REQUEST)
+
+	if request.method == 'GET':
+		departments 			= Department.objects.filter(faculty = faculty)
+		departments_serialized 	= DepratmentSerializer(departments, many = True)
+		return Response(departments_serialized.data)
+	else:
+		return Response(status = status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def departments_instance(request, pk, format = None):
+	"""
+	Returns a department instance if GET, 400-bad-request otherwise.
+	"""
+	try:
+		dep_obj = Department.objects.get(pk = pk)
+	except Department.DoesNotExist:
+		return Response(status = status.HTTP_404_NOT_FOUND)
+
+	if request.method == 'GET':
+		departments_serialized = DepratmentSerializer(dep_obj)
+		return Response(departments_serialized.data)
+
+
+@api_view(['GET'])
+def universities_linked_instance(request, pk, format = None):
+	"""
+	Returns a university instance with its linked faculties and departments if GET, 400-bad-request otherwise.
+	"""
+	try:
+		university_obj = University.objects.get(pk = pk)
+	except University.DoesNotExist:
+		return Response(status = status.HTTP_404_NOT_FOUND)
+
+	if request.method == 'GET':
+		university_serialized = UniversityLinkedSerializer(university_obj)
+		return Response(university_serialized.data)
