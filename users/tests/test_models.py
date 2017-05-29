@@ -372,7 +372,7 @@ class UserProfileTest(TestCase):
 		user_profile 		= UserProfile(university = old_uni, faculty = old_fac, department = old_dep)
 		self.user.profile 	= user_profile
 		request 			= RequestFactory()
-		request 			= request.post(reverse('web_change_info'), data={'new_university_id':self.uni.id, 'new_faculty_id':self.fac.id, 'new_department_id':self.dep.id})
+		request 			= request.post(reverse('web_change_info'), data={'new_university_id':self.uni.id, 'new_faculty_id':self.fac.id, 'new_department_id':self.dep.id, 'new_section_number': 5})
 		request.user 		= self.user
 
 
@@ -393,7 +393,7 @@ class UserProfileTest(TestCase):
 		user_profile 		= UserProfile(university = old_uni, faculty = old_fac, department = old_dep)
 		self.user.profile 	= user_profile
 		request 			= RequestFactory()
-		request 			= request.post(reverse('web_change_info'), data={'new_university_id':99, 'new_faculty_id':99, 'new_department_id':99})
+		request 			= request.post(reverse('web_change_info'), data={'new_university_id':99, 'new_faculty_id':99, 'new_department_id':99, 'new_section_number': 99})
 		request.user 		= self.user
 
 
