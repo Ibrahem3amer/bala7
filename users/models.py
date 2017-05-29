@@ -18,7 +18,7 @@ class Entity(models.Model):
 	class Meta:
 		abstract = True
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.name
 
 class University(Entity):
@@ -224,7 +224,7 @@ class UserProfile(models.Model):
 
 		return True
 	
-	def __unicode__(self):
+	def __str__(self):
 		return self.user.name
 
 
