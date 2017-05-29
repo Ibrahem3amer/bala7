@@ -92,12 +92,15 @@
                                         <label for="faculty">الكلية</label>
                                         <input class="nj-input" type="text" id="faculty" value="{{ user.profile.faculty.name }}" readonly >
 
+<<<<<<< HEAD
                                     </div>
                                 </div>
                                 <div class="small-ele-content">
                                     <div class="form-group">
                                         <label for="year">الفرقة</label>
                                         <input class="nj-input" type="text" id="year" value="الفرقة الثانية" readonly >
+=======
+>>>>>>> banna
                                     </div>
                                 </div>
                                 <div class="small-ele-content">
@@ -116,6 +119,7 @@
                             </div>
                             <div class="choose-univ">
                                 <form action="" method="POST">
+<<<<<<< HEAD
                                     <div class="small-ele-content">
                                     <div class="form-group">
                                         <label class="nj-label" for="univ">الجامعة</label>
@@ -134,38 +138,32 @@
                                             <option id="">كلية الهندسة</option>
                                             <option id="">كلية الحاسبات</option>
                                         </select>
+=======
+                                    <div id="universities-selector-div" class="small-ele-content">
+                                        <div class="form-group">
+                                            <label class="nj-label" for="univ">الجامعة</label>
+                                            <select id="universities-selector"  class="nj-select"></select>
+                                        </div>
+>>>>>>> banna
                                     </div>
-                                </div>
-                                <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label class="nj-label" for="facu">الفرقة</label>
-                                        <select class="nj-select">
-                                            <option value="" disabled selected>اختر الفرقة</option>
-                                            <option id="">الفرقة الاولي</option>
-                                            <option id="">الفرقة الثانية</option>
-                                        </select>
+                                    <div id="faculties-selector-div" class="small-ele-content">
+                                        <div class="form-group">
+                                            <label class="nj-label" for="facu">الكلية</label>
+                                            <select id="faculties-selector" class="nj-select"></select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label class="nj-label" for="facu">القسم</label>
-                                        <select class="nj-select">
-                                            <option value="" disabled selected>اختر القسم</option>
-                                            <option id="">قسم1</option>
-                                            <option id="">قسم 2 </option>
-                                        </select>
+                                    <div id="departments-selector-div" class="small-ele-content">
+                                        <div class="form-group">
+                                            <label class="nj-label" for="facu">القسم</label>
+                                            <select id="departments-selector" class="nj-select"></select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label class="nj-label" for="facu">السكشن</label>
-                                        <select class="nj-select">
-                                            <option value="" disabled selected>اختر السكشن</option>
-                                            <option id="">1</option>
-                                            <option id="">2</option>
-                                        </select>
+                                    <div id="section-div" class="small-ele-content">
+                                        <div class="form-group">
+                                            <label class="nj-label" for="facu">السكشن</label>
+                                            <input id="section-input" class="nj-input" type="number" min="1" max="99" placeholder="رقم السكشن" >
+                                        </div>
                                     </div>
-                                </div>
                                     <button class="true-submit-btn" type="submit"><i class="fa fa-check"></i></button>
                                 </form>
                             </div>
