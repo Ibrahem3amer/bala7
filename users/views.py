@@ -76,8 +76,8 @@ def update_user_password(request):
 		"""
 		Takes a post request and validates password to change it.
 		"""
-		if not request.POST['old_password']:
-			msg = 'Old password cannot be empty.'
+		if not request.POST['old_password'] or not request.POST['new_password'] or not request.POST['new_password_confirm']:
+			msg = 'password fields cannot be empty.'
 			return render(request, 'profile/profile.html', {'error':msg})
 		if UserProfile.validate_new_password(request.POST['old_password'], request.POST['new_password'], request.POST['new_password_confirm'], request.user):
 			UserProfile.change_password(request.POST['new_password'], request.user)
@@ -100,6 +100,7 @@ def update_user_education_info(request):
 			new_info['new_university_id'] 	= request.POST['new_university_id']
 			new_info['new_faculty_id'] 		= request.POST['new_faculty_id']
 			new_info['new_department_id'] 	= request.POST['new_department_id']
+			new_info['new_section_number'] 	= request.POST['new_section_number']
 		except AttributeError:
 			msg = 'University, faculty and department cannot be empty.'
 			return render(request, 'profile/profile.html', {'error':msg})

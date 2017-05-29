@@ -24,11 +24,15 @@ $(document).ready(function(){
         $("#universities-selector").change(function(){
             //get the id of selected option
             var universityId = $(this).children(":selected").attr("id");
+            //set #universities-hidden
+            $('#universities-hidden').val(universityId);
             //reset and fadeout submit button , #departments-selector-div and #section-div
             $('.choose-univ .true-submit-btn').fadeOut();
             $('#departments-selector').html('<option value="" disabled selected>اختر القسم</option>');
             $('#departments-selector-div').fadeOut('fast');
             $('#section-div').fadeOut('fast');
+            $('#faculties-hidden').val("");
+            $('#departments-hidden').val("");
             //display faculties selector
             $('#faculties-selector-div').fadeIn(function(){
                 //send ajax
@@ -44,14 +48,19 @@ $(document).ready(function(){
         
         //when choose faculties then request departments data and display it
         $("#faculties-selector").change(function(){
+            //get the id of selected option
             var facultId = $(this).children(":selected").attr("id");
+            //set faculties-hidden
+            $('#faculties-hidden').val(facultId);
             //fadeout submit button and #section-div
             $('.choose-univ .true-submit-btn').fadeOut();
             $('#section-div').fadeOut('fast');
+            //reset #departments-hidden
+            $('#departments-hidden').val("");
             //display faculties selector
             $('#departments-selector-div').fadeIn(function(){
                 //send ajax
-                $.ajax({url: "/api/departments/faculty/1", success: function(result){
+                $.ajax({url: "/api/departments/faculty/"+ facultId +"", success: function(result){
                     var departments = '<option value="" disabled selected>اختر القسم</option>';
                     for(var i = 0 ; i < result.length ; i++){
                         departments += '<option id="'+ result[i].id +'">'+ result[i].name +'</option>'
@@ -63,6 +72,11 @@ $(document).ready(function(){
     
         //when choose department then display section
         $("#departments-selector").change(function(){
+            //get the id of selected option
+            var departmentId = $(this).children(":selected").attr("id");
+            //set universities-hidden
+            $('#departments-hidden').val(departmentId);
+            
             $('#section-div').fadeIn(); 
         });
     
