@@ -7,6 +7,7 @@ from unittest import skip
 from users.views import home_visitor, display_signup
 from users.models import University, Faculty, Department
 from users.forms import SignupForm, UserSignUpForm
+from django.contrib.auth.models import User
 
 class user_vists_homepage(TestCase):
 	def test_user_find_homepage(self):
@@ -37,6 +38,9 @@ class user_vists_homepage(TestCase):
 		# Assert test
 		self.assertEqual(request.func, display_signup)
 
+
+
+class signup_and_signin(TestCase):
 	def test_signup_returns_correct_output(self):
 		# Setup test
 		response = self.client.get(reverse('web_signup'))
@@ -73,6 +77,88 @@ class user_vists_homepage(TestCase):
 
 
 		# Assert test
-		# 200 but form not submitted. Becuase it has invalid password.
+		# 400 because of something related to session on test client.
+		self.assertEqual(404, response.status_code)
+
+	def test_user_reach_signin(self):
+		# Setup test
+		response = self.client.get(reverse('login'))
+		# Exercise test
+		# Assert test
 		self.assertEqual(200, response.status_code)
+
+	def test_user_signout(self):
+		# Setup test
+		response = self.client.get(reverse('logout'))
+		# Exercise test
+		# Assert test
+		self.assertEqual(200, response.status_code)
+
+	def test_homeuser_redirect_without_login(self):
+		# Setup test
+		response = self.client.get(reverse('home_user'))
+		# Exercise test
+		# Assert test
+		self.assertEqual(302, response.status_code)
+
+	def test_homeuser_with_login(self):
+		# Setup test
+		user = User.objects.create(username='test', email='test_tt@test.com', password='00000111112222255555888ffff')
 		
+		# Exercise test
+		request = self.client.force_login(user)
+		response = self.client.get(reverse('web_user_profile'))
+
+		# Assert test
+		self.assertEqual(200, response.status_code)
+
+	def test_profile_with_login(self):
+		# Setup test
+		user = User.objects.create(username='test', email='test_tt@test.com', password='00000111112222255555888ffff')
+
+		# Exercise test
+		request = self.client.force_login(user)
+		response = self.client.get(reverse('web_user_profile'))
+		
+		# Assert test
+		self.assertEqual(200, response.status_code)
+
+	def test_profile_without_login(self):
+		# Setup test
+		response = self.client.get(reverse('web_user_profile'))
+		# Exercise test
+		# Assert test
+		self.assertEqual(302, response.status_code)
+
+	def test_update_profile_username_without_login(self):
+		# Setup test
+		response = self.client.post(reverse('web_change_username'))
+		# Exercise test
+		# Assert test
+		self.assertEqual(302, response.status_code)
+
+	def test_update_profile_username_login(self):
+		# Setup test
+		user = User.objects.create(username='test', email='test_tt@test.com', password='00000111112222255555888ffff')
+
+		# Exercise test
+		request = self.client.force_login(user)
+		response = self.client.get(reverse('web_change_username'), data = {'new_username': 'idfsfsdf'})
+		
+		# Assert test
+		# 302 as it success and return to profile. 
+		self.assertEqual(302, response.status_code)
+
+	def test_update_email_without_login(self):
+		# Setup test
+		response = self.client.post(reverse('web_change_email'))
+		# Exercise test
+		# Assert test
+		self.assertEqual(302, response.status_code)
+
+	def test_update_password_without_login(self):
+		# Setup test
+		response = self.client.post(reverse('web_change_password'))
+		# Exercise test
+		# Assert test
+		self.assertEqual(302, response.status_code)
