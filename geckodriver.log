@@ -1359,3 +1359,15 @@ JavaScript error: resource://gre/modules/XPCOMUtils.jsm, line 230: TypeError: Cc
 1494435123955	Marionette	INFO	Listening on port 42258
 1494435124027	Marionette	WARN	TLS certificate errors will be ignored for this session
 1494435124736	Marionette	INFO	New connections will no longer be accepted
+1496067831307	geckodriver	INFO	Listening on 127.0.0.1:44623
+1496067832425	geckodriver::marionette	INFO	Starting browser /usr/lib/firefox/firefox.sh with args ["-marionette"]
+1496067836855	Marionette	INFO	Listening on port 35713
+1496067836973	Marionette	WARN	TLS certificate errors will be ignored for this session
+1496067837645	geckodriver	INFO	Listening on 127.0.0.1:58766
+1496067838687	geckodriver::marionette	INFO	Starting browser /usr/lib/firefox/firefox.sh with args ["-marionette"]
+1496067843115	Marionette	INFO	Listening on port 46698
+1496067843218	Marionette	WARN	TLS certificate errors will be ignored for this session
+1496067843909	geckodriver	INFO	Listening on 127.0.0.1:42646
+1496067844949	geckodriver::marionette	INFO	Starting browser /usr/lib/firefox/firefox.sh with args ["-marionette"]
+1496067849819	Marionette	INFO	Listening on port 35181
+1496067849971	Marionette	WARN	TLS certificate errors will be ignored for this session

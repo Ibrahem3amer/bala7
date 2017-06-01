@@ -18,7 +18,7 @@ class Entity(models.Model):
 	class Meta:
 		abstract = True
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.name
 
 class University(Entity):
@@ -128,7 +128,7 @@ class UserProfile(models.Model):
 		return True
 
 	@classmethod
-	def validate_mail(cls, new_email, new_email_confirmation):
+	def validate_mail(cls, new_email, new_email_confirmation, api=False):
 		"""
 		Takes new usermail and its confirmation and validates them.
 
@@ -141,7 +141,7 @@ class UserProfile(models.Model):
 		>>>validate_mail(unvalid_email, confirm)
 		False
 		"""
-		if new_email != new_email_confirmation:
+		if not api and new_email != new_email_confirmation:
 			return False
 		if User.objects.filter(email = new_email).exists():
 			return False
@@ -224,7 +224,7 @@ class UserProfile(models.Model):
 
 		return True
 	
-	def __unicode__(self):
+	def __str__(self):
 		return self.user.name
 
 
