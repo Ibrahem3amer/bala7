@@ -97,9 +97,9 @@ def update_user_education_info(request):
 	if request.method == 'POST':
 		new_info = {}
 		try:
-			new_info['new_university_id'] 	= request.POST['new_university_id']
-			new_info['new_faculty_id'] 		= request.POST['new_faculty_id']
-			new_info['new_department_id'] 	= request.POST['new_department_id']
+			new_info['new_university_id'] 	= request.POST['universities-hidden']
+			new_info['new_faculty_id'] 		= request.POST['faculties-hidden']
+			new_info['new_department_id'] 	= request.POST['departments-hidden']
 			new_info['new_section_number'] 	= request.POST['new_section_number']
 		except AttributeError:
 			msg = 'University, faculty and department cannot be empty.'
