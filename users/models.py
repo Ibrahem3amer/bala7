@@ -4,6 +4,8 @@ from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import validate_password
+from cms.models import Topic
+ 
 import re
 
 
@@ -27,10 +29,15 @@ class University(Entity):
 
 class Faculty(Entity):
 	university 	= models.ForeignKey(University, related_name = 'faculties', on_delete = models.CASCADE, default = 1)
+	def __str__(self):
+		return self.university.name +' - '+ self.name
+
 
 class Department(Entity):
 	dep_type 	= models.CharField(max_length=10, default='normal')
 	faculty 	= models.ForeignKey(Faculty, related_name = 'departments', on_delete = models.CASCADE, default = 1)
+	def __str__(self):
+		return self.faculty.name +' - '+ self.name
 
 class UserProfile(models.Model):
 	user 				= models.OneToOneField(User,related_name = 'profile', on_delete = models.CASCADE, null = True)
@@ -43,7 +50,7 @@ class UserProfile(models.Model):
 	count_of_replies 	= models.IntegerField(default = 0)
 	academic_stats 		= models.CharField(max_length = 20, default = 'unset')
 	last_active_device 	= models.CharField(max_length = 200)
-	#topics				= 'relationship with topics'
+	topics				= models.ManyToManyField(Topic)
 	#table				= 'relationship with table'
 	#posts 				= 'relationship with posts'
 	#replies 			= 'relationship with replies'
@@ -225,7 +232,7 @@ class UserProfile(models.Model):
 		return True
 	
 	def __str__(self):
-		return self.user.name
+		return self.user.username
 
 
 # Pipeline customization method to complete user profile. 
