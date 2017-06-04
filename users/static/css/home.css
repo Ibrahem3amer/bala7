@@ -1,0 +1,127 @@
+
+/*------------------------------------------- start home section ------------------------------------------*/
+
+/*- start control -*/
+.user-section{
+    display: none;
+}
+/*- end control --*/
+/*------- start adv part -------*/
+.home-section .adv-part{
+    padding-top: 15px;
+}
+.home-section .adv-part .ad-block{
+    border: 3px solid #E9EBEE;
+    box-shadow: 1px 1px 5px #333;
+}
+.home-section .adv-part .ad-block img{
+    width: 100%;
+}
+/*------- end adv part ---------*/
+
+/*------- start content part -------*/
+/*- start content element -*/
+.home-section .content-part{
+    padding-left: 0px;
+}
+.home-section .content-part .content-element{
+    margin-top: 16px;
+    border: 3px solid #E9EBEE;    
+}
+.home-section .content-part .content-element .head{
+    background-color: #d9edf7;
+    border-bottom: 1px solid #ddd;
+}
+.home-section .content-part .content-element .head p{
+    font-size: 26px;
+    font-weight: bold;
+    padding: 5px 10px;
+    margin: 0px;
+}
+.home-section .content-part .content-element .content{
+    background-color: #fff;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 5px;
+    
+}
+.home-section .content-part .content-element .content div{
+    vertical-align: top;
+}
+.home-section .content-part .content-element .content div p{
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0px;
+}
+.home-section .content-part .content-element .content div a i{
+    font-size: 20px;
+    
+}
+/*--end content element -*/
+
+/*- strat note element -*/
+.home-section .content-part .note-element{
+    position: relative;
+    margin-top: 15px;
+    border: 3px solid #E9EBEE;    
+    
+}
+.home-section .content-part .note-element .note-head{
+    background-color: #ffdf7d;
+    border-bottom: 1px solid #ddd;
+}
+.home-section .content-part .note-element .note-head p{
+    font-size: 26px;
+    font-weight: bold;
+    padding: 5px 10px;
+    margin: 0px;
+}
+.home-section .content-part .note-element .note-head p i{
+    font-size: 12px;
+    padding-right: 7px;
+}
+.home-section .content-part .note-element .note-head .note-time{
+    position: absolute;
+    top: 9px;
+    left: 10px;
+    
+    background-color: #d9534f;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 2px 13px;
+    padding-top: 3px;
+    margin: 0px;
+    letter-spacing: 2px;
+}
+.home-section .content-part .note-element .note-content{
+    background-color: #fff;
+    text-align: center;
+    padding-top: 10px;
+}
+.home-section .content-part .note-element .note-content p{
+    text-align: right;
+    font-size: 20px;
+    padding: 5px 25px;
+    font-weight: bold;
+}
+/*- end note element -*/
+
+/*- start adv-xs -*/
+.adv-xs{
+    width: 320px;
+    max-width: 100%;
+    height: 100px;
+    margin: auto;
+    margin-top: 15px;
+}
+.adv-xs img{
+    width: 100%;
+    height: 100%;
+}
+/*- end adv-xs -*/
+
+/*------- end content part ---------*/
+
+/*------------------------------------------- end home section --------------------------------------------*/

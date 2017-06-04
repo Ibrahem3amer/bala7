@@ -1,0 +1,30 @@
+@media (max-width:767px){
+    .navbar{
+        height: 54px;
+    }
+}
+.container{
+    background-color: #E9EBEE;
+}
+.title{
+    font-size: 30px;
+    margin-bottom: 30px;
+    vertical-align: middle;
+}
+.content-div{
+    padding: 15px;
+    border: 3px solid #64c1ff;   
+    text-align: center;
+}
+.btns-pos{
+    width: 200px;
+    max-width: 100%;
+    margin-bottom: 10px;
+}
+.btns-pos:first-of-type{
+    background-color: #00b248;
+    margin-top: 75px;
+}
+.btns-pos:first-of-type:hover{
+    background-color: #00e676 ;
+}

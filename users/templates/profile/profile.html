@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+    <head>
+        {% load staticfiles %}
+    
+        <meta charset="utf-8">
+        <title>Najiba | نجيبه</title>
+        <!-- Internet Explorer meta -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- First Mobile meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Bootstrap -->
+        <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> 
+        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        <link href="{% static 'css/profile.css' %}" rel="stylesheet">
+        <link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
+        <!--[if lt IE 9]>
+            <script src="js/html5shiv.min.js"></script>
+            <script src="js/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    </head>
+    <body>
+        <!-- start navbar -->
+        {% include "public/navbar-user.html" %}
+        <!-- end navbar -->
+        
+        
+        <!-- start page content -->
+        <section class="content-section">
+            <div class="container">
+                <div class="row">
+                    <div class="adv-part col-sm-3 hidden-xs">
+                        <div class="ad-block">
+                            <a href="#"><img src="{% static 'pic/adv.jpg' %}"></a> 
+                        </div>
+                    </div>
+                    <div class="content-part col-sm-9">
+
+                        <div class="adv-xs visible-xs">
+                            <img src="{% static 'pic/adv-xs.jpg' %}">
+                        </div>
+
+                        {% if error %}
+                            <h1>{{ error }}</h1>
+                        {% endif %}
+                        <div class="small-ele-div nj-box">
+                            <div class="small-ele-head">
+                                <p>البيانات الشخصية</p>
+
+                            </div>
+                            <div class="small-ele-content">
+                                <i class="fa fa-cog" aria-hidden="true" data-toggle="modal" data-target="#name-modal"></i>
+                                <div class="form-group">
+                                    <label for="name">الاسم</label>
+                                    <input class="nj-input" type="text" id="name" value="{{ user.username }}" readonly >
+                                </div>
+                            </div>
+                            <div class="small-ele-content">
+                                <i class="fa fa-cog" aria-hidden="true" data-toggle="modal" data-target="#email-modal"></i>
+                                <div class="form-group">
+                                    <label for="email">البريد الالكترونى</label>
+                                    <input class="nj-input" type="email" id="email" value="{{ user.email }}" readonly>
+                                </div>
+                            </div>
+                            <div class="small-ele-content">
+                                <i class="fa fa-cog" aria-hidden="true" data-toggle="modal" data-target="#password-modal"></i>
+                                <div class="form-group">
+                                    <label for="password">كلمة السر</label>
+                                    <input class="nj-input" type="password" id="password" value="******" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="small-ele-div nj-box">
+                            <div class="small-ele-head">
+                                <p>بيانات الدراسة</p>
+                                <i id="choose-univ-setting" class="fa fa-cog" aria-hidden="true"></i>
+                            </div>
+                            <div class="univ-info">
+                                <div class="small-ele-content">
+                                    <div class="form-group">
+                                        <label for="univ">الجامعة</label>
+                                        <input class="nj-input" type="text" id="univ" value="{{ user.profile.university.name }}" readonly >
+                                    </div>
+                                </div>
+                                <div class="small-ele-content">
+                                    <div class="form-group">
+                                        <label for="faculty">الكلية</label>
+                                        <input class="nj-input" type="text" id="faculty" value="{{ user.profile.faculty.name }}" readonly >
+                                    </div>
+                                </div>
+                                <div class="small-ele-content">
+                                    <div class="form-group">
+                                        <label for="year">الفرقة</label>
+                                        <input class="nj-input" type="text" id="year" value="الفرقة الثانية" readonly >
+                                    </div>
+                                </div>
+                                <div class="small-ele-content">
+                                    <div class="form-group">
+                                        <label for="dep">القسم</label>
+                                        <input class="nj-input" type="text" id="dep" value="{{ user.profile.department.name }}" readonly >
+                                    </div>
+                                </div>
+                                <div class="small-ele-content">
+                                    <div class="form-group">
+                                        <label for="section">السكشن</label>
+                                        <input class="nj-input" type="text" id="section" value="5" readonly >
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="choose-univ">
+                                <form>
+                                    <div class="small-ele-content">
+                                    <div class="form-group">
+                                        <label class="nj-label" for="univ">الجامعة</label>
+                                        <select  class="nj-select">
+                                            <option value="" disabled selected>اختر الجامعة</option>
+                                            <option id="mans">جامعة المنصورة</option>
+                                            <option id="kafr">جامعة كفر الشيخ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="small-ele-content">
+                                    <div class="form-group">
+                                        <label class="nj-label" for="facu">الكلية</label>
+                                        <select class="nj-select">
+                                            <option value="" disabled selected>اختر الكلية</option>
+                                            <option id="">كلية الهندسة</option>
+                                            <option id="">كلية الحاسبات</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="small-ele-content">
+                                    <div class="form-group">
+                                        <label class="nj-label" for="facu">الفرقة</label>
+                                        <select class="nj-select">
+                                            <option value="" disabled selected>اختر الفرقة</option>
+                                            <option id="">الفرقة الاولي</option>
+                                            <option id="">الفرقة الثانية</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="small-ele-content">
+                                    <div class="form-group">
+                                        <label class="nj-label" for="facu">القسم</label>
+                                        <select class="nj-select">
+                                            <option value="" disabled selected>اختر القسم</option>
+                                            <option id="">قسم1</option>
+                                            <option id="">قسم 2 </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="small-ele-content">
+                                    <div class="form-group">
+                                        <label class="nj-label" for="facu">السكشن</label>
+                                        <select class="nj-select">
+                                            <option value="" disabled selected>اختر السكشن</option>
+                                            <option id="">1</option>
+                                            <option id="">2</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                    <button class="true-submit-btn" type="submit"><i class="fa fa-check"></i></button>
+                                </form>
+                            </div>
+
+                        </div>
+
+
+                        <div class="small-ele-div nj-box">
+                            <div class="small-ele-head">
+                                <p>المواد</p>
+                                <i id="choose-materials-setting" class="fa fa-cog" aria-hidden="true"></i>
+                            </div>
+                            <div class="materials">
+                                <a href="#"><label>علوم الحاسب</label></a> 
+                                <a href="#"><label>اساسيات البرمجة</label></a> 
+                                <a href="#"><label>علوم الحاسب</label></a> 
+                                <a href="#"><label>اساسيات البرمجة</label></a> 
+                                <a href="#"><label>علوم الحاسب</label></a> 
+                                <a href="#"><label>اساسيات البرمجة</label></a> 
+                            </div>
+                            <div class="choose-materials">
+                                <form>
+                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                  <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingOne" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                      <h4 class="panel-title">مواد الصف الأول</h4>
+                                    </div>
+                                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                      <div class="panel-body">
+                                        <div class="checkbox">
+                                            <label class="active-checkbox">
+                                              <input type="checkbox"  checked> اساسيات البرمجة 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> علوم الحاسب 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> اساسيات البرمجة 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> علوم الحاسب 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> اساسيات البرمجة 
+                                            </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingTwo" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                      <h4 class="panel-title">مواد الصف الثانى</h4>
+                                    </div>
+                                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                      <div class="panel-body">
+                                        <div class="checkbox">
+                                            <label>
+                                              <input type="checkbox"> اساسيات البرمجة 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> علوم الحاسب 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> اساسيات البرمجة 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> علوم الحاسب 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> اساسيات البرمجة 
+                                            </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingThree" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                      <h4 class="panel-title">مواد الصف الثالث</h4>
+                                    </div>
+                                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                      <div class="panel-body">
+                                        <div class="checkbox">
+                                            <label>
+                                              <input type="checkbox"> اساسيات البرمجة 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> علوم الحاسب 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> اساسيات البرمجة 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> علوم الحاسب 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> اساسيات البرمجة 
+                                            </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingFour" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+                                      <h4 class="panel-title">مواد الصف الرابع</h4>
+                                    </div>
+                                    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                      <div class="panel-body">
+                                        <div class="checkbox">
+                                            <label>
+                                              <input type="checkbox"> اساسيات البرمجة 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> علوم الحاسب 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> اساسيات البرمجة 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> علوم الحاسب 
+                                            </label>
+                                            <label>
+                                              <input type="checkbox"> اساسيات البرمجة 
+                                            </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                </div>
+                                    <button class="true-submit-btn" type="submit"><i class="fa fa-check"></i></button>
+                                </form>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- end page content -->
+
+        <!------------------------- start modals ---------------------------->
+        <!-- start name modal -->
+        <div id="name-modal" class="modal fade" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <p class="modal-title">تغيير الإسم</p>
+              </div>
+              <form action="{% url 'web_change_username' %}" method="post">
+              {% csrf_token %}
+              <div class="modal-body">
+                <div class="form-group">
+                    <label for="name">الإسم الجديد</label>
+                    <input class="nj-input" type="text" id="name" name="new_username" required="required">
+                </div>
+              </div>
+              <div class="modal-footer">
+                  <input type="submit" class="nj-btn save-btn" value="حفظ">
+              </div>
+              </form>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <!-- end name modal -->
+
+        <!-- start email modal -->
+        <div id="email-modal" class="modal fade" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <p class="modal-title">تغيير البريد الإلكترونى</p>
+              </div>
+              <form action="{% url 'web_change_email' %}" method="post">
+              {% csrf_token %}
+              <div class="modal-body">
+                <div class="form-group">
+                    <label for="name">البريد الجديد</label>
+                    <input class="nj-input" type="email" id="new-email" name="new_usermail">
+                </div>
+                <div class="form-group">
+                    <label for="name">تأكيد البريد</label>
+                    <input class="nj-input" type="email" id="new-email" name="new_usermail_confirmation">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <input type="submit" class="nj-btn save-btn" value="حفظ">
+              </div> 
+              </form>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <!-- end email modal -->
+
+        <!-- start password modal -->
+        <div id="password-modal" class="modal fade" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <p class="modal-title">تغيير البريد الإلكترونى</p>
+              </div>
+              <form action="{% url 'web_change_password' %}" method="post">
+              {% csrf_token %}
+              <div class="modal-body">
+
+                  <div class="form-group">
+                    <label for="password">كلمة السر الحاليه</label>
+                    <input class="nj-input" type="password" id="old-password" name="old_password">
+                 </div>
+
+                  <div class="form-group">
+                    <label for="password">كلمة السر الجديدة</label>
+                    <input class="nj-input" type="password" id="new-password1" name="new_password">
+                 </div>
+                  <div class="form-group">
+                    <label for="password">تأكيد كلمة السر</label>
+                    <input class="nj-input" type="password" id="new-password2" name="new_password_confirm">
+                 </div>
+              </div>
+              <div class="modal-footer">
+                <input type="submit" class="nj-btn save-btn" value="حفظ">
+              </div>
+              </form>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <!-- end password modal -->
+        <!------------------------- end modals ------------------------------>
+
+        <script src="{% static 'js/profile.js' %}"></script>
+    </body>
+</html>

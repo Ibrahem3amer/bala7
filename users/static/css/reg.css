@@ -1,0 +1,164 @@
+.form-group input{
+    display: inline-block;
+    width: 30%;
+    font-size: 20px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    border-top-right-radius:10px;
+    border-bottom-left-radius:10px;
+    border: 2px solid #E9EBEE;   
+    height: 40px;
+    width: 60%;
+}
+
+@media (max-width:767px){
+    .navbar{
+        height: 54px;
+    }
+}
+.container{
+    background-color: #E9EBEE;
+}
+.title{
+    font-size: 30px;
+    margin-bottom: 30px;
+    vertical-align: middle;
+}
+.done{
+    text-align: center;
+}
+.new-symbol{
+    vertical-align: middle;
+}
+.nj-box{
+    border: 3px solid #64c1ff;    
+    box-shadow: 1px 1px 10px #888;
+    margin-bottom: 20px;
+}
+.notfound-box{
+    margin-top: 0px;
+    margin-bottom: 30px;
+}
+.form-group{
+    margin-bottom: 10px;
+}
+.nj-label{
+    padding-right: 20px;
+    padding-left: 20px;
+    display: inline-table;
+    width: 30%;
+}
+.nj-input{
+    width: 60%;
+}
+
+.nj-select{
+    width: 60%;
+    display: inline-block;
+    cursor:pointer;
+    border-top-right-radius:10px;
+    border-bottom-left-radius:10px;
+    border: 2px solid #E9EBEE;   
+    height: 40px;
+    box-shadow: 0 3px 0 #E9EBEE;
+    font-size: 20px;
+}
+.nj-select:focus{
+    outline: none;
+    border-color: #66afe9;
+    box-shadow: 0px 0px 6px #66afe9;
+}
+.form-control{
+    padding-top: 0px;
+    margin-bottom: 10px;
+}
+@media (max-width:450px){
+    .nj-label{
+        padding-left: 50px;
+    }
+    .nj-select{
+        width: 100%;
+        float: left;
+        max-width: 100%;
+    }
+}
+.next-btn{
+    float: left;
+    border: 0px;
+    border-radius: 0px;
+    height: 46px;
+    width: auto;
+}
+.back-btn{
+    float: right;
+}
+.have-acc{
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 18px;
+    vertical-align: middle;
+
+}
+.have-acc-link{
+    color: #000;
+    text-decoration: underline;
+}
+.have-acc-link:hover{
+    color: #64c1ff;
+    
+}
+
+.log-option{
+    vertical-align: middle;
+    margin-top: 10px;
+    margin-left: 20px;
+    display: block;
+    text-align: center;
+}
+.social-log{
+    font-size: 35px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 10px;
+    
+}
+.title-2{
+    margin-right: 10px;
+    font-size: 25px;
+    display: inline-block;
+    width: 150px;
+}
+.fb:hover{
+    color: #3B5998;
+}
+.tw:hover{
+    color: #44A1DA;
+}
+
+
+@media (max-width:700px){
+    .nj-label{
+        display: inline-table;
+        width: 100%;
+        max-width: 100%;
+        }
+    .nj-input{
+        width: 100%;
+        float: left;
+    }
+}
+.not-found1{
+    margin-bottom: 0px;
+    font-size: 30px;
+}
+.not-found2{
+    margin-right:50px;
+    margin-top: 0px;
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+.reset-msg{
+    text-align: center;
+    font-size: 28px;
+}
