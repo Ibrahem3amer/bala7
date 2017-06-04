@@ -35,8 +35,6 @@
                             {% for topic in nav_topics %}
                                 <li class="sub-drop"><a href="{% url 'get_topic' dep_id=topic.dep topic_id=topic.pk %}">{{ topic.name }}</a></li>
                             {% endfor %}
-                            <li class="sub-drop"><a href="#">مادة1</a></li>
-                            <li><a href="#">مادة2</a></li>
                         </ul>
                     </li>
                     <li class=" hidden-xs"><a href="#"><i class="fa fa-bell " aria-hidden="true"></i></a></li>

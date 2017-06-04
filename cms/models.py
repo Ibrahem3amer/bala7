@@ -12,6 +12,7 @@ class Topic(models.Model):
 	desc 		= models.CharField(max_length = 400)
 	term 		= models.PositiveIntegerField(choices = term_choices)
 	department 	= models.ForeignKey('users.Department', related_name = 'topics', on_delete = models.CASCADE)
+	faculty 	= models.ForeignKey('users.Faculty', related_name = 'topics', on_delete = models.CASCADE, null = True)
 	# Professors -> A list of associated professors for this topic.
 	# Table -> A foriegn key that points to the table associated with this topic.
 	# Lectures -> A list of materials that represents all primary content for the topic.
@@ -70,4 +71,21 @@ class UserTopics(object):
 				nav_topic = TopicNav(topic.name, topic.id, topic.department.id)
 				nav_list.append(nav_topic)
 		return nav_list
+
+	@classmethod
+	def get_topics_choices(cls, user_obj):
+		"""
+		Accepts User, returns a list of all available topics with format --> {dep1:ListOfTopics, dep2:ListOfTopics, ..}
+		"""
+		results = {}
+
+		# Returns topics that matches user faculty. 
+		topics 	= Topic.objects.filter(faculty = user_obj.profile.faculty).all()
+		# Grouping topics query by each department in user's faculty. 
+		for dep in user_obj.profile.faculty.departments.all():
+			# Select from topics query topics that hold the same department id of current dep. 
+			results[dep.name] = [candidate_topic for candidate_topic in topics if candidate_topic.department_id == dep.id]
+
+		return results
+
 
