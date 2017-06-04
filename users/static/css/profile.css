@@ -145,6 +145,19 @@
     background: none;
     font-size: 28px;
 }
+.choose-univ .small-ele-content{
+    display: none;
+}
+.choose-univ .true-submit-btn{
+    display: none;
+}
+.choose-univ .hidden-inputs{
+    visibility: hidden;
+    position: absolute;
+    left: 0px;
+    min-width: 1px;
+    width: 80px;
+}
 /* end choose university */
 /* start chose material */
 .materials{

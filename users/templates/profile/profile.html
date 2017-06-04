@@ -47,6 +47,7 @@
                         {% if error %}
                             <h1>{{ error }}</h1>
                         {% endif %}
+
                         <div class="small-ele-div nj-box">
                             <div class="small-ele-head">
                                 <p>البيانات الشخصية</p>
@@ -91,12 +92,7 @@
                                     <div class="form-group">
                                         <label for="faculty">الكلية</label>
                                         <input class="nj-input" type="text" id="faculty" value="{{ user.profile.faculty.name }}" readonly >
-                                    </div>
-                                </div>
-                                <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label for="year">الفرقة</label>
-                                        <input class="nj-input" type="text" id="year" value="الفرقة الثانية" readonly >
+
                                     </div>
                                 </div>
                                 <div class="small-ele-content">
@@ -114,57 +110,35 @@
 
                             </div>
                             <div class="choose-univ">
-                                <form>
-                                    <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label class="nj-label" for="univ">الجامعة</label>
-                                        <select  class="nj-select">
-                                            <option value="" disabled selected>اختر الجامعة</option>
-                                            <option id="mans">جامعة المنصورة</option>
-                                            <option id="kafr">جامعة كفر الشيخ</option>
-                                        </select>
+                                <form action="{% url 'web_change_info' %}" method="POST">
+				                    {% csrf_token %}
+                                    <div id="universities-selector-div" class="small-ele-content">
+                                        <div class="form-group">
+                                            <label class="nj-label" for="univ">الجامعة</label>
+                                            <select id="universities-selector"  class="nj-select" name="new_university_id"></select>
+                                            <input id="universities-hidden" class="nj-select hidden-inputs" name="universities-hidden">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label class="nj-label" for="facu">الكلية</label>
-                                        <select class="nj-select">
-                                            <option value="" disabled selected>اختر الكلية</option>
-                                            <option id="">كلية الهندسة</option>
-                                            <option id="">كلية الحاسبات</option>
-                                        </select>
+                                    <div id="faculties-selector-div" class="small-ele-content">
+                                        <div class="form-group">
+                                            <label class="nj-label" for="facu">الكلية</label>
+                                            <select id="faculties-selector" class="nj-select" name="new_faculty_id"></select>
+                                            <input id="faculties-hidden" class="nj-select hidden-inputs" name="faculties-hidden">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label class="nj-label" for="facu">الفرقة</label>
-                                        <select class="nj-select">
-                                            <option value="" disabled selected>اختر الفرقة</option>
-                                            <option id="">الفرقة الاولي</option>
-                                            <option id="">الفرقة الثانية</option>
-                                        </select>
+                                    <div id="departments-selector-div" class="small-ele-content">
+                                        <div class="form-group">
+                                            <label class="nj-label" for="facu">القسم</label>
+                                            <select id="departments-selector" class="nj-select" name="new_department_id"></select>
+                                            <input id="departments-hidden" class="nj-select hidden-inputs" name="departments-hidden">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label class="nj-label" for="facu">القسم</label>
-                                        <select class="nj-select">
-                                            <option value="" disabled selected>اختر القسم</option>
-                                            <option id="">قسم1</option>
-                                            <option id="">قسم 2 </option>
-                                        </select>
+                                    <div id="section-div" class="small-ele-content">
+                                        <div class="form-group">
+                                            <label class="nj-label" for="facu">السكشن</label>
+                                            <input id="section-input" class="nj-input" type="number" min="1" max="99" placeholder="رقم السكشن" name="new_section_number" />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label class="nj-label" for="facu">السكشن</label>
-                                        <select class="nj-select">
-                                            <option value="" disabled selected>اختر السكشن</option>
-                                            <option id="">1</option>
-                                            <option id="">2</option>
-                                        </select>
-                                    </div>
-                                </div>
                                     <button class="true-submit-btn" type="submit"><i class="fa fa-check"></i></button>
                                 </form>
                             </div>
@@ -188,113 +162,31 @@
                             <div class="choose-materials">
                                 <form>
                                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                  <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingOne" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                      <h4 class="panel-title">مواد الصف الأول</h4>
-                                    </div>
-                                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                      <div class="panel-body">
-                                        <div class="checkbox">
-                                            <label class="active-checkbox">
-                                              <input type="checkbox"  checked> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingTwo" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                      <h4 class="panel-title">مواد الصف الثانى</h4>
-                                    </div>
-                                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                      <div class="panel-body">
-                                        <div class="checkbox">
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingThree" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                      <h4 class="panel-title">مواد الصف الثالث</h4>
-                                    </div>
-                                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                      <div class="panel-body">
-                                        <div class="checkbox">
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingFour" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
-                                      <h4 class="panel-title">مواد الصف الرابع</h4>
-                                    </div>
-                                    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                      <div class="panel-body">
-                                        <div class="checkbox">
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
+                                    {% if avaliable_topics %}
+                                        {% for dep, topics in avaliable_topics.items %}
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading" role="tab" id="headingOne" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                  <h4 class="panel-title">{{ dep }}</h4>
+                                                </div>
+                                                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                                  <div class="panel-body">
+                                                    <div class="checkbox">
+                                                        {% for topic in topics %}
+                                                            <label class="active-checkbox">
+                                                                {% if topic.id in user_topics_ids  %}
+                                                                    <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}" checked>
+                                                                {% else %}
+                                                                    <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}">
+                                                                {% endif %}
+                                                               {{ topic.name }} 
+                                                            </label>
+                                                        {% endfor %}
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
 
                                 </div>
                                     <button class="true-submit-btn" type="submit"><i class="fa fa-check"></i></button>

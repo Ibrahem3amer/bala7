@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+    'cms',
     'social_django',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +69,8 @@ TEMPLATES = [
                 # Social auth
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                # User nav topics
+                'users.context_processors.add_nav_topics'
             ],
         },
     },

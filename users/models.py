@@ -4,6 +4,8 @@ from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import validate_password
+from cms.models import Topic
+ 
 import re
 
 
@@ -18,18 +20,24 @@ class Entity(models.Model):
 	class Meta:
 		abstract = True
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.name
 
 class University(Entity):
+	# Determines the type of the university: public, private, ... etc.
 	uni_type 	= models.CharField(max_length = 10, default = 'public')
 
 class Faculty(Entity):
 	university 	= models.ForeignKey(University, related_name = 'faculties', on_delete = models.CASCADE, default = 1)
+	def __str__(self):
+		return self.university.name +' - '+ self.name
+
 
 class Department(Entity):
 	dep_type 	= models.CharField(max_length=10, default='normal')
 	faculty 	= models.ForeignKey(Faculty, related_name = 'departments', on_delete = models.CASCADE, default = 1)
+	def __str__(self):
+		return self.faculty.name +' - '+ self.name
 
 class UserProfile(models.Model):
 	user 				= models.OneToOneField(User,related_name = 'profile', on_delete = models.CASCADE, null = True)
@@ -42,7 +50,8 @@ class UserProfile(models.Model):
 	count_of_replies 	= models.IntegerField(default = 0)
 	academic_stats 		= models.CharField(max_length = 20, default = 'unset')
 	last_active_device 	= models.CharField(max_length = 200)
-	#topics				= 'relationship with topics'
+	# limit_choices_to = {'department_id': 3}) the problem is how to figure current user dep_id
+	topics				= models.ManyToManyField(Topic, null = True) 
 	#table				= 'relationship with table'
 	#posts 				= 'relationship with posts'
 	#replies 			= 'relationship with replies'
@@ -127,7 +136,7 @@ class UserProfile(models.Model):
 		return True
 
 	@classmethod
-	def validate_mail(cls, new_email, new_email_confirmation):
+	def validate_mail(cls, new_email, new_email_confirmation, api=False):
 		"""
 		Takes new usermail and its confirmation and validates them.
 
@@ -140,7 +149,7 @@ class UserProfile(models.Model):
 		>>>validate_mail(unvalid_email, confirm)
 		False
 		"""
-		if new_email != new_email_confirmation:
+		if not api and new_email != new_email_confirmation:
 			return False
 		if User.objects.filter(email = new_email).exists():
 			return False
@@ -198,9 +207,33 @@ class UserProfile(models.Model):
 		user_obj.save()
 
 		return
+
+	@classmethod
+	def update_education_info(cls, info, user_obj):
+		"""
+		Takes a dict that contains new universiy, faculty and department ids. validates them and change them in user. 
+
+		>>>update_education_info(info, user)
+		True
+		>>>update_education_info(non-existing_info, user)
+		False
+		"""
+		try:
+			new_univeristy 	= University.objects.get(id = info['new_university_id'])
+			new_faculty 	= Faculty.objects.get(id = info['new_faculty_id'])
+			new_dep 		= Department.objects.get(id = info['new_department_id'])
+		except ObjectDoesNotExist:
+			return False
+
+		user_obj.profile.university = new_univeristy
+		user_obj.profile.faculty 	= new_faculty
+		user_obj.profile.department = new_dep
+		user_obj.save()
+
+		return True
 	
-	def __unicode__(self):
-		return self.user.name
+	def __str__(self):
+		return self.user.username
 
 
 # Pipeline customization method to complete user profile. 
@@ -223,3 +256,6 @@ def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
 	except AttributeError:
 		pass
 
+
+
+		

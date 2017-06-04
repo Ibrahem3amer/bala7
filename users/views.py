@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from users.models import University, Faculty, Department, UserProfile 
 from users.forms import UserSignUpForm
+from cms.models import UserTopics
 
 
 def home_visitor(request):
@@ -25,7 +26,9 @@ def home_user(request):
 
 @login_required
 def user_profile(request):
-	return render(request, 'profile/profile.html')
+	avaliable_topics = UserTopics.get_topics_choices(request.user)
+	user_topics_ids = [topic.id for topic in request.user.profile.topics.all()]
+	return render(request, 'profile/profile.html', {'avaliable_topics': avaliable_topics, 'user_topics_ids': user_topics_ids})
 
 @login_required
 def update_user_username(request):
@@ -76,8 +79,8 @@ def update_user_password(request):
 		"""
 		Takes a post request and validates password to change it.
 		"""
-		if not request.POST['old_password']:
-			msg = 'Old password cannot be empty.'
+		if not request.POST['old_password'] or not request.POST['new_password'] or not request.POST['new_password_confirm']:
+			msg = 'password fields cannot be empty.'
 			return render(request, 'profile/profile.html', {'error':msg})
 		if UserProfile.validate_new_password(request.POST['old_password'], request.POST['new_password'], request.POST['new_password_confirm'], request.user):
 			UserProfile.change_password(request.POST['new_password'], request.user)
@@ -88,6 +91,29 @@ def update_user_password(request):
 			return render(request, 'profile/profile.html', {'error':msg})
 		
 		return redirect('home_user')
+
+@login_required
+def update_user_education_info(request):
+	"""
+	Takes post request that contains updated info to be replaced with the old one.
+	"""
+	if request.method == 'POST':
+		new_info = {}
+		try:
+			new_info['new_university_id'] 	= request.POST['universities-hidden']
+			new_info['new_faculty_id'] 		= request.POST['faculties-hidden']
+			new_info['new_department_id'] 	= request.POST['departments-hidden']
+			new_info['new_section_number'] 	= request.POST['new_section_number']
+		except AttributeError:
+			msg = 'University, faculty and department cannot be empty.'
+			return render(request, 'profile/profile.html', {'error':msg})
+
+		if UserProfile.update_education_info(new_info, request.user):
+			msg = 'Your educational info updated successfully.'
+			return render(request, 'profile/profile.html', {'error':msg})
+		else:
+			msg = 'Invalid educational info. Try again.'
+			return render(request, 'profile/profile.html', {'error':msg})
 
 
 def display_signup(request):
