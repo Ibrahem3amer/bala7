@@ -255,3 +255,6 @@ def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
 	except AttributeError:
 		pass
 
+
+
+		

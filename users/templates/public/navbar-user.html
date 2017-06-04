@@ -32,6 +32,9 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-book " aria-hidden="true"></i>موادي<span class="caret"></span></a>
                         <ul class="dropdown-menu">
+                            {% for topic in nav_topics %}
+                                <li class="sub-drop"><a href="{% url 'get_topic' dep_id=topic.dep topic_id=topic.pk %}">{{ topic.name }}</a></li>
+                            {% endfor %}
                             <li class="sub-drop"><a href="#">مادة1</a></li>
                             <li><a href="#">مادة2</a></li>
                         </ul>

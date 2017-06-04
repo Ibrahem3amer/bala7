@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
-from cms.models import Topic
+from cms.models import Topic, UserTopics
 
 def get_topic(request, dep_id, topic_id):
     """

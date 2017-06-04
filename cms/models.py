@@ -23,3 +23,51 @@ class Topic(models.Model):
 
 	def __str__(self):
 		return self.name
+
+class TopicNav(object):
+	"""
+	TopicNav is used in navbar and menus, hold information about each topic: name, link are most important. 
+	"""
+	def __init__(self, name, pk, dep_id):
+		super(TopicNav, self).__init__()
+		self.name 	= name
+		self.pk 	= pk
+		self.dep 	= dep_id
+		self.link 	= self.make_topic_link()
+
+	def __iter__(self):
+		return self
+
+	def make_topic_link(self):
+		"""
+		Creates topic link. Return visitable link. 
+		"""
+		return '/'+str(self.dep)+'/'+str(self.pk)
+
+
+class UserTopics(object):
+	"""
+	Contains the methods meant to organize user interaction with topics. 
+	"""
+
+	@classmethod
+	def get_user_topics(cls, user_obj):
+	    """
+	    Returns list of topics that user has access to. 
+	    """
+	    return user_obj.profile.topics.all()
+
+	@classmethod
+	def get_user_topics_nav(cls, user_obj):
+		"""
+        Returns list of TopicNav objects that user has access to. 
+		"""
+		nav_list = []
+
+		topics 	= cls.get_user_topics(user_obj)
+		if topics:
+			for topic in topics:
+				nav_topic = TopicNav(topic.name, topic.id, topic.department.id)
+				nav_list.append(nav_topic)
+		return nav_list
+
