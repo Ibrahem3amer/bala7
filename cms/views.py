@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
 from cms.models import Topic, UserTopics
 
-def get_topic(request, dep_id, topic_id):
+def get_topic(request, dep_id=-1, topic_id=-1):
     """
     Returns a specific topic with corresponding id. Returns 404 if topic wasn't accessible by user.
     """
@@ -12,7 +12,10 @@ def get_topic(request, dep_id, topic_id):
     if request.user.profile.department.id != int(dep_id):
         raise Http404("You cannot see this!")
 
-    # TODO: Validate that topic is in user's perefrences.
+    # Filtering user's prefernces based on topic_id, using filter() on many-to-many relationship.
+    user_topics = request.user.profile.topics.all()
+    if user_topics.filter(id = topic_id).count() <= 0:
+       raise Http404("This topic is not included in your topics list.") 
 
     try:
         topic = Topic.objects.get(pk = topic_id)

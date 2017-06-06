@@ -1,133 +1,107 @@
 from django.core.urlresolvers import resolve
 from django.urls import reverse
-from django.template.loader import render_to_string
-from django.test import TestCase
-from django.http import HttpRequest
-from unittest import skip
-from users.views import home_visitor, display_signup
-from users.models import University, Faculty, Department
-from users.forms import SignupForm, UserSignUpForm
+from django.test import TestCase, RequestFactory
+from django.http import HttpRequest, Http404
 from django.contrib.auth.models import User
+from unittest import skip
+from users.models import University, Faculty, Department, UserProfile
+from cms.models import Topic
+from cms.views import get_topic 
 
-class signup_and_signin(TestCase):
-    def test_signup_returns_correct_output(self):
-        # Setup test
-        response = self.client.get(reverse('web_signup'))
 
-        # Exercise test
-        # Assert test
-        self.assertEqual(200, response.status_code)
-        self.assertTemplateUsed(response, 'registration/signup.html')
+class Access_restriction(TestCase):
+    def setUp(self):
+        self.user           = User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+        self.uni            = University.objects.create(name = 'test_university')
+        self.fac            = Faculty.objects.create(name = 'Test faculty')
+        self.dep            = Department.objects.create(name = 'Test dep')
+        self.profile        = UserProfile.objects.create(university = self.uni, faculty = self.fac, department = self.dep)
+        self.topic          = Topic.objects.create(name = 'cs', desc = "test test test", department = self.dep, faculty = self.fac, term = 1)
+        self.user.profile   = self.profile
+        self.profile.topics.add(self.topic)
     
-    def test_second_form_get_with_data(self):
+    def test_return_topic_that_match_user(self):
         # Setup test
-        response = self.client.get(reverse('web_signup_second_form'), data={'selected_university':1, 'selected_faculty':1, 'selected_department':1})
-        # Exercise test
-        # Assert test
-        self.assertEqual(200, response.status_code)
-
-    def test_second_form_get_with_no_data(self):
-        # Setup test
-        response = self.client.get(reverse('web_signup_second_form'), data={})
-        # Exercise test
-        # Assert test
-        self.assertEqual(302, response.status_code)
-
-
-    def test_second_form_post_with_data(self):
-        # Setup test
-        first_form_data             = {'university':1, 'faculty':1, 'department':1}
-        session                     = self.client.session
-        session['first_form_data']  = first_form_data
-        session.save()
+        request         = RequestFactory()
+        request         = request.get(reverse('get_topic', kwargs={'dep_id': self.dep.id, 'topic_id': self.topic.id}))
+        request.user    = self.user
 
         # Exercise test
-        response = self.client.post(reverse('web_signup_second_form'), data={'username':'test', 'first_name':'ibrahem', 'last_name':'amer', 'email':'ibrahem@hotmail.com', 'password':'12345678abc', 'password_confirm':'12345678abc'})
-
-
-        # Assert test
-        # 400 because of something related to session on test client.
-        self.assertEqual(404, response.status_code)
-
-    def test_user_reach_signin(self):
-        # Setup test
-        response = self.client.get(reverse('login'))
-        # Exercise test
-        # Assert test
-        self.assertEqual(200, response.status_code)
-
-    def test_user_signout(self):
-        # Setup test
-        response = self.client.get(reverse('logout'))
-        # Exercise test
-        # Assert test
-        self.assertEqual(200, response.status_code)
-
-    def test_homeuser_redirect_without_login(self):
-        # Setup test
-        response = self.client.get(reverse('home_user'))
-        # Exercise test
-        # Assert test
-        self.assertEqual(302, response.status_code)
-
-    def test_homeuser_with_login(self):
-        # Setup test
-        user = User.objects.create(username='test', email='test_tt@test.com', password='00000111112222255555888ffff')
-        
-        # Exercise test
-        request = self.client.force_login(user)
-        response = self.client.get(reverse('web_user_profile'))
-
-        # Assert test
-        self.assertEqual(200, response.status_code)
-
-    def test_profile_with_login(self):
-        # Setup test
-        user = User.objects.create(username='test', email='test_tt@test.com', password='00000111112222255555888ffff')
-
-        # Exercise test
-        request = self.client.force_login(user)
-        response = self.client.get(reverse('web_user_profile'))
+        response = get_topic(request, self.dep.id, self.topic.id)
         
         # Assert test
         self.assertEqual(200, response.status_code)
 
-    def test_profile_without_login(self):
+    def test_return_topic_that_has_different_department(self):
         # Setup test
-        response = self.client.get(reverse('web_user_profile'))
-        # Exercise test
-        # Assert test
-        self.assertEqual(302, response.status_code)
-
-    def test_update_profile_username_without_login(self):
-        # Setup test
-        response = self.client.post(reverse('web_change_username'))
-        # Exercise test
-        # Assert test
-        self.assertEqual(302, response.status_code)
-
-    def test_update_profile_username_login(self):
-        # Setup test
-        user = User.objects.create(username='test', email='test_tt@test.com', password='00000111112222255555888ffff')
+        request         = RequestFactory()
+        request         = request.get(reverse('get_topic', kwargs={'dep_id': self.dep.id, 'topic_id': self.topic.id}))
+        request.user    = self.user
 
         # Exercise test
-        request = self.client.force_login(user)
-        response = self.client.get(reverse('web_change_username'), data = {'new_username': 'idfsfsdf'})
+        another_dep = Department.objects.create() 
+        try:
+            response    = get_topic(request, another_dep.id, self.topic.id)
+            flag        = False
+        except Http404:
+            flag        = True
         
-        # Assert test
-        # 302 as it success and return to profile. 
-        self.assertEqual(302, response.status_code)
 
-    def test_update_email_without_login(self):
-        # Setup test
-        response = self.client.post(reverse('web_change_email'))
-        # Exercise test
         # Assert test
-        self.assertEqual(302, response.status_code)
+        self.assertTrue(flag)
 
-    def test_update_password_without_login(self):
+    def test_return_topic_that_does_not_exist(self):
         # Setup test
-        response = self.client.post(reverse('web_change_password'))
+        request         = RequestFactory()
+        request         = request.get(reverse('get_topic', kwargs={'dep_id': self.dep.id, 'topic_id': self.topic.id}))
+        request.user    = self.user
+
         # Exercise test
+        try:
+            response    = get_topic(request, self.dep.id, 990)
+            flag        = False
+        except Http404:
+            flag        = True
+        
+
         # Assert test
-        self.assertEqual(302, response.status_code)
+        self.assertTrue(flag)
+
+    def test_return_topic_that_outside_user_topics(self):
+        # Setup test
+        another_topic   = Topic.objects.create(name = 'is', desc = "test test test", department = self.dep, faculty = self.fac, term = 1)
+        self.user.profile.topics.add(another_topic)        
+        request         = RequestFactory()
+        request         = request.get(reverse('get_topic', kwargs={'dep_id': self.dep.id, 'topic_id': self.topic.id}))
+        request.user    = self.user
+
+        # Exercise test
+        outsider_topic  = Topic.objects.create(name = 'ms', desc = "test test test", department = self.dep, faculty = self.fac, term = 1)
+        try:
+            response    = get_topic(request, self.dep.id, outsider_topic.id)
+            flag        = False
+        except Http404:
+            flag        = True
+
+        # Assert test
+        self.assertTrue(flag)
+
+
+    def test_get_topic_with_no_parameters(self):
+        # Setup test
+        another_topic   = Topic.objects.create(name = 'is', desc = "test test test", department = self.dep, faculty = self.fac, term = 1)
+        self.user.profile.topics.add(another_topic)        
+        request         = RequestFactory()
+        request         = request.get(reverse('get_topic', kwargs={'dep_id': self.dep.id, 'topic_id': self.topic.id}))
+        request.user    = self.user
+
+        # Exercise test
+        outsider_topic  = Topic.objects.create(name = 'ms', desc = "test test test", department = self.dep, faculty = self.fac, term = 1)
+        try:
+            response    = get_topic(request)
+            flag        = False
+        except Http404:
+            flag        = True
+
+        # Assert test
+        self.assertTrue(flag)
