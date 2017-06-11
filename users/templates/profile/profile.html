@@ -152,43 +152,40 @@
                                 <i id="choose-materials-setting" class="fa fa-cog" aria-hidden="true"></i>
                             </div>
                             <div class="materials">
-                                <a href="#"><label>علوم الحاسب</label></a> 
-                                <a href="#"><label>اساسيات البرمجة</label></a> 
-                                <a href="#"><label>علوم الحاسب</label></a> 
-                                <a href="#"><label>اساسيات البرمجة</label></a> 
-                                <a href="#"><label>علوم الحاسب</label></a> 
-                                <a href="#"><label>اساسيات البرمجة</label></a> 
+                                {% for topic in nav_topics %}
+                                    <a href="{% url 'get_topic' dep_id=topic.dep topic_id=topic.pk %}"><label>{{ topic.name }}</label></a> 
+                                {% endfor %}
                             </div>
                             <div class="choose-materials">
-                                <form>
-                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                    {% if avaliable_topics %}
-                                        {% for dep, topics in avaliable_topics.items %}
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading" role="tab" id="headingOne" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                  <h4 class="panel-title">{{ dep }}</h4>
-                                                </div>
-                                                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                                  <div class="panel-body">
-                                                    <div class="checkbox">
-                                                        {% for topic in topics %}
-                                                            <label class="active-checkbox">
-                                                                {% if topic.id in user_topics_ids  %}
-                                                                    <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}" checked>
-                                                                {% else %}
-                                                                    <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}">
-                                                                {% endif %}
-                                                               {{ topic.name }} 
-                                                            </label>
-                                                        {% endfor %}
+                                <form action="{% url 'update_user_topics' %}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                        {% if avaliable_topics %}
+                                            {% for dep, topics in avaliable_topics.items %}
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading" role="tab" id="headingOne" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                      <h4 class="panel-title">{{ dep }}</h4>
                                                     </div>
-                                                  </div>
+                                                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                                      <div class="panel-body">
+                                                        <div class="checkbox">
+                                                            {% for topic in topics %}
+                                                                <label class="active-checkbox">
+                                                                    {% if topic.id in user_topics_ids  %}
+                                                                        <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}" checked>
+                                                                    {% else %}
+                                                                        <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}">
+                                                                    {% endif %}
+                                                                    {{ topic.name }} 
+                                                                </label>
+                                                            {% endfor %}
+                                                        </div>
+                                                      </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        {% endfor %}
-                                    {% endif %}
-
-                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
                                     <button class="true-submit-btn" type="submit"><i class="fa fa-check"></i></button>
                                 </form>
                             </div>

@@ -5,8 +5,9 @@ from django.core.urlresolvers import resolve
 from django.core.exceptions import ValidationError 
 from django.contrib.auth.models import User
 from unittest import skip
-from cms.models import Topic
-from users.models import Department
+from cms.models import Topic, UserTopics
+from cms.views import update_user_topics
+from users.models import Department, UserProfile, Faculty
 
 class TopicTest(TestCase):
 	def test_add_valid_topic(self):
@@ -40,6 +41,70 @@ class TopicTest(TestCase):
 		# Assert test
 		self.assertRaises(ValidationError, t2.clean)
 
+class UserTopicsTest(TestCase):
+	def setUp(self):
+		self.user 			= User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		self.fac 			= Faculty.objects.create()
+		self.dep 			= Department.objects.create(faculty = self.fac)
+		self.user.profile 	= UserProfile.objects.create(department = self.dep, faculty = self.fac)
+		self.topic 			= Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
+
+	def test_return_user_topics(self):
+		# Setup test	
+		self.user.profile.topics.add(self.topic)
+
+		# Exercise test
+		topics = UserTopics.get_user_topics(self.user)
+		
+		# Assert test
+		self.assertEqual(len(topics), 1)
+		self.assertEqual(topics[0], self.topic)
+
+	def test_return_user_topics_with_no_profile(self):
+		# Setup test	
+		user2 = User.objects.create(username = 'test_2', email = 'tesssst@test.com', password = 'secrettt23455')
+
+		# Exercise test
+		topics = UserTopics.get_user_topics(user2)
+		
+		# Assert test
+		self.assertEqual(len(topics), 0)
+
+	def test_return_available_topics(self):
+		# Setup test	
+		self.user.profile.topics.add(self.topic)
+		dep2 = Department.objects.create(name = "test_dep", faculty = self.fac)
+		
+		# Exercise test
+		topics 	= UserTopics.get_topics_choices(self.user)
+		
+		# Assert test
+		self.assertIn(self.topic.department.name, topics)
+		# Assure that results include all departments within same faculty.
+		self.assertIn(dep2.name, topics)
+
+	def test_update_topics(self):
+		# Setup test	
+		self.user.profile.topics.add(self.topic)
+		new_topic 	= []
+		t1 			= Topic.objects.create(name = 'topic_new_2', desc = 'ddddd', term = 1, department = self.dep)
+		new_topic.append(t1.id)
+		t2 			= Topic.objects.create(name = 'topic_new_3', desc = 'ddddd', term = 2, department = self.dep)
+		new_topic.append(t2.id)
+		t3 			= Topic.objects.create(name = 'topic_new_4', desc = 'ddddd', term = 3, department = self.dep)
+		new_topic.append(t3.id)
+
+
+		# Exercise test
+		request 		= RequestFactory()
+		request 		= request.post(reverse('update_user_topics'), data = {'chosen_list[]':new_topic})
+		request.user 	= self.user
+
+		update_user_topics(request)
+
+		
+		# Assert test
+		self.assertEqual(self.user.profile.topics.all().count(), 3)
 
 
 
