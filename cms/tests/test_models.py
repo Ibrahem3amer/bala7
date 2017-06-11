@@ -83,7 +83,7 @@ class UserTopicsTest(TestCase):
 		# Assure that results include all departments within same faculty.
 		self.assertIn(dep2.name, topics)
 
-	def test_update_topics(self):
+	def test_update_topics_with_correct_ids(self):
 		# Setup test	
 		self.user.profile.topics.add(self.topic)
 		new_topic 	= []
@@ -106,5 +106,87 @@ class UserTopicsTest(TestCase):
 		# Assert test
 		self.assertEqual(self.user.profile.topics.all().count(), 3)
 
+	def test_update_topics_with_empty_list(self):
+		# Setup test	
+		self.user.profile.topics.add(self.topic)
+		new_topic 	= []
 
 
+		# Exercise test
+		request 		= RequestFactory()
+		request 		= request.post(reverse('update_user_topics'), data = {'chosen_list[]':new_topic})
+		request.user 	= self.user
+
+		update_user_topics(request)
+
+		
+		# Assert test
+		self.assertEqual(self.user.profile.topics.all().count(), 1)
+
+	def test_update_topics_with_all_incorrect_ids(self):
+		# Setup test	
+		self.user.profile.topics.add(self.topic)
+		new_topic 	= [990, 1200, 1510]
+
+
+		# Exercise test
+		request 		= RequestFactory()
+		request 		= request.post(reverse('update_user_topics'), data = {'chosen_list[]':new_topic})
+		request.user 	= self.user
+
+		update_user_topics(request)
+
+		
+		# Assert test
+		self.assertEqual(self.user.profile.topics.all().count(), 1)
+
+	def test_update_topics_with_half_correct_half_incorrect(self):
+		# Setup test	
+		self.user.profile.topics.add(self.topic)
+		new_topic 	= []
+		t1 			= Topic.objects.create(name = 'topic_new_2', desc = 'ddddd', term = 1, department = self.dep)
+		new_topic.append(t1.id)
+		t2 			= Topic.objects.create(name = 'topic_new_3', desc = 'ddddd', term = 2, department = self.dep)
+		new_topic.append(t2.id)
+		t3 			= Topic.objects.create(name = 'topic_new_4', desc = 'ddddd', term = 3, department = self.dep)
+		new_topic.append(t3.id)
+		new_topic.append(990)
+		new_topic.append(5300)
+		new_topic.append(8000)
+
+
+		# Exercise test
+		request 		= RequestFactory()
+		request 		= request.post(reverse('update_user_topics'), data = {'chosen_list[]':new_topic})
+		request.user 	= self.user
+
+		update_user_topics(request)
+
+		
+		# Assert test
+		self.assertEqual(self.user.profile.topics.all().count(), 3)
+
+	def test_update_topics_with_correct_ids_that_user_cannot_access(self):
+		# Setup test	
+		self.user.profile.topics.add(self.topic)
+		another_faculty 				= Faculty.objects.create()
+		another_dep_user_cannot_access 	= Department.objects.create(faculty = another_faculty)
+		new_topic 	= []
+		t1 			= Topic.objects.create(name = 'topic_new_2', desc = 'ddddd', term = 1, department = another_dep_user_cannot_access)
+		new_topic.append(t1.id)
+		t2 			= Topic.objects.create(name = 'topic_new_3', desc = 'ddddd', term = 2, department = another_dep_user_cannot_access)
+		new_topic.append(t2.id)
+		t3 			= Topic.objects.create(name = 'topic_new_4', desc = 'ddddd', term = 3, department = another_dep_user_cannot_access)
+		new_topic.append(t3.id)
+
+
+		# Exercise test
+		request 		= RequestFactory()
+		request 		= request.post(reverse('update_user_topics'), data = {'chosen_list[]':new_topic})
+		request.user 	= self.user
+
+		update_user_topics(request)
+
+		
+		# Assert test
+		self.assertEqual(self.user.profile.topics.all().count(), 1)

@@ -16,9 +16,23 @@ def restrict_access(request, topic_id):
 
     return True
 
+def within_user_domain(user_obj, list_of_topics_ids):
+    """
+    Validates that topics are within the same faculty of user's.
+    """
+    user_faculty_departments = user_obj.profile.faculty.departments.all().values_list('id', flat=True)
+    request_topics           = Topic.objects.filter(id__in = list_of_topics_ids).values_list('department', flat=True)
+
+    # Check if all topics in incoming request hold an accessible department id.
+    for topic in request_topics:
+        if topic not in user_faculty_departments:
+            return False
+
+    return True
+
 def get_topic(request, dep_id=-1, topic_id=-1):
     """
-    Returns a specific topic with corresponding id. Returns 404 if topic wasn't accessible by user.
+    Returns a specific topic with corresponding id. Returns 404 if topic isn't accessible by user.
     """
 
     restrict_access(request, topic_id)
@@ -28,7 +42,7 @@ def get_topic(request, dep_id=-1, topic_id=-1):
     except Topic.DoesNotExist:
         raise Http404("It doesn't exist!")
 
-    # Validate that topic relates to department.
+    # Validates that topic relates to department.
     if topic.department.id != int(dep_id):
         raise Http404("Incorrect department")
 
@@ -41,9 +55,11 @@ def update_user_topics(request):
     """
     if request.method == 'POST':
         user_topics = request.POST.getlist('chosen_list[]', None)
-        if not user_topics:
+        # Validates that user has an access to these topics.
+        if not user_topics or not within_user_domain(request.user, user_topics):
             # TODO::Add message that inform user.
             return redirect(reverse('web_user_profile'))
+
 
         if(UserTopics.update_topics(request, user_topics)):
             # TODO::Add message that inform user of success.
