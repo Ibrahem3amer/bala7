@@ -24,8 +24,8 @@ urlpatterns = [
     url(r'^$', views.home_visitor, name = 'home_visitor'),
     url(r'^users/', include('django.contrib.auth.urls')),
     url(r'^users/', include('users.urls')),
-    url(r'^topics/', include('cms.urls')),
     url(r'^api/', include('users.api_urls')),
+    url(r'^topics/', include('cms.urls')),
     url(r'^api/', include('cms.api_urls')),
     url(r'', include('social_django.urls', namespace='social')),
 ]

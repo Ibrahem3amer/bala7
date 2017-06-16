@@ -12,7 +12,7 @@ def restrict_access(request, topic_id):
     # Filtering user's prefernces based on topic_id, using filter() on many-to-many relationship.
     user_topics = request.user.profile.topics.all()
     if user_topics.filter(id = topic_id).count() <= 0:
-       raise Http404("This topic is not included in your topics list.") 
+        return False
 
     return True
 
@@ -34,17 +34,18 @@ def get_topic(request, dep_id=-1, topic_id=-1):
     """
     Returns a specific topic with corresponding id. Returns 404 if topic isn't accessible by user.
     """
-
-    restrict_access(request, topic_id)
-
     try:
         topic = Topic.objects.get(pk = topic_id)
     except Topic.DoesNotExist:
         raise Http404("It doesn't exist!")
 
+    # User has no access to this topic.
+    if not restrict_access(request, topic_id):
+        raise Http404("Access denied.")
+
     # Validates that topic relates to department.
     if topic.department.id != int(dep_id):
-        raise Http404("Incorrect department")
+        raise Http404("Incorrect department.")
 
 
     return render(request, 'topics/get_topic.html', {'topic':topic})

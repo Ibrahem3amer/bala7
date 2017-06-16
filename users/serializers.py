@@ -7,6 +7,10 @@ class UserSerializer(serializers.ModelSerializer):
 		model 	= User
 		fields 	= ('id', 'username', 'email', 'password')
 
+class UserProfileSerialzer(serializers.ModelSerializer):
+	class Meta:
+		model 	= UserProfile
+		fields 	= ('university', 'faculty', 'department', 'level', 'gender', 'count_of_posts', 'count_of_replies', 'topics')
 
 class DepratmentSerializer(serializers.ModelSerializer):
 	class Meta:

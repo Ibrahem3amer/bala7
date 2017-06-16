@@ -1,8 +1,9 @@
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, force_authenticate
+from django.contrib.auth.models import User
 from cms.models import *
-from users.models import Department
+from users.models import Department, Faculty
 
 
 class TopicAPITest(APITestCase):
@@ -15,30 +16,5 @@ class TopicAPITest(APITestCase):
 
         # Assert test
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_return_topic_with_correct_id(self):
-        # Setup test
-        dep         = Department.objects.create()
-        new_topic   = Topic.objects.create(name = 'topic_new_2', desc = 'ddddd', term = 1, department = dep)
-        url         = reverse('api_topic', kwargs={'pk':new_topic.id})
-
-        # Exercise test
-        response = self.client.get(url)
-        
-        # Assert test
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['name'], new_topic.name)
-
-    def test_return_topic_with_incorrect_id(self):
-        # Setup test
-        dep         = Department.objects.create()
-        new_topic   = Topic.objects.create(name = 'topic_new_2', desc = 'ddddd', term = 1, department = dep)
-        url         = reverse('api_topic', kwargs={'pk':new_topic.id+1})
-
-        # Exercise test
-        response = self.client.get(url)
-        
-        # Assert test
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
