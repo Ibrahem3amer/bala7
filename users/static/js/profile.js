@@ -118,5 +118,11 @@ $(document).ready(function(){
         }
     });
     
+    //-------------------------------------------------------------------------------------------------------
+    //remove error alert of change personal information
+    $('#change-personal-data-alert button').click(function(){
+        $('#change-personal-data-alert').remove();
+    });
+    
 });
 

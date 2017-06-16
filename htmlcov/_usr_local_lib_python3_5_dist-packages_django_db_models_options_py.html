@@ -8,7 +8,7 @@
     
     
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for /usr/local/lib/python3.5/dist-packages/django/db/models/options.py: 79%</title>
+    <title>Coverage for /usr/local/lib/python3.5/dist-packages/django/db/models/options.py: 80%</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     
     <script type="text/javascript" src="jquery.min.js"></script>
@@ -24,15 +24,15 @@
 <div id="header">
     <div class="content">
         <h1>Coverage for <b>/usr/local/lib/python3.5/dist-packages/django/db/models/options.py</b> :
-            <span class="pc_cov">79%</span>
+            <span class="pc_cov">80%</span>
         </h1>
 
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
 
         <h2 class="stats">
             405 statements &nbsp;
-            <span class="run hide_run shortkey_r button_toggle_run">321 run</span>
-            <span class="mis shortkey_m button_toggle_mis">84 missing</span>
+            <span class="run hide_run shortkey_r button_toggle_run">325 run</span>
+            <span class="mis shortkey_m button_toggle_mis">80 missing</span>
             <span class="exc shortkey_x button_toggle_exc">0 excluded</span>
 
             
@@ -626,8 +626,8 @@
 <p id="n557" class="pln"><a href="#n557">557</a></p>
 <p id="n558" class="pln"><a href="#n558">558</a></p>
 <p id="n559" class="pln"><a href="#n559">559</a></p>
-<p id="n560" class="stm mis"><a href="#n560">560</a></p>
-<p id="n561" class="stm mis"><a href="#n561">561</a></p>
+<p id="n560" class="stm run hide_run"><a href="#n560">560</a></p>
+<p id="n561" class="stm run hide_run"><a href="#n561">561</a></p>
 <p id="n562" class="pln"><a href="#n562">562</a></p>
 <p id="n563" class="pln"><a href="#n563">563</a></p>
 <p id="n564" class="pln"><a href="#n564">564</a></p>
@@ -724,9 +724,9 @@
 <p id="n655" class="pln"><a href="#n655">655</a></p>
 <p id="n656" class="pln"><a href="#n656">656</a></p>
 <p id="n657" class="pln"><a href="#n657">657</a></p>
-<p id="n658" class="stm mis"><a href="#n658">658</a></p>
+<p id="n658" class="stm run hide_run"><a href="#n658">658</a></p>
 <p id="n659" class="stm mis"><a href="#n659">659</a></p>
-<p id="n660" class="stm mis"><a href="#n660">660</a></p>
+<p id="n660" class="stm run hide_run"><a href="#n660">660</a></p>
 <p id="n661" class="pln"><a href="#n661">661</a></p>
 <p id="n662" class="stm mis"><a href="#n662">662</a></p>
 <p id="n663" class="stm mis"><a href="#n663">663</a></p>
@@ -1452,8 +1452,8 @@
 <p id="t557" class="pln"><span class="str">        combined with filtering of field properties is the public API for</span><span class="strut">&nbsp;</span></p>
 <p id="t558" class="pln"><span class="str">        obtaining this field list.</span><span class="strut">&nbsp;</span></p>
 <p id="t559" class="pln"><span class="str">        """</span><span class="strut">&nbsp;</span></p>
-<p id="t560" class="stm mis">        <span class="nam">all_related_fields</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_get_fields</span><span class="op">(</span><span class="nam">forward</span><span class="op">=</span><span class="key">False</span><span class="op">,</span> <span class="nam">reverse</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">include_hidden</span><span class="op">=</span><span class="key">True</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t561" class="stm mis">        <span class="key">return</span> <span class="nam">make_immutable_fields_list</span><span class="op">(</span><span class="strut">&nbsp;</span></p>
+<p id="t560" class="stm run hide_run">        <span class="nam">all_related_fields</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_get_fields</span><span class="op">(</span><span class="nam">forward</span><span class="op">=</span><span class="key">False</span><span class="op">,</span> <span class="nam">reverse</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">include_hidden</span><span class="op">=</span><span class="key">True</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t561" class="stm run hide_run">        <span class="key">return</span> <span class="nam">make_immutable_fields_list</span><span class="op">(</span><span class="strut">&nbsp;</span></p>
 <p id="t562" class="pln">            <span class="str">"related_objects"</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
 <p id="t563" class="pln">            <span class="op">(</span><span class="nam">obj</span> <span class="key">for</span> <span class="nam">obj</span> <span class="key">in</span> <span class="nam">all_related_fields</span> <span class="key">if</span> <span class="key">not</span> <span class="nam">obj</span><span class="op">.</span><span class="nam">hidden</span> <span class="key">or</span> <span class="nam">obj</span><span class="op">.</span><span class="nam">field</span><span class="op">.</span><span class="nam">many_to_many</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t564" class="pln">        <span class="op">)</span><span class="strut">&nbsp;</span></p>
@@ -1550,9 +1550,9 @@
 <p id="t655" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t656" class="pln"><span class="str">        Returns None if the model isn't an ancestor of this one.</span><span class="strut">&nbsp;</span></p>
 <p id="t657" class="pln"><span class="str">        """</span><span class="strut">&nbsp;</span></p>
-<p id="t658" class="stm mis">        <span class="key">if</span> <span class="nam">ancestor</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">parents</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t658" class="stm run hide_run">        <span class="key">if</span> <span class="nam">ancestor</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">parents</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t659" class="stm mis">            <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">parents</span><span class="op">[</span><span class="nam">ancestor</span><span class="op">]</span><span class="strut">&nbsp;</span></p>
-<p id="t660" class="stm mis">        <span class="key">for</span> <span class="nam">parent</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">parents</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t660" class="stm run hide_run">        <span class="key">for</span> <span class="nam">parent</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">parents</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t661" class="pln">            <span class="com"># Tries to get a link field from the immediate parent</span><span class="strut">&nbsp;</span></p>
 <p id="t662" class="stm mis">            <span class="nam">parent_link</span> <span class="op">=</span> <span class="nam">parent</span><span class="op">.</span><span class="nam">_meta</span><span class="op">.</span><span class="nam">get_ancestor_link</span><span class="op">(</span><span class="nam">ancestor</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t663" class="stm mis">            <span class="key">if</span> <span class="nam">parent_link</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
@@ -1726,7 +1726,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.4</a>,
-            created at 2017-05-14 17:27
+            created at 2017-06-12 09:59
         </p>
     </div>
 </div>

@@ -8,7 +8,7 @@
     
     
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for /usr/local/lib/python3.5/dist-packages/django/utils/decorators.py: 55%</title>
+    <title>Coverage for /usr/local/lib/python3.5/dist-packages/django/utils/decorators.py: 61%</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     
     <script type="text/javascript" src="jquery.min.js"></script>
@@ -24,15 +24,15 @@
 <div id="header">
     <div class="content">
         <h1>Coverage for <b>/usr/local/lib/python3.5/dist-packages/django/utils/decorators.py</b> :
-            <span class="pc_cov">55%</span>
+            <span class="pc_cov">61%</span>
         </h1>
 
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
 
         <h2 class="stats">
             102 statements &nbsp;
-            <span class="run hide_run shortkey_r button_toggle_run">56 run</span>
-            <span class="mis shortkey_m button_toggle_mis">46 missing</span>
+            <span class="run hide_run shortkey_r button_toggle_run">62 run</span>
+            <span class="mis shortkey_m button_toggle_mis">40 missing</span>
             <span class="exc shortkey_x button_toggle_exc">0 excluded</span>
 
             
@@ -223,18 +223,18 @@
 <p id="n154" class="stm mis"><a href="#n154">154</a></p>
 <p id="n155" class="stm mis"><a href="#n155">155</a></p>
 <p id="n156" class="stm run hide_run"><a href="#n156">156</a></p>
-<p id="n157" class="stm mis"><a href="#n157">157</a></p>
+<p id="n157" class="stm run hide_run"><a href="#n157">157</a></p>
 <p id="n158" class="stm mis"><a href="#n158">158</a></p>
 <p id="n159" class="pln"><a href="#n159">159</a></p>
 <p id="n160" class="pln"><a href="#n160">160</a></p>
-<p id="n161" class="stm mis"><a href="#n161">161</a></p>
-<p id="n162" class="stm mis"><a href="#n162">162</a></p>
-<p id="n163" class="stm mis"><a href="#n163">163</a></p>
-<p id="n164" class="stm mis"><a href="#n164">164</a></p>
+<p id="n161" class="stm run hide_run"><a href="#n161">161</a></p>
+<p id="n162" class="stm run hide_run"><a href="#n162">162</a></p>
+<p id="n163" class="stm run hide_run"><a href="#n163">163</a></p>
+<p id="n164" class="stm run hide_run"><a href="#n164">164</a></p>
 <p id="n165" class="pln"><a href="#n165">165</a></p>
 <p id="n166" class="stm run hide_run"><a href="#n166">166</a></p>
 <p id="n167" class="stm run hide_run"><a href="#n167">167</a></p>
-<p id="n168" class="stm mis"><a href="#n168">168</a></p>
+<p id="n168" class="stm run hide_run"><a href="#n168">168</a></p>
 <p id="n169" class="stm run hide_run"><a href="#n169">169</a></p>
 <p id="n170" class="stm run hide_run"><a href="#n170">170</a></p>
 <p id="n171" class="stm run hide_run"><a href="#n171">171</a></p>
@@ -424,18 +424,18 @@
 <p id="t154" class="stm mis">                            <span class="key">return</span> <span class="nam">result</span><span class="strut">&nbsp;</span></p>
 <p id="t155" class="stm mis">                    <span class="key">raise</span><span class="strut">&nbsp;</span></p>
 <p id="t156" class="stm run hide_run">                <span class="key">if</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">response</span><span class="op">,</span> <span class="str">'render'</span><span class="op">)</span> <span class="key">and</span> <span class="nam">callable</span><span class="op">(</span><span class="nam">response</span><span class="op">.</span><span class="nam">render</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t157" class="stm mis">                    <span class="key">if</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">middleware</span><span class="op">,</span> <span class="str">'process_template_response'</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t157" class="stm run hide_run">                    <span class="key">if</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">middleware</span><span class="op">,</span> <span class="str">'process_template_response'</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t158" class="stm mis">                        <span class="nam">response</span> <span class="op">=</span> <span class="nam">middleware</span><span class="op">.</span><span class="nam">process_template_response</span><span class="op">(</span><span class="nam">request</span><span class="op">,</span> <span class="nam">response</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t159" class="pln">                    <span class="com"># Defer running of process_response until after the template</span><span class="strut">&nbsp;</span></p>
 <p id="t160" class="pln">                    <span class="com"># has been rendered:</span><span class="strut">&nbsp;</span></p>
-<p id="t161" class="stm mis">                    <span class="key">if</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">middleware</span><span class="op">,</span> <span class="str">'process_response'</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t162" class="stm mis">                        <span class="key">def</span> <span class="nam">callback</span><span class="op">(</span><span class="nam">response</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t163" class="stm mis">                            <span class="key">return</span> <span class="nam">middleware</span><span class="op">.</span><span class="nam">process_response</span><span class="op">(</span><span class="nam">request</span><span class="op">,</span> <span class="nam">response</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t164" class="stm mis">                        <span class="nam">response</span><span class="op">.</span><span class="nam">add_post_render_callback</span><span class="op">(</span><span class="nam">callback</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t161" class="stm run hide_run">                    <span class="key">if</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">middleware</span><span class="op">,</span> <span class="str">'process_response'</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t162" class="stm run hide_run">                        <span class="key">def</span> <span class="nam">callback</span><span class="op">(</span><span class="nam">response</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t163" class="stm run hide_run">                            <span class="key">return</span> <span class="nam">middleware</span><span class="op">.</span><span class="nam">process_response</span><span class="op">(</span><span class="nam">request</span><span class="op">,</span> <span class="nam">response</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t164" class="stm run hide_run">                        <span class="nam">response</span><span class="op">.</span><span class="nam">add_post_render_callback</span><span class="op">(</span><span class="nam">callback</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t165" class="pln">                <span class="key">else</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t166" class="stm run hide_run">                    <span class="key">if</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">middleware</span><span class="op">,</span> <span class="str">'process_response'</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t167" class="stm run hide_run">                        <span class="key">return</span> <span class="nam">middleware</span><span class="op">.</span><span class="nam">process_response</span><span class="op">(</span><span class="nam">request</span><span class="op">,</span> <span class="nam">response</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t168" class="stm mis">                <span class="key">return</span> <span class="nam">response</span><span class="strut">&nbsp;</span></p>
+<p id="t168" class="stm run hide_run">                <span class="key">return</span> <span class="nam">response</span><span class="strut">&nbsp;</span></p>
 <p id="t169" class="stm run hide_run">            <span class="key">return</span> <span class="nam">_wrapped_view</span><span class="strut">&nbsp;</span></p>
 <p id="t170" class="stm run hide_run">        <span class="key">return</span> <span class="nam">_decorator</span><span class="strut">&nbsp;</span></p>
 <p id="t171" class="stm run hide_run">    <span class="key">return</span> <span class="nam">_make_decorator</span><span class="strut">&nbsp;</span></p>
@@ -476,7 +476,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.4</a>,
-            created at 2017-05-14 19:42
+            created at 2017-06-12 09:59
         </p>
     </div>
 </div>

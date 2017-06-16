@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from users.models import University, Faculty, Department, UserProfile 
 from users.forms import UserSignUpForm
+from cms.models import UserTopics
 
 
 def home_visitor(request):
@@ -25,7 +26,9 @@ def home_user(request):
 
 @login_required
 def user_profile(request):
-	return render(request, 'profile/profile.html')
+	avaliable_topics = UserTopics.get_topics_choices(request.user)
+	user_topics_ids = [topic.id for topic in request.user.profile.topics.all()]
+	return render(request, 'profile/profile.html', {'avaliable_topics': avaliable_topics, 'user_topics_ids': user_topics_ids})
 
 @login_required
 def update_user_username(request):
@@ -97,9 +100,9 @@ def update_user_education_info(request):
 	if request.method == 'POST':
 		new_info = {}
 		try:
-			new_info['new_university_id'] 	= request.POST['new_university_id']
-			new_info['new_faculty_id'] 		= request.POST['new_faculty_id']
-			new_info['new_department_id'] 	= request.POST['new_department_id']
+			new_info['new_university_id'] 	= request.POST['universities-hidden']
+			new_info['new_faculty_id'] 		= request.POST['faculties-hidden']
+			new_info['new_department_id'] 	= request.POST['departments-hidden']
 			new_info['new_section_number'] 	= request.POST['new_section_number']
 		except AttributeError:
 			msg = 'University, faculty and department cannot be empty.'

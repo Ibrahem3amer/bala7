@@ -1,24 +1,4 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
-<html>
-<head>
-	<title>Bala7</title>
-</head>
-<body>
-	<p id="id_description">description</p>
-    <h1>Basic info</h1>
-        <h2>name: {{ user.username }}</h2>
-        <h2>email: {{ user.email }}</h2>
-        <h2>password: *****</h2>
-        <hr />
-    <h1>Student info</h1>
-        <h2>univesity: {{ user.profile.university.name }}</h2>
-        <h2>faculty: {{ user.profile.faculty.name }}</h2>
-        <h2>department: {{ user.profile.department.name }}</h2>
-    <hr />
-    <h1>topics</h1>
-</body>
-=======
 <html dir="rtl" lang="ar">
     <head>
         {% load staticfiles %}
@@ -64,6 +44,9 @@
                             <img src="{% static 'pic/adv-xs.jpg' %}">
                         </div>
 
+                        {% if error %}
+                            <h1>{{ error }}</h1>
+                        {% endif %}
                         <div class="small-ele-div nj-box">
                             <div class="small-ele-head">
                                 <p>البيانات الشخصية</p>
@@ -108,12 +91,7 @@
                                     <div class="form-group">
                                         <label for="faculty">الكلية</label>
                                         <input class="nj-input" type="text" id="faculty" value="{{ user.profile.faculty.name }}" readonly >
-                                    </div>
-                                </div>
-                                <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label for="year">الفرقة</label>
-                                        <input class="nj-input" type="text" id="year" value="الفرقة الثانية" readonly >
+
                                     </div>
                                 </div>
                                 <div class="small-ele-content">
@@ -131,56 +109,46 @@
 
                             </div>
                             <div class="choose-univ">
-                                <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label class="nj-label" for="univ">الجامعة</label>
-                                        <select  class="nj-select">
-                                            <option value="" disabled selected>اختر الجامعة</option>
-                                            <option id="mans">جامعة المنصورة</option>
-                                            <option id="kafr">جامعة كفر الشيخ</option>
-                                        </select>
+                                <form action="{% url 'web_change_info' %}" method="POST">
+				    {% csrf_token %}
+                                    <div id="universities-selector-div" class="small-ele-content">
+                                        <div class="form-group">
+                                            <label class="nj-label" for="univ">الجامعة</label>
+                                            <select id="universities-selector"  class="nj-select" name="new_university_id"></select>
+<<<<<<< HEAD
+=======
+                                            <input id="universities-hidden" class="nj-select hidden-inputs" name="universities-hidden">
+>>>>>>> banna
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label class="nj-label" for="facu">الكلية</label>
-                                        <select class="nj-select">
-                                            <option value="" disabled selected>اختر الكلية</option>
-                                            <option id="">كلية الهندسة</option>
-                                            <option id="">كلية الحاسبات</option>
-                                        </select>
+                                    <div id="faculties-selector-div" class="small-ele-content">
+                                        <div class="form-group">
+                                            <label class="nj-label" for="facu">الكلية</label>
+                                            <select id="faculties-selector" class="nj-select" name="new_faculty_id"></select>
+<<<<<<< HEAD
+=======
+                                            <input id="faculties-hidden" class="nj-select hidden-inputs" name="faculties-hidden">
+>>>>>>> banna
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label class="nj-label" for="facu">الفرقة</label>
-                                        <select class="nj-select">
-                                            <option value="" disabled selected>اختر الفرقة</option>
-                                            <option id="">الفرقة الاولي</option>
-                                            <option id="">الفرقة الثانية</option>
-                                        </select>
+                                    <div id="departments-selector-div" class="small-ele-content">
+                                        <div class="form-group">
+                                            <label class="nj-label" for="facu">القسم</label>
+                                            <select id="departments-selector" class="nj-select" name="new_department_id"></select>
+<<<<<<< HEAD
+=======
+                                            <input id="departments-hidden" class="nj-select hidden-inputs" name="departments-hidden">
+>>>>>>> banna
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label class="nj-label" for="facu">القسم</label>
-                                        <select class="nj-select">
-                                            <option value="" disabled selected>اختر القسم</option>
-                                            <option id="">قسم1</option>
-                                            <option id="">قسم 2 </option>
-                                        </select>
+                                    <div id="section-div" class="small-ele-content">
+                                        <div class="form-group">
+                                            <label class="nj-label" for="facu">السكشن</label>
+                                            <input id="section-input" class="nj-input" type="number" min="1" max="99" placeholder="رقم السكشن" name="new_section_number" />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="small-ele-content">
-                                    <div class="form-group">
-                                        <label class="nj-label" for="facu">السكشن</label>
-                                        <select class="nj-select">
-                                            <option value="" disabled selected>اختر السكشن</option>
-                                            <option id="">1</option>
-                                            <option id="">2</option>
-                                        </select>
-                                    </div>
-                                </div>
+                                    <button class="true-submit-btn" type="submit"><i class="fa fa-check"></i></button>
+                                </form>
                             </div>
 
                         </div>
@@ -200,7 +168,7 @@
                                 <a href="#"><label>اساسيات البرمجة</label></a> 
                             </div>
                             <div class="choose-materials">
-
+                                <form>
                                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                   <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="headingOne" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -311,6 +279,8 @@
                                   </div>
 
                                 </div>
+                                    <button class="true-submit-btn" type="submit"><i class="fa fa-check"></i></button>
+                                </form>
                             </div>
 
                         </div>
@@ -330,19 +300,18 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <p class="modal-title">تغيير الإسم</p>
               </div>
+              <form action="{% url 'web_change_username' %}" method="post">
+              {% csrf_token %}
               <div class="modal-body">
                 <div class="form-group">
                     <label for="name">الإسم الجديد</label>
-                    <input class="nj-input" type="text" id="name">
+                    <input class="nj-input" type="text" id="name" name="new_username" required="required">
                 </div>
-                  <div class="form-group">
-                    <label for="password">كلمة السر</label>
-                    <input class="nj-input" type="password" id="password" >
-                 </div>
               </div>
               <div class="modal-footer">
-                <a class="nj-btn">حفظ</a>
+                  <input type="submit" class="nj-btn save-btn" value="حفظ">
               </div>
+              </form>
             </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
@@ -356,23 +325,22 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <p class="modal-title">تغيير البريد الإلكترونى</p>
               </div>
+              <form action="{% url 'web_change_email' %}" method="post">
+              {% csrf_token %}
               <div class="modal-body">
                 <div class="form-group">
                     <label for="name">البريد الجديد</label>
-                    <input class="nj-input" type="email" id="new-email">
+                    <input class="nj-input" type="email" id="new-email" name="new_usermail">
                 </div>
                 <div class="form-group">
                     <label for="name">تأكيد البريد</label>
-                    <input class="nj-input" type="email" id="new-email">
+                    <input class="nj-input" type="email" id="new-email" name="new_usermail_confirmation">
                 </div>
-                  <div class="form-group">
-                    <label for="password">كلمة السر</label>
-                    <input class="nj-input" type="password" id="password" >
-                 </div>
               </div>
               <div class="modal-footer">
-                <a class="nj-btn">حفظ</a>
-              </div>
+                <input type="submit" class="nj-btn save-btn" value="حفظ">
+              </div> 
+              </form>
             </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
@@ -386,25 +354,28 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <p class="modal-title">تغيير البريد الإلكترونى</p>
               </div>
+              <form action="{% url 'web_change_password' %}" method="post">
+              {% csrf_token %}
               <div class="modal-body">
 
                   <div class="form-group">
                     <label for="password">كلمة السر الحاليه</label>
-                    <input class="nj-input" type="password" id="old-password" >
+                    <input class="nj-input" type="password" id="old-password" name="old_password">
                  </div>
 
                   <div class="form-group">
                     <label for="password">كلمة السر الجديدة</label>
-                    <input class="nj-input" type="password" id="new-password1" >
+                    <input class="nj-input" type="password" id="new-password1" name="new_password">
                  </div>
                   <div class="form-group">
                     <label for="password">تأكيد كلمة السر</label>
-                    <input class="nj-input" type="password" id="new-password2" >
+                    <input class="nj-input" type="password" id="new-password2" name="new_password_confirm">
                  </div>
               </div>
               <div class="modal-footer">
-                <a class="nj-btn">حفظ</a>
+                <input type="submit" class="nj-btn save-btn" value="حفظ">
               </div>
+              </form>
             </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
@@ -413,5 +384,4 @@
 
         <script src="{% static 'js/profile.js' %}"></script>
     </body>
->>>>>>> b6bab4e181780ee2a8ab40a97a5fc8d539ad8dab
 </html>
