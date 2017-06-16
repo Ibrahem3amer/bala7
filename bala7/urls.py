@@ -17,6 +17,7 @@ from django.contrib.auth import views as auth_views
 from django.conf.urls import url, include
 from django.contrib import admin
 from users import views, urls
+from cms import urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -24,6 +25,8 @@ urlpatterns = [
     url(r'^users/', include('django.contrib.auth.urls')),
     url(r'^users/', include('users.urls')),
     url(r'^api/', include('users.api_urls')),
+    url(r'^topics/', include('cms.urls')),
+    url(r'^api/', include('cms.api_urls')),
     url(r'', include('social_django.urls', namespace='social')),
 ]
 

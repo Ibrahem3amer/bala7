@@ -8,7 +8,7 @@
     
     
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for /usr/local/lib/python3.5/dist-packages/django/utils/encoding.py: 65%</title>
+    <title>Coverage for /usr/local/lib/python3.5/dist-packages/django/utils/encoding.py: 66%</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     
     <script type="text/javascript" src="jquery.min.js"></script>
@@ -24,15 +24,15 @@
 <div id="header">
     <div class="content">
         <h1>Coverage for <b>/usr/local/lib/python3.5/dist-packages/django/utils/encoding.py</b> :
-            <span class="pc_cov">65%</span>
+            <span class="pc_cov">66%</span>
         </h1>
 
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
 
         <h2 class="stats">
             110 statements &nbsp;
-            <span class="run hide_run shortkey_r button_toggle_run">71 run</span>
-            <span class="mis shortkey_m button_toggle_mis">39 missing</span>
+            <span class="run hide_run shortkey_r button_toggle_run">73 run</span>
+            <span class="mis shortkey_m button_toggle_mis">37 missing</span>
             <span class="exc shortkey_x button_toggle_exc">0 excluded</span>
 
             
@@ -327,11 +327,11 @@
 <p id="n258" class="pln"><a href="#n258">258</a></p>
 <p id="n259" class="pln"><a href="#n259">259</a></p>
 <p id="n260" class="pln"><a href="#n260">260</a></p>
-<p id="n261" class="stm mis"><a href="#n261">261</a></p>
+<p id="n261" class="stm run hide_run"><a href="#n261">261</a></p>
 <p id="n262" class="stm mis"><a href="#n262">262</a></p>
 <p id="n263" class="pln"><a href="#n263">263</a></p>
 <p id="n264" class="pln"><a href="#n264">264</a></p>
-<p id="n265" class="stm mis"><a href="#n265">265</a></p>
+<p id="n265" class="stm run hide_run"><a href="#n265">265</a></p>
 <p id="n266" class="pln"><a href="#n266">266</a></p>
 <p id="n267" class="pln"><a href="#n267">267</a></p>
 <p id="n268" class="stm run hide_run"><a href="#n268">268</a></p>
@@ -611,11 +611,11 @@
 <p id="t258" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t259" class="pln"><span class="str">    Returns an ASCII string containing the encoded result.</span><span class="strut">&nbsp;</span></p>
 <p id="t260" class="pln"><span class="str">    """</span><span class="strut">&nbsp;</span></p>
-<p id="t261" class="stm mis">    <span class="key">if</span> <span class="nam">path</span> <span class="key">is</span> <span class="key">None</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t261" class="stm run hide_run">    <span class="key">if</span> <span class="nam">path</span> <span class="key">is</span> <span class="key">None</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t262" class="stm mis">        <span class="key">return</span> <span class="nam">path</span><span class="strut">&nbsp;</span></p>
 <p id="t263" class="pln">    <span class="com"># I know about `os.sep` and `os.altsep` but I want to leave</span><span class="strut">&nbsp;</span></p>
 <p id="t264" class="pln">    <span class="com"># some flexibility for hardcoding separators.</span><span class="strut">&nbsp;</span></p>
-<p id="t265" class="stm mis">    <span class="key">return</span> <span class="nam">quote</span><span class="op">(</span><span class="nam">force_bytes</span><span class="op">(</span><span class="nam">path</span><span class="op">)</span><span class="op">.</span><span class="nam">replace</span><span class="op">(</span><span class="str">b"\\"</span><span class="op">,</span> <span class="str">b"/"</span><span class="op">)</span><span class="op">,</span> <span class="nam">safe</span><span class="op">=</span><span class="str">b"/~!*()'"</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t265" class="stm run hide_run">    <span class="key">return</span> <span class="nam">quote</span><span class="op">(</span><span class="nam">force_bytes</span><span class="op">(</span><span class="nam">path</span><span class="op">)</span><span class="op">.</span><span class="nam">replace</span><span class="op">(</span><span class="str">b"\\"</span><span class="op">,</span> <span class="str">b"/"</span><span class="op">)</span><span class="op">,</span> <span class="nam">safe</span><span class="op">=</span><span class="str">b"/~!*()'"</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t266" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t267" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t268" class="stm run hide_run"><span class="key">def</span> <span class="nam">get_system_encoding</span><span class="op">(</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
@@ -642,7 +642,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.4</a>,
-            created at 2017-05-14 19:42
+            created at 2017-06-12 09:59
         </p>
     </div>
 </div>

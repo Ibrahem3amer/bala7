@@ -24,6 +24,8 @@
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
     </head>
     <body>
+
+        
         <!-- start navbar -->
         {% include "public/navbar-user.html" %}
         <!-- end navbar -->
@@ -45,8 +47,12 @@
                         </div>
 
                         {% if error %}
-                            <h1>{{ error }}</h1>
+                            <div id="change-personal-data-alert" class="alert alert-warning alert-dismissible" role="alert">
+                              <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+                              {{ error }}
+                            </div>
                         {% endif %}
+
                         <div class="small-ele-div nj-box">
                             <div class="small-ele-head">
                                 <p>البيانات الشخصية</p>
@@ -151,125 +157,40 @@
                                 <i id="choose-materials-setting" class="fa fa-cog" aria-hidden="true"></i>
                             </div>
                             <div class="materials">
-                                <a href="#"><label>علوم الحاسب</label></a> 
-                                <a href="#"><label>اساسيات البرمجة</label></a> 
-                                <a href="#"><label>علوم الحاسب</label></a> 
-                                <a href="#"><label>اساسيات البرمجة</label></a> 
-                                <a href="#"><label>علوم الحاسب</label></a> 
-                                <a href="#"><label>اساسيات البرمجة</label></a> 
+                                {% for topic in nav_topics %}
+                                    <a href="{% url 'get_topic' dep_id=topic.dep topic_id=topic.pk %}"><label>{{ topic.name }}</label></a> 
+                                {% endfor %}
                             </div>
                             <div class="choose-materials">
-                                <form>
-                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                  <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingOne" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                      <h4 class="panel-title">مواد الصف الأول</h4>
+                                <form action="{% url 'update_user_topics' %}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                        {% if avaliable_topics %}
+                                            {% for dep, topics in avaliable_topics.items %}
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading" role="tab" id="headingOne" role="button" data-toggle="collapse" data-parent="#accordion" href="#{{forloop.counter}}panel" aria-expanded="true" aria-controls="{{forloop.counter}}panel">
+                                                      <h4 class="panel-title">{{ dep }}</h4>
+                                                    </div>
+                                                    <div id="{{forloop.counter}}panel" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                                      <div class="panel-body">
+                                                        <div class="checkbox">
+                                                            {% for topic in topics %}
+                                                                <label class="active-checkbox">
+                                                                    {% if topic.id in user_topics_ids  %}
+                                                                        <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}" checked>
+                                                                    {% else %}
+                                                                        <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}">
+                                                                    {% endif %}
+                                                                    {{ topic.name }} 
+                                                                </label>
+                                                            {% endfor %}
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
-                                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                      <div class="panel-body">
-                                        <div class="checkbox">
-                                            <label class="active-checkbox">
-                                              <input type="checkbox"  checked> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingTwo" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                      <h4 class="panel-title">مواد الصف الثانى</h4>
-                                    </div>
-                                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                      <div class="panel-body">
-                                        <div class="checkbox">
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingThree" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                      <h4 class="panel-title">مواد الصف الثالث</h4>
-                                    </div>
-                                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                      <div class="panel-body">
-                                        <div class="checkbox">
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingFour" class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
-                                      <h4 class="panel-title">مواد الصف الرابع</h4>
-                                    </div>
-                                    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                      <div class="panel-body">
-                                        <div class="checkbox">
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> علوم الحاسب 
-                                            </label>
-                                            <label>
-                                              <input type="checkbox"> اساسيات البرمجة 
-                                            </label>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                </div>
                                     <button class="true-submit-btn" type="submit"><i class="fa fa-check"></i></button>
                                 </form>
                             </div>

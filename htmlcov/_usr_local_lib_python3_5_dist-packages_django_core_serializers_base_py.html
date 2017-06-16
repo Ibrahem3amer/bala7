@@ -8,7 +8,7 @@
     
     
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for /usr/local/lib/python3.5/dist-packages/django/core/serializers/base.py: 60%</title>
+    <title>Coverage for /usr/local/lib/python3.5/dist-packages/django/core/serializers/base.py: 68%</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     
     <script type="text/javascript" src="jquery.min.js"></script>
@@ -24,15 +24,15 @@
 <div id="header">
     <div class="content">
         <h1>Coverage for <b>/usr/local/lib/python3.5/dist-packages/django/core/serializers/base.py</b> :
-            <span class="pc_cov">60%</span>
+            <span class="pc_cov">68%</span>
         </h1>
 
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
 
         <h2 class="stats">
             108 statements &nbsp;
-            <span class="run hide_run shortkey_r button_toggle_run">65 run</span>
-            <span class="mis shortkey_m button_toggle_mis">43 missing</span>
+            <span class="run hide_run shortkey_r button_toggle_run">73 run</span>
+            <span class="mis shortkey_m button_toggle_mis">35 missing</span>
             <span class="exc shortkey_x button_toggle_exc">0 excluded</span>
 
             
@@ -256,8 +256,8 @@
 <p id="n187" class="pln"><a href="#n187">187</a></p>
 <p id="n188" class="pln"><a href="#n188">188</a></p>
 <p id="n189" class="stm run hide_run"><a href="#n189">189</a></p>
-<p id="n190" class="stm mis"><a href="#n190">190</a></p>
-<p id="n191" class="stm mis"><a href="#n191">191</a></p>
+<p id="n190" class="stm run hide_run"><a href="#n190">190</a></p>
+<p id="n191" class="stm run hide_run"><a href="#n191">191</a></p>
 <p id="n192" class="pln"><a href="#n192">192</a></p>
 <p id="n193" class="stm run hide_run"><a href="#n193">193</a></p>
 <p id="n194" class="stm mis"><a href="#n194">194</a></p>
@@ -267,14 +267,14 @@
 <p id="n198" class="pln"><a href="#n198">198</a></p>
 <p id="n199" class="pln"><a href="#n199">199</a></p>
 <p id="n200" class="pln"><a href="#n200">200</a></p>
-<p id="n201" class="stm mis"><a href="#n201">201</a></p>
-<p id="n202" class="stm mis"><a href="#n202">202</a></p>
+<p id="n201" class="stm run hide_run"><a href="#n201">201</a></p>
+<p id="n202" class="stm run hide_run"><a href="#n202">202</a></p>
 <p id="n203" class="stm mis"><a href="#n203">203</a></p>
 <p id="n204" class="stm mis"><a href="#n204">204</a></p>
 <p id="n205" class="pln"><a href="#n205">205</a></p>
 <p id="n206" class="pln"><a href="#n206">206</a></p>
 <p id="n207" class="pln"><a href="#n207">207</a></p>
-<p id="n208" class="stm mis"><a href="#n208">208</a></p>
+<p id="n208" class="stm run hide_run"><a href="#n208">208</a></p>
 <p id="n209" class="pln"><a href="#n209">209</a></p>
 <p id="n210" class="pln"><a href="#n210">210</a></p>
 <p id="n211" class="stm run hide_run"><a href="#n211">211</a></p>
@@ -284,15 +284,15 @@
 <p id="n215" class="pln"><a href="#n215">215</a></p>
 <p id="n216" class="pln"><a href="#n216">216</a></p>
 <p id="n217" class="pln"><a href="#n217">217</a></p>
-<p id="n218" class="stm mis"><a href="#n218">218</a></p>
-<p id="n219" class="stm mis"><a href="#n219">219</a></p>
+<p id="n218" class="stm run hide_run"><a href="#n218">218</a></p>
+<p id="n219" class="stm run hide_run"><a href="#n219">219</a></p>
 <p id="n220" class="pln"><a href="#n220">220</a></p>
 <p id="n221" class="stm mis"><a href="#n221">221</a></p>
 <p id="n222" class="stm mis"><a href="#n222">222</a></p>
 <p id="n223" class="stm mis"><a href="#n223">223</a></p>
 <p id="n224" class="stm mis"><a href="#n224">224</a></p>
 <p id="n225" class="stm mis"><a href="#n225">225</a></p>
-<p id="n226" class="stm mis"><a href="#n226">226</a></p>
+<p id="n226" class="stm run hide_run"><a href="#n226">226</a></p>
 
             </td>
             <td class="text">
@@ -485,8 +485,8 @@
 <p id="t187" class="pln"><span class="str">    """</span><span class="strut">&nbsp;</span></p>
 <p id="t188" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t189" class="stm run hide_run">    <span class="key">def</span> <span class="nam">__init__</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">obj</span><span class="op">,</span> <span class="nam">m2m_data</span><span class="op">=</span><span class="key">None</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t190" class="stm mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">object</span> <span class="op">=</span> <span class="nam">obj</span><span class="strut">&nbsp;</span></p>
-<p id="t191" class="stm mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">m2m_data</span> <span class="op">=</span> <span class="nam">m2m_data</span><span class="strut">&nbsp;</span></p>
+<p id="t190" class="stm run hide_run">        <span class="nam">self</span><span class="op">.</span><span class="nam">object</span> <span class="op">=</span> <span class="nam">obj</span><span class="strut">&nbsp;</span></p>
+<p id="t191" class="stm run hide_run">        <span class="nam">self</span><span class="op">.</span><span class="nam">m2m_data</span> <span class="op">=</span> <span class="nam">m2m_data</span><span class="strut">&nbsp;</span></p>
 <p id="t192" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t193" class="stm run hide_run">    <span class="key">def</span> <span class="nam">__repr__</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t194" class="stm mis">        <span class="key">return</span> <span class="str">"&lt;DeserializedObject: %s(pk=%s)>"</span> <span class="op">%</span> <span class="op">(</span><span class="strut">&nbsp;</span></p>
@@ -496,14 +496,14 @@
 <p id="t198" class="pln">        <span class="com"># Call save on the Model baseclass directly. This bypasses any</span><span class="strut">&nbsp;</span></p>
 <p id="t199" class="pln">        <span class="com"># model-defined save. The save is also forced to be raw.</span><span class="strut">&nbsp;</span></p>
 <p id="t200" class="pln">        <span class="com"># raw=True is passed to any pre/post_save signals.</span><span class="strut">&nbsp;</span></p>
-<p id="t201" class="stm mis">        <span class="nam">models</span><span class="op">.</span><span class="nam">Model</span><span class="op">.</span><span class="nam">save_base</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">object</span><span class="op">,</span> <span class="nam">using</span><span class="op">=</span><span class="nam">using</span><span class="op">,</span> <span class="nam">raw</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t202" class="stm mis">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">m2m_data</span> <span class="key">and</span> <span class="nam">save_m2m</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t201" class="stm run hide_run">        <span class="nam">models</span><span class="op">.</span><span class="nam">Model</span><span class="op">.</span><span class="nam">save_base</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">object</span><span class="op">,</span> <span class="nam">using</span><span class="op">=</span><span class="nam">using</span><span class="op">,</span> <span class="nam">raw</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t202" class="stm run hide_run">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">m2m_data</span> <span class="key">and</span> <span class="nam">save_m2m</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t203" class="stm mis">            <span class="key">for</span> <span class="nam">accessor_name</span><span class="op">,</span> <span class="nam">object_list</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">m2m_data</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t204" class="stm mis">                <span class="nam">getattr</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">object</span><span class="op">,</span> <span class="nam">accessor_name</span><span class="op">)</span><span class="op">.</span><span class="nam">set</span><span class="op">(</span><span class="nam">object_list</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t205" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t206" class="pln">        <span class="com"># prevent a second (possibly accidental) call to save() from saving</span><span class="strut">&nbsp;</span></p>
 <p id="t207" class="pln">        <span class="com"># the m2m data twice.</span><span class="strut">&nbsp;</span></p>
-<p id="t208" class="stm mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">m2m_data</span> <span class="op">=</span> <span class="key">None</span><span class="strut">&nbsp;</span></p>
+<p id="t208" class="stm run hide_run">        <span class="nam">self</span><span class="op">.</span><span class="nam">m2m_data</span> <span class="op">=</span> <span class="key">None</span><span class="strut">&nbsp;</span></p>
 <p id="t209" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t210" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t211" class="stm run hide_run"><span class="key">def</span> <span class="nam">build_instance</span><span class="op">(</span><span class="nam">Model</span><span class="op">,</span> <span class="nam">data</span><span class="op">,</span> <span class="nam">db</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
@@ -513,15 +513,15 @@
 <p id="t215" class="pln"><span class="str">    If the model instance doesn't have a primary key and the model supports</span><span class="strut">&nbsp;</span></p>
 <p id="t216" class="pln"><span class="str">    natural keys, try to retrieve it from the database.</span><span class="strut">&nbsp;</span></p>
 <p id="t217" class="pln"><span class="str">    """</span><span class="strut">&nbsp;</span></p>
-<p id="t218" class="stm mis">    <span class="nam">obj</span> <span class="op">=</span> <span class="nam">Model</span><span class="op">(</span><span class="op">**</span><span class="nam">data</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t219" class="stm mis">    <span class="key">if</span> <span class="op">(</span><span class="nam">obj</span><span class="op">.</span><span class="nam">pk</span> <span class="key">is</span> <span class="key">None</span> <span class="key">and</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">Model</span><span class="op">,</span> <span class="str">'natural_key'</span><span class="op">)</span> <span class="key">and</span><span class="strut">&nbsp;</span></p>
+<p id="t218" class="stm run hide_run">    <span class="nam">obj</span> <span class="op">=</span> <span class="nam">Model</span><span class="op">(</span><span class="op">**</span><span class="nam">data</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t219" class="stm run hide_run">    <span class="key">if</span> <span class="op">(</span><span class="nam">obj</span><span class="op">.</span><span class="nam">pk</span> <span class="key">is</span> <span class="key">None</span> <span class="key">and</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">Model</span><span class="op">,</span> <span class="str">'natural_key'</span><span class="op">)</span> <span class="key">and</span><span class="strut">&nbsp;</span></p>
 <p id="t220" class="pln">            <span class="nam">hasattr</span><span class="op">(</span><span class="nam">Model</span><span class="op">.</span><span class="nam">_default_manager</span><span class="op">,</span> <span class="str">'get_by_natural_key'</span><span class="op">)</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t221" class="stm mis">        <span class="nam">natural_key</span> <span class="op">=</span> <span class="nam">obj</span><span class="op">.</span><span class="nam">natural_key</span><span class="op">(</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t222" class="stm mis">        <span class="key">try</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t223" class="stm mis">            <span class="nam">obj</span><span class="op">.</span><span class="nam">pk</span> <span class="op">=</span> <span class="nam">Model</span><span class="op">.</span><span class="nam">_default_manager</span><span class="op">.</span><span class="nam">db_manager</span><span class="op">(</span><span class="nam">db</span><span class="op">)</span><span class="op">.</span><span class="nam">get_by_natural_key</span><span class="op">(</span><span class="op">*</span><span class="nam">natural_key</span><span class="op">)</span><span class="op">.</span><span class="nam">pk</span><span class="strut">&nbsp;</span></p>
 <p id="t224" class="stm mis">        <span class="key">except</span> <span class="nam">Model</span><span class="op">.</span><span class="nam">DoesNotExist</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t225" class="stm mis">            <span class="key">pass</span><span class="strut">&nbsp;</span></p>
-<p id="t226" class="stm mis">    <span class="key">return</span> <span class="nam">obj</span><span class="strut">&nbsp;</span></p>
+<p id="t226" class="stm run hide_run">    <span class="key">return</span> <span class="nam">obj</span><span class="strut">&nbsp;</span></p>
 
             </td>
         </tr>
@@ -532,7 +532,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.4</a>,
-            created at 2017-05-14 17:27
+            created at 2017-06-12 09:59
         </p>
     </div>
 </div>
