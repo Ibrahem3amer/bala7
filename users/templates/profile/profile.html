@@ -47,7 +47,10 @@
                         </div>
 
                         {% if error %}
-                            <h1>{{ error }}</h1>
+                            <div id="change-personal-data-alert" class="alert alert-warning alert-dismissible" role="alert">
+                              <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+                              {{ error }}
+                            </div>
                         {% endif %}
 
                         <div class="small-ele-div nj-box">
@@ -165,10 +168,10 @@
                                         {% if avaliable_topics %}
                                             {% for dep, topics in avaliable_topics.items %}
                                                 <div class="panel panel-default">
-                                                    <div class="panel-heading" role="tab" id="headingOne" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    <div class="panel-heading" role="tab" id="headingOne" role="button" data-toggle="collapse" data-parent="#accordion" href="#{{forloop.counter}}panel" aria-expanded="true" aria-controls="{{forloop.counter}}panel">
                                                       <h4 class="panel-title">{{ dep }}</h4>
                                                     </div>
-                                                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                                    <div id="{{forloop.counter}}panel" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                                                       <div class="panel-body">
                                                         <div class="checkbox">
                                                             {% for topic in topics %}
@@ -188,6 +191,7 @@
                                             {% endfor %}
                                         {% endif %}
                                     </div>
+
                                     <button class="true-submit-btn" type="submit"><i class="fa fa-check"></i></button>
                                 </form>
                             </div>

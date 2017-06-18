@@ -1,4 +1,13 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
+<html>
+<head>
+	<title>Topic</title>
+</head>
+<body>
+	{% if topic %}
+		<h1>{{ topic.name }}</h1>
+=======
 <html dir="rtl" lang="ar">
 <head>
 	
@@ -409,6 +418,7 @@
 
 
         <script src="{% static 'js/topic.js' %}"></script>
+>>>>>>> banna
 	{% endif %}
 </body>
 </html>
