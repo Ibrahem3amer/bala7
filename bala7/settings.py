@@ -69,6 +69,8 @@ TEMPLATES = [
                 # Social auth
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                # User nav topics
+                'users.context_processors.add_nav_topics'
             ],
         },
     },

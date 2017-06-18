@@ -37,7 +37,22 @@
     padding-bottom: 30px;
     padding-left: 0px;
 }
-
+#change-personal-data-alert{
+    width: 75%;
+    margin: auto;
+    position: fixed;
+    top: 75px;
+    left: 0px;
+    right: 0px;
+    text-align: center;
+    z-index: 9999;
+}
+/*xs*/
+@media (max-width:767px){
+    #change-personal-data-alert{
+        width: 90%;
+    }
+}
 .small-ele-div{
     margin-top: 15px;
     padding: 0px;

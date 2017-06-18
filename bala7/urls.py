@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^users/', include('users.urls')),
     url(r'^api/', include('users.api_urls')),
     url(r'^topics/', include('cms.urls')),
+    url(r'^api/', include('cms.api_urls')),
     url(r'', include('social_django.urls', namespace='social')),
 ]
 

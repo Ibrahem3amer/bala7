@@ -50,7 +50,7 @@ class UserProfile(models.Model):
 	count_of_replies 	= models.IntegerField(default = 0)
 	academic_stats 		= models.CharField(max_length = 20, default = 'unset')
 	last_active_device 	= models.CharField(max_length = 200)
-	topics				= models.ManyToManyField(Topic)
+	topics				= models.ManyToManyField(Topic) 
 	#table				= 'relationship with table'
 	#posts 				= 'relationship with posts'
 	#replies 			= 'relationship with replies'
@@ -220,7 +220,7 @@ class UserProfile(models.Model):
 		try:
 			new_univeristy 	= University.objects.get(id = info['new_university_id'])
 			new_faculty 	= Faculty.objects.get(id = info['new_faculty_id'])
-			new_dep 		= Department.objects.get( id = info['new_department_id'])
+			new_dep 		= Department.objects.get(id = info['new_department_id'])
 		except ObjectDoesNotExist:
 			return False
 
@@ -255,3 +255,6 @@ def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
 	except AttributeError:
 		pass
 
+
+
+		
