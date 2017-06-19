@@ -175,7 +175,7 @@
                                                       <div class="panel-body">
                                                         <div class="checkbox">
                                                             {% for topic in topics %}
-                                                                
+                                                                    
                                                                 {% if topic.id in user_topics_ids  %}
                                                                     <label class="active-checkbox">
                                                                         <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}" checked>
@@ -183,7 +183,7 @@
                                                                     <label class="">
                                                                         <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}">
                                                                 {% endif %}
-                                                                    {{ topic.name }} 
+                                                                {{ topic.name }} 
                                                                     </label>
                                                             {% endfor %}
                                                         </div>
