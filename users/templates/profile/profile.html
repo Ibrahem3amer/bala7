@@ -46,12 +46,14 @@
                             <img src="{% static 'pic/adv-xs.jpg' %}">
                         </div>
 
-                        {% if error %}
-                            <div id="change-personal-data-alert" class="alert alert-warning alert-dismissible" role="alert">
-                              <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
-                              {{ error }}
-                            </div>
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
                         {% endif %}
+
 
                         <div class="small-ele-div nj-box">
                             <div class="small-ele-head">

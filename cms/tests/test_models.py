@@ -4,6 +4,7 @@ from django.http import HttpRequest
 from django.core.urlresolvers import resolve
 from django.core.exceptions import ValidationError 
 from django.contrib.auth.models import User
+from django.contrib.messages.storage.fallback import FallbackStorage
 from unittest import skip
 from cms.models import Topic, UserTopics
 from cms.views import update_user_topics
@@ -42,6 +43,14 @@ class TopicTest(TestCase):
 		self.assertRaises(ValidationError, t2.clean)
 
 class UserTopicsTest(TestCase):
+	def make_messages_available(self, request):
+		"""
+		Takes request and make django's messages available for it.
+		"""
+		setattr(request, 'session', 'session')
+		messages = FallbackStorage(request)
+		setattr(request, '_messages', messages)
+
 	def setUp(self):
 		self.user 			= User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
 		self.fac 			= Faculty.objects.create()
@@ -99,6 +108,9 @@ class UserTopicsTest(TestCase):
 		request 		= RequestFactory()
 		request 		= request.post(reverse('update_user_topics'), data = {'chosen_list[]':new_topic})
 		request.user 	= self.user
+		
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		update_user_topics(request)
 
@@ -116,6 +128,9 @@ class UserTopicsTest(TestCase):
 		request 		= RequestFactory()
 		request 		= request.post(reverse('update_user_topics'), data = {'chosen_list[]':new_topic})
 		request.user 	= self.user
+		
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		update_user_topics(request)
 
@@ -133,6 +148,9 @@ class UserTopicsTest(TestCase):
 		request 		= RequestFactory()
 		request 		= request.post(reverse('update_user_topics'), data = {'chosen_list[]':new_topic})
 		request.user 	= self.user
+
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		update_user_topics(request)
 
@@ -160,6 +178,9 @@ class UserTopicsTest(TestCase):
 		request 		= request.post(reverse('update_user_topics'), data = {'chosen_list[]':new_topic})
 		request.user 	= self.user
 
+		# Making messages available for request.
+		self.make_messages_available(request)
+
 		update_user_topics(request)
 
 		
@@ -184,6 +205,9 @@ class UserTopicsTest(TestCase):
 		request 		= RequestFactory()
 		request 		= request.post(reverse('update_user_topics'), data = {'chosen_list[]':new_topic})
 		request.user 	= self.user
+		
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		update_user_topics(request)
 

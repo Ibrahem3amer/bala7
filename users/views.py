@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponse
 from users.models import University, Faculty, Department, UserProfile 
 from users.forms import UserSignUpForm
@@ -13,21 +14,34 @@ def home_visitor(request):
 
 @login_required
 def home_user(request):
+	"""
+	Displays logged-in user homepage, creates default profile in case of not. 
+	"""
 	user = request.user
 	profile_error = ''
 	try:
 		user_profile = user.profile
 	except AttributeError:
+		# Create default profile. 
 		new_profile = UserProfile()
-		new_profile.user = user
+		new_profile.user 	= user
+		new_profile.topics 	= None 
 		new_profile.save()
-		profile_error = 'Please complete your profile.'
-	return render(request, 'home_user.html', {'profile_error': profile_error})
+		messages.add_message(request, messages.INFO, 'Please complete your profile')
+	return render(request, 'home_user.html')
 
 @login_required
 def user_profile(request):
-	avaliable_topics = UserTopics.get_topics_choices(request.user)
-	user_topics_ids = [topic.id for topic in request.user.profile.topics.all()]
+	"""
+	Gathers user's availabe topics, displays user profile page.
+	"""
+
+	# Assign a default profile to user if profile doesn't exist.
+	try:
+		avaliable_topics = UserTopics.get_topics_choices(request.user)
+		user_topics_ids = [topic.id for topic in request.user.profile.topics.all()]
+	except UserProfile.DoesNotExist:
+		return home_user(request)
 	return render(request, 'profile/profile.html', {'avaliable_topics': avaliable_topics, 'user_topics_ids': user_topics_ids})
 
 @login_required
@@ -47,8 +61,8 @@ def update_user_username(request):
 
 			if UserProfile.validate_name(request.POST['new_username']):
 				UserProfile.change_username(request.POST['new_username'], request.user)
-				msg = 'Username successfully changed.'
-				return render(request, 'profile/profile.html', {'error':msg})
+				messages.add_message(request, messages.SUCCESS, 'Username successfully changed')
+				return user_profile(request)
 			else:
 				msg = 'Username is not valid or already exists. Try another one.'
 				return render(request, 'profile/profile.html', {'error':msg})

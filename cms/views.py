@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponse, Http404
 from django.urls import reverse
 from cms.models import Topic, UserTopics
@@ -58,16 +59,14 @@ def update_user_topics(request):
         user_topics = request.POST.getlist('chosen_list[]', None)
         # Validates that user has an access to these topics.
         if not user_topics or not within_user_domain(request.user, user_topics):
-            # TODO::Add message that inform user.
+            messages.add_message(request, messages.ERROR, 'You chose empty or unavailabe topics')
             return redirect(reverse('web_user_profile'))
 
 
         if(UserTopics.update_topics(request, user_topics)):
-            # TODO::Add message that inform user of success.
-            pass
+            messages.add_message(request, messages.SUCCESS, 'Topics updated successfully')
         else:
-            # TODO::Add message that inform user of failure.
-            pass
-        
+            messages.add_message(request, messages.ERROR, 'Select valid topics')
+
         return redirect(reverse('web_user_profile'))
 
