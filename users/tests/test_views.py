@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 from django.test import TestCase
 from django.http import HttpRequest
+from django.contrib.messages.storage.fallback import FallbackStorage
 from unittest import skip
 from users.views import home_visitor, display_signup
 from users.models import University, Faculty, Department, UserProfile
@@ -41,6 +42,15 @@ class user_vists_homepage(TestCase):
 
 
 class signup_and_signin(TestCase):
+
+	def make_messages_available(self, request):
+		"""
+		Takes request and make django's messages available for it.
+		"""
+		setattr(request, 'session', 'session')
+		messages = FallbackStorage(request)
+		setattr(request, '_messages', messages)
+
 	def setUp(self):
 		self.old_uni 			= University()
 		self.old_uni.save()

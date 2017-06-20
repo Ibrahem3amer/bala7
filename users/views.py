@@ -65,7 +65,8 @@ def update_user_username(request):
 				return user_profile(request)
 			else:
 				msg = 'Username is not valid or already exists. Try another one.'
-				return render(request, 'profile/profile.html', {'error':msg})
+				messages.add_message(request, messages.ERROR, msg)
+				return render(request, 'profile/profile.html')
 		else:
 			return redirect('home_user')
 
@@ -77,14 +78,17 @@ def update_user_email(request):
 		"""
 		if not request.POST['new_usermail']:
 			msg = 'Email cannot be empty.'
-			return render(request, 'profile/profile.html', {'error':msg})
+			messages.add_message(request, messages.ERROR, msg)
+			return render(request, 'profile/profile.html')
 		if UserProfile.validate_mail(request.POST['new_usermail'], request.POST['new_usermail_confirmation']):
 			UserProfile.change_mail(request.POST['new_usermail'], request.user)
 			msg = 'Email successfully changed.'
-			return render(request, 'profile/profile.html', {'error':msg})
+			messages.add_message(request, messages.SUCCESS, msg)
+			return render(request, 'profile/profile.html')
 		else:
 			msg = 'Email is not valid or does not match.'
-			return render(request, 'profile/profile.html', {'error':msg})
+			messages.add_message(request, messages.ERROR, msg)
+			return render(request, 'profile/profile.html')
 		
 		return redirect('home_user')
 
@@ -93,16 +97,22 @@ def update_user_password(request):
 		"""
 		Takes a post request and validates password to change it.
 		"""
+		# Check for emptiness
 		if not request.POST['old_password'] or not request.POST['new_password'] or not request.POST['new_password_confirm']:
 			msg = 'password fields cannot be empty.'
-			return render(request, 'profile/profile.html', {'error':msg})
+			messages.add_message(request, messages.ERROR, msg)
+			return render(request, 'profile/profile.html')
+
+		# Check if password is valid
 		if UserProfile.validate_new_password(request.POST['old_password'], request.POST['new_password'], request.POST['new_password_confirm'], request.user):
 			UserProfile.change_password(request.POST['new_password'], request.user)
 			msg = 'Password successfully changed.'
-			return render(request, 'profile/profile.html', {'error':msg})
+			messages.add_message(request, messages.SUCCESS, msg)
+			return render(request, 'profile/profile.html')
 		else:
 			msg = 'Password is not valid. It must be at least 8 characters length, mix of letters and numbers.'
-			return render(request, 'profile/profile.html', {'error':msg})
+			messages.add_message(request, messages.ERROR, msg)
+			return render(request, 'profile/profile.html')
 		
 		return redirect('home_user')
 
@@ -120,14 +130,17 @@ def update_user_education_info(request):
 			new_info['new_section_number'] 	= request.POST['new_section_number']
 		except AttributeError:
 			msg = 'University, faculty and department cannot be empty.'
-			return render(request, 'profile/profile.html', {'error':msg})
+			messages.add_message(request, messages.ERROR, msg)
+			return render(request, 'profile/profile.html')
 
 		if UserProfile.update_education_info(new_info, request.user):
 			msg = 'Your educational info updated successfully.'
-			return render(request, 'profile/profile.html', {'error':msg})
+			messages.add_message(request, messages.SUCCESS, msg)
+			return render(request, 'profile/profile.html')
 		else:
 			msg = 'Invalid educational info. Try again.'
-			return render(request, 'profile/profile.html', {'error':msg})
+			messages.add_message(request, messages.ERROR, msg)
+			return render(request, 'profile/profile.html')
 
 
 def display_signup(request):

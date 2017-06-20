@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 from django.test import TestCase, RequestFactory
 from django.http import HttpRequest
+from django.contrib.messages.storage.fallback import FallbackStorage
 from unittest import skip
 from users.views import *
 from users.models import University, Faculty, Department, UserProfile
@@ -238,6 +239,14 @@ class DepartmentModelTest(TestCase):
 
 class UserProfileTest(TestCase):
 
+	def make_messages_available(self, request):
+		"""
+		Takes request and make django's messages available for it.
+		"""
+		setattr(request, 'session', 'session')
+		messages = FallbackStorage(request)
+		setattr(request, '_messages', messages)
+
 	def setUp(self):
 		self.user 		= User.objects.create_user(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
 		self.uni 		= University.objects.create(name = 'Test university')
@@ -315,6 +324,8 @@ class UserProfileTest(TestCase):
 		request 		= request.post(reverse('web_change_username'), data={'new_username':'13Ibraheeeem'})
 		request.user 	= self.user
 
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		# Exercise test
 		update_user_username(request)
@@ -329,9 +340,12 @@ class UserProfileTest(TestCase):
 		request 		= request.post(reverse('web_change_username'), data={'new_username':'ibrahem3amer'})
 		request.user 	= self.user
 
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		# Exercise test
 		update_user_username(request)
+
 
 		# Assert test
 		self.assertNotEqual('ibrahem3amer', self.user.username)
@@ -342,6 +356,8 @@ class UserProfileTest(TestCase):
 		request 		= request.post(reverse('web_change_email'), data={'new_usermail':'ibrahem3amer@hotmail.com', 'new_usermail_confirmation':'ibrahem3amer@hotmail.com'})
 		request.user 	= self.user
 
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		# Exercise test
 		update_user_email(request)
@@ -355,9 +371,14 @@ class UserProfileTest(TestCase):
 		request 		= request.post(reverse('web_change_email'), data={'new_usermail':'ibrahem3amer.com', 'new_usermail_confirmation':'ibrahem3amer.com'})
 		request.user 	= self.user
 
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		# Exercise test
 		update_user_email(request)
+
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		# Assert test
 		self.assertNotEqual('ibrahem3amer.com', self.user.email)
@@ -373,6 +394,8 @@ class UserProfileTest(TestCase):
 			})
 		request.user 	= self.user
 
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		# Exercise test
 		response = update_user_password(request)
@@ -397,6 +420,10 @@ class UserProfileTest(TestCase):
 		user.profile.university = self.old_uni
 		user.profile.faculty 	= self.old_fac
 		user.profile.department = self.old_dep
+		
+		# Making messages available for request.
+		self.make_messages_available(request)
+		
 		update_user_education_info(request)
 
 		# Assert test
@@ -418,6 +445,10 @@ class UserProfileTest(TestCase):
 		self.user.profile.university 	= self.old_uni
 		self.user.profile.faculty 		= self.old_fac
 		self.user.profile.department 	= self.old_dep
+
+		# Making messages available for request.
+		self.make_messages_available(request)
+
 		update_user_education_info(request)
 
 		# Assert test
