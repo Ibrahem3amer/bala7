@@ -56,7 +56,12 @@ class UserTopics(object):
 	    """
 	    Returns list of topics that user has access to. 
 	    """
-	    return user_obj.profile.topics.all()
+	    try:
+	    	return user_obj.profile.topics.all()
+	    except AttributeError:
+	    	from users.models import UserProfile
+	    	UserProfile.make_form_new_profile(user_obj)
+	    	return user_obj.profile.topics.all()
 
 	@classmethod
 	def get_user_topics_nav(cls, user_obj):
@@ -82,10 +87,29 @@ class UserTopics(object):
 		# Returns topics that matches user faculty. 
 		topics 	= Topic.objects.filter(faculty = user_obj.profile.faculty).all()
 		# Grouping topics query by each department in user's faculty. 
-		for dep in user_obj.profile.faculty.departments.all():
+		for dep in user_obj.profile.faculty.departments.all().order_by('name'):
 			# Select from topics query topics that hold the same department id of current dep. 
 			results[dep.name] = [candidate_topic for candidate_topic in topics if candidate_topic.department_id == dep.id]
 
 		return results
+
+	@classmethod
+	def update_topics(cls, request, user_topics):
+		"""
+		Accepts ids of topics, validates them and update user's own topics to the queryset. 
+		"""
+		# Validating existence of each topic, pass if one of them doesn't exist.
+		try:
+			topics = Topic.objects.filter(id__in = user_topics)
+		except Topic.DoesNotExist:
+			pass
+
+		if not topics:
+			return False
+		else:
+			request.user.profile.topics = user_topics
+			return True
+
+
 
 

@@ -24,6 +24,8 @@
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
     </head>
     <body>
+
+        
         <!-- start navbar -->
         {% include "public/navbar-user.html" %}
         <!-- end navbar -->
@@ -44,9 +46,14 @@
                             <img src="{% static 'pic/adv-xs.jpg' %}">
                         </div>
 
-                        {% if error %}
-                            <h1>{{ error }}</h1>
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
                         {% endif %}
+
 
                         <div class="small-ele-div nj-box">
                             <div class="small-ele-head">
@@ -152,43 +159,41 @@
                                 <i id="choose-materials-setting" class="fa fa-cog" aria-hidden="true"></i>
                             </div>
                             <div class="materials">
-                                <a href="#"><label>علوم الحاسب</label></a> 
-                                <a href="#"><label>اساسيات البرمجة</label></a> 
-                                <a href="#"><label>علوم الحاسب</label></a> 
-                                <a href="#"><label>اساسيات البرمجة</label></a> 
-                                <a href="#"><label>علوم الحاسب</label></a> 
-                                <a href="#"><label>اساسيات البرمجة</label></a> 
+                                {% for topic in nav_topics %}
+                                    <a href="{% url 'get_topic' dep_id=topic.dep topic_id=topic.pk %}"><label>{{ topic.name }}</label></a> 
+                                {% endfor %}
                             </div>
                             <div class="choose-materials">
-                                <form>
-                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                    {% if avaliable_topics %}
-                                        {% for dep, topics in avaliable_topics.items %}
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading" role="tab" id="headingOne" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                  <h4 class="panel-title">{{ dep }}</h4>
-                                                </div>
-                                                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                                  <div class="panel-body">
-                                                    <div class="checkbox">
-                                                        {% for topic in topics %}
-                                                            <label class="active-checkbox">
-                                                                {% if topic.id in user_topics_ids  %}
-                                                                    <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}" checked>
-                                                                {% else %}
-                                                                    <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}">
-                                                                {% endif %}
-                                                               {{ topic.name }} 
-                                                            </label>
-                                                        {% endfor %}
+                                <form action="{% url 'update_user_topics' %}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                        {% if avaliable_topics %}
+                                            {% for dep, topics in avaliable_topics.items %}
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading" role="tab" id="headingOne" role="button" data-toggle="collapse" data-parent="#accordion" href="#{{forloop.counter}}panel" aria-expanded="true" aria-controls="{{forloop.counter}}panel">
+                                                      <h4 class="panel-title">{{ dep }}</h4>
                                                     </div>
-                                                  </div>
+                                                    <div id="{{forloop.counter}}panel" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                                      <div class="panel-body">
+                                                        <div class="checkbox">
+                                                            {% for topic in topics %}
+                                                                <label class="active-checkbox">
+                                                                    {% if topic.id in user_topics_ids  %}
+                                                                        <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}" checked>
+                                                                    {% else %}
+                                                                        <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}">
+                                                                    {% endif %}
+                                                                    {{ topic.name }} 
+                                                                </label>
+                                                            {% endfor %}
+                                                        </div>
+                                                      </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        {% endfor %}
-                                    {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
 
-                                </div>
                                     <button class="true-submit-btn" type="submit"><i class="fa fa-check"></i></button>
                                 </form>
                             </div>

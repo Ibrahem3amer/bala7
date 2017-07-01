@@ -3,9 +3,10 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 from django.test import TestCase
 from django.http import HttpRequest
+from django.contrib.messages.storage.fallback import FallbackStorage
 from unittest import skip
 from users.views import home_visitor, display_signup
-from users.models import University, Faculty, Department
+from users.models import University, Faculty, Department, UserProfile
 from users.forms import SignupForm, UserSignUpForm
 from django.contrib.auth.models import User
 
@@ -41,6 +42,23 @@ class user_vists_homepage(TestCase):
 
 
 class signup_and_signin(TestCase):
+
+	def make_messages_available(self, request):
+		"""
+		Takes request and make django's messages available for it.
+		"""
+		setattr(request, 'session', 'session')
+		messages = FallbackStorage(request)
+		setattr(request, '_messages', messages)
+
+	def setUp(self):
+		self.old_uni 			= University()
+		self.old_uni.save()
+		self.old_fac			= Faculty(university = self.old_uni)
+		self.old_fac.save()
+		self.old_dep 			= Department(faculty = self.old_fac)
+		self.old_dep.save()
+
 	def test_signup_returns_correct_output(self):
 		# Setup test
 		response = self.client.get(reverse('web_signup'))
@@ -67,7 +85,7 @@ class signup_and_signin(TestCase):
 
 	def test_second_form_post_with_data(self):
 		# Setup test
-		first_form_data 			= {'university':1, 'faculty':1, 'department':1}
+		first_form_data 			= {'university':self.old_uni.id, 'faculty':self.old_fac.id, 'department':self.old_dep.id}
 		session 					= self.client.session
 		session['first_form_data'] 	= first_form_data
 		session.save()
@@ -77,8 +95,8 @@ class signup_and_signin(TestCase):
 
 
 		# Assert test
-		# 400 because of something related to session on test client.
-		self.assertEqual(404, response.status_code)
+		# Redirect user to homepage if success.
+		self.assertEqual(302, response.status_code)
 
 	def test_user_reach_signin(self):
 		# Setup test
@@ -103,18 +121,27 @@ class signup_and_signin(TestCase):
 
 	def test_homeuser_with_login(self):
 		# Setup test
-		user = User.objects.create(username='test', email='test_tt@test.com', password='00000111112222255555888ffff')
+		user 				= User.objects.create(username='test', email='test_tt@test.com', password='00000111112222255555888ffff')
+		user.save()
+		user_profile 		= UserProfile(university = self.old_uni, faculty = self.old_fac, department = self.old_dep)
+		user_profile.user 	= user
+		user_profile.save()
+
 		
 		# Exercise test
 		request = self.client.force_login(user)
-		response = self.client.get(reverse('web_user_profile'))
+		response = self.client.get(reverse('home_user'))
 
 		# Assert test
 		self.assertEqual(200, response.status_code)
 
 	def test_profile_with_login(self):
 		# Setup test
-		user = User.objects.create(username='test', email='test_tt@test.com', password='00000111112222255555888ffff')
+		user 				= User.objects.create(username='test', email='test_tt@test.com', password='00000111112222255555888ffff')
+		user.save()
+		user_profile 		= UserProfile(university = self.old_uni, faculty = self.old_fac, department = self.old_dep)
+		user_profile.user 	= user
+		user_profile.save()
 
 		# Exercise test
 		request = self.client.force_login(user)

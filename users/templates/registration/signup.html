@@ -38,46 +38,25 @@
                             <h1>{{ error }}</h1>
                         {% endif %}
                         <label class="nj-label" for="id_select_university">الجامعة</label>
-                        <select id="id_select_university" name="selected_university"  class="form-control select nj-select">
-                            <option value="" disabled selected>اختر الجامعة</option>
-                            {% for university in universities %}
-                                <option class="university_name" value="{{ university.id }}">{{ university.name }}</option>
-                            {% endfor %}
-                        </select>
+                        <select id="id_select_university" name="selected_university"  class="form-control select nj-select"></select>
                     </div>
                     <div class="form-group">
                         <label class="nj-label" for="id_select_faculty">الكلية</label>
                         <select id="id_select_faculty" name="selected_faculty" class="form-control select nj-select">
-                            <option value="" disabled selected>اختر الكلية</option>
-                            {% for faculty in faculties %}
-                                <option class="faculty_name" name="{{ faculty.university.name }}_{{ faculty.name }}" value="{{ faculty.id }}" id="{{ faculty.id }}">{{ faculty.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="nj-label" for="facu">الفرقة</label>
-                        <select class="form-control select nj-select">
-                            <option value="" disabled selected>اختر الفرقة</option>
-                            <option id="">الفرقة الاولي</option>
-                            <option id="">الفرقة الثانية</option>
+                            <option value="" disabled selected>اختر الكليه</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="nj-label" for="id_select_department">القسم</label>
                         <select id="id_select_department" name="selected_department" class="form-control select nj-select">
                             <option value="" disabled selected>اختر القسم</option>
-                            {% for department in departments %}
-                                <option class="department_name" id="{{ department.id }}" value="{{ department.id }}" name="{{ department.faculty.name }}_{{ department.name }}">{{ department.name }}</option>
-                            {% endfor %}
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="nj-label" for="facu">السكشن</label>
-                        <select class="form-control select nj-select">
-                            <option value="" disabled selected>اختر السكشن</option>
-                            <option id="">1</option>
-                            <option id="">2</option>
-                        </select>
+                        <div class="form-group">
+                            <label class="nj-label" for="facu">السكشن</label>
+                            <input id="section-input" class="nj-input" type="number" min="1" max="99" placeholder="رقم السكشن" name="new_section_number" />
+                        </div>
                     </div>
                     <div class="have-acc">لديك حساب بالفعل؟
                         <a class="have-acc-link" href="{% url 'login' %}" id="id_signin_side">سجل دخول الآن</a>
@@ -109,5 +88,6 @@
         </div>
     </div>
     
+    <script src="{% static 'js/registration.js' %}"></script>
 </body>
 </html>

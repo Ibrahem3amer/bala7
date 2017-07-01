@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 from django.test import TestCase, RequestFactory
 from django.http import HttpRequest
+from django.contrib.messages.storage.fallback import FallbackStorage
 from unittest import skip
 from users.views import *
 from users.models import University, Faculty, Department, UserProfile
@@ -238,11 +239,25 @@ class DepartmentModelTest(TestCase):
 
 class UserProfileTest(TestCase):
 
+	def make_messages_available(self, request):
+		"""
+		Takes request and make django's messages available for it.
+		"""
+		setattr(request, 'session', 'session')
+		messages = FallbackStorage(request)
+		setattr(request, '_messages', messages)
+
 	def setUp(self):
-		self.user 	= User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
-		self.uni 	= University.objects.create(name = 'Test university')
-		self.fac 	= Faculty.objects.create(name = 'Test faculty')
-		self.dep 	= Department.objects.create(name = 'Test dep')
+		self.user 		= User.objects.create_user(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		self.uni 		= University.objects.create(name = 'Test university')
+		self.fac 		= Faculty.objects.create(name = 'Test faculty')
+		self.dep 		= Department.objects.create(name = 'Test dep')
+		self.old_uni	= University()
+		self.old_uni.save()
+		self.old_fac	= Faculty(university = self.old_uni)
+		self.old_fac.save()
+		self.old_dep 	= Department(faculty = self.old_fac)
+		self.old_dep.save()
 
 	
 	def test_insert_new_profile_with_user(self):
@@ -282,8 +297,18 @@ class UserProfileTest(TestCase):
 
 	def test_update_vaild_username(self):
 		# Setup test
-		request 		= RequestFactory()
-		request 		= request.post(reverse('web_change_username'), data={'new_username':'Ibraheeeeeeem'})
+		request 			= RequestFactory()
+		request 			= request.post(reverse('web_change_username'), data={'new_username':'Ibraheeeeeeem'})
+		user_profile 		= UserProfile(university = self.old_uni, faculty = self.old_fac, department = self.old_dep)
+		user_profile.user 	= self.user
+		user_profile.save()
+		
+		# Making messages available for request.
+		from django.contrib.messages.storage.fallback import FallbackStorage
+		setattr(request, 'session', 'session')
+		messages = FallbackStorage(request)
+		setattr(request, '_messages', messages)
+
 		request.user 	= self.user
 
 
@@ -299,6 +324,8 @@ class UserProfileTest(TestCase):
 		request 		= request.post(reverse('web_change_username'), data={'new_username':'13Ibraheeeem'})
 		request.user 	= self.user
 
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		# Exercise test
 		update_user_username(request)
@@ -313,9 +340,12 @@ class UserProfileTest(TestCase):
 		request 		= request.post(reverse('web_change_username'), data={'new_username':'ibrahem3amer'})
 		request.user 	= self.user
 
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		# Exercise test
 		update_user_username(request)
+
 
 		# Assert test
 		self.assertNotEqual('ibrahem3amer', self.user.username)
@@ -326,6 +356,8 @@ class UserProfileTest(TestCase):
 		request 		= request.post(reverse('web_change_email'), data={'new_usermail':'ibrahem3amer@hotmail.com', 'new_usermail_confirmation':'ibrahem3amer@hotmail.com'})
 		request.user 	= self.user
 
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		# Exercise test
 		update_user_email(request)
@@ -339,9 +371,14 @@ class UserProfileTest(TestCase):
 		request 		= request.post(reverse('web_change_email'), data={'new_usermail':'ibrahem3amer.com', 'new_usermail_confirmation':'ibrahem3amer.com'})
 		request.user 	= self.user
 
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		# Exercise test
 		update_user_email(request)
+
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		# Assert test
 		self.assertNotEqual('ibrahem3amer.com', self.user.email)
@@ -357,6 +394,8 @@ class UserProfileTest(TestCase):
 			})
 		request.user 	= self.user
 
+		# Making messages available for request.
+		self.make_messages_available(request)
 
 		# Exercise test
 		response = update_user_password(request)
@@ -367,42 +406,50 @@ class UserProfileTest(TestCase):
 
 	def test_update_educational_info_with_valid(self):
 		# Setup test
-		old_uni 			= University()
-		old_fac				= Faculty()
-		old_dep 			= Department()
-		user_profile 		= UserProfile(university = old_uni, faculty = old_fac, department = old_dep)
-		self.user.profile 	= user_profile
+		user 				= User.objects.create(username='test', email='test_tt@test.com', password='00000111112222255555888ffff')
+		user.save()
+		user_profile 		= UserProfile(university = self.old_uni, faculty = self.old_fac, department = self.old_dep)
+		user_profile.user 	= user
+		user_profile.save()
 		request 			= RequestFactory()
-		request 			= request.post(reverse('web_change_info'), data={'new_university_id':self.uni.id, 'new_faculty_id':self.fac.id, 'new_department_id':self.dep.id, 'new_section_number': 5})
-		request.user 		= self.user
+		request 			= request.post(reverse('web_change_info'), data={'universities-hidden':self.uni.id, 'faculties-hidden':self.fac.id, 'departments-hidden':self.dep.id, 'new_section_number': 5})
+		request.user 		= user
 
 
 		# Exercise test
-		self.user.profile.university = old_uni
-		self.user.profile.faculty 	= old_fac
-		self.user.profile.department = old_dep
+		user.profile.university = self.old_uni
+		user.profile.faculty 	= self.old_fac
+		user.profile.department = self.old_dep
+		
+		# Making messages available for request.
+		self.make_messages_available(request)
+		
 		update_user_education_info(request)
 
 		# Assert test
-		self.assertNotEqual(old_uni, self.user.profile.university)
+		self.assertNotEqual(self.old_uni, user.profile.university)
 
 	def test_update_educational_info_with_invalid_ids(self):
 		# Setup test
-		old_uni 			= University()
-		old_fac				= Faculty()
-		old_dep 			= Department()
-		user_profile 		= UserProfile(university = old_uni, faculty = old_fac, department = old_dep)
-		self.user.profile 	= user_profile
-		request 			= RequestFactory()
-		request 			= request.post(reverse('web_change_info'), data={'new_university_id':99, 'new_faculty_id':99, 'new_department_id':99, 'new_section_number': 99})
-		request.user 		= self.user
+		self.user 				= User.objects.create(username='test', email='test_tt@test.com', password='00000111112222255555888ffff')
+		self.user.save()
+		self.user_profile 		= UserProfile(university = self.old_uni, faculty = self.old_fac, department = self.old_dep)
+		self.user_profile.user 	= self.user
+		self.user_profile.save()
+		request 					= RequestFactory()
+		request 					= request.post(reverse('web_change_info'), data={'universities-hidden':99, 'faculties-hidden':99, 'departments-hidden':99, 'new_section_number': 99})
+		request.user 				= self.user
 
 
 		# Exercise test
-		self.user.profile.university = old_uni
-		self.user.profile.faculty 	= old_fac
-		self.user.profile.department = old_dep
+		self.user.profile.university 	= self.old_uni
+		self.user.profile.faculty 		= self.old_fac
+		self.user.profile.department 	= self.old_dep
+
+		# Making messages available for request.
+		self.make_messages_available(request)
+
 		update_user_education_info(request)
 
 		# Assert test
-		self.assertEqual(old_uni, self.user.profile.university)
+		self.assertEqual(self.old_uni, self.user.profile.university)

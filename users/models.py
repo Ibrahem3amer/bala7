@@ -50,8 +50,7 @@ class UserProfile(models.Model):
 	count_of_replies 	= models.IntegerField(default = 0)
 	academic_stats 		= models.CharField(max_length = 20, default = 'unset')
 	last_active_device 	= models.CharField(max_length = 200)
-	# limit_choices_to = {'department_id': 3}) the problem is how to figure current user dep_id
-	topics				= models.ManyToManyField(Topic, null = True) 
+	topics				= models.ManyToManyField(Topic) 
 	#table				= 'relationship with table'
 	#posts 				= 'relationship with posts'
 	#replies 			= 'relationship with replies'

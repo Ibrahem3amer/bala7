@@ -92,7 +92,7 @@
 <p id="n23" class="pln"><a href="#n23">23</a></p>
 <p id="n24" class="stm run hide_run"><a href="#n24">24</a></p>
 <p id="n25" class="stm run hide_run"><a href="#n25">25</a></p>
-<p id="n26" class="stm run hide_run"><a href="#n26">26</a></p>
+<p id="n26" class="stm mis"><a href="#n26">26</a></p>
 <p id="n27" class="stm mis"><a href="#n27">27</a></p>
 <p id="n28" class="stm mis"><a href="#n28">28</a></p>
 <p id="n29" class="stm run hide_run"><a href="#n29">29</a></p>
@@ -141,7 +141,7 @@
 <p id="n72" class="stm run hide_run"><a href="#n72">72</a></p>
 <p id="n73" class="pln"><a href="#n73">73</a></p>
 <p id="n74" class="stm run hide_run"><a href="#n74">74</a></p>
-<p id="n75" class="stm mis"><a href="#n75">75</a></p>
+<p id="n75" class="stm run hide_run"><a href="#n75">75</a></p>
 
             </td>
             <td class="text">
@@ -170,7 +170,7 @@
 <p id="t23" class="pln"><span class="str">        """</span><span class="strut">&nbsp;</span></p>
 <p id="t24" class="stm run hide_run">        <span class="nam">option</span> <span class="op">=</span> <span class="str">'--testrunner='</span><span class="strut">&nbsp;</span></p>
 <p id="t25" class="stm run hide_run">        <span class="key">for</span> <span class="nam">arg</span> <span class="key">in</span> <span class="nam">argv</span><span class="op">[</span><span class="num">2</span><span class="op">:</span><span class="op">]</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t26" class="stm run hide_run">            <span class="key">if</span> <span class="nam">arg</span><span class="op">.</span><span class="nam">startswith</span><span class="op">(</span><span class="nam">option</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t26" class="stm mis">            <span class="key">if</span> <span class="nam">arg</span><span class="op">.</span><span class="nam">startswith</span><span class="op">(</span><span class="nam">option</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t27" class="stm mis">                <span class="nam">self</span><span class="op">.</span><span class="nam">test_runner</span> <span class="op">=</span> <span class="nam">arg</span><span class="op">[</span><span class="nam">len</span><span class="op">(</span><span class="nam">option</span><span class="op">)</span><span class="op">:</span><span class="op">]</span><span class="strut">&nbsp;</span></p>
 <p id="t28" class="stm mis">                <span class="key">break</span><span class="strut">&nbsp;</span></p>
 <p id="t29" class="stm run hide_run">        <span class="nam">super</span><span class="op">(</span><span class="nam">Command</span><span class="op">,</span> <span class="nam">self</span><span class="op">)</span><span class="op">.</span><span class="nam">run_from_argv</span><span class="op">(</span><span class="nam">argv</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
@@ -219,7 +219,7 @@
 <p id="t72" class="stm run hide_run">        <span class="nam">failures</span> <span class="op">=</span> <span class="nam">test_runner</span><span class="op">.</span><span class="nam">run_tests</span><span class="op">(</span><span class="nam">test_labels</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t73" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t74" class="stm run hide_run">        <span class="key">if</span> <span class="nam">failures</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t75" class="stm mis">            <span class="nam">sys</span><span class="op">.</span><span class="nam">exit</span><span class="op">(</span><span class="nam">bool</span><span class="op">(</span><span class="nam">failures</span><span class="op">)</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t75" class="stm run hide_run">            <span class="nam">sys</span><span class="op">.</span><span class="nam">exit</span><span class="op">(</span><span class="nam">bool</span><span class="op">(</span><span class="nam">failures</span><span class="op">)</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 
             </td>
         </tr>
@@ -230,7 +230,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.4</a>,
-            created at 2017-05-14 17:27
+            created at 2017-06-12 09:59
         </p>
     </div>
 </div>
