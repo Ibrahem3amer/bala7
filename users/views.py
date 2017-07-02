@@ -168,6 +168,8 @@ def signup_second_form(request):
 
 		# Redirect user to first form with error of he didn't entered data.
 		if university is None or faculty is None or department is None:
+			msg = 'Please select your university, faculty, and department.'
+			messages.add_message(request, messages.ERROR, msg)
 			return redirect('web_signup')
 		first_form_data 					= {'university':university, 'faculty':faculty, 'department':department}
 		request.session['first_form_data'] 	= first_form_data

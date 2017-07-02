@@ -176,14 +176,16 @@
                                                       <div class="panel-body">
                                                         <div class="checkbox">
                                                             {% for topic in topics %}
-                                                                <label class="active-checkbox">
-                                                                    {% if topic.id in user_topics_ids  %}
+                                                                    
+                                                                {% if topic.id in user_topics_ids  %}
+                                                                    <label class="active-checkbox">
                                                                         <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}" checked>
-                                                                    {% else %}
+                                                                {% else %}
+                                                                    <label class="">
                                                                         <input type="checkbox" name="chosen_list[]" value="{{ topic.id }}">
-                                                                    {% endif %}
-                                                                    {{ topic.name }} 
-                                                                </label>
+                                                                {% endif %}
+                                                                {{ topic.name }} 
+                                                                    </label>
                                                             {% endfor %}
                                                         </div>
                                                       </div>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <form action="{% url 'add_material_web' %}" method="POST">
+        {% csrf_token %}
+        {{ add_material_form }}
+        <input type="hidden" name="material_topic_id" value="10">
+        <input type="submit" name="Add">
+    </form>
+</body>
+</html>

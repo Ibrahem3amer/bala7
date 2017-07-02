@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.http import HttpResponse, Http404
 from django.urls import reverse
 from cms.models import Topic, UserTopics
+from cms.forms import AddMaterialForm
 
 def restrict_access(request, topic_id):
     """
@@ -69,4 +70,23 @@ def update_user_topics(request):
             messages.add_message(request, messages.ERROR, 'Select valid topics')
 
         return redirect(reverse('web_user_profile'))
+
+def add_material(request):
+    """
+    Accepts POST, GET requets. Add new material if POST, display form errors if GET.
+    """
+    topic_id = request.POST.get('material_topic_id', '0')
+
+    if request.method == 'POST':
+        material_form = AddMaterialForm(request.POST)
+        if material_form.is_valid():
+            return HttpResponse('ok')
+    else:
+        # Initiate new form, gather user and topic from request details. 
+        user            = request.user
+        request_url     = '/topics/4/7'.split('/')
+        topic           = get_object_or_404(Topic, pk = request_url[3])
+        material_form   = AddMaterialForm(initial={'user': user, 'topic': topic})
+
+        return render(request, 'add_material.html', {'add_material_form': material_form})
 
