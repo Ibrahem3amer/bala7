@@ -3,6 +3,7 @@
 <head>
 	
     {% load staticfiles %}
+    {% load materials_extras %}
     
         <meta charset="utf-8">
         <title>{{ topic.name }}</title>
@@ -191,13 +192,15 @@
                                         </div>
                                         <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                                             <div class="panel-body">
-                                                {% for material in weeks_materials.1 %}
-                                                  <div class="row">
-                                                      <div class="col-xs-4"><a href="{{material.link}}"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                      <div class="col-xs-4"><p>{{ material.name }}</p></div>
-                                                      <div class="col-xs-4"><p>{{ material.content_type }}</p></div>
-                                                  </div>
-                                                {% endfor %}
+                                                {% if weeks_materials|week_number:forloop.counter %}
+                                                  {% for material in weeks_materials|week_number:forloop.counter %}
+                                                    <div class="row">
+                                                        <div class="col-xs-4"><a href="{{material.link}}"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                        <div class="col-xs-4"><p>{{ material.name }}</p></div>
+                                                        <div class="col-xs-4"><p>{% if material.content_type == 1 %} محاضرة {% else %} سكشن/شرح {% endif %}</p></div>
+                                                    </div>
+                                                  {% endfor %}
+                                                {% endif %}
                                                 <div class="row">
                                                     <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
                                                     <div class="col-xs-4"><p>عنوان السكشن</p></div>
