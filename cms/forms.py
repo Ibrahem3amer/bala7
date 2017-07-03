@@ -12,6 +12,23 @@ class AddMaterialForm(forms.ModelForm):
     class Meta:
         model       = Material
         fields      = '__all__'
-        validators  = {'link': MaterialValidator.validate_material_link}
+
+    def clean(self):
+        super(AddMaterialForm, self).clean()
+        form_cleaned_data = self.cleaned_data
+
+        # Validate material link validity.
+        link_validation = MaterialValidator.validate_material_link(form_cleaned_data['link'])
+        if link_validation != 1:
+            raise forms.ValidationError("Material link should lead to pdf file, should not be broken link.")
+
+        # Validate that date is not future date.
+        date_validation = MaterialValidator.validate_date(form_cleaned_data['year'])
+        if date_validation != 1:
+            raise forms.ValidationError("Material date should not be in the future.")
+
+
+        return form_cleaned_data
+
 
         

@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator, MinLengthValidator
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.conf import settings
 from django.contrib.auth.models import User
 
@@ -127,7 +127,7 @@ class Material(models.Model):
 	# Fields
 	name 			= models.CharField(max_length = 200, validators = [material_name_validator], default = "N/A")
 	content			= models.CharField(max_length = 500, validators = [content_min_len_validator])
-	link 			= models.URLField()
+	link 			= models.URLField(unique = True)
 	year 			= models.DateField()
 	term 			= models.PositiveIntegerField(choices = term_choices)
 	content_type	= models.PositiveIntegerField(choices = type_choices)
@@ -142,8 +142,13 @@ class Material(models.Model):
 	def clean(self):
 
 		# Validates that week number associated with materials is real week number.
-		if self.week_number not in range(self.topic.weeks):
-			raise ValidationError('Week number is not found.')
+		try:
+			if self.week_number not in range(self.topic.weeks):
+				raise ValidationError('Week number is not found.')
+		except ObjectDoesNotExist:
+			# RelatedObject handler.
+			self.week_number = 0
+
 
 	# Material's methods
 	@classmethod
