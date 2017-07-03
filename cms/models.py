@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 class Topic(models.Model):
 	# Helper variables
-	topic_name_validator 	= RegexValidator(r'^[a-zA-Z][a-zA-Z0-9]*([ ]?[a-zA-Z0-9]+)+$', 'Name cannot start with number, should consist of characters.')
+	topic_name_validator 	= RegexValidator(r'^[\u0621-\u064Aa-zA-Z][\u0621-\u064Aa-zA-Z0-9]*([ ]?[\u0621-\u064Aa-zA-Z0-9]+)+$', 'Name cannot start with number, should consist of characters.') 
 	term_choices 			= [(1, 'First term'), (2, 'Second term'), (3, 'Summer')]
 
 	# Class attributes
@@ -121,7 +121,7 @@ class Material(models.Model):
 	type_choices = [(1, 'Lecture'), (2, 'Asset')]
 
 	# Model Validator
-	material_name_validator 	= RegexValidator(r'^[a-zA-Z][a-zA-Z0-9]*([ ]?[a-zA-Z0-9]+)+$', 'Name cannot start with number, should consist of characters.') 
+	material_name_validator 	= RegexValidator(r'^[\u0621-\u064Aa-zA-Z][\u0621-\u064Aa-zA-Z0-9]*([ ]?[\u0621-\u064Aa-zA-Z0-9]+)+$', 'Name cannot start with number, should consist of characters.') 
 	content_min_len_validator	= MinLengthValidator(50, 'Material Description should be more than 50 characters.')
 
 	# Fields

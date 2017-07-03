@@ -14,6 +14,8 @@ class AddMaterialForm(forms.ModelForm):
         fields      = '__all__'
 
     def clean(self):
+
+        # Parent validation.
         super(AddMaterialForm, self).clean()
         form_cleaned_data = self.cleaned_data
 
