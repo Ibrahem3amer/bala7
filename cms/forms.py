@@ -6,8 +6,8 @@ from cms.models import Material, Topic
 from cms.validators import MaterialValidator
 
 class AddMaterialForm(forms.ModelForm):
-    user    = forms.ModelChoiceField(queryset = User.objects.first(), widget = forms.HiddenInput())
-    topic   = forms.ModelChoiceField(queryset = Topic.objects.first(), widget = forms.HiddenInput())
+    user    = forms.ModelChoiceField(queryset = User.objects.all(), widget = forms.HiddenInput())
+    topic   = forms.ModelChoiceField(queryset = Topic.objects.all(), widget = forms.HiddenInput())
 
     class Meta:
         model       = Material

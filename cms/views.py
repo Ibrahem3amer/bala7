@@ -73,14 +73,13 @@ def update_user_topics(request):
 
 def add_material(request):
     """
-    Accepts POST, GET requets. Add new material if POST, display form errors if GET.
+    Accepts POST, GET requets. Add new material if POST, collecting user and topic details from request if GET.
     """
-    topic_id = request.POST.get('material_topic_id', '0')
-
     if request.method == 'POST':
         material_form = AddMaterialForm(request.POST)
         if material_form.is_valid():
-            return HttpResponse('ok')
+            material_form.save()
+            return redirect('home_user')
     else:
         # Initiate new form, gather user and topic from request details. 
         user            = request.user
@@ -88,5 +87,5 @@ def add_material(request):
         topic           = get_object_or_404(Topic, pk = request_url[3])
         material_form   = AddMaterialForm(initial={'user': user, 'topic': topic})
 
-        return render(request, 'add_material.html', {'add_material_form': material_form})
+    return render(request, 'add_material.html', {'add_material_form': material_form})
 
