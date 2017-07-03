@@ -341,4 +341,23 @@ class MaterialTest(TestCase):
 
 		# Exercise test
 		# Assert test
-		self.assertRaises(ValidationError, lambda: material_test.full_clean())
+		self.assertRaises(ValidationError, lambda: material_test.full_clean())		
+
+	def test_add_material_with_repeated_link(self):
+		# Setup test
+		material_test = Material.objects.create(
+				name 			= 'material',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.google.com',
+				year 			= '2123-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= self.topic
+			)
+
+		# Exercise test
+		# Assert test
+		self.assertRaises(ValidationError, lambda: material_test.full_clean())		
+

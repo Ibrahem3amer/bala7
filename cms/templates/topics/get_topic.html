@@ -181,102 +181,45 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane fade in  active" id="content">
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingOne" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        <h4 class="panel-title">
-                                            الاسبوع الأول
-                                        </h4>
-                                    </div>
-                                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                        <div class="panel-body">
-                                            <div class="row">
-                                                <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                <div class="col-xs-4"><p>عنوان المحاضرة</p></div>
-                                                <div class="col-xs-4"><p>المحاضرة</p></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                <div class="col-xs-4"><p>عنوان السكشن</p></div>
-                                                <div class="col-xs-4"><p>السكشن</p></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                <div class="col-xs-4"><p>عنوان التاسك</p></div>
-                                                <div class="col-xs-4"><p>التاسك</p></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                <div class="col-xs-4"><p>عنوان المشاركة</p></div>
-                                                <div class="col-xs-4"><p>المشاركة</p></div>
+                                {% if weeks_days %}
+                                  {% for week_title in weeks_days %}
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="headingOne" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <h4 class="panel-title">
+                                                {{ week_title }}
+                                            </h4>
+                                        </div>
+                                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                            <div class="panel-body">
+                                                {% for material in weeks_materials.1 %}
+                                                  <div class="row">
+                                                      <div class="col-xs-4"><a href="{{material.link}}"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                      <div class="col-xs-4"><p>{{ material.name }}</p></div>
+                                                      <div class="col-xs-4"><p>{{ material.content_type }}</p></div>
+                                                  </div>
+                                                {% endfor %}
+                                                <div class="row">
+                                                    <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                    <div class="col-xs-4"><p>عنوان السكشن</p></div>
+                                                    <div class="col-xs-4"><p>السكشن</p></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                    <div class="col-xs-4"><p>عنوان التاسك</p></div>
+                                                    <div class="col-xs-4"><p>التاسك</p></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                    <div class="col-xs-4"><p>عنوان المشاركة</p></div>
+                                                    <div class="col-xs-4"><p>المشاركة</p></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingTwo" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        <h4 class="panel-title">
-                                            الاسبوع الثاني
-                                        </h4>
-                                    </div>
-                                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                        <div class="panel-body">
-                                            <div class="row">
-                                                <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                <div class="col-xs-4"><p>عنوان المحاضرة</p></div>
-                                                <div class="col-xs-4"><p>المحاضرة</p></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                <div class="col-xs-4"><p>عنوان السكشن</p></div>
-                                                <div class="col-xs-4"><p>السكشن</p></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                <div class="col-xs-4"><p>عنوان التاسك</p></div>
-                                                <div class="col-xs-4"><p>التاسك</p></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                <div class="col-xs-4"><p>عنوان المشاركة</p></div>
-                                                <div class="col-xs-4"><p>المشاركة</p></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingThree"  role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        <h4 class="panel-title">
-                                            الاسبوع الثالث
-                                        </h4>
-                                    </div>
-                                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                        <div class="panel-body">
-                                            <div class="row">
-                                                <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                <div class="col-xs-4"><p>عنوان المحاضرة</p></div>
-                                                <div class="col-xs-4"><p>المحاضرة</p></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                <div class="col-xs-4"><p>عنوان السكشن</p></div>
-                                                <div class="col-xs-4"><p>السكشن</p></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                <div class="col-xs-4"><p>عنوان التاسك</p></div>
-                                                <div class="col-xs-4"><p>التاسك</p></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                <div class="col-xs-4"><p>عنوان المشاركة</p></div>
-                                                <div class="col-xs-4"><p>المشاركة</p></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                  {% endfor %}
+                                {% else %}
+                                  <h3>مفيش محتوى للأسف ونجيبة زعلانة</h3>
+                                {% endif %}
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane fade " id="community">
