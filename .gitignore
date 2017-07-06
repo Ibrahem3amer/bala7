@@ -4,10 +4,6 @@ __pycache__/
 *$py.class
 media/
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 2e23917d94cda1f8fb32557f00fad7843843dc9a
 .idea/
 
 # C extensions
@@ -108,48 +104,3 @@ db.sqlite3
 .idea
 .DS_Store
 .DS_STORE
-<<<<<<< HEAD
-
-Oct 25 '16 at 4:00
-add a comment
-1 Answer
-active
-oldest
-votes
-up vote
-1
-down vote
-accepted
-	
-
-As follows, I've solved the problem.
-
-git rm -r --cached .
-git add .
-git commit -m
-git push ~
-
-Thank you for your corporation, and I'm sorry for my ignorance.
-shareimprove this answer
-	
-answered Oct 25 '16 at 4:13
-lalala
-4321523
-	
-add a comment
-Your Answer
-
- 
-Sign up or log in
-
-Sign up using Google
-
-Sign up using Facebook
-
-Sign up using Email and Password
-Post as a guest
-Name
-Email
-
-=======
->>>>>>> 2e23917d94cda1f8fb32557f00fad7843843dc9a
