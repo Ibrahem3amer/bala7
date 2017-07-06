@@ -4,6 +4,10 @@ __pycache__/
 *$py.class
 media/
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2e23917d94cda1f8fb32557f00fad7843843dc9a
 .idea/
 
 # C extensions
@@ -104,6 +108,7 @@ db.sqlite3
 .idea
 .DS_Store
 .DS_STORE
+<<<<<<< HEAD
 
 Oct 25 '16 at 4:00
 add a comment
@@ -146,3 +151,5 @@ Post as a guest
 Name
 Email
 
+=======
+>>>>>>> 2e23917d94cda1f8fb32557f00fad7843843dc9a

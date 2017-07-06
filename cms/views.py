@@ -4,6 +4,43 @@ from django.contrib import messages
 from django.http import HttpResponse, Http404
 from django.urls import reverse
 from cms.models import Topic, UserTopics
+from cms.forms import AddMaterialForm
+
+def add_weeks_to_range(topic_weeks_range):
+    """
+    Accepts range of weeks for specific topic, returns dictionary of this range size that maps week days.
+    """
+    weeks = [
+        'الأسبوع الأول',
+        'الأسبوع الثاني',
+        'الأسبوع الثالث',
+        'الأسبوع الرابع',
+        'الأسبوع الخامس',
+        'الأسبوع السادس',
+        'الأسبوع السابع',
+        'الأسبوع الثامن',
+        'الأسبوع التاسع',
+        'الأسبوع العاشر',
+        'الأسبوع الحادي عشر',
+        'الأسبوع الثاني عشر',
+    ]
+
+
+    weeks = weeks[:topic_weeks_range]
+    return weeks
+
+
+def add_weeks_to_materials(topic, topic_weeks_range):
+    """
+    Accepts number of weeks for specific topic, returns 1-based list that holds materials related to this week.
+    """
+    materials_list = [0] * (topic_weeks_range+1)
+    for i in range(1, topic_weeks_range):
+        materials_list[i] = topic.primary_materials.filter(week_number = i).all()
+
+    return materials_list
+
+
 
 def restrict_access(request, topic_id):
     """
@@ -48,8 +85,13 @@ def get_topic(request, dep_id=-1, topic_id=-1):
     if topic.department.id != int(dep_id):
         raise Http404("Incorrect department.")
 
+    # Get dictionary of current size of weeks.
+    weeks = add_weeks_to_range(topic.weeks)
 
-    return render(request, 'topics/get_topic.html', {'topic':topic})
+    # Get each week materials.
+    materials = add_weeks_to_materials(topic, topic.weeks)
+
+    return render(request, 'topics/get_topic.html', {'topic':topic, 'weeks_days': weeks, 'weeks_materials': materials})
 
 def update_user_topics(request):
     """
@@ -69,4 +111,22 @@ def update_user_topics(request):
             messages.add_message(request, messages.ERROR, 'Select valid topics')
 
         return redirect(reverse('web_user_profile'))
+
+def add_material(request):
+    """
+    Accepts POST, GET requets. Add new material if POST, collecting user and topic details from request if GET.
+    """
+    if request.method == 'POST':
+        material_form = AddMaterialForm(request.POST)
+        if material_form.is_valid():
+            material_form.save()
+            return redirect('home_user')
+    else:
+        # Initiate new form, gather user and topic from request details. 
+        user            = request.user
+        request_url     = '/topics/4/7'.split('/')
+        topic           = get_object_or_404(Topic, pk = request_url[3])
+        material_form   = AddMaterialForm(initial={'user': user, 'topic': topic})
+
+    return render(request, 'add_material.html', {'add_material_form': material_form})
 
