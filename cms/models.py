@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.core.validators import RegexValidator, MinLengthValidator
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
@@ -118,7 +119,7 @@ class UserTopics(object):
 class Material(models.Model):
 	# Helper attributes
 	term_choices = [(1, 'First term'), (2, 'Second term'), (3, 'Summer')]
-	type_choices = [(1, 'Lecture'), (2, 'Asset')]
+	type_choices = [(1, 'Lecture'), (2, 'Asset'), (3, 'Task')]
 
 	# Model Validator
 	material_name_validator 	= RegexValidator(r'^[\u0621-\u064Aa-zA-Z][\u0621-\u064Aa-zA-Z0-9]*([ ]?[\u0621-\u064Aa-zA-Z0-9]+)+$', 'Name cannot start with number, should consist of characters.') 
@@ -139,6 +140,7 @@ class Material(models.Model):
 	def __str__(self):
 		return self.name
 
+	# Model-level validation
 	def clean(self):
 
 		# Validates that week number associated with materials is real week number.
@@ -148,6 +150,14 @@ class Material(models.Model):
 		except ObjectDoesNotExist:
 			# RelatedObject handler.
 			self.week_number = 0
+
+        # Validate that user has an access to add material to topic.
+		try:
+			if self.user.profile.department.id != self.topic.department.id:
+				raise ValidationError("Access denied.")
+		except (AttributeError, ObjectDoesNotExist):
+			raise ValidationError("Invalid User or Topic.")
+
 
 
 	# Material's methods
@@ -180,8 +190,30 @@ class Material(models.Model):
 
 
 
+class Task(Material):
+
+	# Additional fields.
+	deadline = models.DateField()
 
 
+	# Model-level validation
+	def clean(self):
+		
+		# Validate that deadline is not a passed date. 
+		now = datetime.date.today()
+		date_difference = self.deadline - now
+		if date_difference.days <= 3:
+			raise ValidationError('Deadline date should be 3 days ahead at least.')
+
+	# Task methods.
+	@classmethod
+	def get_closest_tasks(cls, request):
+	    """
+	    Returns tasks whose deadlines occurs 3 days from now. 
+	    """
+	    now 		= datetime.date.today()
+	    days_limit 	= datetime.timedelta(days = 4) 
+	    return Task.objects.filter(topic__in = request.user.profile.topics.all(), deadline__range = (now, now+days_limit))
 
 
 
