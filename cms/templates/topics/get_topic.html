@@ -197,20 +197,10 @@
                                                     <div class="row">
                                                         <div class="col-xs-4"><a href="{{material.link}}"><i class="fa fa-link" aria-hidden="true"></i></a></div>
                                                         <div class="col-xs-4"><p>{{ material.name }}</p></div>
-                                                        <div class="col-xs-4"><p>{% if material.content_type == 1 %} محاضرة {% else %} سكشن/شرح {% endif %}</p></div>
+                                                        <div class="col-xs-4"><p>{% if material.content_type == 1 %} محاضرة {% elif material.content_type == 2 %} سكشن/شرح {% else %} تاسك {% endif %}</p></div>
                                                     </div>
                                                   {% endfor %}
                                                 {% endif %}
-                                                <div class="row">
-                                                    <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                    <div class="col-xs-4"><p>عنوان السكشن</p></div>
-                                                    <div class="col-xs-4"><p>السكشن</p></div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                    <div class="col-xs-4"><p>عنوان التاسك</p></div>
-                                                    <div class="col-xs-4"><p>التاسك</p></div>
-                                                </div>
                                                 <div class="row">
                                                     <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
                                                     <div class="col-xs-4"><p>عنوان المشاركة</p></div>
