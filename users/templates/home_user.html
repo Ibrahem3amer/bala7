@@ -2,6 +2,7 @@
 <html dir="rtl" lang="ar">
     <head>
         {% load staticfiles %}
+        {% load dates %}
     
         <meta charset="utf-8">
         <title>Najiba | نجيبه</title>
@@ -41,7 +42,7 @@
                     {% if tasks %}
                         {% for task in tasks %}
                             <div class="alert alert-warning">
-                              <strong>خد بالك!</strong> عندك تاسك: <a href="{{ task.link }}">{{ task.name }}</a> المفروض يتسلم يوم {{ task.deadline }}
+                              <strong>خد بالك!</strong> عندك تاسك: <a href="{{ task.link }}">{{ task.name }}</a> المفروض يتسلم يوم {{ task.deadline|date_to_day }} الجاي!
                             </div>
                         {% endfor %}
                     {% endif %}
