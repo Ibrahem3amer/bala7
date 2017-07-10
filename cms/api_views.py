@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from cms.serializers import *
 from cms.models import *
-from cms.views import restrict_access, within_user_domain
+from cms.views import restrict_access, within_user_domain, add_weeks_to_materials
 from users.models import Faculty, Department, UserProfile
 
 @api_view(['GET'])
@@ -87,3 +87,35 @@ def user_topics(request, format = None):
             return Response(status = status.HTTP_400_BAD_REQUEST)
 
 
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def materials_list(request, topic_id, format = None):
+    """
+    Return a list of materials related to specific topic using GET
+    """
+
+    # Validates that user has an access on this instance. 
+    if not restrict_access(request, topic_id):
+        return Response(status = status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'GET':
+        try:
+            topic_instance = Topic.objects.get(pk = topic_id)
+        except Topic.DoesNotExist:
+            return Response(status = status.HTTP_404_NOT_FOUND)
+
+        materials               = Material.objects.filter(topic_id = topic_id).all()
+        materials_serialized    = MaterialSerializer(materials, many = True)
+        return Response(materials_serialized.data)
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def tasks_list(request, format = None):
+    """
+    Return a list of tasks whose deadlines are to be met.
+    """
+    if request.method == 'GET':
+        tasks               = Task.get_closest_tasks(request)
+        tasks_serialized    = TasksSerializer(tasks, many = True)
+        return Response(tasks_serialized.data)

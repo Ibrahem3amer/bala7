@@ -30,16 +30,16 @@ def add_weeks_to_range(topic_weeks_range):
     return weeks
 
 
-def add_weeks_to_materials(topic, topic_weeks_range):
+def add_weeks_to_materials(topic):
     """
     Accepts number of weeks for specific topic, returns 1-based list that holds materials related to this week.
     """
+    topic_weeks_range = topic.weeks
     materials_list = [0] * (topic_weeks_range+1)
     for i in range(1, topic_weeks_range):
         materials_list[i] = topic.primary_materials.filter(week_number = i).all()
 
     return materials_list
-
 
 
 def restrict_access(request, topic_id):
@@ -89,7 +89,7 @@ def get_topic(request, dep_id=-1, topic_id=-1):
     weeks = add_weeks_to_range(topic.weeks)
 
     # Get each week materials.
-    materials = add_weeks_to_materials(topic, topic.weeks)
+    materials = add_weeks_to_materials(topic)
 
     return render(request, 'topics/get_topic.html', {'topic':topic, 'weeks_days': weeks, 'weeks_materials': materials})
 
