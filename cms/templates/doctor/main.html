@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <title>Doctor</title>
+</head>
+<body>
+{{ doctor.name }}
+<img src="{{ request.scheme }}://{{ request.get_host }}/{% get_media_prefix %}{{ doctor.picture }}" width="200px" height="200px" />
+{{ doctor.bio }}
+<h2>{{ doctor.faculty.name }}</h2>
+<h3>{{ doctor.email }}</h3>
+<h3>{{ doctor.website }}</h3>
+<h3>{{ doctor.linkedn }}</h3>
+<hr />
+<h1>المواد</h1>
+{% if doctor.topics %}
+    {% for topic in doctor.topics.all %}
+        <a href="{% url 'get_topic' topic.department.id topic.id %}">{{ topic.name }}</a>
+        <small>{{ topic.term }}</small>
+        <small>{{ topic.faculty.name }}</small>
+        <br />
+    {% endfor %}
+{% endif %}
+</body>
+</html>

@@ -1,9 +1,11 @@
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 from users import api_views
+from cms import api_views as cms_views
 
 urlpatterns = [
     url(r'^users/$', api_views.users_list, name = 'api_users_list'),
+    url(r'^users/tasks$', cms_views.tasks_list, name = 'api_user_tasks'),
     url(r'^users/(?P<pk>[0-9]+)$', api_views.user_instance, name = 'api_user'),
     url(r'^universities/$', api_views.universities_list, name = 'api_univs_list'),
     url(r'^universities/(?P<pk>[0-9]+)$', api_views.univerisity_instance, name = 'api_univ'),

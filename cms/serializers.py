@@ -15,10 +15,29 @@ class FacultyTopicsSerializer(serializers.ModelSerializer):
 
     topics = serializers.SerializerMethodField('return_faculty_topics')
 
+    class Meta:
+        model   = Faculty
+        fields  = ('name', 'topics')
     
     def return_faculty_topics(self, obj):
         return self.context.get('topics')
 
+
+class MaterialSerializer(serializers.ModelSerializer):
+
+    user    = serializers.PrimaryKeyRelatedField(read_only=True)
+    topic   = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
-        model   = Faculty
-        fields  = ('name', 'topics')
+        model   = Material
+        fields  = ('__all__')
+    
+
+class TasksSerializer(serializers.ModelSerializer):
+
+    user    = serializers.PrimaryKeyRelatedField(read_only=True)
+    topic   = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model   = Task
+        fields  = ('__all__')

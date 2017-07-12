@@ -1,3 +1,4 @@
+import datetime
 from django.urls import reverse
 from django.test import TestCase, RequestFactory
 from django.http import HttpRequest
@@ -6,9 +7,10 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
 from unittest import skip
-from cms.models import Topic, UserTopics
+from cms.models import Topic, UserTopics, Material, Task
 from cms.views import update_user_topics
-from users.models import Department, UserProfile, Faculty
+from users.models import Department, UserProfile, Faculty, University
+
 
 class TopicTest(TestCase):
 	def test_add_valid_topic(self):
@@ -30,7 +32,7 @@ class TopicTest(TestCase):
 		
 		# Exercise test
 		# Assert test
-		self.assertRaises(ValidationError, t.clean)
+		self.assertRaises(ValidationError, t.clean())
 
 	def test_add_repeated_topic_name(self):
 		# Setup test
@@ -214,3 +216,262 @@ class UserTopicsTest(TestCase):
 		
 		# Assert test
 		self.assertEqual(self.user.profile.topics.all().count(), 1)
+
+class MaterialTest(TestCase):
+	def setUp(self):
+		self.uni 			= University.objects.create(name = 'Test university')
+		self.fac 			= Faculty.objects.create(name = 'Test faculty')
+		self.dep 			= Department.objects.create(name = 'Test dep')
+		self.topic 			= Topic.objects.create(name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
+		self.user 			= User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f')
+		self.user.profile 	= UserProfile.objects.create(university = self.uni, faculty = self.fac, department = self.dep)
+		self.material 		= Material.objects.create(
+				name 			= 'test_material',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.google.com',
+				year 			= '2017-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= self.topic
+			)
+
+	def test_add_material(self):
+		# Setup test
+		material_test = Material.objects.create(
+				name 			= 'test_material',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.godogle.com',
+				year 			= '2017-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= self.topic
+			)
+
+		# Exercise test
+		materials_in_db = Material.objects.latest('id')
+		
+		# Assert test
+		self.assertEqual(material_test, materials_in_db)
+
+	def test_add_material_with_invalid_name(self):
+		# Setup test
+		material_test = Material.objects.create(
+				name 			= '123material',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.gofogle.com',
+				year 			= '2017-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 0,
+				user 			= self.user,
+				topic 			= self.topic
+			)
+
+		# Exercise test
+		# Assert test
+		self.assertRaises(ValidationError, lambda: material_test.full_clean())
+
+	def test_add_material_with_empty_content(self):
+		# Setup test
+		material_test = Material.objects.create(
+				name 			= 'material',
+				content 		= '',
+				link 			= 'http://www.docs.googlce.com',
+				year 			= '2017-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 0,
+				user 			= self.user,
+				topic 			= self.topic
+			)
+
+		# Exercise test
+		# Assert test
+		self.assertRaises(ValidationError, lambda: material_test.full_clean())
+
+	def test_add_material_with_content_less_than_50(self):
+		# Setup test
+		material_test = Material.objects.create(
+				name 			= 'material',
+				content 		= 'f',
+				link 			= 'http://www.docs.gosogle.com',
+				year 			= '2017-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 2,
+				user 			= self.user,
+				topic 			= self.topic
+			)
+
+		# Exercise test
+		# Assert test
+		self.assertRaises(ValidationError, lambda: material_test.full_clean())
+
+	def test_add_material_with_week_number_that_doesnot_exist(self):
+		# Setup test
+		material_test = Material.objects.create(
+				name 			= 'material',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.googssle.com',
+				year 			= '2123-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 99,
+				user 			= self.user,
+				topic 			= self.topic
+			)
+
+		# Exercise test
+		# Assert test
+		self.assertRaises(ValidationError, lambda: material_test.full_clean())	
+
+	def test_material_topic_lays_outside_user_scope(self):
+		# Setup test
+		another_user 	= User.objects.create_user(username = 'test_user', password = '12684szsf4df8f5d')
+		material_test 	= Material.objects.create(
+				name 			= 'material',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.googssle.com',
+				year 			= '2123-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 1,
+				user 			= another_user,
+				topic 			= self.topic
+			)
+
+		# Exercise test
+		# Assert test
+		self.assertRaises(ValidationError, lambda: material_test.full_clean())		
+
+class TaskTest(TestCase):
+	def setUp(self):
+		self.uni       	= University.objects.create(name = 'Test university')
+		self.fac        = Faculty.objects.create(name = 'Test faculty')
+		self.dep        = Department.objects.create(name = 'Test dep')
+		self.topic      = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
+		self.user 		= User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
+		self.profile   	= UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
+		self.material 	= Material.objects.create(
+				name 			= 'test_material',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.google.com',
+				year 			= '2017-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= self.topic
+			)
+
+		self.task 	 	= Task.objects.create(
+				name 			= 'test_tasks',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.testtask.com',
+				year 			= '2017-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= self.topic,
+				deadline 		= '2018-5-1',
+
+			)
+
+		self.user.profile.topics.add(self.topic)
+
+	def test_add_basic_valid_task(self):
+		# Setup test
+		task_test =	Task.objects.create(
+				name 			= 'test',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.testtasktwo.com',
+				year 			= '2017-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= self.topic,
+				deadline 		= '2018-5-1',
+
+			)
+		
+		# Exercise test
+		db_result = Task.objects.filter(deadline = '2018-5-1').count()
+
+		# Assert test
+		self.assertEqual(2, db_result)
+
+	def test_deadline_with_passed_date(self):
+		# Setup test
+		task_test =	Task.objects.create(
+				name 			= 'test tasks',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.testtasktwo.com',
+				year 			= '2017-1-5',
+				term 			= 1,
+				content_type 	= 3,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= self.topic,
+				deadline 		= '2010-5-1',
+
+			)
+		
+		# Exercise test
+		# Assert test
+		self.assertRaises(ValidationError, lambda: task_test.full_clean())
+
+	def test_deadline_with_date_less_than_3_days_ahead(self):
+		# Setup test
+		now 		= datetime.datetime.now()
+		task_test 	= Task.objects.create(
+				name 			= 'test tasks',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.testtasktwo.com',
+				year 			= '2017-1-5',
+				term 			= 1,
+				content_type 	= 3,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= self.topic,
+				deadline 		= now,
+
+			)
+		
+		# Exercise test
+		# Assert test
+		self.assertRaises(ValidationError, lambda: task_test.full_clean())
+
+	def test_get_closest_three_dates_from_five(self):
+		# Setup test
+		now 	= datetime.datetime.now()
+
+		# Create tasks with days starts with tomorrow ends with today+5 days. Should return 3 tasks.
+		for i in range(2, 7):	
+			task_test 	= Task.objects.create(
+					name 			= 'test tasks',
+					content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+					link 			= 'http://www.docs.'+str(i)+'.com',
+					year 			= '2017-1-5',
+					term 			= 1,
+					content_type 	= 3,
+					week_number 	= 1,
+					user 			= self.user,
+					topic 			= self.topic,
+					deadline 		= now+datetime.timedelta(days = i),
+
+				)
+		
+		# Exercise test
+		request 		= HttpRequest()
+		request.user 	= self.user
+
+		# Assert test
+		self.assertEqual(3, Task.get_closest_tasks(request).count())
+
+
