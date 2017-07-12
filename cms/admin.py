@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
-from cms.models import Topic, Material, Task
+from cms.models import Topic, Material, Task, Professor
 
 # Register your models here.
 class TopicAdmin(admin.ModelAdmin):
@@ -49,6 +49,10 @@ class TaskAdmin(admin.ModelAdmin):
             return qs.filter()
         return qs.filter(topic_id__in = request.user.profile.topics.all())
 
+class ProfessorAdmin(admin.ModelAdmin):
+    pass
+
 admin.site.register(Topic, TopicAdmin)
 admin.site.register(Material, MaterialAdmin)
 admin.site.register(Task, TaskAdmin)
+admin.site.register(Professor, ProfessorAdmin)

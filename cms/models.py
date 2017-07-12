@@ -4,20 +4,20 @@ from django.core.validators import RegexValidator, MinLengthValidator
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.conf import settings
 from django.contrib.auth.models import User
+from cms.validators import GeneralCMSValidator
 
 class Topic(models.Model):
 	# Helper variables
-	topic_name_validator 	= RegexValidator(r'^[\u0621-\u064Aa-zA-Z][\u0621-\u064Aa-zA-Z0-9]*([ ]?[\u0621-\u064Aa-zA-Z0-9]+)+$', 'Name cannot start with number, should consist of characters.') 
 	term_choices 			= [(1, 'First term'), (2, 'Second term'), (3, 'Summer')]
 
 	# Class attributes
-	name 		= models.CharField(max_length = 200, validators = [topic_name_validator])
+	name 		= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator])
 	desc 		= models.CharField(max_length = 400)
 	term 		= models.PositiveIntegerField(choices = term_choices)
 	weeks		= models.PositiveIntegerField(default = 0)
 	department 	= models.ForeignKey('users.Department', related_name = 'topics', on_delete = models.CASCADE)
 	faculty 	= models.ForeignKey('users.Faculty', related_name = 'topics', on_delete = models.CASCADE, null = True)
-	# Professors -> A list of associated professors for this topic.
+	professors 	= models.ManyToManyField('Professor', related_name = 'topics')
 	# Table -> A foriegn key that points to the table associated with this topic.
 	# Lectures -> A list of materials that represents all primary content for the topic.
 	# Contributions -> A list of materials that represents all secondary content for the topic.	
@@ -122,11 +122,10 @@ class Material(models.Model):
 	type_choices = [(1, 'Lecture'), (2, 'Asset'), (3, 'Task')]
 
 	# Model Validator
-	material_name_validator 	= RegexValidator(r'^[\u0621-\u064Aa-zA-Z][\u0621-\u064Aa-zA-Z0-9]*([ ]?[\u0621-\u064Aa-zA-Z0-9]+)+$', 'Name cannot start with number, should consist of characters.') 
 	content_min_len_validator	= MinLengthValidator(50, 'Material Description should be more than 50 characters.')
 
 	# Fields
-	name 			= models.CharField(max_length = 200, validators = [material_name_validator], default = "N/A")
+	name 			= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
 	content			= models.CharField(max_length = 500, validators = [content_min_len_validator])
 	link 			= models.URLField(unique = True)
 	year 			= models.DateField()
@@ -216,5 +215,17 @@ class Task(Material):
 	    return Task.objects.filter(topic__in = request.user.profile.topics.all(), deadline__range = (now, now+days_limit))
 
 
+class Professor(models.Model):
+
+	# Attributes
+	name 	= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
+	faculty = models.ForeignKey('users.Faculty', related_name = 'professors', on_delete = models.CASCADE)
+	bio 	= models.TextField(null = True, blank = True)
+	picture = models.ImageField(default = 'doctor.jpg')
+	email 	= models.EmailField(null = True, blank = True)
+	website = models.URLField(null = True, blank = True)
+	linkedn = models.URLField(null = True, blank = True)
 
 
+	def __str__(self):
+		return self.name

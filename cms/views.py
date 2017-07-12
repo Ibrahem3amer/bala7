@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse, Http404
 from django.urls import reverse
-from cms.models import Topic, UserTopics
+from cms.models import Topic, UserTopics, Professor
 from cms.forms import AddMaterialForm
 
 def add_weeks_to_range(topic_weeks_range):
@@ -130,3 +130,11 @@ def add_material(request):
 
     return render(request, 'add_material.html', {'add_material_form': material_form})
 
+
+def doctor_main_page(request, doctor_id):
+    """
+    Accepts GET, displays doctor's information. 
+    """
+    doctor = get_object_or_404(Professor, pk = doctor_id)
+    if request.method == 'GET':
+        return render(request, 'doctor/main.html', {'doctor': doctor})

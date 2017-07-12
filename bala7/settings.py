@@ -128,6 +128,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Media files
+ENV_PATH    = os.path.abspath(os.path.dirname(__file__))
+MEDIA_ROOT  = os.path.join(ENV_PATH, 'media/')
+MEDIA_URL   = "media/"
+
 # Auth backend settings - Social auth
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.twitter.TwitterOAuth',
