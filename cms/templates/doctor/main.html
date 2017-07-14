@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html dir="rtl" lang="ar">
 <head>
     {% load static %}
     {% load staticfiles %}
@@ -27,13 +27,17 @@
 </head>
 <body>
     
+    <!-- start navbar -->
+    {% include "public/navbar-user.html" %}
+    <!-- end navbar -->
+    
         <section class="content-section">
         <div class="container">
             <div class="row">
                 <div class="col-md-9 col-xs-12 r-float" id="out">
                     <div id="doc-box">
                         <img src="{{ request.scheme }}://{{ request.get_host }}/{% get_media_prefix %}{{ doctor.picture }}"/>
-                        <b>{{ doctor.name }}</b>
+                        <p><b>{{ doctor.name }}</b></p>
                         <p>{{ doctor.faculty.name }}</p>
                         <p>{{ doctor.bio }}</p>
                         <div class="contact">
