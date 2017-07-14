@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    {% load staticfiles %}
+    
+	<meta charset="utf-8">
+    <title>Najiba | نجيبه</title>
+    <!-- Internet Explorer meta -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- First Mobile meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> 
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/reg.css' %}" rel="stylesheet">
+    <link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
+    <!--[if lt IE 9]>
+        <script src="js/html5shiv.min.js"></script>
+        <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+    <!-- start navbar -->
+    {% include "public/navbar1.html" %}
+    <!-- end navbar -->
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 nj-box ">
+                <div class="title"><i class="fa fa-plus-square new-symbol" aria-hidden="true"></i> إنشاء حساب المرحلة "{{ stage_num }}" </div>
+                <form id="id_registeration_form" action="{% url 'web_signup_second_form' %}" method="get">
+                    <div class="form-group">
+                        {% if error %}
+                            <h1>{{ error }}</h1>
+                        {% endif %}
+                        <label class="nj-label" for="id_select_university">الجامعة</label>
+                        <select id="id_select_university" name="selected_university"  class="form-control select nj-select"></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="nj-label" for="id_select_faculty">الكلية</label>
+                        <select id="id_select_faculty" name="selected_faculty" class="form-control select nj-select">
+                            <option value="" disabled selected>اختر الكليه</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="nj-label" for="id_select_department">القسم</label>
+                        <select id="id_select_department" name="selected_department" class="form-control select nj-select">
+                            <option value="" disabled selected>اختر القسم</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label class="nj-label" for="facu">السكشن</label>
+                            <input id="section-input" class="nj-input" type="number" min="1" max="99" placeholder="رقم السكشن" name="new_section_number" />
+                        </div>
+                    </div>
+                    <div class="have-acc">لديك حساب بالفعل؟
+                        <a class="have-acc-link" href="{% url 'login' %}" id="id_signin_side">سجل دخول الآن</a>
+                    </div>
+                    <input type="submit" name="submit_signup_data" id="id_submit_signup_data" class="nj-btn next-btn" value="التالى">
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 nj-box notfound-box">
+                <div class="not-found1"><i class="fa fa-exclamation-triangle new-symbol" aria-hidden="true"></i> كليتك مش موجوده؟</div>
+                <div class="not-found2" >اضف بياناتك وهنتواصل معاك عند إضافة كليتك :)</div>
+                <form id="id_notify_form" action="{% url 'thankyou' %}">
+                    <div class="form-group">
+                        <label class="nj-label" for="id_future_university">الجامعه</label>
+                        <input type="text" class="form-control nj-input" name="future_notification_university" id="id_future_university" placeholder="الجامعه">
+                    </div>
+                    <div class="form-group">
+                        <label class="nj-label" for="id_future_faculty">الكليه</label>
+                        <input type="text" class="form-control nj-input" name="future_notification_faculty" id="id_future_faculty" placeholder="الكليه">
+                    </div>
+                    <div class="form-group">
+                        <label class="nj-label" for="id_future_notify">البريد الالكتروني</label>
+                        <input type="email" name="future_notification_email" id="id_future_notify" class="form-control nj-input" placeholder="البريد الإلكتروني">
+                    </div>
+                    <input type="submit" name="future_notification_submit" id="id_future_form_submit" value="تم" class="nj-btn next-btn">
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{% static 'js/registration.js' %}"></script>
+</body>
+</html>

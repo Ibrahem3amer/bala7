@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+	
+    {% load staticfiles %}
+    {% load materials_extras %}
+    
+        <meta charset="utf-8">
+        <title>{{ topic.name }}</title>
+        <!-- Internet Explorer meta -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- First Mobile meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Bootstrap -->
+        <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> 
+        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        <link href="{% static 'css/topic.css' %}" rel="stylesheet">
+        <link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
+        <!--[if lt IE 9]>
+            <script src="js/html5shiv.min.js"></script>
+            <script src="js/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+    <!-- start navbar -->
+    {% include "public/navbar-user.html" %}
+    <!-- end navbar -->
+    
+	{% if topic %}
+        <!-- start page content -->
+        <section class="content-section">
+            <div class="right-div">
+                <div class="arrows-div">
+                    <i id="right-arrow" class="fa fa-chevron-right move-arrow" aria-hidden="true"></i>
+                    <i id="left-arrow" class="fa fa-chevron-left move-arrow" aria-hidden="true"></i>
+                </div>
+
+                <div class="elements-div">
+                    {% for doctor in topic.professors.all %}
+                      <div class="right-ele doctor-name">
+                          <a href="{% url 'display_doctor' doctor.id %}"><p>{{ doctor.name }}</p></a>
+                      </div>
+                    {% endfor %}
+                    <div class="right-ele">
+                        <div class="right-ele-head">
+                            <p>الامتحانات</p>
+                        </div>
+                        <div class="right-ele-body">
+                            <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th>السنه</th>
+                                  <th>الدكتور</th>
+                                  <th>الرابط</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>2016</td>
+                                  <td>محمد الدسوقى</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>2015</td>
+                                  <td>حازم البكرى</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>2014</td>
+                                  <td>شريف بركات</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>2014</td>
+                                  <td>شريف بركات</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>2014</td>
+                                  <td>شريف بركات</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="right-ele">
+                        <div class="right-ele-head">
+                            <p>محتوى متعلق</p>
+                        </div>
+                        <div class="right-ele-body">
+                            <table class="table table-hover ">
+                              <thead>
+                                <tr class="materials-table-h">
+                                  <th>العنوان</th>
+                                  <th>الرابط</th>
+                                </tr>
+                              </thead>
+                              <tbody class="materials-table-b">
+                                <tr>
+                                  <td>محمد الدسوقى</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>حازم البكرى</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>شريف بركات</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>شريف بركات</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>شريف بركات</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="right-ele">
+                        <div class="right-ele-head">
+                            <p>ارشيف الماده</p>
+                        </div>
+                        <div class="right-ele-body">
+                            <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th>السنه</th>
+                                  <th>الترم</th>
+                                  <th>الرابط</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>2016</td>
+                                  <td>الترم الاول</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>2016</td>
+                                  <td>الترم الثانى</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>2015</td>
+                                  <td>الترم الاول</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>2015</td>
+                                  <td>الترم الثانى</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="center-div">
+                <div class="tabs">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs nav-heads" role="tablist">
+                        <li role="presentation" class="active tab">
+                            <a href="#content" aria-controls="content" role="tab" data-toggle="tab">المحتوي</a>
+                        </li>
+                        <li role="presentation" class="tab">
+                            <a href="#community" aria-controls="community" role="tab" data-toggle="tab">المجتمع</a>
+                        </li>
+                        <li role="presentation" class="tab">
+                            <a href="#requests" aria-controls="community" role="tab" data-toggle="tab">الطلبات</a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade in  active" id="content">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                <div class="row">
+                                    <div class="sm-md-ads">
+                                        <img src="{% static 'pic/adv728x90.png' %}">
+                                    </div>
+                                    <div class="xs-ads">
+                                        <img src="{% static 'pic/adv-xs.jpg' %}">
+                                    </div>
+                                </div>
+                                
+                                <div class="add-week">
+                                    <button id="add-week-btn" class="nj-btn">اضافة اسبوع</button>
+                                    <form action="" method="post">
+                                        <div id="new-week-box">
+                                            <div class="week-head">
+                                                <p class="week-name">الاسبوع الرابع</p>
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </div>
+
+                                            <div class="week-body">
+                                                <p><span>عنوان المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
+                                                <p><span>رابط المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
+                                                <p><span>عنوان السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
+                                                <p><span>رابط السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
+                                                <p><span>عنوان التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
+                                                <p><span>رابط التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
+                                            </div>
+                                            <div class="week-footer">
+                                                <button type="submit" class="nj-btn">اضافه</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                                {% if weeks_days %}
+                                  {% for week_title in weeks_days %}
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="heading{{ forloop.counter }}" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapseOne">
+                                            <h4 class="panel-title">
+                                                {{ week_title }}
+                                            </h4>
+                                        </div>
+                                        <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="headingOne">
+                                            <div class="panel-body">
+                                                <div class="edit-div">
+                                                    <i class="fa fa-cog edit-week-icon" aria-hidden="true"></i>
+                                                </div>
+                                                
+                                                <div class="edit-week">
+                                                    <form action="" method="post">
+                                                        <p><span>عنوان المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
+                                                        <p><span>رابط المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
+                                                        <p><span>عنوان السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
+                                                        <p><span>رابط السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
+                                                        <p><span>عنوان التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
+                                                        <p><span>رابط التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
+                                                        <button type="submit" class="nj-btn">حفظ</button>
+                                                    </form>
+                                                </div>
+                                                <div class="week-content">
+                                                    {% if weeks_materials|week_number:forloop.counter %}
+                                                      {% for material in weeks_materials|week_number:forloop.counter %}
+                                                        <div class="row content-row">
+                                                            <div class="col-xs-2 col-sm-4"><a href="{{material.link}}"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                            <div class="col-xs-8 col-sm-4"><p>{{ material.name }}</p></div>
+                                                            <div class="col-xs-2 col-sm-4"><p>{% if material.content_type == 1 %} محاضرة {% elif material.content_type == 2 %} سكشن/شرح {% else %} تاسك {% endif %}</p></div>
+                                                        </div>
+                                                      {% endfor %}
+                                                    {% endif %}
+                                                    <div class="assets">
+                                                        <p class="assets-h">المشاركات:</p>
+                                                        <div class="assets-body">
+                                                            <div class="row">
+                                                                <div class="col-xs-8 col-sm-4"><p>عنوان المشاركه</p></div>
+                                                                <div class="col-sm-4 hidden-xs"><p class="assets-time">6 يوليو ، الساعه 11:30م</p></div>
+                                                                <div class="col-xs-4 col-sm-4"><a href="" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-xs-8 col-sm-4"><p>عنوان المشاركه</p></div>
+                                                                <div class="col-sm-4 hidden-xs"><p class="assets-time">6 يوليو ، الساعه 11:30م</p></div>
+                                                                <div class="col-xs-4 col-sm-4"><a href="" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-xs-8 col-sm-4"><p>عنوان المشاركه</p></div>
+                                                                <div class="col-sm-4 hidden-xs"><p class="assets-time">6 يوليو ، الساعه 11:30م</p></div>
+                                                                <div class="col-xs-4 col-sm-4"><a href="" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  {% endfor %}
+                                {% else %}
+                                  <h3>مفيش محتوى للأسف ونجيبة زعلانة</h3>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade " id="community">
+                            <div class="contribute">
+                                <div class="btn-div">
+                                    <a class="nj-btn" id="contribute-btn" href="#">مشاركة</a>
+                                    <a class="nj-btn" id="request-btn" href="#">طلب</a>
+                                </div>
+
+                                <div id="contribute-form" class="share-box nj-box col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2">
+                                    <i class="box-close-btn fa fa-times" aria-hidden="true"></i>
+                                    <form>
+                                        <div class="form-group">
+                                            <label class="nj-label">عنوان المحتوي</label>
+                                            <input type="text" class="form-control nj-input" id="" placeholder="عنوان المحتوي">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="nj-label">الاسبوع</label>
+                                            <select class="form-control select nj-select">
+                                                <option value="" disabled selected>اختر رقم الاسبوع</option>
+                                                <option id="">1</option>
+                                                <option id="">2</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="nj-label">المحتوي</label>
+                                            <textarea class="nj-textarea" rows="3"></textarea>
+                                        </div>
+                                        <a class="nj-btn" id="contribute-btn-send" href="#">مشاركة</a>
+                                    </form>
+                                </div>
+
+
+                                <div id="request-form" class="order-box nj-box col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2">
+                                    <i class="box-close-btn fa fa-times" aria-hidden="true"></i>
+                                    <form>
+                                        <div class="form-group">
+                                            <label class="nj-label">عنوان الطلب</label>
+                                            <input type="text" class="form-control nj-input" id="" placeholder="عنوان المحتوي">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="nj-label">المحتوي</label>
+                                            <textarea class="nj-textarea" rows="3"></textarea>
+                                        </div>
+                                        <a class="nj-btn" id="contribute-btn-send" href="#">ارسل</a>
+                                    </form>
+                                </div>
+
+                                <div class="post">
+                                    <div class="post-body">
+                                        <div class="publisher-name"><p>هشام عبد اللطيف</p></div>
+                                        <div class="post-content">
+                                            <p>بالنسبه لتدريب المينا الاوراق المطلوبه اثبات قيد من الكليه ب ٢٥ جنيه وصورة بطاقه وهيتسلمو في( مبني شئون العاملين) في المينا اول ما تخش من البوابه الرئيسية علي اليمين ده بالنسبه لكل للناس الي ملت الفورمه والي مامملتش بردو. </p>
+                                        </div>
+                                    </div>
+                                    <div class="show-hide-comments">
+                                        <p><i class="fa fa-comments" aria-hidden="true"></i><span> إظهار التعليقات</span></p>
+                                    </div>
+                                    <div class="write-comment">
+                                        <input type="text" class="nj-input" placeholder="اكتب تعليق...">
+                                    </div>
+                                    <div class="post-comments">
+
+                                        <div class="comment">
+                                            <p class="publisher-name">محمد على</p>
+                                            <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
+                                        </div>
+                                        <div class="comment">
+                                            <p class="publisher-name">سمير محمد</p>
+                                            <p class="comment-content">معلش يا جماعه في بوست تاني انا نزلتو في ورقه زياده لازم تتطبع وتتملي مع الورق</p>
+                                        </div>
+                                        <div class="comment">
+                                            <p class="publisher-name">محمد على</p>
+                                            <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
+                                        </div>
+                                        <div class="comment">
+                                            <p class="publisher-name">سمير محمد</p>
+                                            <p class="comment-content">معلش يا جماعه في بوست تاني انا نزلتو في ورقه زياده لازم تتطبع وتتملي مع الورق</p>
+                                        </div>
+                                        <div class="comment">
+                                            <p class="publisher-name">محمد على</p>
+                                            <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
+                                        </div>
+                                        <div class="comment">
+                                            <p class="publisher-name">سمير محمد</p>
+                                            <p class="comment-content">معلش يا جماعه في بوست تاني انا نزلتو في ورقه زياده لازم تتطبع وتتملي مع الورق</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="post">
+                                    <div class="post-body">
+                                        <div class="publisher-name"><p>هشام عبد اللطيف</p></div>
+                                        <div class="post-content">
+                                            <p>بالنسبه لتدريب المينا الاوراق المطلوبه اثبات قيد من الكليه ب ٢٥ جنيه وصورة بطاقه وهيتسلمو في( مبني شئون العاملين) في المينا اول ما تخش من البوابه الرئيسية علي اليمين ده بالنسبه لكل للناس الي ملت الفورمه والي مامملتش بردو. </p>
+                                        </div>
+                                    </div>
+                                    <div class="show-hide-comments">
+                                        <p><i class="fa fa-comments" aria-hidden="true"></i><span> إظهار التعليقات</span></p>
+                                    </div>
+                                    <div class="write-comment">
+                                        <input type="text" class="nj-input" placeholder="اكتب تعليق...">
+                                    </div>
+                                    <div class="post-comments">
+
+                                        <div class="comment">
+                                            <p class="publisher-name">محمد على</p>
+                                            <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
+                                        </div>
+                                        <div class="comment">
+                                            <p class="publisher-name">سمير محمد</p>
+                                            <p class="comment-content">معلش يا جماعه في بوست تاني انا نزلتو في ورقه زياده لازم تتطبع وتتملي مع الورق</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade " id="requests">
+                            
+                            <div class="request-view-box">
+                                <div class="request-head">
+                                    <p>هشام عبد اللطيف</p>
+                                    <span>1 يوليو ، الساعه 11:15م</span>
+                                </div>
+                                <div class="request-body">
+                                    <p>بالنسبه لتدريب المينا الاوراق المطلوبه اثبات قيد من الكليه ب ٢٥ جنيه وصورة بطاقه وهيتسلمو في( مبني شئون العاملين) في المينا اول ما تخش من البوابه الرئيسية علي اليمين ده بالنسبه لكل للناس الي ملت الفورمه والي مامملتش بردو.</p>
+                                </div>
+                                <div class="request-footer">
+                                    <button class="nj-btn">قبول</button>
+                                    <button class="nj-btn">رفض</button>
+                                </div>
+                            </div>
+                            <div class="share-view-box">
+                                <div class="share-head">
+                                    <p>هشام عبد اللطيف</p>
+                                    <span>1 يوليو ، الساعه 11:15م</span>
+                                </div>
+                                <div class="share-body">
+                                    <p><span>نوع المحتوى <span class="colon">:</span></span> <span>مشاركه</span></p>
+                                    <p><span>عنوان المحتوى <span class="colon">:</span></span> <span>تلخيص الاسبوع الاول</span></p>
+                                    <p><span>الاسبوع <span class="colon">:</span></span> <span>الاسبوع الثانى</span></p>
+                                    <p><span>رابط المحتوى <span class="colon">:</span></span> <span><a href="" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></span></p>
+                                </div>
+                                <div class="share-footer">
+                                    <button class="nj-btn">قبول</button>
+                                    <button class="nj-btn">رفض</button>
+                                </div>
+                            </div>
+                             
+                        </div><!-- end requests tab -->
+                    </div>
+                </div>
+            </div>
+            <div class="adv-div">
+                <img src="{% static 'pic/adv300x250.jpg' %}">
+            </div>
+        </section>
+        <!-- end page content -->
+
+
+
+        <script src="{% static 'js/topic.js' %}"></script>
+	{% endif %}
+</body>
+</html>

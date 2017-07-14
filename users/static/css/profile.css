@@ -1,4 +1,7 @@
-
+.save-btn{
+    border:0px; 
+    font-weight: normal;
+}
 /*------------------------------------------- start content-section ------------------------------------------*/
 /*------- start adv part -------*/
 .content-section .adv-part{
@@ -32,8 +35,24 @@
 
 .content-part{
     padding-bottom: 30px;
+    padding-left: 0px;
 }
-
+#change-personal-data-alert{
+    width: 75%;
+    margin: auto;
+    position: fixed;
+    top: 75px;
+    left: 0px;
+    right: 0px;
+    text-align: center;
+    z-index: 9999;
+}
+/*xs*/
+@media (max-width:767px){
+    #change-personal-data-alert{
+        width: 90%;
+    }
+}
 .small-ele-div{
     margin-top: 15px;
     padding: 0px;
@@ -131,6 +150,28 @@
 
 .choose-univ{
     display: none;
+    position: relative;
+}
+.true-submit-btn{
+    position: absolute;
+    left: 10px;
+    top: -42px;
+    
+    background: none;
+    font-size: 28px;
+}
+.choose-univ .small-ele-content{
+    display: none;
+}
+.choose-univ .true-submit-btn{
+    display: none;
+}
+.choose-univ .hidden-inputs{
+    visibility: hidden;
+    position: absolute;
+    left: 0px;
+    min-width: 1px;
+    width: 80px;
 }
 /* end choose university */
 /* start chose material */
@@ -154,6 +195,7 @@
 }
 .choose-materials{
     display: none;
+    position: relative;
 }
 .panel-group{
     margin: 0px;

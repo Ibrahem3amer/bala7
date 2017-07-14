@@ -8,7 +8,7 @@
     
     
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for /usr/local/lib/python3.5/dist-packages/django/db/backends/sqlite3/base.py: 53%</title>
+    <title>Coverage for /usr/local/lib/python3.5/dist-packages/django/db/backends/sqlite3/base.py: 57%</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     
     <script type="text/javascript" src="jquery.min.js"></script>
@@ -24,15 +24,15 @@
 <div id="header">
     <div class="content">
         <h1>Coverage for <b>/usr/local/lib/python3.5/dist-packages/django/db/backends/sqlite3/base.py</b> :
-            <span class="pc_cov">53%</span>
+            <span class="pc_cov">57%</span>
         </h1>
 
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
 
         <h2 class="stats">
             242 statements &nbsp;
-            <span class="run hide_run shortkey_r button_toggle_run">129 run</span>
-            <span class="mis shortkey_m button_toggle_mis">113 missing</span>
+            <span class="run hide_run shortkey_r button_toggle_run">138 run</span>
+            <span class="mis shortkey_m button_toggle_mis">104 missing</span>
             <span class="exc shortkey_x button_toggle_exc">0 excluded</span>
 
             
@@ -342,16 +342,16 @@
 <p id="n273" class="pln"><a href="#n273">273</a></p>
 <p id="n274" class="pln"><a href="#n274">274</a></p>
 <p id="n275" class="pln"><a href="#n275">275</a></p>
-<p id="n276" class="stm mis"><a href="#n276">276</a></p>
-<p id="n277" class="stm mis"><a href="#n277">277</a></p>
+<p id="n276" class="stm run hide_run"><a href="#n276">276</a></p>
+<p id="n277" class="stm run hide_run"><a href="#n277">277</a></p>
 <p id="n278" class="stm mis"><a href="#n278">278</a></p>
-<p id="n279" class="stm mis"><a href="#n279">279</a></p>
-<p id="n280" class="stm mis"><a href="#n280">280</a></p>
-<p id="n281" class="stm mis"><a href="#n281">281</a></p>
+<p id="n279" class="stm run hide_run"><a href="#n279">279</a></p>
+<p id="n280" class="stm run hide_run"><a href="#n280">280</a></p>
+<p id="n281" class="stm run hide_run"><a href="#n281">281</a></p>
 <p id="n282" class="stm mis"><a href="#n282">282</a></p>
-<p id="n283" class="stm mis"><a href="#n283">283</a></p>
-<p id="n284" class="stm mis"><a href="#n284">284</a></p>
-<p id="n285" class="stm mis"><a href="#n285">285</a></p>
+<p id="n283" class="stm run hide_run"><a href="#n283">283</a></p>
+<p id="n284" class="stm run hide_run"><a href="#n284">284</a></p>
+<p id="n285" class="stm run hide_run"><a href="#n285">285</a></p>
 <p id="n286" class="pln"><a href="#n286">286</a></p>
 <p id="n287" class="pln"><a href="#n287">287</a></p>
 <p id="n288" class="pln"><a href="#n288">288</a></p>
@@ -364,7 +364,7 @@
 <p id="n295" class="pln"><a href="#n295">295</a></p>
 <p id="n296" class="pln"><a href="#n296">296</a></p>
 <p id="n297" class="pln"><a href="#n297">297</a></p>
-<p id="n298" class="stm mis"><a href="#n298">298</a></p>
+<p id="n298" class="stm run hide_run"><a href="#n298">298</a></p>
 <p id="n299" class="stm mis"><a href="#n299">299</a></p>
 <p id="n300" class="pln"><a href="#n300">300</a></p>
 <p id="n301" class="pln"><a href="#n301">301</a></p>
@@ -830,16 +830,16 @@
 <p id="t273" class="pln"><span class="str">        Backends can override this method if they can more directly apply</span><span class="strut">&nbsp;</span></p>
 <p id="t274" class="pln"><span class="str">        constraint checking (e.g. via "SET CONSTRAINTS ALL IMMEDIATE")</span><span class="strut">&nbsp;</span></p>
 <p id="t275" class="pln"><span class="str">        """</span><span class="strut">&nbsp;</span></p>
-<p id="t276" class="stm mis">        <span class="nam">cursor</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">cursor</span><span class="op">(</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t277" class="stm mis">        <span class="key">if</span> <span class="nam">table_names</span> <span class="key">is</span> <span class="key">None</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t276" class="stm run hide_run">        <span class="nam">cursor</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">cursor</span><span class="op">(</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t277" class="stm run hide_run">        <span class="key">if</span> <span class="nam">table_names</span> <span class="key">is</span> <span class="key">None</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t278" class="stm mis">            <span class="nam">table_names</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">introspection</span><span class="op">.</span><span class="nam">table_names</span><span class="op">(</span><span class="nam">cursor</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t279" class="stm mis">        <span class="key">for</span> <span class="nam">table_name</span> <span class="key">in</span> <span class="nam">table_names</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t280" class="stm mis">            <span class="nam">primary_key_column_name</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">introspection</span><span class="op">.</span><span class="nam">get_primary_key_column</span><span class="op">(</span><span class="nam">cursor</span><span class="op">,</span> <span class="nam">table_name</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t281" class="stm mis">            <span class="key">if</span> <span class="key">not</span> <span class="nam">primary_key_column_name</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t279" class="stm run hide_run">        <span class="key">for</span> <span class="nam">table_name</span> <span class="key">in</span> <span class="nam">table_names</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t280" class="stm run hide_run">            <span class="nam">primary_key_column_name</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">introspection</span><span class="op">.</span><span class="nam">get_primary_key_column</span><span class="op">(</span><span class="nam">cursor</span><span class="op">,</span> <span class="nam">table_name</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t281" class="stm run hide_run">            <span class="key">if</span> <span class="key">not</span> <span class="nam">primary_key_column_name</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t282" class="stm mis">                <span class="key">continue</span><span class="strut">&nbsp;</span></p>
-<p id="t283" class="stm mis">            <span class="nam">key_columns</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">introspection</span><span class="op">.</span><span class="nam">get_key_columns</span><span class="op">(</span><span class="nam">cursor</span><span class="op">,</span> <span class="nam">table_name</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t284" class="stm mis">            <span class="key">for</span> <span class="nam">column_name</span><span class="op">,</span> <span class="nam">referenced_table_name</span><span class="op">,</span> <span class="nam">referenced_column_name</span> <span class="key">in</span> <span class="nam">key_columns</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t285" class="stm mis">                <span class="nam">cursor</span><span class="op">.</span><span class="nam">execute</span><span class="op">(</span><span class="strut">&nbsp;</span></p>
+<p id="t283" class="stm run hide_run">            <span class="nam">key_columns</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">introspection</span><span class="op">.</span><span class="nam">get_key_columns</span><span class="op">(</span><span class="nam">cursor</span><span class="op">,</span> <span class="nam">table_name</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t284" class="stm run hide_run">            <span class="key">for</span> <span class="nam">column_name</span><span class="op">,</span> <span class="nam">referenced_table_name</span><span class="op">,</span> <span class="nam">referenced_column_name</span> <span class="key">in</span> <span class="nam">key_columns</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t285" class="stm run hide_run">                <span class="nam">cursor</span><span class="op">.</span><span class="nam">execute</span><span class="op">(</span><span class="strut">&nbsp;</span></p>
 <p id="t286" class="pln">                    <span class="str">"""</span><span class="strut">&nbsp;</span></p>
 <p id="t287" class="pln"><span class="str">                    SELECT REFERRING.`%s`, REFERRING.`%s` FROM `%s` as REFERRING</span><span class="strut">&nbsp;</span></p>
 <p id="t288" class="pln"><span class="str">                    LEFT JOIN `%s` as REFERRED</span><span class="strut">&nbsp;</span></p>
@@ -852,7 +852,7 @@
 <p id="t295" class="pln">                        <span class="nam">column_name</span><span class="op">,</span> <span class="nam">referenced_column_name</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
 <p id="t296" class="pln">                    <span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t297" class="pln">                <span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t298" class="stm mis">                <span class="key">for</span> <span class="nam">bad_row</span> <span class="key">in</span> <span class="nam">cursor</span><span class="op">.</span><span class="nam">fetchall</span><span class="op">(</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t298" class="stm run hide_run">                <span class="key">for</span> <span class="nam">bad_row</span> <span class="key">in</span> <span class="nam">cursor</span><span class="op">.</span><span class="nam">fetchall</span><span class="op">(</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t299" class="stm mis">                    <span class="key">raise</span> <span class="nam">utils</span><span class="op">.</span><span class="nam">IntegrityError</span><span class="op">(</span><span class="strut">&nbsp;</span></p>
 <p id="t300" class="pln">                        <span class="str">"The row in table '%s' with primary key '%s' has an "</span><span class="strut">&nbsp;</span></p>
 <p id="t301" class="pln">                        <span class="str">"invalid foreign key: %s.%s contains a value '%s' that "</span><span class="strut">&nbsp;</span></p>
@@ -1050,7 +1050,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.4</a>,
-            created at 2017-05-14 17:27
+            created at 2017-06-12 09:59
         </p>
     </div>
 </div>

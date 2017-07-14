@@ -13,17 +13,26 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.contrib.auth import views as auth_views
+from django.conf.urls import url, include
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-from users import views
+from users import views, urls
+from cms import urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home_visitor, name = 'home_visitor'),
-    url(r'^users/home', views.home_user, name = 'home_user'),
-    url(r'^users/signin', views.display_signup, name = 'web_signin'),
-    url(r'^users/signup/user_details', views.signup_second_form, name = 'web_signup_second_form'),
-    url(r'^users/signup/user_finish', views.signup_second_form, name = 'web_signup_third_form'),
-    url(r'^users/signup', views.display_signup, name = 'web_signup'),
-    url(r'^users/thankyou', views.display_signup, name = 'thankyou'),
+    url(r'^users/', include('django.contrib.auth.urls')),
+    url(r'^users/', include('users.urls')),
+    url(r'^api/', include('users.api_urls')),
+    url(r'^topics/', include('cms.urls')),
+    url(r'^api/', include('cms.api_urls')),
+    url(r'', include('social_django.urls', namespace='social')),
 ]
+
+
+if settings.DEBUG is True:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

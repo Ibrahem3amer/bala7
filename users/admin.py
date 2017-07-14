@@ -1,5 +1,5 @@
 from django.contrib import admin
-from users.models import University, Faculty, Department
+from users.models import University, Faculty, Department, UserProfile
 
 # Register your models here.
 class UniversityAdmin(admin.ModelAdmin):
@@ -11,7 +11,11 @@ class FacultyAdmin(admin.ModelAdmin):
 class DepartmentAdmin(admin.ModelAdmin):
     pass
 
+class UserProfileAdmin(admin.ModelAdmin):
+    pass
+
 
 admin.site.register(University, UniversityAdmin)
 admin.site.register(Faculty, FacultyAdmin)
 admin.site.register(Department, DepartmentAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)

@@ -1,3 +1,16 @@
+.form-group input{
+    display: inline-block;
+    width: 30%;
+    font-size: 20px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    border-top-right-radius:10px;
+    border-bottom-left-radius:10px;
+    border: 2px solid #E9EBEE;   
+    height: 40px;
+    width: 60%;
+}
+
 @media (max-width:767px){
     .navbar{
         height: 54px;
@@ -32,6 +45,7 @@
     display: inline-block;
     margin-top: 20px;
     margin-bottom: 10px;    
+    border: 0px;
 }
 .log-option{
     vertical-align: middle;

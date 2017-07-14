@@ -8,7 +8,7 @@
     
     
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for /usr/local/lib/python3.5/dist-packages/django/core/handlers/base.py: 55%</title>
+    <title>Coverage for /usr/local/lib/python3.5/dist-packages/django/core/handlers/base.py: 57%</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     
     <script type="text/javascript" src="jquery.min.js"></script>
@@ -24,15 +24,15 @@
 <div id="header">
     <div class="content">
         <h1>Coverage for <b>/usr/local/lib/python3.5/dist-packages/django/core/handlers/base.py</b> :
-            <span class="pc_cov">55%</span>
+            <span class="pc_cov">57%</span>
         </h1>
 
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
 
         <h2 class="stats">
             150 statements &nbsp;
-            <span class="run hide_run shortkey_r button_toggle_run">82 run</span>
-            <span class="mis shortkey_m button_toggle_mis">68 missing</span>
+            <span class="run hide_run shortkey_r button_toggle_run">85 run</span>
+            <span class="mis shortkey_m button_toggle_mis">65 missing</span>
             <span class="exc shortkey_x button_toggle_exc">0 excluded</span>
 
             
@@ -270,7 +270,7 @@
 <p id="n201" class="pln"><a href="#n201">201</a></p>
 <p id="n202" class="pln"><a href="#n202">202</a></p>
 <p id="n203" class="stm run hide_run"><a href="#n203">203</a></p>
-<p id="n204" class="stm mis"><a href="#n204">204</a></p>
+<p id="n204" class="stm run hide_run"><a href="#n204">204</a></p>
 <p id="n205" class="stm mis"><a href="#n205">205</a></p>
 <p id="n206" class="pln"><a href="#n206">206</a></p>
 <p id="n207" class="stm mis"><a href="#n207">207</a></p>
@@ -280,8 +280,8 @@
 <p id="n211" class="pln"><a href="#n211">211</a></p>
 <p id="n212" class="pln"><a href="#n212">212</a></p>
 <p id="n213" class="pln"><a href="#n213">213</a></p>
-<p id="n214" class="stm mis"><a href="#n214">214</a></p>
-<p id="n215" class="stm mis"><a href="#n215">215</a></p>
+<p id="n214" class="stm run hide_run"><a href="#n214">214</a></p>
+<p id="n215" class="stm run hide_run"><a href="#n215">215</a></p>
 <p id="n216" class="stm mis"><a href="#n216">216</a></p>
 <p id="n217" class="stm mis"><a href="#n217">217</a></p>
 <p id="n218" class="pln"><a href="#n218">218</a></p>
@@ -523,7 +523,7 @@
 <p id="t201" class="pln">        <span class="com"># If the response supports deferred rendering, apply template</span><span class="strut">&nbsp;</span></p>
 <p id="t202" class="pln">        <span class="com"># response middleware and then render the response</span><span class="strut">&nbsp;</span></p>
 <p id="t203" class="stm run hide_run">        <span class="key">elif</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">response</span><span class="op">,</span> <span class="str">'render'</span><span class="op">)</span> <span class="key">and</span> <span class="nam">callable</span><span class="op">(</span><span class="nam">response</span><span class="op">.</span><span class="nam">render</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t204" class="stm mis">            <span class="key">for</span> <span class="nam">middleware_method</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_template_response_middleware</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t204" class="stm run hide_run">            <span class="key">for</span> <span class="nam">middleware_method</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_template_response_middleware</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t205" class="stm mis">                <span class="nam">response</span> <span class="op">=</span> <span class="nam">middleware_method</span><span class="op">(</span><span class="nam">request</span><span class="op">,</span> <span class="nam">response</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t206" class="pln">                <span class="com"># Complain if the template response middleware returned None (a common error).</span><span class="strut">&nbsp;</span></p>
 <p id="t207" class="stm mis">                <span class="key">if</span> <span class="nam">response</span> <span class="key">is</span> <span class="key">None</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
@@ -533,8 +533,8 @@
 <p id="t211" class="pln">                        <span class="op">%</span> <span class="op">(</span><span class="nam">middleware_method</span><span class="op">.</span><span class="nam">__self__</span><span class="op">.</span><span class="nam">__class__</span><span class="op">.</span><span class="nam">__name__</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t212" class="pln">                    <span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t213" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t214" class="stm mis">            <span class="key">try</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t215" class="stm mis">                <span class="nam">response</span> <span class="op">=</span> <span class="nam">response</span><span class="op">.</span><span class="nam">render</span><span class="op">(</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t214" class="stm run hide_run">            <span class="key">try</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t215" class="stm run hide_run">                <span class="nam">response</span> <span class="op">=</span> <span class="nam">response</span><span class="op">.</span><span class="nam">render</span><span class="op">(</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t216" class="stm mis">            <span class="key">except</span> <span class="nam">Exception</span> <span class="key">as</span> <span class="nam">e</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t217" class="stm mis">                <span class="nam">response</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">process_exception_by_middleware</span><span class="op">(</span><span class="nam">e</span><span class="op">,</span> <span class="nam">request</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t218" class="pln"><span class="strut">&nbsp;</span></p>
@@ -580,7 +580,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.4</a>,
-            created at 2017-05-14 19:42
+            created at 2017-06-12 09:59
         </p>
     </div>
 </div>

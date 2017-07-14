@@ -1,0 +1,58 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid ">
+            <!--  toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed " data-toggle="collapse" data-target="#nj-nav" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <!--START xs icons -->
+                <ul class="xs-nav-icons">
+                    <li class="dropdown visible-xs">
+                        <a class-"sub" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-cog nav-fa" aria-hidden="true"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'web_user_profile' %}"><i class="fa fa-user nav-fa-xs " aria-hidden="true"></i>الصفحة الشخصية</a></li>
+                            <li><a href="{% url 'logout' %}?next={% url 'home_visitor' %}"><i class="fa fa-sign-out nav-fa-xs " aria-hidden="true"></i>تسجيل خروج</a></li>
+                        </ul>
+                    </li>
+
+                    <li class=" visible-xs"><a href="#"><i class="fa fa-bell nav-fa" aria-hidden="true"></i></a></li>
+                </ul>
+            </div>
+                <!--END xs icons -->
+            {% if user.is_authenticated %}
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="nj-nav"> 
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{% url 'home_user' %}"><i class="fa fa-home " aria-hidden="true"></i>الرئيسية</a></li>
+                        <li><a href="#"><i class="fa fa-table " aria-hidden="true"></i>جدولي</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-book " aria-hidden="true"></i>موادي<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                {% for topic in nav_topics %}
+                                    <li class="sub-drop"><a href="{% url 'get_topic' dep_id=topic.dep topic_id=topic.pk %}">{{ topic.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li class=" hidden-xs"><a href="#"><i class="fa fa-bell " aria-hidden="true"></i></a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-left">
+                        <li class="dropdown hidden-xs">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-cog  nav-fa-sp" aria-hidden="true"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'web_user_profile' %}"><i class="fa fa-user nav-fa " aria-hidden="true"></i>الصفحة الشخصية</a></li>
+                                <li><a href="{% url 'logout' %}?next={% url 'home_visitor' %}"><i class="fa fa-sign-out nav-fa" aria-hidden="true"></i>تسجيل خروج</a></li>
+
+                            </ul>
+                         </li>
+
+                    </ul>
+                </div>
+            {% endif %}
+    <!-- /.navbar-collapse -->
+
+        </div><!-- /.container-fluid -->
+</nav>

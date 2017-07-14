@@ -16,7 +16,7 @@ class signup_form_test(TestCase):
 		u = User()
 		u.username = 'waaaaeeel'
 		u.email = 'waeeel@hotmail.com'
-		data = {'username':u.username, 'email':u.email, 'password':'123', 'password_confirm':'123'}
+		data = {'username':u.username, 'email':u.email, 'password':'12345678abc', 'password_confirm':'12345678abc'}
 		
 		# Exercise test
 		form = UserSignUpForm(data=data)
@@ -29,11 +29,51 @@ class signup_form_test(TestCase):
 		u = User()
 		u.username = '123'
 		u.email = 'ibrahem3amer@fff.com'
-		data = {'username':u.username, 'email':u.email, 'password':'123', 'password_confirm':'123'}
+		data = {'username':u.username, 'email':u.email, 'password':'12345678abc', 'password_confirm':'12345678abc'}
 
 		# Exercise test
 		form = UserSignUpForm(data=data)
 		
 		# Assert test
-		self.fail('write regex to check username validator.')
 		self.assertFalse(form.is_valid())
+
+	def test_users_submits_unmatched_password(self):
+		# Setup test
+		u = User()
+		u.username = 'iige13'
+		u.email = 'ibrahem3amer@fff.com'
+		data = {'username':u.username, 'email':u.email, 'password':'12345678abc', 'password_confirm':'12345678bca'}
+		
+		# Exercise test
+		form = UserSignUpForm(data=data)
+
+		# Assert test
+		self.assertFalse(form.is_valid())
+
+	# Causes keyError exception because of the front-end validation that password should be 7 digits.
+	def test_password_strength(self):
+		# Setup test
+		u = User()
+		u.username = 'ibham'
+		u.email = 'ibrahem3amer@ssss.com'
+		data = {'username':u.username, 'email':u.email, 'password':'555', 'password_confirm':'555'}
+		
+		# Exercise test
+		form = UserSignUpForm(data=data)
+
+		# Assert test
+		self.assertFalse(form.is_valid())
+
+	def test_password_with_only_digits(self):
+		# Setup test
+		u = User()
+		u.username = 'ibham'
+		u.email = 'ibrahem3amer@ssss.com'
+		data = {'username':u.username, 'email':u.email, 'password':'12345678', 'password_confirm':'12345678'}
+		
+		# Exercise test
+		form = UserSignUpForm(data=data)
+
+		# Assert test
+		self.assertFalse(form.is_valid())
+
