@@ -2,25 +2,69 @@
 <html>
 <head>
     {% load static %}
-    <title>Doctor</title>
+    {% load staticfiles %}
+    {% load materials_extras %}
+    
+        <meta charset="utf-8">
+        <title>{{ doctor.name }}</title>
+        <!-- Internet Explorer meta -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- First Mobile meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Bootstrap -->
+        <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> 
+        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        <link href="{% static 'css/doc-profile.css' %}" rel="stylesheet">
+        <link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
+        <!--[if lt IE 9]>
+            <script src="js/html5shiv.min.js"></script>
+            <script src="js/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
 </head>
 <body>
-{{ doctor.name }}
-<img src="{{ request.scheme }}://{{ request.get_host }}/{% get_media_prefix %}{{ doctor.picture }}" width="200px" height="200px" />
-{{ doctor.bio }}
-<h2>{{ doctor.faculty.name }}</h2>
-<h3>{{ doctor.email }}</h3>
-<h3>{{ doctor.website }}</h3>
-<h3>{{ doctor.linkedn }}</h3>
-<hr />
-<h1>المواد</h1>
-{% if doctor.topics %}
-    {% for topic in doctor.topics.all %}
-        <a href="{% url 'get_topic' topic.department.id topic.id %}">{{ topic.name }}</a>
-        <small>{{ topic.term }}</small>
-        <small>{{ topic.faculty.name }}</small>
-        <br />
-    {% endfor %}
-{% endif %}
+    
+        <section class="content-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 col-xs-12 r-float" id="out">
+                    <div id="doc-box">
+                        <img src="{{ request.scheme }}://{{ request.get_host }}/{% get_media_prefix %}{{ doctor.picture }}"/>
+                        <b>{{ doctor.name }}</b>
+                        <p>{{ doctor.faculty.name }}</p>
+                        <p>{{ doctor.bio }}</p>
+                        <div class="contact">
+                            <a href="{{ doctor.email }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                            <a href="{{ doctor.linkedn }}"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+                            <a href="{{ doctor.website }}"><i class="fa fa-laptop" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                    <div id="doc-topics" class="">
+                        <p>مواد قام بتدريسها</p>
+                        {% if doctor.topics %}
+                            {% for topic in doctor.topics.all %}
+                            <div class="col-md-6 col-xs-12 topic">
+                                <b class="col-xs-4 r-float"><a href="{% url 'get_topic' topic.department.id topic.id %}">{{ topic.name }}</a></b>
+                                <span class="label label-default col-xs-2 r-float fname">{{ topic.faculty.name }}</span>                         <span class="label label-default col-xs-2 r-float fname">تيرم {{ topic.term }}</span>
+                                <a href="#" class="col-xs-4 r-float">امتحانات </a>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+                </div>
+                 <div class="adv-part col-md-3 col-xs-12 r-float">
+                    <div class="ad-block">
+                        <a href="#"><img src="{% static 'pic/adv300x250.jpg' %}"></a> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+      
+   
 </body>
 </html>
