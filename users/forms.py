@@ -36,7 +36,7 @@ class UserSignUpForm(forms.ModelForm):
 		Returns Validation error if and only if:
 			- Confirm_password != original_password
 		"""
-		cleaned_data 		= super(UserSignUpForm, self).clean()
+		cleaned_data = super(UserSignUpForm, self).clean()
 		try:
 			original_password 	= cleaned_data['password']
 			confirm_password 	= cleaned_data['password_confirm']
@@ -63,7 +63,6 @@ class UserSignUpForm(forms.ModelForm):
 		cleaned_data['email'] -> email or ValidationError
 
 		Returns Validation error if and only if email already exists with different username.
-
 		"""
 		# Using self.cleaned_data as it's already cleaned. and we clean specific attribute. 
 		try:
@@ -82,7 +81,7 @@ class UserSignUpForm(forms.ModelForm):
 		Creates new user and associate an empty profile to it. 
 		"""
 		form 				= self.cleaned_data
-		usr 				= User(username = form['username'], email = form['email'], password = form['password'])
+		usr 				= User.objects.create_user(username = form['username'], email = form['email'], password = form['password'])
 		usr.set_password(form['password'])
 		usr.save()
 		return usr
