@@ -296,9 +296,7 @@ input , button:focus{
     overflow: hidden;
     overflow-y: auto;  
 }
-.assets-body > .row{
-    height: 35px;
-}
+.assets-body > .row{}
 .assets-body > .row:hover{
     background-color: #eaeaea;
 }
