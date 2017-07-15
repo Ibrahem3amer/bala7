@@ -176,9 +176,11 @@
                         <li role="presentation" class="tab">
                             <a href="#community" aria-controls="community" role="tab" data-toggle="tab">المجتمع</a>
                         </li>
-                        <li role="presentation" class="tab">
-                            <a href="#requests" aria-controls="community" role="tab" data-toggle="tab">الطلبات</a>
-                        </li>
+                        {% if request.user.is_staff %}
+                          <li role="presentation" class="tab">
+                              <a href="#requests" aria-controls="community" role="tab" data-toggle="tab">الطلبات</a>
+                          </li>
+                        {% endif %}
                     </ul>
 
                     <!-- Tab panes -->
@@ -194,29 +196,31 @@
                                     </div>
                                 </div>
                                 
-                                <div class="add-week">
-                                    <button id="add-week-btn" class="nj-btn">اضافة اسبوع</button>
-                                    <form action="" method="post">
-                                        <div id="new-week-box">
-                                            <div class="week-head">
-                                                <p class="week-name">الاسبوع الرابع</p>
-                                                <i class="fa fa-times" aria-hidden="true"></i>
-                                            </div>
+                                {% if request.user.is_staff %}
+                                  <div class="add-week">
+                                      <button id="add-week-btn" class="nj-btn">اضافة اسبوع</button>
+                                      <form action="" method="post">
+                                          <div id="new-week-box">
+                                              <div class="week-head">
+                                                  <p class="week-name">الاسبوع الرابع</p>
+                                                  <i class="fa fa-times" aria-hidden="true"></i>
+                                              </div>
 
-                                            <div class="week-body">
-                                                <p><span>عنوان المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                <p><span>رابط المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                <p><span>عنوان السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                <p><span>رابط السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                <p><span>عنوان التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                <p><span>رابط التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                            </div>
-                                            <div class="week-footer">
-                                                <button type="submit" class="nj-btn">اضافه</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                                              <div class="week-body">
+                                                  <p><span>عنوان المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
+                                                  <p><span>رابط المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
+                                                  <p><span>عنوان السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
+                                                  <p><span>رابط السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
+                                                  <p><span>عنوان التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
+                                                  <p><span>رابط التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
+                                              </div>
+                                              <div class="week-footer">
+                                                  <button type="submit" class="nj-btn">اضافه</button>
+                                              </div>
+                                          </div>
+                                      </form>
+                                  </div>
+                                {% endif %}
                                 
                                 {% if weeks_days %}
                                   {% for week_title in weeks_days %}
@@ -228,10 +232,11 @@
                                         </div>
                                         <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="headingOne">
                                             <div class="panel-body">
-                                                <div class="edit-div">
-                                                    <i class="fa fa-cog edit-week-icon" aria-hidden="true"></i>
-                                                </div>
-                                                
+                                                {% if request.user.is_staff %}
+                                                  <div class="edit-div">
+                                                      <i class="fa fa-cog edit-week-icon" aria-hidden="true"></i>
+                                                  </div>
+                                                {% endif %}
                                                 <div class="edit-week">
                                                     <form action="" method="post">
                                                         <p><span>عنوان المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
