@@ -40,9 +40,11 @@
                 </div>
 
                 <div class="elements-div">
-                    <div class="right-ele doctor-name">
-                        <p>د.محمد الدسوقى</p>
-                    </div>
+                    {% for doctor in topic.professors.all %}
+                      <div class="right-ele doctor-name">
+                          <a href="{% url 'display_doctor' doctor.id %}"><p>{{ doctor.name }}</p></a>
+                      </div>
+                    {% endfor %}
                     <div class="right-ele">
                         <div class="right-ele-head">
                             <p>الامتحانات</p>
