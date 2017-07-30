@@ -254,9 +254,9 @@
                                                     {% if weeks_materials|week_number:forloop.counter %}
                                                       {% for material in weeks_materials|week_number:forloop.counter %}
                                                         <div class="row content-row">
-                                                            <div class="col-xs-2 col-sm-4"><a href="{{material.link}}"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                            <div class="col-xs-8 col-sm-4"><p>{{ material.name }}</p></div>
-                                                            <div class="col-xs-2 col-sm-4"><p>{% if material.content_type == 1 %} محاضرة {% elif material.content_type == 2 %} سكشن/شرح {% else %} تاسك {% endif %}</p></div>
+                                                            <div class="col-xs-8 col-sm-4"><a href="{{material.link}}"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                            <div class="col-xs-8 col-sm-4 hidden-xs"><p class="assets-time">احمد البنا | 6 يوليو ، 11:30م</p></div>
+                                                            <div class="col-xs-4 col-sm-4"><p class="resourse-name">{% if material.content_type == 1 %} <i class="fa fa-book" aria-hidden="true"></i> {% elif material.content_type == 2 %} <i class="fa fa-sticky-note" aria-hidden="true"></i> {% else %} <i class="fa fa-tasks" aria-hidden="true"></i> {% endif %}{{ material.name }}</p></div>
                                                         </div>
                                                       {% endfor %}
                                                     {% endif %}
@@ -265,17 +265,17 @@
                                                         <div class="assets-body">
                                                             <div class="row">
                                                                 <div class="col-xs-8 col-sm-4"><p>عنوان المشاركه</p></div>
-                                                                <div class="col-sm-4 hidden-xs"><p class="assets-time">6 يوليو ، الساعه 11:30م</p></div>
+                                                                <div class="col-sm-4 hidden-xs"><p class="assets-time">6 يوليو ، 11:30م</p></div>
                                                                 <div class="col-xs-4 col-sm-4"><a href="" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></div>
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-xs-8 col-sm-4"><p>عنوان المشاركه</p></div>
-                                                                <div class="col-sm-4 hidden-xs"><p class="assets-time">6 يوليو ، الساعه 11:30م</p></div>
+                                                                <div class="col-sm-4 hidden-xs"><p class="assets-time">6 يوليو ، 11:30م</p></div>
                                                                 <div class="col-xs-4 col-sm-4"><a href="" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></div>
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-xs-8 col-sm-4"><p>عنوان المشاركه</p></div>
-                                                                <div class="col-sm-4 hidden-xs"><p class="assets-time">6 يوليو ، الساعه 11:30م</p></div>
+                                                                <div class="col-sm-4 hidden-xs"><p class="assets-time">6 يوليو ، 11:30م</p></div>
                                                                 <div class="col-xs-4 col-sm-4"><a href="" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></div>
                                                             </div>
                                                         </div>

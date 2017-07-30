@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
 from unittest import skip
-from cms.models import Topic, UserTopics, Material, Task
+from cms.models import Topic, UserTopics, Material, Task, TopicTable
 from cms.views import update_user_topics
 from users.models import Department, UserProfile, Faculty, University
 
@@ -474,4 +474,18 @@ class TaskTest(TestCase):
 		# Assert test
 		self.assertEqual(3, Task.get_closest_tasks(request).count())
 
+class TopicTableTest(TestCase):
+	def setUp(self):
+		self.topic = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, weeks = 5)
+
+	def test_initiate_topic_table(self):
+		"""Tests that table is created successfully."""
+
+		# Setup test
+		topic_table = TopicTable.objects.create(
+			
+		)
+		# Exercise test
+		# Assert test
+		
 

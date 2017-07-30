@@ -272,31 +272,37 @@ input , button:focus{
 .week-content{
     padding: 0px;
     padding-top: 30px;
-    padding-bottom: 15px;
+    padding-bottom: 20px;
 }
 .content-row{
     padding: 0px 15px;
 }
+.week-content .resourse-name{
+    text-align: right;
+    padding-right: 30px;
+}
+.week-content .resourse-name i{
+    padding-left: 5px;
+    vertical-align: middle;
+    color: #0064B7;
+}
 .assets{
-    width: calc(100% - 30px);
-    margin: auto;
+    width: 100%;
     overflow: hidden;
-    border: 1px solid #ddd;
+    
 }
 .assets-h{
-    padding-right: 10px;
+    padding-right: 25px;
     text-align: right;
     font-weight: bold;
     font-size: 24px;
-    margin: 5px;
+    margin: 10px 0px;
     border-bottom: 1px solid #ddd;
 }
-.assets-body{
-    max-height: 70px;
-    overflow: hidden;
-    overflow-y: auto;  
+.assets-body{}
+.assets-body > .row{
+    margin: 0px;
 }
-.assets-body > .row{}
 .assets-body > .row:hover{
     background-color: #eaeaea;
 }

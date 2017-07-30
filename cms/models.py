@@ -1,6 +1,6 @@
 import datetime
 from django.db import models
-from django.core.validators import RegexValidator, MinLengthValidator
+from django.core.validators import RegexValidator, MinLengthValidator, validate_comma_separated_integer_list
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -229,3 +229,41 @@ class Professor(models.Model):
 
 	def __str__(self):
 		return self.name
+
+
+class Table(models.Model):
+	"""Contains the basic components for building a table."""
+
+	# Attributes
+	dates = models.CharField(max_length = 200)
+	topics = models.CharField(max_length = 200)
+	places = models.CharField(max_length = 200)
+	off_days = models.CharField(
+		max_length = 200,
+		validators=[validate_comma_separated_integer_list]
+	)
+	json = models.CharField(max_length = 200)
+
+	# Meta
+	class Meta:
+		abstract = True
+
+	# Methods
+	def setjson(self):
+		table = []
+		for i in range(1, 8):
+			table[i] = self.dates[i] + self.topics[i] + self.places[i]
+		self.json = ''.join(table)
+
+
+class TopicTable(Table):
+	"""Manages the time table for each topic"""
+
+	# Attributes
+	topic = models.OneToOneField(
+		Topic,
+		on_delete=models.CASCADE,
+		related_name='table'
+	)
+	
+
