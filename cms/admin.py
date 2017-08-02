@@ -57,7 +57,27 @@ class ProfessorAdmin(admin.ModelAdmin):
 
 
 class TopicTableAdmin(admin.ModelAdmin):
-    exclude = ('json',)
+    fields = ['topic']
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """limits Topics field to user's topics."""
+        if db_field.name == "topic" and not request.user.is_superuser:
+            kwargs["queryset"]  = Topic.objects.filter(id__in = request.user.profile.topics.all())
+
+        return super(TopicTableAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        """Adds sv inputs to table instance."""
+        request_topics =  [[0]*6 for i in range(7)]
+        request_places =  [[0]*6 for i in range(7)]
+        for day in range(7):
+            day_index = '_'+str(day)
+            for peroid in range(6):
+                period_index = '_'+str(peroid)
+                request_topics[day][peroid] = request.POST['topic'+day_index+period_index]
+                request_places[day][peroid] = request.POST['place'+day_index+period_index]
+        off_days = request.POST.getlist('off_days[]', None)
+        ss
 
 
 admin.site.register(Topic, TopicAdmin)

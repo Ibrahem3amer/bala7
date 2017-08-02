@@ -1,5 +1,6 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_urls static admin_modify %}
+{% load dates %}
 
 {% block extrahead %}{{ block.super }}
 <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
@@ -54,14 +55,26 @@
   {% include "admin/includes/fieldset.html" %}
 {% endfor %}
 
-<!-- Week days-->
+<!-- Weekend days -->
+<h1>أيام الأجازة</h1>
 {% for day in "1234567" %}
-    <div class="module aligned collapse">
-        <h1>Day #{{ day }}</h1>
-        {% for period in "123456" %}
+    <div class="module aligned">
+        <label for="id_{{ day }}">{{ forloop.counter0|num_to_day }}</label>
+        <input type="checkbox" name="off_days[]" value="{{ day }}" id="id_{{ day }}" />
+    </div>
+{% endfor %}
+<!-- End Weekend days -->
+
+<p>سيب الأيام أو الفترات اللي مفيهاش حاجة فاضية.</p>
+<!-- Week days-->
+{% for day in "0123456" %}
+    <div class="module aligned">
+        <h1>Day: {{ forloop.counter0|num_to_day }}</h1>
+        {% for period in "012345" %}
             <div class="form-row">
                 <label class="required" for="id_{{ day }}_{{ period }}">Period {{ period }}: </label>
-                <input type="text" name="{{ day }}-{{ period }}" id="id_{{ day }}_{{ period }}" class="vTextField" />
+                <input type="text" name="topic_{{ day }}_{{ period }}" id="id_{{ day }}_{{ period }}" class="vTextField" placeholder="مثال: محاضرة رياضيات" />
+                <input type="text" name="place_{{ day }}_{{ period }}" id="id_{{ day }}_{{ period }}" class="vTextField" placeholder="مثال: مدرج حمدي الوزير" />
             </div>
         {% endfor %}
     </div>
