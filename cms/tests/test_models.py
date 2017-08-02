@@ -515,5 +515,6 @@ class TopicTableTest(TestCase):
 		
 		# Assert test
 		self.assertIn(topics[1][1], table.json)
+
 		
 

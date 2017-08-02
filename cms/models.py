@@ -234,8 +234,18 @@ class Professor(models.Model):
 class Table(models.Model):
 	"""Contains the basic components for building a table."""
 
+	# Helopers
+	days={
+			0: 'Sat',
+			1: 'Sun',
+			2: 'Mon',
+			3: 'Tue',
+			4: 'Wen',
+			5: 'Thu',
+			6: 'Fri',
+		}
+
 	# Attributes
-	dates = models.CharField(max_length = 200)
 	topics = models.CharField(max_length = 200)
 	places = models.CharField(max_length = 200)
 	off_days = models.CharField(
@@ -251,27 +261,16 @@ class Table(models.Model):
 	# Methods
 	def setjson(self):
 		"""Concatenates topics and places into dict: {day: {period: {topic: 'topic', place: 'place'}}}"""
-		
-		days={
-			0: 'Sat',
-			1: 'Sun',
-			2: 'Mon',
-			3: 'Tue',
-			4: 'Wen',
-			5: 'Thu',
-			6: 'Fri',
-		}
 
 		table = {}
 		for day in range(7):
-			day_index = days[day]
+			day_index = self.days[day]
 			table[day_index] = {}
 			for period in range(6):
 				table[day_index][period] = {}
 				table[day_index][period]['topic'] = self.topics[day][period]
 				table[day_index][period]['place'] = self.places[day][period]
 		self.json = str(table)
-		print(self.json)
 
 
 class TopicTable(Table):

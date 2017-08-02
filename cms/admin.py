@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
-from cms.models import Topic, Material, Task, Professor
+from cms.models import Topic, Material, Task, Professor, TopicTable
 
-# Register your models here.
+
 class TopicAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
@@ -13,6 +13,7 @@ class TopicAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return qs
         return qs.filter(id__in = request.user.profile.topics.all())
+
 
 class MaterialAdmin(admin.ModelAdmin):
 
@@ -38,6 +39,7 @@ class MaterialAdmin(admin.ModelAdmin):
             return qs.filter(content_type__lt = 3)
         return qs.filter(topic_id__in = request.user.profile.topics.all(), content_type__lt = 3)
 
+
 class TaskAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
@@ -49,10 +51,17 @@ class TaskAdmin(admin.ModelAdmin):
             return qs.filter()
         return qs.filter(topic_id__in = request.user.profile.topics.all())
 
+
 class ProfessorAdmin(admin.ModelAdmin):
     pass
+
+
+class TopicTableAdmin(admin.ModelAdmin):
+    exclude = ('json',)
+
 
 admin.site.register(Topic, TopicAdmin)
 admin.site.register(Material, MaterialAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Professor, ProfessorAdmin)
+admin.site.register(TopicTable, TopicTableAdmin)
