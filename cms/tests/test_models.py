@@ -476,15 +476,19 @@ class TaskTest(TestCase):
 
 class TopicTableTest(TestCase):
 	def setUp(self):
-		self.topic = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, weeks = 5)
+		self.uni       	= University.objects.create(name = 'Test university')
+		self.fac        = Faculty.objects.create(name = 'Test faculty')
+		self.dep        = Department.objects.create(name = 'Test dep')
+		self.topic      = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
+		self.user 		= User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
+		self.profile   	= UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
 
 	def test_initiate_topic_table(self):
 		"""Tests that table is created successfully."""
 
 		# Setup test
-		topic_table = TopicTable.objects.create(
-			
-		)
+		week = [[0] * 6] * 7
+
 		# Exercise test
 		# Assert test
 		
