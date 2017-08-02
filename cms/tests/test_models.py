@@ -488,8 +488,31 @@ class TopicTableTest(TestCase):
 
 		# Setup test
 		week = [[0] * 6] * 7
+		topics = week
+		topics[1][1] = 'Lecture'
+		table = TopicTable.objects.create(topic=self.topic, topics=topics)
 
 		# Exercise test
+		table_in_db = TopicTable.objects.count()
+		
 		# Assert test
+		self.assertTrue(table_in_db > 0)
+
+	def test_table_json_display_correctly(self):
+		"""Tests wether or not table.json return correct table."""
+
+		# Setup test
+		week = [[0] * 6] * 7
+		topics = week
+		places = week 
+		topics[1][1] = 'Lecture'
+		places[1][1] = 'Hall 1'
+
+
+		# Exercise test
+		table = TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		
+		# Assert test
+		self.assertIn(topics[1][1], table.json)
 		
 
