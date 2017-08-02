@@ -250,10 +250,28 @@ class Table(models.Model):
 
 	# Methods
 	def setjson(self):
-		table = []
-		for i in range(1, 8):
-			table[i] = self.dates[i] + self.topics[i] + self.places[i]
-		self.json = ''.join(table)
+		"""Concatenates topics and places into dict: {day: {period: {topic: 'topic', place: 'place'}}}"""
+		
+		days={
+			0: 'Sat',
+			1: 'Sun',
+			2: 'Mon',
+			3: 'Tue',
+			4: 'Wen',
+			5: 'Thu',
+			6: 'Fri',
+		}
+
+		table = {}
+		for day in range(7):
+			day_index = days[day]
+			table[day_index] = {}
+			for period in range(6):
+				table[day_index][period] = {}
+				table[day_index][period]['topic'] = self.topics[day][period]
+				table[day_index][period]['place'] = self.places[day][period]
+		self.json = str(table)
+		print(self.json)
 
 
 class TopicTable(Table):
