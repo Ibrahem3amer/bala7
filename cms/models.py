@@ -246,13 +246,13 @@ class Table(models.Model):
 		}
 
 	# Attributes
-	topics = models.CharField(max_length = 200)
-	places = models.CharField(max_length = 200)
+	topics = models.TextField()
+	places = models.TextField()
 	off_days = models.CharField(
 		max_length = 200,
 		validators=[validate_comma_separated_integer_list]
 	)
-	json = models.CharField(max_length = 200)
+	json = models.TextField()
 
 	# Meta
 	class Meta:
@@ -272,6 +272,15 @@ class Table(models.Model):
 				table[day_index][period]['place'] = self.places[day][period]
 		self.json = str(table)
 
+	def to_list(self, str_attribute):
+		"""Returns a list representation of topics attribute."""
+		import ast
+		try:
+			list_representation = ast.literal_eval(str_attribute)
+		except:
+			list_representation = {}
+		return list_representation
+
 
 class TopicTable(Table):
 	"""Manages the time table for each topic"""
@@ -282,5 +291,8 @@ class TopicTable(Table):
 		on_delete=models.CASCADE,
 		related_name='table'
 	)
+
+	def __str__(self):
+		return self.topic.name + ' table'
 	
 

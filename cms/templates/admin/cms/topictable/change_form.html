@@ -1,6 +1,7 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_urls static admin_modify %}
 {% load dates %}
+{% load admin_interface_extras %}
 
 {% block extrahead %}{{ block.super }}
 <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
@@ -60,7 +61,7 @@
 {% for day in "1234567" %}
     <div class="module aligned">
         <label for="id_{{ day }}">{{ forloop.counter0|num_to_day }}</label>
-        <input type="checkbox" name="off_days[]" value="{{ day }}" id="id_{{ day }}" />
+        <input type="checkbox" name="off_days[]" value="{{ day }}" id="id_{{ day }" {% if day in off_days %}checked{% endif %}/>
     </div>
 {% endfor %}
 <!-- End Weekend days -->
@@ -73,8 +74,8 @@
         {% for period in "012345" %}
             <div class="form-row">
                 <label class="required" for="id_{{ day }}_{{ period }}">Period {{ period }}: </label>
-                <input type="text" name="topic_{{ day }}_{{ period }}" id="id_{{ day }}_{{ period }}" class="vTextField" placeholder="مثال: محاضرة رياضيات" />
-                <input type="text" name="place_{{ day }}_{{ period }}" id="id_{{ day }}_{{ period }}" class="vTextField" placeholder="مثال: مدرج حمدي الوزير" />
+                <input type="text" name="topic_{{ day }}_{{ period }}" id="id_{{ day }}_{{ period }}" class="vTextField" placeholder="مثال: محاضرة رياضيات" value="{{ topics_table|dynamic_index:forloop.parentloop.counter0|dynamic_index:forloop.counter0 }}" />
+                <input type="text" name="place_{{ day }}_{{ period }}" id="id_{{ day }}_{{ period }}" class="vTextField" placeholder="مثال: مدرج حمدي الوزير" value="{{ places_table|dynamic_index:forloop.parentloop.counter0|dynamic_index:forloop.counter0 }}" />
             </div>
         {% endfor %}
     </div>
