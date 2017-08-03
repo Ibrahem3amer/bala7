@@ -47,5 +47,28 @@ $(document).ready(function(){
             $(this).html('<i class="fa fa-comments" aria-hidden="true"></i><span> إظهار التعليقات</span>');
             $(this).parent().nextAll('.post-comments').fadeOut();
         }
-    })
+    });
+    
+    //show add new week box
+    $('#add-week-btn').click(function(){
+        $('#new-week-box').slideToggle();
+    });
+    //close new week box
+    $('.week-head i').click(function(){
+        $('#new-week-box').slideUp();
+    });
+    
+    // edit week
+    $('.edit-week-icon').click(function(event){
+        var weekDisplay = $(this).parent().next().css('display');
+        if( weekDisplay == 'none'){
+            $(this).removeClass('fa-cog').addClass('fa-times');
+            $(this).parent().next().slideDown();
+            $(this).parent().next().next().slideUp();
+        }else{
+            $(this).removeClass('fa-times').addClass('fa-cog');
+            $(this).parent().next().slideUp();
+            $(this).parent().next().next().slideDown();
+        }
+    });
 });

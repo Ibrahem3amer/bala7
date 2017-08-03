@@ -6,14 +6,17 @@ from unittest import skip
 from django.contrib.auth.models import User
 from cms.models import Topic, Material
 from cms.forms import AddMaterialForm
-from users.models import Department
+from users.models import University, Faculty, Department, UserProfile
 
 class AddMaterialFormTest(TestCase):
     def setUp(self):
-        self.dep        = Department.objects.create()
-        self.topic      = Topic.objects.create(name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
-        self.user       = User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f')
-        self.material   = Material.objects.create(
+        self.uni            = University.objects.create(name = 'Test university')
+        self.fac            = Faculty.objects.create(name = 'Test faculty')
+        self.dep            = Department.objects.create(name = 'Test dep')
+        self.topic          = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
+        self.user           = User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f')
+        self.profile        = UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
+        self.material       = Material.objects.create(
                 name            = 'test_material',
                 content         = 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
                 link            = 'http://onedrive.live.com/',
@@ -24,6 +27,7 @@ class AddMaterialFormTest(TestCase):
                 user            = self.user,
                 topic           = self.topic
             )
+        
 
     def test_intiaite_basic_form(self):
         # Setup test

@@ -1,6 +1,12 @@
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.validators import RegexValidator
 from urllib.parse import urlparse
 import datetime
+
+class GeneralCMSValidator(object):
+    """Contains general validators that can be applied in multiple situations."""
+    name_validator = RegexValidator(r'^[\u0621-\u064Aa-zA-Z][\u0621-\u064Aa-zA-Z0-9]*([ ]?[\u0621-\u064Aa-zA-Z0-9]+)+$', 'Name cannot start with number, should consist of characters.') 
+
 
 class MaterialValidator(object):
     """Validator for common fields of material model"""
@@ -37,7 +43,7 @@ class MaterialValidator(object):
         if int(now.year) - int(date.year) < 0:
             return 0
         return 1
- 
+
 
 
 

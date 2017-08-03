@@ -29,7 +29,6 @@ class AddMaterialForm(forms.ModelForm):
         if date_validation != 1:
             raise forms.ValidationError("Material date should not be in the future.")
 
-
         return form_cleaned_data
 
 

@@ -1,22 +1,23 @@
+import datetime
 from django.db import models
-from django.core.validators import RegexValidator, MinLengthValidator
+from django.core.validators import RegexValidator, MinLengthValidator, validate_comma_separated_integer_list
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.conf import settings
 from django.contrib.auth.models import User
+from cms.validators import GeneralCMSValidator
 
 class Topic(models.Model):
 	# Helper variables
-	topic_name_validator 	= RegexValidator(r'^[\u0621-\u064Aa-zA-Z][\u0621-\u064Aa-zA-Z0-9]*([ ]?[\u0621-\u064Aa-zA-Z0-9]+)+$', 'Name cannot start with number, should consist of characters.') 
 	term_choices 			= [(1, 'First term'), (2, 'Second term'), (3, 'Summer')]
 
 	# Class attributes
-	name 		= models.CharField(max_length = 200, validators = [topic_name_validator])
+	name 		= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator])
 	desc 		= models.CharField(max_length = 400)
 	term 		= models.PositiveIntegerField(choices = term_choices)
 	weeks		= models.PositiveIntegerField(default = 0)
 	department 	= models.ForeignKey('users.Department', related_name = 'topics', on_delete = models.CASCADE)
 	faculty 	= models.ForeignKey('users.Faculty', related_name = 'topics', on_delete = models.CASCADE, null = True)
-	# Professors -> A list of associated professors for this topic.
+	professors 	= models.ManyToManyField('Professor', related_name = 'topics')
 	# Table -> A foriegn key that points to the table associated with this topic.
 	# Lectures -> A list of materials that represents all primary content for the topic.
 	# Contributions -> A list of materials that represents all secondary content for the topic.	
@@ -118,14 +119,13 @@ class UserTopics(object):
 class Material(models.Model):
 	# Helper attributes
 	term_choices = [(1, 'First term'), (2, 'Second term'), (3, 'Summer')]
-	type_choices = [(1, 'Lecture'), (2, 'Asset')]
+	type_choices = [(1, 'Lecture'), (2, 'Asset'), (3, 'Task')]
 
 	# Model Validator
-	material_name_validator 	= RegexValidator(r'^[\u0621-\u064Aa-zA-Z][\u0621-\u064Aa-zA-Z0-9]*([ ]?[\u0621-\u064Aa-zA-Z0-9]+)+$', 'Name cannot start with number, should consist of characters.') 
 	content_min_len_validator	= MinLengthValidator(50, 'Material Description should be more than 50 characters.')
 
 	# Fields
-	name 			= models.CharField(max_length = 200, validators = [material_name_validator], default = "N/A")
+	name 			= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
 	content			= models.CharField(max_length = 500, validators = [content_min_len_validator])
 	link 			= models.URLField(unique = True)
 	year 			= models.DateField()
@@ -139,6 +139,7 @@ class Material(models.Model):
 	def __str__(self):
 		return self.name
 
+	# Model-level validation
 	def clean(self):
 
 		# Validates that week number associated with materials is real week number.
@@ -148,6 +149,14 @@ class Material(models.Model):
 		except ObjectDoesNotExist:
 			# RelatedObject handler.
 			self.week_number = 0
+
+        # Validate that user has an access to add material to topic.
+		try:
+			if self.user.profile.department.id != self.topic.department.id:
+				raise ValidationError("Access denied.")
+		except (AttributeError, ObjectDoesNotExist):
+			raise ValidationError("Invalid User or Topic.")
+
 
 
 	# Material's methods
@@ -180,9 +189,81 @@ class Material(models.Model):
 
 
 
+class Task(Material):
+
+	# Additional fields.
+	deadline = models.DateField()
 
 
+	# Model-level validation
+	def clean(self):
+		
+		# Validate that deadline is not a passed date. 
+		now = datetime.date.today()
+		date_difference = self.deadline - now
+		if date_difference.days <= 3:
+			raise ValidationError('Deadline date should be 3 days ahead at least.')
+
+	# Task methods.
+	@classmethod
+	def get_closest_tasks(cls, request):
+	    """
+	    Returns tasks whose deadlines occurs 3 days from now. 
+	    """
+	    now 		= datetime.date.today()
+	    days_limit 	= datetime.timedelta(days = 4) 
+	    return Task.objects.filter(topic__in = request.user.profile.topics.all(), deadline__range = (now, now+days_limit))
 
 
+class Professor(models.Model):
 
+	# Attributes
+	name 	= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
+	faculty = models.ForeignKey('users.Faculty', related_name = 'professors', on_delete = models.CASCADE)
+	bio 	= models.TextField(null = True, blank = True)
+	picture = models.ImageField(default = 'doctor.jpg')
+	email 	= models.EmailField(null = True, blank = True)
+	website = models.URLField(null = True, blank = True)
+	linkedn = models.URLField(null = True, blank = True)
+
+
+	def __str__(self):
+		return self.name
+
+
+class Table(models.Model):
+	"""Contains the basic components for building a table."""
+
+	# Attributes
+	dates = models.CharField(max_length = 200)
+	topics = models.CharField(max_length = 200)
+	places = models.CharField(max_length = 200)
+	off_days = models.CharField(
+		max_length = 200,
+		validators=[validate_comma_separated_integer_list]
+	)
+	json = models.CharField(max_length = 200)
+
+	# Meta
+	class Meta:
+		abstract = True
+
+	# Methods
+	def setjson(self):
+		table = []
+		for i in range(1, 8):
+			table[i] = self.dates[i] + self.topics[i] + self.places[i]
+		self.json = ''.join(table)
+
+
+class TopicTable(Table):
+	"""Manages the time table for each topic"""
+
+	# Attributes
+	topic = models.OneToOneField(
+		Topic,
+		on_delete=models.CASCADE,
+		related_name='table'
+	)
+	
 

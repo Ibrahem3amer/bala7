@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from users.models import University, Faculty, Department, UserProfile 
 from users.forms import UserSignUpForm
-from cms.models import UserTopics
+from cms.models import UserTopics, Task
 
 
 def home_visitor(request):
@@ -28,7 +28,11 @@ def home_user(request):
 		new_profile.topics 	= None 
 		new_profile.save()
 		messages.add_message(request, messages.INFO, 'Please complete your profile')
-	return render(request, 'home_user.html')
+
+	# Getting user tasks deadlines. 
+	tasks = Task.get_closest_tasks(request)
+
+	return render(request, 'home_user.html', {'tasks': tasks})
 
 @login_required
 def user_profile(request):
