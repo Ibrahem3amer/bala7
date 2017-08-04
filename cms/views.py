@@ -68,6 +68,7 @@ def within_user_domain(user_obj, list_of_topics_ids):
 
     return True
 
+@login_required
 def get_topic(request, dep_id=-1, topic_id=-1):
     """
     Returns a specific topic with corresponding id. Returns 404 if topic isn't accessible by user.
@@ -93,6 +94,7 @@ def get_topic(request, dep_id=-1, topic_id=-1):
 
     return render(request, 'topics/get_topic.html', {'topic':topic, 'weeks_days': weeks, 'weeks_materials': materials})
 
+@login_required
 def update_user_topics(request):
     """
     Accepts user request with topics from his faculty, calls update method. redirects to profile with status. 
@@ -112,6 +114,7 @@ def update_user_topics(request):
 
         return redirect(reverse('web_user_profile'))
 
+@login_required
 def add_material(request):
     """
     Accepts POST, GET requets. Add new material if POST, collecting user and topic details from request if GET.
@@ -130,7 +133,7 @@ def add_material(request):
 
     return render(request, 'add_material.html', {'add_material_form': material_form})
 
-
+@login_required
 def doctor_main_page(request, doctor_id):
     """
     Accepts GET, displays doctor's information. 
@@ -138,3 +141,9 @@ def doctor_main_page(request, doctor_id):
     doctor = get_object_or_404(Professor, pk = doctor_id)
     if request.method == 'GET':
         return render(request, 'doctor/main.html', {'doctor': doctor})
+
+@login_required
+def table_main(request):
+    """Returns department table on GET."""
+    if request.method == 'GET':
+        pass

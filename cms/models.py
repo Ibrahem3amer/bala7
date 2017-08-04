@@ -294,5 +294,60 @@ class TopicTable(Table):
 
 	def __str__(self):
 		return self.topic.name + ' table'
+
+
+class DepartmentTable(object):
+	"""Manages the available options of user's query."""
+	
+	# Attributes 
+	user_topics = []
+	department_topics = []
+	available_topics = []
+	professors = []
+
+
+	# Methods
+	def get_user_topics(self, user):
+		"""Graps user choices of topics."""
+		try:
+			return user.profile.topics.all()
+		except:
+			# Profile doesn't exist.
+			return []
+
+	def get_dep_topics(self, user):
+		"""Graps user's department topics."""
+		try:
+			return user.profile.department.topics.all()
+		except:
+			# Profile doesn't exist.
+			return []
+
+	def get_available_topics(self):
+		"""Make the unioun of user_topics and dep_topics"""
+		return list(set(self.department_topics).union(self.user_topics))
+
+	def get_available_topics_professors(self):
+		"""Returns a set of all availabe professors."""
+		professors = []
+		for topic in self.available_topics:
+			try:
+				query = topic.professors.all()
+				if query:
+					professors.append(query)
+			except:
+				# Topic or Professor doesn't exist 
+				pass
+		return list(set(professors))
+
+
+	def __init__(self, user):
+		super(DepartmentTable, self).__init__()
+		self.user_topics = self.get_user_topics(user)
+		self.department_topics = self.get_dep_topics(user)
+		self.available_topics = self.get_available_topics()
+		self.professors = self.get_available_topics_professors()
+			
+		
 	
 

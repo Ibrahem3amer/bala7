@@ -9,7 +9,7 @@ from cms.models import Topic
 from cms.views import get_topic 
 
 
-class Access_restriction(TestCase):
+class AccessRestriction(TestCase):
     def setUp(self):
         self.user           = User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
         self.uni            = University.objects.create(name = 'test_university')
@@ -105,3 +105,9 @@ class Access_restriction(TestCase):
 
         # Assert test
         self.assertTrue(flag)
+
+class TableViews(TestCase):
+    def test_page_load_on_get(self):
+        # Setup test
+        # Exercise test
+        # Assert test

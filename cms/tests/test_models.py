@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
 from unittest import skip
-from cms.models import Topic, UserTopics, Material, Task, TopicTable
+from cms.models import Topic, UserTopics, Material, Task, TopicTable, DepartmentTable, Professor
 from cms.views import update_user_topics
 from users.models import Department, UserProfile, Faculty, University
 
@@ -516,5 +516,82 @@ class TopicTableTest(TestCase):
 		# Assert test
 		self.assertIn(topics[1][1], table.json)
 
-		
+class DepartmentTableTest(TestCase):
+	def setUp(self):
+		self.user = User.objects.create_user(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		self.fac = Faculty.objects.create()
+		self.dep = Department.objects.create(faculty = self.fac)
+		self.user.profile = UserProfile.objects.create(department = self.dep, faculty = self.fac)
+		self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
+		self.topic2 = Topic.objects.create(name = 'topic name2', desc = 'ddddd', term = 2, department = self.dep)
+		self.topic.professors.add(Professor.objects.create(name="gamal", faculty=self.fac))
+		self.topic2.professors.add(Professor.objects.create(name="meshmesh", faculty=self.fac))
 
+	def test_return_user_topics_and_dep_topics(self):
+		"""Tests that class return a set of user and dep topics."""
+		# Setup test
+		fac2 = Faculty.objects.create()
+		dep2 = Department.objects.create(faculty = fac2)
+		topic3 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2, department = dep2)
+		self.user.profile.topics.add(topic3)
+
+		# Exercise test
+		dep_table = DepartmentTable(self.user)
+
+		# Assert test
+		self.assertIn(topic3, dep_table.available_topics)
+		self.assertIn(self.topic2, dep_table.available_topics)
+
+	def test_return_dep_topics_only(self):
+		"""Returns dep topics when user topics is none."""
+		# Setup test
+		fac2 = Faculty.objects.create()
+		dep2 = Department.objects.create(faculty = fac2)
+		topic3 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2, department = dep2)
+
+		# Exercise test
+		dep_table = DepartmentTable(self.user)
+
+		# Assert test
+		self.assertNotIn(topic3, dep_table.available_topics)
+		self.assertIn(self.topic2, dep_table.available_topics)
+
+	def test_nothing_when_user_excpetion(self):
+		"""Returns none."""
+		# Setup test
+		another_user = User.objects.create_user(
+							username='ffffsds',
+							email='tesssst@test.dd',
+							password='secrettt23455'
+						)
+
+		# Exercise test
+		dep_table = DepartmentTable(another_user)
+
+		# Assert test
+		self.assertEqual([], dep_table.available_topics)
+
+	def test_return_all_professors(self):
+		"""Returns all professors for available topics"""
+		# Setup test
+
+		# Exercise test
+		dep_table = DepartmentTable(self.user)
+
+		# Assert test
+		self.assertEqual(2, len(dep_table.professors))
+
+	def test_ignores_empty_professors(self):
+		"""Returns all professors who have data for available topics"""
+		# Setup test
+		fac2 = Faculty.objects.create()
+		dep2 = Department.objects.create(faculty = fac2)
+		topic3 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2, department = dep2)
+		topic4 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2, department = dep2)
+		self.user.profile.topics.add(topic3, topic4)
+
+		# Exercise test
+		dep_table = DepartmentTable(self.user)
+
+		# Assert test
+		self.assertEqual(2, len(dep_table.professors))		
