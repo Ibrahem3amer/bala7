@@ -498,23 +498,39 @@ class TopicTableTest(TestCase):
 		# Assert test
 		self.assertTrue(table_in_db > 0)
 
-	def test_table_json_display_correctly(self):
-		"""Tests wether or not table.json return correct table."""
+	def test_table_display_correct_table_list(self):
+		"""Tests wether or not set return correct table list."""
 
 		# Setup test
-		week = [[0] * 6] * 7
-		topics = [[0] * 6] * 7
-		places = [[0] * 6] * 7 
+		week = [['']*6 for i in range(7)]
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
 		topics[1][1] = 'Lecture'
 		places[1][1] = 'Hall 1'
 
-
 		# Exercise test
 		table = TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
-		table.setjson()
+		t_json = table.set_final_table()
 		
 		# Assert test
-		self.assertIn(topics[1][1], table.json)
+		self.assertEqual(topics[1][1]+'\n'+places[1][1], t_json[1][1])
+
+	def test_table_display_correct_table_list_when_string_given(self):
+		"""Tests wether or not set return correct table list."""
+
+		# Setup test
+		week = [['']*6 for i in range(7)]
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'Lecture'
+		places[1][1] = 'Hall 1'
+
+		# Exercise test
+		table = TopicTable.objects.create(topic=self.topic, topics=str(topics), places=str(places))
+		t_json = table.set_final_table()
+		
+		# Assert test
+		self.assertEqual(topics[1][1]+'\n'+places[1][1], t_json[1][1])
 
 class DepartmentTableTest(TestCase):
 	def setUp(self):

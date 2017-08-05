@@ -20,7 +20,7 @@
                 <li><a href="{% url 'get_topic' topic.department.id topic.id %}">{{ topic.name }}</a></li>
             {% endfor %}
         </ul>
-        {{ topic.table.set_json }}
+        {{ topic.table.set_final_table }}
         <h1>Table</h1>
         <table style="border: 1px solid #000; padding: 10px; direction: rtl;">
             {% for day in '1234567' %}
@@ -32,7 +32,7 @@
                             <small>{{ forloop.counter }}</small>
                             <hr />
                             {% for topic in table.available_topics %}
-                                {{ topic.table.set_json|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}
+                                {{ topic.table.set_final_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}
                                 
                             {% endfor %}
                         </td>

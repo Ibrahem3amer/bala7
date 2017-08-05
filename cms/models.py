@@ -259,15 +259,17 @@ class Table(models.Model):
 		abstract = True
 
 	# Methods
-	def set_json(self):
-		"""Concatenates topics and places into dict: {day: {period: {topic: 'topic', place: 'place'}}}"""
+	def set_final_table(self):
+		"""Concatenates topics and places into one list."""
 
-		table = [[0]*6 for i in range(7)]
-		topics = self.to_list(self.topics)
-		places = self.to_list(self.places)
+		table = [['']*6 for i in range(7)]
+		topics = self.to_list(str(self.topics)) if type(self.topics) is not list else self.topics
+		places = self.to_list(str(self.places)) if type(self.places) is not list else self.places
+
 		for day in range(7):
 			for period in range(6):
 				table[day][period] = topics[day][period] + '\n' + places[day][period]
+		
 		return table
 
 	def to_list(self, str_attribute):
