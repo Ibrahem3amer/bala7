@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.http import HttpResponse, Http404
 from django.urls import reverse
-from cms.models import Topic, UserTopics, Professor
+from cms.models import Topic, UserTopics, Professor, DepartmentTable
 from cms.forms import AddMaterialForm
 
 def add_weeks_to_range(topic_weeks_range):
@@ -143,7 +144,16 @@ def doctor_main_page(request, doctor_id):
         return render(request, 'doctor/main.html', {'doctor': doctor})
 
 @login_required
-def table_main(request):
+def dep_table_main(request):
     """Returns department table on GET."""
     if request.method == 'GET':
-        pass
+        try:
+            # Grapping user department table.
+            if request.user.profile:
+                dep_table = DepartmentTable(request.user)
+            return render(request, 'tables/table_main.html', {'table': dep_table})
+        except ObjectDoesNotExist:
+            messages.add_message(request, messages.ERROR, 'Please update your profile.')
+            return redirect('web_user_profile')
+    else:
+        return redirect('home_user')

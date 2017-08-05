@@ -259,18 +259,16 @@ class Table(models.Model):
 		abstract = True
 
 	# Methods
-	def setjson(self):
+	def set_json(self):
 		"""Concatenates topics and places into dict: {day: {period: {topic: 'topic', place: 'place'}}}"""
 
-		table = {}
+		table = [[0]*6 for i in range(7)]
+		topics = self.to_list(self.topics)
+		places = self.to_list(self.places)
 		for day in range(7):
-			day_index = self.days[day]
-			table[day_index] = {}
 			for period in range(6):
-				table[day_index][period] = {}
-				table[day_index][period]['topic'] = self.topics[day][period]
-				table[day_index][period]['place'] = self.places[day][period]
-		self.json = str(table)
+				table[day][period] = topics[day][period] + '\n' + places[day][period]
+		return table
 
 	def to_list(self, str_attribute):
 		"""Returns a list representation of topics attribute."""
@@ -280,7 +278,6 @@ class Table(models.Model):
 		except:
 			list_representation = {}
 		return list_representation
-
 
 class TopicTable(Table):
 	"""Manages the time table for each topic"""
@@ -332,9 +329,8 @@ class DepartmentTable(object):
 		professors = []
 		for topic in self.available_topics:
 			try:
-				query = topic.professors.all()
-				if query:
-					professors.append(query)
+				for prof in topic.professors.all():
+					professors.append(prof)
 			except:
 				# Topic or Professor doesn't exist 
 				pass
