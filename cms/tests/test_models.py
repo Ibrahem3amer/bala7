@@ -611,3 +611,83 @@ class DepartmentTableTest(TestCase):
 
 		# Assert test
 		self.assertEqual(2, len(dep_table.professors))		
+
+class UserTableTest(TestCase):
+	def setUp(self):
+		self.user = User.objects.create_user(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		self.fac = Faculty.objects.create()
+		self.dep = Department.objects.create(faculty = self.fac)
+		UserProfile.objects.create(user=self.user, department = self.dep, faculty = self.fac)
+		self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
+		self.topic2 = Topic.objects.create(name = 'topic name2', desc = 'ddddd', term = 2, department = self.dep)
+		self.topic.professors.add(Professor.objects.create(name="gamal", faculty=self.fac))
+		self.topic2.professors.add(Professor.objects.create(name="meshmesh", faculty=self.fac))
+
+	def test_assign_user_table(self):
+		"""updates user table for non-existing table (first time)."""
+		
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'topic_test_user'
+		topics[2][3] = 'another_test'
+		topic_table = TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		index1 = str(self.topic.id)+'_'+'1'+'_'+'1'
+		index2 = str(self.topic.id)+'_'+'2'+'_'+'3'
+		data = {'choices[]': [index1, index2]}
+
+		# Exercise test
+		url = reverse('web_user_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Assert test
+		self.assertIn('topic_test_user', self.user.profile.table.topics)
+
+	def test_update_user_table(self):
+		"""updates user table for an existing table."""
+		
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'topic_test_user'
+		topics[2][3] = 'another_test'
+		topics[5][1] = 'existing_table'
+		topics[4][3] = 'another_cell'
+		topics[1][1] = 'same_cell_as_previous'
+		topic_table = TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		index1 = str(self.topic.id)+'_'+'1'+'_'+'1'
+		index2 = str(self.topic.id)+'_'+'2'+'_'+'3'
+		data = {'choices[]': [index1, index2]}
+		url = reverse('web_user_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Exercise test
+		data = {'choices[]': ['1_5_1', '1_4_3', '1_1_1']}
+		request = self.client.post(url, data=data)
+
+
+		# Assert test
+		self.assertIn('existing_table', self.user.profile.table.topics)
+		self.assertIn('same_cell_as_previous', self.user.profile.table.topics)
+
+	def test_assign_user_table_with_fake_topics(self):
+		"""updates user table for non-existing table (first time)."""
+		
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'topic_test_user'
+		topics[2][3] = 'another_test'
+		topic_table = TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		data = {'choices[]': ['1_5_1', '5_5_5', '1_4_3', '1_1_1', '2_3_4']}
+
+		# Exercise test
+		url = reverse('web_user_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Assert test
+		self.assertIn('topic_test_user', self.user.profile.table.topics)
+

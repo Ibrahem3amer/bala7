@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.http import HttpResponse, Http404
 from django.urls import reverse
-from cms.models import Topic, UserTopics, Professor, DepartmentTable
+from cms.models import Topic, UserTopics, Professor, DepartmentTable, UserTable
 from cms.forms import AddMaterialForm
 
 def add_weeks_to_range(topic_weeks_range):
@@ -155,5 +155,58 @@ def dep_table_main(request):
         except ObjectDoesNotExist:
             messages.add_message(request, messages.ERROR, 'Please update your profile.')
             return redirect('web_user_profile')
+    else:
+        return redirect('home_user')
+
+@login_required
+def query_table(request):
+    """Returns query results specified by user."""
+    if request.method == 'POST':
+        topics = request.POST.getlist('topics', None)
+        professors = request.POST.getlist('professors', None)
+        periods = request.POST.getlist('periods', None)
+        days = request.POST.getlist('days', None)
+        
+        table = DepartmentTable(request.user)
+        results = table.query_table(request.user, topics, professors, periods, days)
+        return render(request, 'tables/query_results.html', {'table': results})        
+
+@login_required
+def user_table(request):
+    """Returns user table on GET. Updates table on POST"""
+    if request.method == 'GET':
+        try:
+            # If user has no table, display department table.
+            if request.user.profile:
+                user_table = request.user.profile.table
+        except ObjectDoesNotExist:
+            user_table = DepartmentTable(request.user)
+
+        return render(request, 'tables/user_table.html', {'table': user_table})
+
+    elif request.method == 'POST':
+        # Checking for table existence. 
+        choices = request.POST.getlist('choices[]', None)
+        if len(choices) > 0:
+            # Initiate a user table.
+            user_table = UserTable.initiate_user_table(choices)
+
+            # Create new Instance of user table.
+            try:
+                UserTable.objects.update_or_create(
+                    user_profile=request.user.profile,
+                    defaults={
+                        'topics': user_table[0],
+                        'places': user_table[1]
+                    }
+                )
+            except ObjectDoesNotExist:
+                messages.add_message(request, messages.ERROR, 'Please update your profile.')
+                return redirect('web_user_profile')
+        else:
+            messages.add_message(request, messages.ERROR, 'You did not choose any topics.')
+        
+        return redirect('web_user_table')
+
     else:
         return redirect('home_user')
