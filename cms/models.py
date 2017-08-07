@@ -326,12 +326,10 @@ class UserTable(Table):
 					topic = Topic.objects.get(pk=topic_id)
 					topic = get_object_or_404(Topic, pk=topic_id)
 					table = topic.table.set_final_table()
-					user_table_topics[day][period] = table[day][period]
-					user_table_places[day][period] = table[day][period]
+					user_table_topics[day][period] += '\n'+table[day][period]
+					user_table_places[day][period] += '\n'+table[day][period]
 				except:
 					continue
-				
-
 
 		return [user_table_topics, user_table_places]
 
@@ -395,42 +393,36 @@ class DepartmentTable(object):
 				for professor in topic.professors.all():
 					if str(professor.id) in professors:
 						filtered_topics.append(topic)
-
 			self.available_topics = filtered_topics
-		
-		if days or periods:
-			return self.filter_table(days, periods)
-		return self.available_topics		
+
+		return self.filter_table(days, periods)
 
 	def filter_table(self, days=None, periods=None):
 		"""filter available topics based on days and periods."""
+		table = [ [ [0] for k in range(20) ] for j in range(TABLE_PERIODS) for i in range(TABLE_DAYS) ]
+		choices = []
 		if self.available_topics:
-
 			# Assign default value for days or periods if not provided.
 			days = TABLE_DAYS_LIST if not days else days
 			periods = TABLE_PERIODS_LIST if not periods else periods
-			results = {}
-			
-			# Iterate over topics, grap days that match query.
-			# For each day, grap periods that match query or the whole day.
+
+			# Construct final table for each available topic. 
+			# Populate another table with days and periods that matches user's input.
 			for topic in self.available_topics:
 				try:
-					topic.table.topics = topic.table.to_list(topic.table.topics)
-					topic.table.places = topic.table.to_list(topic.table.places)
+					final_table = topic.table.set_final_table()
 					for day in days:
 						for period in periods:
-							t = topic.table.topics[int(day)][int(period)]
-							p = topic.table.places[int(day)][int(period)]
-							topic_index = 'result_'+str(topic.id)+'_'+str(period)
-							day_period_index = 'result_time_'+str(topic.id)+'_'+str(period)
-							if t:
-								results[topic_index] = t+'\n'+p
-								results[day_period_index] = [int(day), int(period)]
-								results[topic.name] = topic.name
+							if len(final_table[int(day)][int(period)]) > 2:
+								table[int(day)][int(period)].append(final_table[int(day)][int(period)])
+								choices.append(str(topic.id)+'_'+str(day)+'_'+str(period))
+
 				except ObjectDoesNotExist:
 					# Topic has no table.
+
 					continue
-			return results
+					
+		return [table, choices]
 
 
 

@@ -14,18 +14,28 @@
             {% endfor %}
         </ul>
     {% endif %}
-    {% if results %}
-        <ul>
-            {% for result in results %}
-                <ul>
-                    {% for element in result %}
-                        <li>{{ element }}</li>
-                    {% endfor %}
-                </ul>
-            {% endfor %}
-        </ul>
-    {% elif topics %}
-        
+    {% if table %}
+        <form method="POST" action="{% url 'web_user_table' %}">
+        {% csrf_token %}
+            <table style="border: 1px solid #000; padding: 10px; direction: rtl;">
+                {% for day in '1234567' %}
+                    <tr>
+                        <th>{{ forloop.counter0|num_to_day }}</th>
+                        {% for period in '123456' %}
+                            <td style="border: 1px solid #000; width: auto; height: auto; padding: 5px;">
+                                {% for topic in table|dynamic_index:forloop.parentloop.counter0|dynamic_index:forloop.counter0 %}
+                                    {% if topic and topic|length > 2 %}
+                                        {{ topic }}
+                                        <hr />
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+            <input type="submit" name="submit" value="update user table" />
+        </form>
     {% endif %}
 </body>
 </html>

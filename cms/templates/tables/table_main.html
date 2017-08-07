@@ -40,7 +40,7 @@
         <ul>
             {% for day in '1234567' %}
                 <li>
-                    <input type="checkbox" name="periods" value="{{ forloop.counter }}">
+                    <input type="checkbox" name="days" value="{{ forloop.counter }}">
                     {{ forloop.counter0|num_to_day }}
                 </li>
             {% endfor %}

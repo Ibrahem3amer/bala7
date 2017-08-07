@@ -166,14 +166,12 @@ def query_table(request):
         professors = request.POST.getlist('professors', None)
         periods = request.POST.getlist('periods', None)
         days = request.POST.getlist('days', None)
-        
         table = DepartmentTable(request.user)
+        # results[0] -> table, results[1] -> choices
         results = table.query_table(request.user, topics, professors, periods, days)
-        result_topics = []
-        if results is list:
-            result_topics = results
-            results = []
-        return render(request, 'tables/query_results.html', {'results': results, 'topics': result_topics})        
+        request.session['choices'] = results[1]
+
+        return render(request, 'tables/query_results.html', {'table': results[0]})        
 
 @login_required
 def user_table(request):
@@ -190,11 +188,10 @@ def user_table(request):
 
     elif request.method == 'POST':
         # Checking for table existence. 
-        choices = request.POST.getlist('choices[]', None)
+        choices = request.POST.getlist('choices[]', None) or request.session.get('choices', None)
         if len(choices) > 0:
             # Initiate a user table.
             user_table = UserTable.initiate_user_table(choices)
-
             # Create new Instance of user table.
             try:
                 UserTable.objects.update_or_create(
