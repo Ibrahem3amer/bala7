@@ -1,3 +1,4 @@
+import json
 from django.contrib import admin
 from django.contrib.auth.models import User
 from cms.models import Topic, Material, Task, Professor, TopicTable
@@ -66,8 +67,29 @@ class TopicTableAdmin(admin.ModelAdmin):
 
         return super(TopicTableAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        """Overrides the change view that displays change_form.html"""
+        
+        # Grapping table that matches topic_id.
+        topic = TopicTable.objects.get(id=object_id)
+
+        # Generating off-days list on-fly for template.
+        off_days = [ day for day in topic.off_days ]
+
+        # Attaching table topics and places as extra context. 
+        extra_context = extra_context or {}
+        extra_context['topics_table'] = topic.to_list(topic.topics)
+        extra_context['places_table'] = topic.to_list(topic.places)
+        extra_context['off_days'] = topic.to_list(topic.off_days)
+
+        return super(TopicTableAdmin, self).change_view(
+            request, object_id, form_url, extra_context=extra_context,
+        )
+
     def save_model(self, request, obj, form, change):
         """Adds sv inputs to table instance."""
+
+        # Populating data from request input.
         request_topics =  [[0]*6 for i in range(7)]
         request_places =  [[0]*6 for i in range(7)]
         for day in range(7):
@@ -77,7 +99,14 @@ class TopicTableAdmin(admin.ModelAdmin):
                 request_topics[day][peroid] = request.POST['topic'+day_index+period_index]
                 request_places[day][peroid] = request.POST['place'+day_index+period_index]
         off_days = request.POST.getlist('off_days[]', None)
-        ss
+        
+        # Save data to table instance.
+        obj.topics = request_topics
+        obj.places = request_places
+        obj.off_days = off_days
+
+        super(TopicTableAdmin, self).save_model(request, obj, form, change)
+
 
 
 admin.site.register(Topic, TopicAdmin)

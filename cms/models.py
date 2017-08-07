@@ -1,10 +1,14 @@
 import datetime
 from django.db import models
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.validators import RegexValidator, MinLengthValidator, validate_comma_separated_integer_list
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.conf import settings
 from django.contrib.auth.models import User
 from cms.validators import GeneralCMSValidator
+
+TABLE_DAYS = 7
+TABLE_PERIODS = 6
 
 class Topic(models.Model):
 	# Helper variables
@@ -58,20 +62,20 @@ class UserTopics(object):
 
 	@classmethod
 	def get_user_topics(cls, user_obj):
-	    """
-	    Returns list of topics that user has access to. 
-	    """
-	    try:
-	    	return user_obj.profile.topics.all()
-	    except AttributeError:
-	    	from users.models import UserProfile
-	    	UserProfile.make_form_new_profile(user_obj)
-	    	return user_obj.profile.topics.all()
+		"""
+		Returns list of topics that user has access to. 
+		"""
+		try:
+			return user_obj.profile.topics.all()
+		except AttributeError:
+			from users.models import UserProfile
+			UserProfile.make_form_new_profile(user_obj)
+			return user_obj.profile.topics.all()
 
 	@classmethod
 	def get_user_topics_nav(cls, user_obj):
 		"""
-        Returns list of TopicNav objects that user has access to. 
+		Returns list of TopicNav objects that user has access to. 
 		"""
 		nav_list = []
 
@@ -150,7 +154,7 @@ class Material(models.Model):
 			# RelatedObject handler.
 			self.week_number = 0
 
-        # Validate that user has an access to add material to topic.
+		# Validate that user has an access to add material to topic.
 		try:
 			if self.user.profile.department.id != self.topic.department.id:
 				raise ValidationError("Access denied.")
@@ -162,24 +166,24 @@ class Material(models.Model):
 	# Material's methods
 	@classmethod
 	def get_department_materials(cls, department):
-	    """
-	    Returns list of materials that assoicate to specific departmnet. 
-	    """
-	    return 
+		"""
+		Returns list of materials that assoicate to specific departmnet. 
+		"""
+		return 
 
 	@classmethod
 	def get_year_materials(cls, year, term = None):
-	    """
-	    Retruns list of materials that assoicate to specific year within specific term if term provided, All 3 terms otherwise.
-	    """
-	    return 
+		"""
+		Retruns list of materials that assoicate to specific year within specific term if term provided, All 3 terms otherwise.
+		"""
+		return 
 
 	@classmethod
 	def get_prof_materials(cls, professor, term = None):
-	    """
-	    Returns list of materials that assoicate to specific professor in current year within specific term or all 3 terms. 
-	    """
-	    return
+		"""
+		Returns list of materials that assoicate to specific professor in current year within specific term or all 3 terms. 
+		"""
+		return
 
 	def make_pdf_link(self):
 		"""
@@ -207,12 +211,12 @@ class Task(Material):
 	# Task methods.
 	@classmethod
 	def get_closest_tasks(cls, request):
-	    """
-	    Returns tasks whose deadlines occurs 3 days from now. 
-	    """
-	    now 		= datetime.date.today()
-	    days_limit 	= datetime.timedelta(days = 4) 
-	    return Task.objects.filter(topic__in = request.user.profile.topics.all(), deadline__range = (now, now+days_limit))
+		"""
+		Returns tasks whose deadlines occurs 3 days from now. 
+		"""
+		now 		= datetime.date.today()
+		days_limit 	= datetime.timedelta(days = 4) 
+		return Task.objects.filter(topic__in = request.user.profile.topics.all(), deadline__range = (now, now+days_limit))
 
 
 class Professor(models.Model):
@@ -246,32 +250,40 @@ class Table(models.Model):
 		}
 
 	# Attributes
-	topics = models.CharField(max_length = 200)
-	places = models.CharField(max_length = 200)
+	topics = models.TextField()
+	places = models.TextField()
 	off_days = models.CharField(
 		max_length = 200,
 		validators=[validate_comma_separated_integer_list]
 	)
-	json = models.CharField(max_length = 200)
+	json = models.TextField()
 
 	# Meta
 	class Meta:
 		abstract = True
 
 	# Methods
-	def setjson(self):
-		"""Concatenates topics and places into dict: {day: {period: {topic: 'topic', place: 'place'}}}"""
+	def set_final_table(self):
+		"""Concatenates topics and places into one list."""
 
-		table = {}
-		for day in range(7):
-			day_index = self.days[day]
-			table[day_index] = {}
-			for period in range(6):
-				table[day_index][period] = {}
-				table[day_index][period]['topic'] = self.topics[day][period]
-				table[day_index][period]['place'] = self.places[day][period]
-		self.json = str(table)
+		table = [['']*TABLE_PERIODS for i in range(TABLE_DAYS)]
+		topics = self.to_list(str(self.topics)) if type(self.topics) is not list else self.topics
+		places = self.to_list(str(self.places)) if type(self.places) is not list else self.places
 
+		for day in range(TABLE_DAYS):
+			for period in range(TABLE_PERIODS):
+				table[day][period] = topics[day][period] + '\n' + places[day][period]
+		
+		return table
+
+	def to_list(self, str_attribute):
+		"""Returns a list representation of topics attribute."""
+		import ast
+		try:
+			list_representation = ast.literal_eval(str_attribute)
+		except:
+			list_representation = {}
+		return list_representation
 
 class TopicTable(Table):
 	"""Manages the time table for each topic"""
@@ -282,5 +294,148 @@ class TopicTable(Table):
 		on_delete=models.CASCADE,
 		related_name='table'
 	)
+
+	def __str__(self):
+		return self.topic.name + ' table'
+
+
+class UserTable(Table):
+	"""Holds user selections for table."""
+
+	# Attributes
+	user_profile = models.OneToOneField(
+		'users.UserProfile',
+		on_delete=models.CASCADE,
+		related_name='table'
+	)
+
+	# Methods
+	@classmethod
+	def initiate_user_table(cls, choices):
+		"""Takes user choices and forms a table."""
+		user_table_topics = [['']*TABLE_PERIODS for i in range(TABLE_DAYS)]
+		user_table_places = [['']*TABLE_PERIODS for i in range(TABLE_DAYS)]
+		for choice in choices:
+			# Split choice and populate user table.
+			choice_arr = choice.split('_')
+			if len(choice_arr) >= 3:
+				topic_id, day, period = int(choice_arr[0]), int(choice_arr[1]), int(choice_arr[2])
+				try:
+					topic = Topic.objects.get(pk=topic_id)
+					topic = get_object_or_404(Topic, pk=topic_id)
+					table = topic.table.set_final_table()
+					user_table_topics[day][period] = table[day][period]
+					user_table_places[day][period] = table[day][period]
+				except:
+					continue
+				
+
+
+		return [user_table_topics, user_table_places]
+
+	def __str__(self):
+		return self.user_profile.user.username + ' table'
+
+
+class DepartmentTable(object):
+	"""Manages the available options of user's query."""
+	
+	# Attributes 
+	user_topics = []
+	department_topics = []
+	available_topics = []
+	professors = []
+
+
+	# Methods
+	def get_user_topics(self, user):
+		"""Graps user choices of topics."""
+		try:
+			return user.profile.topics.all()
+		except:
+			# Profile doesn't exist.
+			return []
+
+	def get_dep_topics(self, user):
+		"""Graps user's department topics."""
+		try:
+			return user.profile.department.topics.all()
+		except:
+			# Profile doesn't exist.
+			return []
+
+	def get_available_topics(self):
+		"""Make the unioun of user_topics and dep_topics"""
+		return list(set(self.department_topics).union(self.user_topics))
+
+	def get_available_topics_professors(self):
+		"""Returns a set of all availabe professors."""
+		professors = []
+		for topic in self.available_topics:
+			try:
+				for prof in topic.professors.all():
+					professors.append(prof)
+			except:
+				# Topic or Professor doesn't exist 
+				pass
+		return list(set(professors))
+
+	def query_table(self, user, topics, professors, periods, days):
+		"""Queries table based on user specifications."""
+		if topics:
+			# Filter topics so that it matches user's input.
+			self.available_topics = [topic for topic in self.available_topics if str(topic.id) in topics]
+		
+		if professors:
+			# Filter each topic so that its professors should lay in user's input. 
+			filtered_topics = []
+			for topic in self.available_topics:
+				for professor in topic.professors.all():
+					if str(professor.id) in professors:
+						filtered_topics.append(topic)
+
+			self.available_topics = filtered_topics
+
+		return self.filter_table(days, periods)
+
+	def filter_table(self, days, periods):
+		"""filter available topics based on days and periods."""
+		if self.available_topics:
+			results = {}
+			if days:
+				# Iterate over topics, grap days that match query.
+				# For each day, grap periods that match query or the whole day.
+				for topic in self.available_topics:
+					try:
+						topic.table.topics = topic.table.to_list(topic.table.topics)
+						topic.table.places = topic.table.to_list(topic.table.places)
+						for day in days:
+							for period in (set(day).intersection(periods) or range(TABLE_PERIODS)):
+								t = topic.table.topics[int(day)][int(period)]
+								p = topic.table.places[int(day)][int(period)]
+								topic_index = 'result_'+str(topic.id)+'_'+str(period)
+								day_period_index = 'result_time_'+str(topic.id)+'_'+str(period)
+								if t:
+									results[topic_index] = t+'\n'+p
+									results[day_period_index] = [int(day), int(period)]
+									results[topic.name] = topic.name
+					except ObjectDoesNotExist:
+						# Topic has no table.
+						continue
+				return results
+			else:
+				return self.available_topics
+
+
+
+
+	def __init__(self, user):
+		super(DepartmentTable, self).__init__()
+		self.user_topics = self.get_user_topics(user)
+		self.department_topics = self.get_dep_topics(user)
+		self.available_topics = self.get_available_topics()
+		self.professors = self.get_available_topics_professors()
+			
+		
 	
 

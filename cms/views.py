@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.http import HttpResponse, Http404
 from django.urls import reverse
-from cms.models import Topic, UserTopics, Professor
+from cms.models import Topic, UserTopics, Professor, DepartmentTable, UserTable
 from cms.forms import AddMaterialForm
 
 def add_weeks_to_range(topic_weeks_range):
@@ -68,6 +69,7 @@ def within_user_domain(user_obj, list_of_topics_ids):
 
     return True
 
+@login_required
 def get_topic(request, dep_id=-1, topic_id=-1):
     """
     Returns a specific topic with corresponding id. Returns 404 if topic isn't accessible by user.
@@ -93,6 +95,7 @@ def get_topic(request, dep_id=-1, topic_id=-1):
 
     return render(request, 'topics/get_topic.html', {'topic':topic, 'weeks_days': weeks, 'weeks_materials': materials})
 
+@login_required
 def update_user_topics(request):
     """
     Accepts user request with topics from his faculty, calls update method. redirects to profile with status. 
@@ -112,6 +115,7 @@ def update_user_topics(request):
 
         return redirect(reverse('web_user_profile'))
 
+@login_required
 def add_material(request):
     """
     Accepts POST, GET requets. Add new material if POST, collecting user and topic details from request if GET.
@@ -130,7 +134,7 @@ def add_material(request):
 
     return render(request, 'add_material.html', {'add_material_form': material_form})
 
-
+@login_required
 def doctor_main_page(request, doctor_id):
     """
     Accepts GET, displays doctor's information. 
@@ -138,3 +142,71 @@ def doctor_main_page(request, doctor_id):
     doctor = get_object_or_404(Professor, pk = doctor_id)
     if request.method == 'GET':
         return render(request, 'doctor/main.html', {'doctor': doctor})
+
+@login_required
+def dep_table_main(request):
+    """Returns department table on GET."""
+    if request.method == 'GET':
+        try:
+            # Grapping user department table.
+            if request.user.profile:
+                dep_table = DepartmentTable(request.user)
+            return render(request, 'tables/table_main.html', {'table': dep_table})
+        except ObjectDoesNotExist:
+            messages.add_message(request, messages.ERROR, 'Please update your profile.')
+            return redirect('web_user_profile')
+    else:
+        return redirect('home_user')
+
+@login_required
+def query_table(request):
+    """Returns query results specified by user."""
+    if request.method == 'POST':
+        topics = request.POST.getlist('topics', None)
+        professors = request.POST.getlist('professors', None)
+        periods = request.POST.getlist('periods', None)
+        days = request.POST.getlist('days', None)
+        
+        table = DepartmentTable(request.user)
+        results = table.query_table(request.user, topics, professors, periods, days)
+        return render(request, 'tables/query_results.html', {'table': results})        
+
+@login_required
+def user_table(request):
+    """Returns user table on GET. Updates table on POST"""
+    if request.method == 'GET':
+        try:
+            # If user has no table, display department table.
+            if request.user.profile:
+                user_table = request.user.profile.table
+        except ObjectDoesNotExist:
+            user_table = DepartmentTable(request.user)
+
+        return render(request, 'tables/user_table.html', {'table': user_table})
+
+    elif request.method == 'POST':
+        # Checking for table existence. 
+        choices = request.POST.getlist('choices[]', None)
+        if len(choices) > 0:
+            # Initiate a user table.
+            user_table = UserTable.initiate_user_table(choices)
+
+            # Create new Instance of user table.
+            try:
+                UserTable.objects.update_or_create(
+                    user_profile=request.user.profile,
+                    defaults={
+                        'topics': user_table[0],
+                        'places': user_table[1]
+                    }
+                )
+            except ObjectDoesNotExist:
+                messages.add_message(request, messages.ERROR, 'Please update your profile.')
+                return redirect('web_user_profile')
+        else:
+            messages.add_message(request, messages.ERROR, 'You did not choose any topics.')
+        
+        return redirect('web_user_table')
+
+    else:
+        return redirect('home_user')

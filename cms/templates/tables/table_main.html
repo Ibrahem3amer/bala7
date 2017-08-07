@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Table</title>
+    {% load admin_interface_extras %}
+    {% load dates %}
+
+</head>
+<body>
+    <form method="POST" action="{% url 'web_query_table' %}">
+        {% csrf_token %}
+        <h1>Available doctors</h1>
+        <ul>
+            {% for prof in table.professors %}
+                <li>
+                    <input type="checkbox" name="professors" value="{{ prof.id }}">
+                    <a href="{% url 'display_doctor' prof.id %}">{{ prof.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <h1>Available topics</h1>
+        <ul>
+            {% for topic in table.available_topics %}
+                <li>
+                    <input type="checkbox" name="topics" value="{{ topic.id }}">
+                    <a href="{% url 'get_topic' topic.department.id topic.id %}">{{ topic.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <h1>Peroids</h1>
+        <ul>
+            {% for period in '123456' %}
+                <li>
+                    <input type="checkbox" name="periods" value="{{ forloop.counter }}">
+                    {{ forloop.counter }}
+                </li>
+            {% endfor %}
+        </ul>
+        <h1>Days</h1>
+        <ul>
+            {% for day in '1234567' %}
+                <li>
+                    <input type="checkbox" name="periods" value="{{ forloop.counter }}">
+                    {{ forloop.counter0|num_to_day }}
+                </li>
+            {% endfor %}
+        </ul>
+        <input type="submit" name="query" />
+    </body>
+</form>
+</html>
