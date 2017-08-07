@@ -756,16 +756,20 @@ class QueryTableTest(TestCase):
 		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table']['result_1_1'])
 		self.assertIn(topics[1][3]+'\n'+places[1][3], request.context['table']['result_1_3'])
 
-	@skip
 	def test_query_just_periods(self):
 		# Setup test
 		topics = [['']*6 for i in range(7)]
 		places = [['']*6 for i in range(7)]
 		topics[1][1] = 'Lecture'
 		places[1][1] = 'Hall 1'
+		topics[1][2] = 'Lecture'
+		places[1][2] = 'Hall 1'
 		TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
-		days = [1]
-		data = {'days': days}
+		topics[2][3] = 'Section'
+		places[2][3] = 'Hall 2'
+		TopicTable.objects.create(topic=self.topic2, topics=topics, places=places)
+		periods = [3, 2]
+		data = {'periods': periods}
 		
 		# Exercise test
 		url = reverse('web_query_table')
@@ -774,5 +778,5 @@ class QueryTableTest(TestCase):
 
 		# Assert test
 		# ['result_1'] is the dict key of where model combines topic and place.
-		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table']['result_1'])
+		self.assertIn(topics[1][2]+'\n'+places[1][2], request.context['table']['result_2_2'])
 

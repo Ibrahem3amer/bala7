@@ -7,7 +7,9 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from cms.validators import GeneralCMSValidator
 
+TABLE_DAYS_LIST = [0, 1, 2, 3, 4, 5, 6]
 TABLE_DAYS = 7
+TABLE_PERIODS_LIST = [0, 1, 2, 3, 4, 5]
 TABLE_PERIODS = 6
 
 class Topic(models.Model):
@@ -395,37 +397,40 @@ class DepartmentTable(object):
 						filtered_topics.append(topic)
 
 			self.available_topics = filtered_topics
+		
+		if days or periods:
+			return self.filter_table(days, periods)
+		return self.available_topics		
 
-		return self.filter_table(days, periods)
-
-	def filter_table(self, days, periods):
+	def filter_table(self, days=None, periods=None):
 		"""filter available topics based on days and periods."""
 		if self.available_topics:
-			results = {}
-			if days:
-				# Iterate over topics, grap days that match query.
-				# For each day, grap periods that match query or the whole day.
-				for topic in self.available_topics:
-					try:
-						topic.table.topics = topic.table.to_list(topic.table.topics)
-						topic.table.places = topic.table.to_list(topic.table.places)
-						for day in days:
-							for period in (set(day).intersection(periods) or range(TABLE_PERIODS)):
-								t = topic.table.topics[int(day)][int(period)]
-								p = topic.table.places[int(day)][int(period)]
-								topic_index = 'result_'+str(topic.id)+'_'+str(period)
-								day_period_index = 'result_time_'+str(topic.id)+'_'+str(period)
-								if t:
-									results[topic_index] = t+'\n'+p
-									results[day_period_index] = [int(day), int(period)]
-									results[topic.name] = topic.name
-					except ObjectDoesNotExist:
-						# Topic has no table.
-						continue
-				return results
-			else:
-				return self.available_topics
 
+			# Assign default value for days or periods if not provided.
+			days = TABLE_DAYS_LIST if not days else days
+			periods = TABLE_PERIODS_LIST if not periods else periods
+			results = {}
+			
+			# Iterate over topics, grap days that match query.
+			# For each day, grap periods that match query or the whole day.
+			for topic in self.available_topics:
+				try:
+					topic.table.topics = topic.table.to_list(topic.table.topics)
+					topic.table.places = topic.table.to_list(topic.table.places)
+					for day in days:
+						for period in periods:
+							t = topic.table.topics[int(day)][int(period)]
+							p = topic.table.places[int(day)][int(period)]
+							topic_index = 'result_'+str(topic.id)+'_'+str(period)
+							day_period_index = 'result_time_'+str(topic.id)+'_'+str(period)
+							if t:
+								results[topic_index] = t+'\n'+p
+								results[day_period_index] = [int(day), int(period)]
+								results[topic.name] = topic.name
+				except ObjectDoesNotExist:
+					# Topic has no table.
+					continue
+			return results
 
 
 
