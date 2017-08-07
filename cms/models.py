@@ -380,30 +380,38 @@ class DepartmentTable(object):
 				pass
 		return list(set(professors))
 
-	def quey_table(self, user, topics, professors, periods, days):
-	    """Queries table based on user specifications."""
-	    if topics:
-	    	self.available_topics = [topic for topic in self.available_topics if topic.id == topic_id for topic_id in topics]
-	    	
-    	if professors:
-    		self.professors = [topic for topic in self.available_topics if topic.professor.id == prof_id for prof_id in professors]
+	def query_table(self, user, topics, professors, periods, days):
+		"""Queries table based on user specifications."""
+		if topics:
+			# Filter topics so that it matches user's input.
+			self.available_topics = [topic for topic in self.available_topics if str(topic.id) in topics]
+		
+		if professors:
+			# Filter each topic so that its professors should lay in user's input. 
+			filtered_topics = []
+			for topic in self.available_topics:
+				for professor in topic.professors.all():
+					if str(professor.id) in professors:
+						filtered_topics.append(topic)
 
-    	return self.filter_table(days, periods)
+			self.available_topics = filtered_topics
 
-    def filter_table(self, days, periods):
-    	"""filter available topics based on days and periods."""
-    	if self.available_topics:
-    		results = {}
-    		if days:
-    			# Iterate over topics, grap days that match query.
-    			# For each day, grap periods that match query or the whole day.
-    			for topic in self.available_topics:
-    				topic_index = 'result_'+str(topic)
-    				day_period_index = 'result_time'+str(topic)
-    				for day in days:
-    					for period in (set(day).intersection(periods) or day):
-    						results[topic_index] = topic.table.topics[day][period]+'\n'+topic.table.places[day][period]
-    						results[day_period_index] = [day, period]
+		return self.filter_table(days, periods)
+
+	def filter_table(self, days, periods):
+		"""filter available topics based on days and periods."""
+		if self.available_topics:
+			results = {}
+			if days:
+				# Iterate over topics, grap days that match query.
+				# For each day, grap periods that match query or the whole day.
+				for topic in self.available_topics:
+					topic_index = 'result_'+str(topic)
+					day_period_index = 'result_time'+str(topic)
+					for day in days:
+						for period in (set(day).intersection(periods) or day):
+							results[topic_index] = topic.table.topics[day][period]+'\n'+topic.table.places[day][period]
+							results[day_period_index] = [day, period]
 				return results
 			else:
 				return self.available_topics

@@ -691,3 +691,66 @@ class UserTableTest(TestCase):
 		# Assert test
 		self.assertIn('topic_test_user', self.user.profile.table.topics)
 
+class QueryTableTest(TestCase):
+	def setUp(self):
+		self.user = User.objects.create_user(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		self.fac = Faculty.objects.create()
+		self.dep = Department.objects.create(faculty = self.fac)
+		UserProfile.objects.create(user=self.user, department = self.dep, faculty = self.fac)
+		self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
+		self.topic2 = Topic.objects.create(name = 'topic name2', desc = 'ddddd', term = 2, department = self.dep)
+		self.topic3 = Topic.objects.create(name = 'topic name3', desc = 'ddddd', term = 3, department = self.dep)
+		self.topic.professors.add(Professor.objects.create(name="gamal", faculty=self.fac))
+		self.topic2.professors.add(Professor.objects.create(name="meshmesh", faculty=self.fac))
+		self.user.profile.topics.add(self.topic)
+		self.user.profile.topics.add(self.topic2)
+		self.user.profile.topics.add(self.topic3)
+
+	def test_query_just_professors(self):
+		# Setup test
+		professors = [1,2]
+		data = {'professors': professors}
+		
+		# Exercise test
+		url = reverse('web_query_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Assert test
+		self.assertIn(self.topic, request.context['table'])
+		self.assertIn(self.topic2, request.context['table'])
+
+	def test_query_just_topics(self):
+		# Setup test
+		topics = [self.topic.id, self.topic3.id]
+		data = {'topics': topics}
+		
+		# Exercise test
+		url = reverse('web_query_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Assert test
+		self.assertIn(self.topic, request.context['table'])
+		self.assertIn(self.topic3, request.context['table'])
+
+	def test_query_just_days(self):
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'Lecture'
+		places[1][1] = 'Hall 1'
+		TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		days = [1]
+		data = {'days': days}
+		
+		# Exercise test
+		url = reverse('web_query_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Assert test
+		self.assertIn(self.topic, request.context['table'])
+
+
+
