@@ -503,16 +503,18 @@ class TopicTableTest(TestCase):
 
 		# Setup test
 		week = [[0] * 6] * 7
-		topics = week
-		places = week 
+		topics = [[0] * 6] * 7
+		places = [[0] * 6] * 7 
 		topics[1][1] = 'Lecture'
 		places[1][1] = 'Hall 1'
 
 
 		# Exercise test
 		table = TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		table.setjson()
 		
 		# Assert test
 		self.assertIn(topics[1][1], table.json)
+
 		
 

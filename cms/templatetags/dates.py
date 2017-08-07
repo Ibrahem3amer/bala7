@@ -13,3 +13,20 @@ def date_to_weekday(date):
     if datetime.date.today() == date:
         return 'النهاردة'
     return days[date.isoweekday()]
+
+@register.filter(name='num_to_day')
+def date_to_weekday(num):
+    """
+    Accpets datetime.date() object and turn it to week day.
+    Precondition: Week starts with saturday.
+    """
+    days = [
+        'السبت',
+        'الحد',
+        'الاتنين',
+        'التلات',
+        'الأربع',
+        'الخميس',
+        'الجمعة'
+    ]
+    return days[num]
