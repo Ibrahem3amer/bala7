@@ -777,6 +777,6 @@ class QueryTableTest(TestCase):
 		request = self.client.post(url, data=data)
 
 		# Assert test
-		# ['result_1'] is the dict key of where model combines topic and place.
+		# ['result_topicId_period']: dict key of where model combines topic and place.
 		self.assertIn(topics[1][2]+'\n'+places[1][2], request.context['table']['result_2_2'])
 

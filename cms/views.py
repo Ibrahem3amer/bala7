@@ -169,7 +169,11 @@ def query_table(request):
         
         table = DepartmentTable(request.user)
         results = table.query_table(request.user, topics, professors, periods, days)
-        return render(request, 'tables/query_results.html', {'table': results})        
+        result_topics = []
+        if results is list:
+            result_topics = results
+            results = []
+        return render(request, 'tables/query_results.html', {'results': results, 'topics': result_topics})        
 
 @login_required
 def user_table(request):
