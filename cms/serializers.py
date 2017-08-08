@@ -3,13 +3,28 @@ from cms.models import *
 from users.models import Faculty
 from django.contrib.auth.models import User
 
+class TopicTableSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TopicTable
+        fields = ('__all__')
+
+
+class UserTableSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserTable
+        fields = ('__all__')
+
+
 class TopicSerializer(serializers.ModelSerializer):
-    department  = serializers.PrimaryKeyRelatedField(read_only=True)
-    faculty     = serializers.PrimaryKeyRelatedField(read_only=True)
+    department = serializers.PrimaryKeyRelatedField(read_only=True)
+    faculty = serializers.PrimaryKeyRelatedField(read_only=True)
+    table = TopicTableSerializer(read_only=True)
     
     class Meta:
         model   = Topic
-        fields  = ('id', 'name', 'desc', 'term', 'department', 'faculty')
+        fields  = ('id', 'name', 'desc', 'term', 'department', 'faculty', 'table')
 
 class FacultyTopicsSerializer(serializers.ModelSerializer):
 

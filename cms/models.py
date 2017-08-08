@@ -276,6 +276,8 @@ class Table(models.Model):
 			for period in range(TABLE_PERIODS):
 				table[day][period] = topics[day][period] + '\n' + places[day][period]
 		
+		self.json = table 
+		
 		return table
 
 	def to_list(self, str_attribute):

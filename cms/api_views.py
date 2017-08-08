@@ -1,3 +1,4 @@
+import json
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
@@ -119,3 +120,24 @@ def tasks_list(request, format = None):
         tasks               = Task.get_closest_tasks(request)
         tasks_serialized    = TasksSerializer(tasks, many = True)
         return Response(tasks_serialized.data)
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def query_dep_table(request, format = None):
+    """Query dep table using given paramaters via POST."""
+    
+    topics = request.POST.getlist('topics', None)
+    professors = request.POST.getlist('professors', None)
+    periods = request.POST.getlist('periods', None)
+    days = request.POST.getlist('days', None)
+    table = DepartmentTable(request.user)
+    
+    # results[0] -> table, results[1] -> choices
+    results = table.query_table(request.user, topics, professors, periods, days)
+    request.session['choices'] = results[1]
+
+    if(results[0]):
+        json_table = json.dumps(results[0])
+        return Response(json_table)
+    else:
+        return Response(status = status.HTTP_404_NOT_FOUND)
