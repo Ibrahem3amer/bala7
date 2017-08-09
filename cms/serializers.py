@@ -56,3 +56,15 @@ class TasksSerializer(serializers.ModelSerializer):
     class Meta:
         model   = Task
         fields  = ('__all__')
+
+
+class ProfessorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Professor
+        fields = ('__all__')
+
+
+class DepartmentTableSerializer(serializers.Serializer):
+    available_topics = serializers.ListField(child=TopicSerializer())
+    professors = serializers.ListField(child=ProfessorSerializer())
