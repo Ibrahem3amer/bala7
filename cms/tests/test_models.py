@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
 from unittest import skip
-from cms.models import Topic, UserTopics, Material, Task, TopicTable, DepartmentTable, Professor, TABLE_PERIODS, TABLE_DAYS
+from cms.models import Topic, UserTopics, Material, Task, TopicTable, DepartmentTable, Professor, TABLE_PERIODS, TABLE_DAYS, UserContribution
 from cms.views import update_user_topics
 from users.models import Department, UserProfile, Faculty, University
 
@@ -331,8 +331,8 @@ class MaterialTest(TestCase):
 
 	def test_material_topic_lays_outside_user_scope(self):
 		# Setup test
-		another_user 	= User.objects.create_user(username = 'test_user', password = '12684szsf4df8f5d')
-		material_test 	= Material.objects.create(
+		another_user = User.objects.create_user(username = 'test_user', password = '12684szsf4df8f5d')
+		material_test = Material.objects.create(
 				name 			= 'material',
 				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
 				link 			= 'http://www.docs.googssle.com',
@@ -346,7 +346,31 @@ class MaterialTest(TestCase):
 
 		# Exercise test
 		# Assert test
-		self.assertRaises(ValidationError, lambda: material_test.full_clean())		
+		self.assertRaises(ValidationError, lambda: material_test.full_clean())
+
+	def test_user_add_material_in_topic_in_another_dep(self):
+		# Setup test
+		another_dep = Department.objects.create(name = 'Test dep2')
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		self.user.profile.topics.add(another_topic)
+		material_test 	= Material.objects.create(
+				name 			= 'material',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.googssle.com',
+				year 			= '2123-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= another_topic
+			)
+
+		# Exercise test
+		topic_materials = another_topic.primary_materials.all()
+		
+		# Assert test
+		self.assertIn(material_test, topic_materials)
+		self.assertEqual(None, material_test.full_clean())
 
 class TaskTest(TestCase):
 	def setUp(self):
@@ -839,3 +863,87 @@ class QueryTableTest(TestCase):
 		# Assert test
 
 		self.assertEqual(empty_query, request.context['table'])
+
+class UserContributionTest(TestCase):
+	def setUp(self):
+		self.uni 			= University.objects.create(name = 'Test university')
+		self.fac 			= Faculty.objects.create(name = 'Test faculty')
+		self.dep 			= Department.objects.create(name = 'Test dep')
+		self.topic 			= Topic.objects.create(name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
+		self.user 			= User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f')
+		self.user.profile 	= UserProfile.objects.create(university = self.uni, faculty = self.fac, department = self.dep)
+		self.material 		= UserContribution.objects.create(
+				name = 'test_material',
+				content = 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link = 'http://www.docs.google.com',
+				year = datetime.datetime.now(),
+				term = 1,
+				content_type = 1,
+				week_number = 1,
+				user = self.user,
+				topic = self.topic,
+				deadline = datetime.datetime.now(),
+				supervisior_id = 0
+			)
+
+	def test_user_add_material_in_topic_in_another_dep(self):
+		# Setup test
+		another_dep = Department.objects.create(name = 'Test dep2')
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		self.user.profile.topics.add(another_topic)
+		material_test 	= UserContribution.objects.create(
+				name 			= 'material',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.googssle.com',
+				year 			= '2123-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= another_topic,
+				deadline = datetime.datetime.now(),
+				supervisior_id = 0
+			)
+
+		# Exercise test
+		topic_materials = another_topic.secondary_materials.all()
+		
+		# Assert test
+		self.assertIn(material_test, topic_materials)
+		self.assertEqual(None, material_test.full_clean())
+
+	def test_user_add_task_with_current_deadline(self):
+		# Setup test
+		another_dep = Department.objects.create(name = 'Test dep2')
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		self.user.profile.topics.add(another_topic)
+		material_test 	= UserContribution.objects.create(
+				name 			= 'material',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.googssle.com',
+				year 			= datetime.datetime.now(),
+				term 			= 1,
+				content_type 	= 3,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= another_topic,
+				deadline = datetime.datetime.now(),
+				supervisior_id = 0
+			)
+
+		# Exercise test
+		topic_materials = another_topic.secondary_materials.all()
+		
+		# Assert test
+		with self.assertRaisesRegexp(ValidationError, 'Deadline date should be 3 days ahead at least.'):
+			material_test.full_clean()
+		self.assertRaises(ValidationError, lambda: material_test.full_clean())
+
+	def test_this(self):
+		# Setup test
+	
+		# Exercise test
+	
+		# Assert test
+		self.fail('test user can save deadline safley.')
+		self.fail('test deadline can be scheduled')

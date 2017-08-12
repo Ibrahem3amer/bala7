@@ -150,7 +150,7 @@ class MaterialBase(models.Model):
 
 		# Validates that week number associated with materials is real week number.
 		try:
-			if self.week_number not in range(self.topic.weeks):
+			if self.week_number not in range(self.topic.weeks+1):
 				raise ValidationError('Week number is not found.')
 		except ObjectDoesNotExist:
 			# RelatedObject handler.
@@ -194,9 +194,10 @@ class Material(MaterialBase):
 	# Model-level validation
 	def clean(self):
 		super(Material, self).clean()
+		
 		# Validate that user has an access to add material to topic.
 		try:
-			if self.user.profile.department.id != self.topic.department.id:
+			if self.topic not in self.user.profile.topics.all():
 				raise ValidationError("Access denied.")
 		except (AttributeError, ObjectDoesNotExist):
 			raise ValidationError("Invalid User or Topic.")
@@ -214,7 +215,7 @@ class Task(MaterialBase):
 		super(Task, self).clean()
 		# Validate that user has an access to add material to topic.
 		try:
-			if self.user.profile.department.id != self.topic.department.id:
+			if self.topic not in self.user.profile.topics.all():
 				raise ValidationError("Access denied.")
 		except (AttributeError, ObjectDoesNotExist):
 			raise ValidationError("Invalid User or Topic.")
@@ -254,7 +255,7 @@ class UserContribution(MaterialBase):
 		
 		# Validate that user has an access to add material to topic.
 		try:
-			if self.user.profile.department.id != self.topic.department.id:
+			if self.topic not in self.user.profile.topics.all():
 				raise ValidationError("Access denied.")
 		except (AttributeError, ObjectDoesNotExist):
 			raise ValidationError("Invalid User or Topic.")

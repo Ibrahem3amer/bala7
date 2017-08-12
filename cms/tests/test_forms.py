@@ -28,6 +28,7 @@ class AddMaterialFormTest(TestCase):
                 topic           = self.topic
             )
         
+        self.user.profile.topics.add(self.topic)
 
     def test_intiaite_basic_form(self):
         # Setup test
