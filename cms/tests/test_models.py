@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
 from unittest import skip
-from cms.models import Topic, UserTopics, Material, Task, TopicTable, DepartmentTable, Professor
+from cms.models import Topic, UserTopics, Material, Task, TopicTable, DepartmentTable, Professor, TABLE_PERIODS, TABLE_DAYS
 from cms.views import update_user_topics
 from users.models import Department, UserProfile, Faculty, University
 
@@ -754,7 +754,6 @@ class QueryTableTest(TestCase):
 		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table'][1][1])
 		self.assertIn(topics[4][4]+'\n'+places[4][4], request.context['table'][4][4])
 	
-	@skip
 	def test_query_just_days(self):
 		# Setup test
 		topics = [['']*6 for i in range(7)]
@@ -777,7 +776,6 @@ class QueryTableTest(TestCase):
 		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table'][1][1])
 		self.assertIn(topics[1][3]+'\n'+places[1][3], request.context['table'][1][3])
 
-	@skip
 	def test_query_just_periods(self):
 		# Setup test
 		topics = [['']*6 for i in range(7)]
@@ -799,6 +797,45 @@ class QueryTableTest(TestCase):
 		request = self.client.post(url, data=data)
 
 		# Assert test
-		# ['result_topicId_period']: dict key of where model combines topic and place.
 		self.assertIn(topics[1][2]+'\n'+places[1][2], request.context['table'][1][2])
 
+	def test_query_with_all_options(self):
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'Lecture'
+		places[1][1] = 'Hall 1'
+		topics[1][2] = 'Lecture'
+		places[1][2] = 'Hall 1'
+		TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		topics[2][3] = 'Section'
+		places[2][3] = 'Hall 2'
+		TopicTable.objects.create(topic=self.topic2, topics=topics, places=places)
+		periods = [i for i in range(6)]
+		days = [i for i in range(7)]
+		topics_ids = [1, 2, 3]
+		professors = [1, 2]
+		data = {'periods': periods, 'days':days, 'professors':professors, 'topics':topics_ids}
+		
+		# Exercise test
+		url = reverse('web_query_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Assert test
+		self.assertIn(topics[1][2]+'\n'+places[1][2], request.context['table'][1][2])
+	
+	def test_query_with_topic_has_no_table(self):
+		# Setup test
+		topics_ids = [3]
+		data = {'topics':topics_ids}
+		
+		# Exercise test
+		url = reverse('web_query_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+		empty_query = table = [ [ [0] for k in range(20) ] for j in range(TABLE_PERIODS) for i in range(TABLE_DAYS) ]
+
+		# Assert test
+
+		self.assertEqual(empty_query, request.context['table'])

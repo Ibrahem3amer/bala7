@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import authenticate, login
 from users.serializers import *
 from cms.serializers import UserTableSerializer
 from users.models import *
@@ -29,6 +30,19 @@ def users_list(request, format = None):
 			new_instance.save()
 			return Response(new_instance.data, status = status.HTTP_201_CREATED)
 		return Response(status = status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def check_user_instance(request, format=None):
+	"""Checks if user is signed in, returns user.id if found, 0 otherwise."""
+	username = request.POST.get('username', None)
+	userpassword = request.POST.get('password', None)
+
+	if username and userpassword:
+		user = authenticate(username=username, password=userpassword)
+		if user:
+			login(request, user)
+			return Response(request.user.id)
+	return response(0)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def user_instance(request, pk, format = None):
