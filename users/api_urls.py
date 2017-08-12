@@ -16,6 +16,8 @@ urlpatterns = [
     url(r'^departments/$', api_views.departments_list, name = 'api_deps_list'),
     url(r'^departments/faculty/(?P<fac_pk>[0-9]+)$', api_views.departments_faculty_list, name = 'api_dep_fac'),
     url(r'^departments/(?P<pk>[0-9]+)$', api_views.departments_instance, name = 'api_dep'),
+    url(r'^contributions/add$', api_views.add_contribution, name = 'api_add_contribution'),
+    url(r'^contributions/change$', api_views.change_contribution_status, name = 'api_change_contribution'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

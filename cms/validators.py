@@ -25,7 +25,7 @@ class MaterialValidator(object):
         # Check that url is valid url, and that url leads to allowed form of urls.
         if url_parsing.scheme and url_parsing.netloc:
             if not any( match in url for match in allowed):
-                return -1
+                pass
         else:
             return 0
 

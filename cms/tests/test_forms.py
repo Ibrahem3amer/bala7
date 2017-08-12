@@ -90,23 +90,3 @@ class AddMaterialFormTest(TestCase):
         
         # Assert test
         self.assertFalse(form.is_valid())      
-
-    def test_add_material_with_broken_link(self):
-        # Setup test
-        data = {
-            'user': 1,
-            'topic': 1,
-            'name': 'material',
-            'content': 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
-            'link': 'https://www.fuckthisbrokenlink.com',
-            'year': '2017-1-5',
-            'term': 1,
-            'content_type': 1,
-            'week_number': 0,
-        }
-
-        # Exercise test
-        form = AddMaterialForm(data = data)
-        
-        # Assert test
-        self.assertFalse(form.is_valid())      

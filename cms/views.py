@@ -1,11 +1,12 @@
+import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.http import HttpResponse, Http404
 from django.urls import reverse
-from cms.models import Topic, UserTopics, Professor, DepartmentTable, UserTable
-from cms.forms import AddMaterialForm
+from cms.models import Topic, UserTopics, Professor, DepartmentTable, UserTable, UserContribution
+from cms.forms import AddMaterialForm, UserContributionForm
 
 def add_weeks_to_range(topic_weeks_range):
     """
@@ -31,14 +32,18 @@ def add_weeks_to_range(topic_weeks_range):
     return weeks
 
 
-def add_weeks_to_materials(topic):
+def add_weeks_to_materials(topic, secondary_materials=False):
     """
     Accepts number of weeks for specific topic, returns 1-based list that holds materials related to this week.
     """
     topic_weeks_range = topic.weeks
     materials_list = [0] * (topic_weeks_range+1)
-    for i in range(1, topic_weeks_range):
-        materials_list[i] = topic.primary_materials.filter(week_number = i).all()
+    if secondary_materials:
+        for i in range(1, topic_weeks_range):
+            materials_list[i] = topic.secondary_materials.filter(week_number=i, status=3).all()
+    else:
+        for i in range(1, topic_weeks_range):
+            materials_list[i] = topic.primary_materials.filter(week_number=i).all()
 
     return materials_list
 
@@ -90,10 +95,30 @@ def get_topic(request, dep_id=-1, topic_id=-1):
     # Get dictionary of current size of weeks.
     weeks = add_weeks_to_range(topic.weeks)
 
-    # Get each week materials.
-    materials = add_weeks_to_materials(topic)
+    # Get each week secondary materials.
+    secondary_materials = add_weeks_to_materials(topic, True)
 
-    return render(request, 'topics/get_topic.html', {'topic':topic, 'weeks_days': weeks, 'weeks_materials': materials})
+    # Get each week primary materials.
+    materials = add_weeks_to_materials(topic, False)
+
+    # Get user contribution form.
+    user_contributon = UserContributionForm(initial={'topic':topic.id, 'user':request.user.id})
+
+    # Get pending requests.
+    pending_contributions = UserContribution.objects.filter(status=1)
+
+    return render(
+        request,
+        'topics/get_topic.html',
+        {
+            'topic':topic,
+            'weeks_days': weeks,
+            'weeks_materials': materials,
+            'sec_materials': secondary_materials,
+            'contribution_form': user_contributon,
+            'pending_contributions': pending_contributions,
+        }
+    )
 
 @login_required
 def update_user_topics(request):
@@ -130,9 +155,10 @@ def add_material(request):
         user            = request.user
         request_url     = '/topics/4/7'.split('/')
         topic           = get_object_or_404(Topic, pk = request_url[3])
-        material_form   = AddMaterialForm(initial={'user': user, 'topic': topic})
+        material_form   = AddMaterialForm(initial={'topic': topic.id})
 
     return render(request, 'add_material.html', {'add_material_form': material_form})
+
 
 @login_required
 def doctor_main_page(request, doctor_id):
