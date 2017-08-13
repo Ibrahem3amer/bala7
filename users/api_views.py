@@ -1,8 +1,13 @@
+import json
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from django.core.exceptions import ObjectDoesNotExist
 from users.serializers import *
+from cms.serializers import UserTableSerializer
 from users.models import *
+from cms.models import DepartmentTable
 from django.contrib.auth.models import User
 
 @api_view(['GET', 'POST'])
@@ -176,3 +181,35 @@ def universities_linked_instance(request, pk, format = None):
 	if request.method == 'GET':
 		university_serialized = UniversityLinkedSerializer(university_obj)
 		return Response(university_serialized.data)
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def main_table(request, user_id, format = None):
+	"""Returns dep table for given user instance on GET."""
+	try:
+		if request.user.profile:
+			dep_table = DepartmentTable(request.user)
+			tables_list = []
+			for topic in dep_table.available_topics:
+				try:
+					tables_list.append(topic.table.set_final_table())
+				except:
+					# No table.
+					continue
+			
+			json_list = json.dumps(tables_list, ensure_ascii=False)
+			return Response(json_list)
+
+	except UserProfile.DoesNotExist:
+		return Response(status = status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def user_table(request, user_id, format = None):
+	"""Returns user table for given user instance on GET."""
+	try:
+		if request.user.profile and request.user.profile.table:
+			user_table = UserTableSerializer(request.user.profile.table)
+			return Response(user_table.data)
+	except ObjectDoesNotExist:
+		return Response(status = status.HTTP_404_NOT_FOUND)

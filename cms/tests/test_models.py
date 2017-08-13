@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
 from unittest import skip
-from cms.models import Topic, UserTopics, Material, Task
+from cms.models import Topic, UserTopics, Material, Task, TopicTable, DepartmentTable, Professor
 from cms.views import update_user_topics
 from users.models import Department, UserProfile, Faculty, University
 
@@ -474,4 +474,331 @@ class TaskTest(TestCase):
 		# Assert test
 		self.assertEqual(3, Task.get_closest_tasks(request).count())
 
+class TopicTableTest(TestCase):
+	def setUp(self):
+		self.uni       	= University.objects.create(name = 'Test university')
+		self.fac        = Faculty.objects.create(name = 'Test faculty')
+		self.dep        = Department.objects.create(name = 'Test dep')
+		self.topic      = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
+		self.user 		= User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
+		self.profile   	= UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
+
+	def test_initiate_topic_table(self):
+		"""Tests that table is created successfully."""
+
+		# Setup test
+		week = [[0] * 6] * 7
+		topics = week
+		topics[1][1] = 'Lecture'
+		table = TopicTable.objects.create(topic=self.topic, topics=topics)
+
+		# Exercise test
+		table_in_db = TopicTable.objects.count()
+		
+		# Assert test
+		self.assertTrue(table_in_db > 0)
+
+	def test_table_display_correct_table_list(self):
+		"""Tests wether or not set return correct table list."""
+
+		# Setup test
+		week = [['']*6 for i in range(7)]
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'Lecture'
+		places[1][1] = 'Hall 1'
+
+		# Exercise test
+		table = TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		t_json = table.set_final_table()
+		
+		# Assert test
+		self.assertEqual(topics[1][1]+'\n'+places[1][1], t_json[1][1])
+
+	def test_table_display_correct_table_list_when_string_given(self):
+		"""Tests wether or not set return correct table list."""
+
+		# Setup test
+		week = [['']*6 for i in range(7)]
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'Lecture'
+		places[1][1] = 'Hall 1'
+
+		# Exercise test
+		table = TopicTable.objects.create(topic=self.topic, topics=str(topics), places=str(places))
+		t_json = table.set_final_table()
+		
+		# Assert test
+		self.assertEqual(topics[1][1]+'\n'+places[1][1], t_json[1][1])
+
+class DepartmentTableTest(TestCase):
+	def setUp(self):
+		self.user = User.objects.create_user(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		self.fac = Faculty.objects.create()
+		self.dep = Department.objects.create(faculty = self.fac)
+		self.user.profile = UserProfile.objects.create(department = self.dep, faculty = self.fac)
+		self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
+		self.topic2 = Topic.objects.create(name = 'topic name2', desc = 'ddddd', term = 2, department = self.dep)
+		self.topic.professors.add(Professor.objects.create(name="gamal", faculty=self.fac))
+		self.topic2.professors.add(Professor.objects.create(name="meshmesh", faculty=self.fac))
+
+	def test_return_user_topics_and_dep_topics(self):
+		"""Tests that class return a set of user and dep topics."""
+		# Setup test
+		fac2 = Faculty.objects.create()
+		dep2 = Department.objects.create(faculty = fac2)
+		topic3 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2, department = dep2)
+		self.user.profile.topics.add(topic3)
+
+		# Exercise test
+		dep_table = DepartmentTable(self.user)
+
+		# Assert test
+		self.assertIn(topic3, dep_table.available_topics)
+		self.assertIn(self.topic2, dep_table.available_topics)
+
+	def test_return_dep_topics_only(self):
+		"""Returns dep topics when user topics is none."""
+		# Setup test
+		fac2 = Faculty.objects.create()
+		dep2 = Department.objects.create(faculty = fac2)
+		topic3 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2, department = dep2)
+
+		# Exercise test
+		dep_table = DepartmentTable(self.user)
+
+		# Assert test
+		self.assertNotIn(topic3, dep_table.available_topics)
+		self.assertIn(self.topic2, dep_table.available_topics)
+
+	def test_nothing_when_user_excpetion(self):
+		"""Returns none."""
+		# Setup test
+		another_user = User.objects.create_user(
+							username='ffffsds',
+							email='tesssst@test.dd',
+							password='secrettt23455'
+						)
+
+		# Exercise test
+		dep_table = DepartmentTable(another_user)
+
+		# Assert test
+		self.assertEqual([], dep_table.available_topics)
+
+	def test_return_all_professors(self):
+		"""Returns all professors for available topics"""
+		# Setup test
+
+		# Exercise test
+		dep_table = DepartmentTable(self.user)
+
+		# Assert test
+		self.assertEqual(2, len(dep_table.professors))
+
+	def test_ignores_empty_professors(self):
+		"""Returns all professors who have data for available topics"""
+		# Setup test
+		fac2 = Faculty.objects.create()
+		dep2 = Department.objects.create(faculty = fac2)
+		topic3 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2, department = dep2)
+		topic4 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2, department = dep2)
+		self.user.profile.topics.add(topic3, topic4)
+
+		# Exercise test
+		dep_table = DepartmentTable(self.user)
+
+		# Assert test
+		self.assertEqual(2, len(dep_table.professors))		
+
+class UserTableTest(TestCase):
+	def setUp(self):
+		self.user = User.objects.create_user(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		self.fac = Faculty.objects.create()
+		self.dep = Department.objects.create(faculty = self.fac)
+		UserProfile.objects.create(user=self.user, department = self.dep, faculty = self.fac)
+		self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
+		self.topic2 = Topic.objects.create(name = 'topic name2', desc = 'ddddd', term = 2, department = self.dep)
+		self.topic.professors.add(Professor.objects.create(name="gamal", faculty=self.fac))
+		self.topic2.professors.add(Professor.objects.create(name="meshmesh", faculty=self.fac))
+
+	def test_assign_user_table(self):
+		"""updates user table for non-existing table (first time)."""
+		
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'topic_test_user'
+		topics[2][3] = 'another_test'
+		topic_table = TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		index1 = str(self.topic.id)+'_'+'1'+'_'+'1'
+		index2 = str(self.topic.id)+'_'+'2'+'_'+'3'
+		data = {'choices[]': [index1, index2]}
+
+		# Exercise test
+		url = reverse('web_user_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Assert test
+		self.assertIn('topic_test_user', self.user.profile.table.topics)
+
+	def test_update_user_table(self):
+		"""updates user table for an existing table."""
+		
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'topic_test_user'
+		topics[2][3] = 'another_test'
+		topics[5][1] = 'existing_table'
+		topics[4][3] = 'another_cell'
+		topics[1][1] = 'same_cell_as_previous'
+		topic_table = TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		index1 = str(self.topic.id)+'_'+'1'+'_'+'1'
+		index2 = str(self.topic.id)+'_'+'2'+'_'+'3'
+		data = {'choices[]': [index1, index2]}
+		url = reverse('web_user_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Exercise test
+		data = {'choices[]': ['1_5_1', '1_4_3', '1_1_1']}
+		request = self.client.post(url, data=data)
+
+
+		# Assert test
+		self.assertIn('existing_table', self.user.profile.table.topics)
+		self.assertIn('same_cell_as_previous', self.user.profile.table.topics)
+
+	def test_assign_user_table_with_fake_topics(self):
+		"""updates user table for non-existing table (first time)."""
+		
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'topic_test_user'
+		topics[2][3] = 'another_test'
+		topic_table = TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		data = {'choices[]': ['1_5_1', '5_5_5', '1_4_3', '1_1_1', '2_3_4']}
+
+		# Exercise test
+		url = reverse('web_user_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Assert test
+		self.assertIn('topic_test_user', self.user.profile.table.topics)
+
+class QueryTableTest(TestCase):
+	def setUp(self):
+		self.user = User.objects.create_user(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
+		self.fac = Faculty.objects.create()
+		self.dep = Department.objects.create(faculty = self.fac)
+		UserProfile.objects.create(user=self.user, department = self.dep, faculty = self.fac)
+		self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
+		self.topic2 = Topic.objects.create(name = 'topic name2', desc = 'ddddd', term = 2, department = self.dep)
+		self.topic3 = Topic.objects.create(name = 'topic name3', desc = 'ddddd', term = 3, department = self.dep)
+		self.topic.professors.add(Professor.objects.create(name="gamal", faculty=self.fac))
+		self.topic2.professors.add(Professor.objects.create(name="meshmesh", faculty=self.fac))
+		self.user.profile.topics.add(self.topic)
+		self.user.profile.topics.add(self.topic2)
+		self.user.profile.topics.add(self.topic3)
+
+	def test_query_just_professors(self):
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'Lecture'
+		places[1][1] = 'Hall 1'
+		topics[1][3] = 'Section'
+		places[1][3] = 'Hall 2'
+		TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		topics[4][4] = 'another_lecture'
+		places[4][4] = 'another_lecture'
+		TopicTable.objects.create(topic=self.topic3, topics=topics, places=places)
+		professors = [1,2]
+		data = {'professors': professors}
+		
+		# Exercise test
+		url = reverse('web_query_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Assert test
+		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table'][1][1])
+		self.assertNotIn(topics[4][4]+'\n'+places[4][4], request.context['table'][4][4])
+
+	def test_query_just_topics(self):
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'Lecture'
+		places[1][1] = 'Hall 1'
+		topics[1][3] = 'Section'
+		places[1][3] = 'Hall 2'
+		TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		topics[4][4] = 'another_lecture'
+		places[4][4] = 'another_lecture'
+		TopicTable.objects.create(topic=self.topic3, topics=topics, places=places)
+		topics_list = [self.topic.id, self.topic3.id]
+		data = {'topics': topics_list}
+		
+		# Exercise test
+		url = reverse('web_query_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Assert test
+		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table'][1][1])
+		self.assertIn(topics[4][4]+'\n'+places[4][4], request.context['table'][4][4])
+	
+	@skip
+	def test_query_just_days(self):
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'Lecture'
+		places[1][1] = 'Hall 1'
+		topics[1][3] = 'Section'
+		places[1][3] = 'Hall 2'
+		TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		days = [1]
+		data = {'days': days}
+		
+		# Exercise test
+		url = reverse('web_query_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Assert test
+		# ['result_1'] is the dict key of where model combines topic and place.
+		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table'][1][1])
+		self.assertIn(topics[1][3]+'\n'+places[1][3], request.context['table'][1][3])
+
+	@skip
+	def test_query_just_periods(self):
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'Lecture'
+		places[1][1] = 'Hall 1'
+		topics[1][2] = 'Lecture'
+		places[1][2] = 'Hall 1'
+		TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		topics[2][3] = 'Section'
+		places[2][3] = 'Hall 2'
+		TopicTable.objects.create(topic=self.topic2, topics=topics, places=places)
+		periods = [3, 2]
+		data = {'periods': periods}
+		
+		# Exercise test
+		url = reverse('web_query_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Assert test
+		# ['result_topicId_period']: dict key of where model combines topic and place.
+		self.assertIn(topics[1][2]+'\n'+places[1][2], request.context['table'][1][2])
 

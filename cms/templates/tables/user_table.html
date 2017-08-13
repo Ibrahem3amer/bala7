@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <title>Table</title>
+    {% load admin_interface_extras %}
+    {% load dates %}
+    {% load materials_extras %}
+    {% load staticfiles %}
+    
+    <meta charset="utf-8">
+    <!-- Internet Explorer meta -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- First Mobile meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> 
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/table.css' %}" rel="stylesheet">
+    <link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
+    <!--[if lt IE 9]>
+        <script src="js/html5shiv.min.js"></script>
+        <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+</head>
+<body>
+    <!-- start navbar -->
+    {% include "public/navbar-user.html" %}
+    <!-- end navbar -->
+    <section class="all-content">
+        <div class="ads-section">
+            <img src="{% static 'pic/adv300x250.jpg' %}" alt="adv300x250">
+        </div>
+        <div class="content-section">
+            <div class="xs-ads">
+                <img src="{% static 'pic/adv-xs.jpg' %}" alt="320x100-adv">
+            </div>
+            <h1 class="table-h">جدول المستخدم</h1>
+            <div class="userTable-div">
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %} >{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <table>
+                    <tr>
+                        <th></th>
+                        <th>الفتره الاولى</th>
+                        <th>الفتره الثانيه</th>
+                        <th>الفتره الثالثه</th>
+                        <th>الفتره الرابعه</th>
+                        <th>الفتره الخامسه</th>
+                        <th>الفتره السادسه</th>
+                    </tr>
+                    {% for day in '1234567' %}
+                        <tr>
+                            <th>{{ forloop.counter0|num_to_day }}</th>
+                            {% for period in '123456' %}
+                                <td>
+                                    <p>{{ request.user.profile.table|get_table_list|dynamic_index:forloop.parentloop.counter0|dynamic_index:forloop.counter0 }}</p>
+                                    
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="btns-div">
+                <a href="{% url 'web_dep_table' %}" class="nj-btn">استعلام</a>
+                <a href="" class="nj-btn">جدول القسم</a>
+            </div>
+            
+        </div>
+    </section>
+    
+</body>
+</html>
