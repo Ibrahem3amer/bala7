@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Table</title>
+    {% load admin_interface_extras %}
+    {% load dates %}
+    {% load materials_extras %}
+
+</head>
+<body>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <table style="border: 1px solid #000; padding: 10px; direction: rtl;">
+    {% for day in '1234567' %}
+        <tr>
+            <th>{{ forloop.counter0|num_to_day }}</th>
+            {% for period in '123456' %}
+                <td style="border: 1px solid #000; width: auto; height: auto; padding: 5px;">
+                    {% for topic_table in table %}
+                        {% if topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0|length > 3 %}
+                            {{ topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}
+                            <hr />
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

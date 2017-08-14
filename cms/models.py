@@ -137,7 +137,6 @@ class MaterialBase(models.Model):
 	term 			= models.PositiveIntegerField(choices = term_choices)
 	content_type	= models.PositiveIntegerField(choices = type_choices)
 	week_number 	= models.PositiveIntegerField()
-	# professor 	= foreignkey to professor
 
 	class Meta:
 		abstract = True
@@ -190,6 +189,7 @@ class Material(MaterialBase):
 
 	user = models.ForeignKey(User, related_name = 'primary_materials', on_delete = models.CASCADE)
 	topic = models.ForeignKey('Topic', related_name = 'primary_materials', on_delete = models.CASCADE)
+	professor = models.ManyToManyField('Professor', related_name='primary_materials')
 
 	# Model-level validation
 	def clean(self):
@@ -208,7 +208,9 @@ class Task(MaterialBase):
 	# Additional fields.
 	user = models.ForeignKey(User, related_name = 'primary_tasks', on_delete = models.CASCADE)
 	topic = models.ForeignKey('Topic', related_name = 'primary_tasks', on_delete = models.CASCADE)
+	professor = models.ManyToManyField('Professor', related_name='primary_tasks')
 	deadline = models.DateField()
+
 
 	# Model-level validation
 	def clean(self):
@@ -229,12 +231,13 @@ class Task(MaterialBase):
 	# Task methods.
 	@classmethod
 	def get_closest_tasks(cls, request):
-		"""
-		Returns tasks whose deadlines occurs 3 days from now. 
-		"""
-		now 		= datetime.date.today()
-		days_limit 	= datetime.timedelta(days = 4) 
-		return Task.objects.filter(topic__in = request.user.profile.topics.all(), deadline__range = (now, now+days_limit))
+		"""Returns tasks whose deadlines occurs 3 days from now."""
+		from itertools import chain
+		now = datetime.date.today()
+		days_limit = datetime.timedelta(days = 4) 
+		primary_tasks = Task.objects.filter(topic__in = request.user.profile.topics.all(), deadline__range = (now, now+days_limit))
+		secondary_tasks = UserContribution.objects.filter(status=3, content_type=3, topic__in=request.user.profile.topics.all(), deadline__range=(now, now+days_limit))	
+		return list(chain(primary_tasks, secondary_tasks))
 
 
 class UserContribution(MaterialBase):
@@ -248,6 +251,7 @@ class UserContribution(MaterialBase):
 	deadline = models.DateField(blank=True, default=False)
 	user = models.ForeignKey(User, related_name = 'secondary_materials', on_delete = models.CASCADE)
 	topic = models.ForeignKey('Topic', related_name = 'secondary_materials', on_delete = models.CASCADE)
+	professor = models.ManyToManyField('Professor', related_name='secondary_materials')
 
 	# Model-level validation.
 	def clean(self):
@@ -324,7 +328,7 @@ class Table(models.Model):
 
 		for day in range(TABLE_DAYS):
 			for period in range(TABLE_PERIODS):
-				table[day][period] = topics[day][period] + '\n' + places[day][period]
+				table[day][period] = topics[day][period] + ' @ ' + places[day][period]
 		
 		self.json = table 
 		
@@ -378,8 +382,8 @@ class UserTable(Table):
 					topic = Topic.objects.get(pk=topic_id)
 					topic = get_object_or_404(Topic, pk=topic_id)
 					table = topic.table.set_final_table()
-					user_table_topics[day][period] += '\n'+table[day][period]
-					user_table_places[day][period] += '\n'+table[day][period]
+					user_table_topics[day][period] += '@'+table[day][period]
+					user_table_places[day][period] += '@'+table[day][period]
 				except:
 					continue
 

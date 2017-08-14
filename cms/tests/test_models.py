@@ -473,7 +473,7 @@ class TaskTest(TestCase):
 
 	def test_get_closest_three_dates_from_five(self):
 		# Setup test
-		now 	= datetime.datetime.now()
+		now = datetime.datetime.now()
 
 		# Create tasks with days starts with tomorrow ends with today+5 days. Should return 3 tasks.
 		for i in range(2, 7):	
@@ -492,11 +492,11 @@ class TaskTest(TestCase):
 				)
 		
 		# Exercise test
-		request 		= HttpRequest()
-		request.user 	= self.user
+		request = HttpRequest()
+		request.user = self.user
 
 		# Assert test
-		self.assertEqual(3, Task.get_closest_tasks(request).count())
+		self.assertEqual(3, len(Task.get_closest_tasks(request)))
 
 class TopicTableTest(TestCase):
 	def setUp(self):
@@ -885,6 +885,7 @@ class UserContributionTest(TestCase):
 				deadline = datetime.datetime.now(),
 				supervisior_id = 0
 			)
+		self.user.profile.topics.add(self.topic)
 
 	def test_user_add_material_in_topic_in_another_dep(self):
 		# Setup test
@@ -939,11 +940,43 @@ class UserContributionTest(TestCase):
 			material_test.full_clean()
 		self.assertRaises(ValidationError, lambda: material_test.full_clean())
 
-	def test_this(self):
+	def test_get_closest_tasks_with_user_contributions(self):
 		# Setup test
-	
+		now = datetime.datetime.now()
+
+		# Create tasks with days starts with tomorrow ends with today+5 days. Should return 3 primary tasks.
+		# Should return 2 secondary tasks, as there're just 2 approved.
+		for i in range(2, 7):	
+			task_test 	= Task.objects.create(
+				name='test tasks',
+				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link='http://www.docs.'+str(i)+'.com',
+				year='2017-1-5',
+				term=1,
+				content_type=3,
+				week_number=1,
+				user=self.user,
+				topic=self.topic,
+				deadline=now+datetime.timedelta(days = i),
+			)
+			material_test 	= UserContribution.objects.create(
+				name='material',
+				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link='http://www.dosscs.'+str(i)+'.com',
+				year=datetime.datetime.now(),
+				term=1,
+				content_type=3,
+				week_number=1,
+				user=self.user,
+				topic=self.topic,
+				deadline=now+datetime.timedelta(days = i),
+				supervisior_id=0,
+				status=3 if not i%2 else 1
+			)
+		
 		# Exercise test
-	
+		request = HttpRequest()
+		request.user = self.user
+
 		# Assert test
-		self.fail('test user can save deadline safley.')
-		self.fail('test deadline can be scheduled')
+		self.assertEqual(5, len(Task.get_closest_tasks(request)))

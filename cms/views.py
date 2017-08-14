@@ -200,6 +200,27 @@ def query_table(request):
         return render(request, 'tables/query_results.html', {'table': results[0]})        
 
 @login_required
+def available_table(request):
+    """Returns the main available table of department and user's topics."""
+    if request.method == 'GET':
+        try:
+            # If user has no profile, redirect him to his profile.
+            dep_table = DepartmentTable(request.user)
+            topics = []
+            for topic in dep_table.available_topics:
+                try:
+                    if topic.table:
+                        topics.append(topic.table.set_final_table())
+                except:
+                    continue
+        except ObjectDoesNotExist:
+            messages.add_message(request, messages.ERROR, 'Please update your profile.')
+            return redirect('web_user_profile')
+
+        return render(request, 'tables/available_table.html', {'table': topics})
+
+
+@login_required
 def user_table(request):
     """Returns user table on GET. Updates table on POST"""
     if request.method == 'GET':

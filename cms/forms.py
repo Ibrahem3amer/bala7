@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.forms.widgets import SelectDateWidget
 from django.shortcuts import get_object_or_404
-from cms.models import Material, Topic, UserContribution
+from cms.models import Material, Topic, UserContribution, Professor
 from cms.validators import MaterialValidator
 
 class AddMaterialForm(forms.ModelForm):
@@ -49,6 +49,7 @@ class UserContributionForm(forms.ModelForm):
     content_type = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control select nj-select'}), choices=UserContribution.type_choices)
     week_number = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control nj-input'}))
     deadline = forms.DateField(widget=forms.SelectDateWidget(attrs={'class': 'form-control nj-input'}))
+    professor = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control select nj-select'}), queryset=Professor.objects.all(), required=False)
     topic = forms.CharField(widget=forms.HiddenInput())
     user = forms.CharField(widget=forms.HiddenInput())
 
@@ -64,3 +65,11 @@ class UserContributionForm(forms.ModelForm):
             self.instance.user = get_object_or_404(User, pk=initial_arguments.get('user', -1))
             self.instance.year = datetime.datetime.now()
             self.instance.supervisior_id = -1
+
+        # Filtering professors to the ones who lays in same user topics.
+        try:
+            professor_query = Professor.objects.filter(id__in=self.instance.topic.professors.all())
+            self.fields['professor'].queryset = professor_query
+        except:
+            self.fields['professor'].queryset = []
+        
