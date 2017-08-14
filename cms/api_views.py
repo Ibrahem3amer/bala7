@@ -124,7 +124,7 @@ def tasks_list(request, format = None):
 @api_view(['POST', 'GET'])
 @permission_classes((IsAuthenticated,))
 def query_dep_table(request, format = None):
-    """Query dep table with paramaters via POST. """
+    """Query dep table with paramaters via POST. Returns query parameters via GET."""
 
     if request.method == 'POST':
         topics = request.POST.getlist('topics', None)

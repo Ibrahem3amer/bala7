@@ -1,13 +1,16 @@
 import json
+import datetime
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import authenticate, login
 from users.serializers import *
 from cms.serializers import UserTableSerializer
 from users.models import *
-from cms.models import DepartmentTable
+from cms.models import DepartmentTable, Topic, UserContribution
+from cms.forms import UserContributionForm
 from django.contrib.auth.models import User
 
 @api_view(['GET', 'POST'])
@@ -27,6 +30,19 @@ def users_list(request, format = None):
 			new_instance.save()
 			return Response(new_instance.data, status = status.HTTP_201_CREATED)
 		return Response(status = status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def check_user_instance(request, format=None):
+	"""Checks if user is signed in, returns user.id if found, 0 otherwise."""
+	username = request.POST.get('username', None)
+	userpassword = request.POST.get('password', None)
+
+	if username and userpassword:
+		user = authenticate(username=username, password=userpassword)
+		if user:
+			login(request, user)
+			return Response(request.user.id)
+	return response(0)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def user_instance(request, pk, format = None):
@@ -213,3 +229,46 @@ def user_table(request, user_id, format = None):
 			return Response(user_table.data)
 	except ObjectDoesNotExist:
 		return Response(status = status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def add_contribution(request):
+	"""Add new contribution to speicifc topic."""
+	if request.method == 'POST':
+		contrib_form = UserContributionForm(request.POST, initial={'topic':request.POST.get('topic', -1), 'user':request.user.id})
+		response = {}
+		if contrib_form.is_valid():
+			contrib_form.save()
+			response['result'] = 'success'
+			return Response(
+				json.dumps(response)
+			)
+		else:
+			response['result'] = 'failure'
+			response['errors'] = contrib_form.errors
+			return Response(
+				json.dumps(response)
+			)
+
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def change_contribution_status(request):
+	"""changes the status of contribution from pending to approved/disapproved."""
+	status = 3 if request.POST['accept_button'] else (2 if request.POST['ignore_button'] else 1)
+	response = {}
+	try:
+		contribution = UserContribution.objects.get(id=request.POST.get('contribution_id', -1))
+		contribution.status = status
+		contribution.supervisior_id = request.user.id
+		contribution.save()
+		response['result'] = 'success'
+		return Response(
+			json.dumps(response)
+		)
+	except:
+		# Invalid contribution.
+		response['result'] = 'failure'
+		return Response(
+			json.dumps(response)
+		)

@@ -121,8 +121,7 @@ class UserTopics(object):
 			request.user.profile.topics = user_topics
 			return True		
 
-
-class Material(models.Model):
+class MaterialBase(models.Model):
 	# Helper attributes
 	term_choices = [(1, 'First term'), (2, 'Second term'), (3, 'Summer')]
 	type_choices = [(1, 'Lecture'), (2, 'Asset'), (3, 'Task')]
@@ -138,9 +137,9 @@ class Material(models.Model):
 	term 			= models.PositiveIntegerField(choices = term_choices)
 	content_type	= models.PositiveIntegerField(choices = type_choices)
 	week_number 	= models.PositiveIntegerField()
-	user 			= models.ForeignKey(User, related_name = 'primary_materials', on_delete = models.CASCADE)
-	topic 			= models.ForeignKey('Topic', related_name = 'primary_materials', on_delete = models.CASCADE)
-	# professor 	= foreignkey to professor
+
+	class Meta:
+		abstract = True
 
 	def __str__(self):
 		return self.name
@@ -150,19 +149,11 @@ class Material(models.Model):
 
 		# Validates that week number associated with materials is real week number.
 		try:
-			if self.week_number not in range(self.topic.weeks):
+			if self.week_number not in range(self.topic.weeks+1):
 				raise ValidationError('Week number is not found.')
 		except ObjectDoesNotExist:
 			# RelatedObject handler.
 			self.week_number = 0
-
-		# Validate that user has an access to add material to topic.
-		try:
-			if self.user.profile.department.id != self.topic.department.id:
-				raise ValidationError("Access denied.")
-		except (AttributeError, ObjectDoesNotExist):
-			raise ValidationError("Invalid User or Topic.")
-
 
 
 	# Material's methods
@@ -194,16 +185,43 @@ class Material(models.Model):
 		return
 
 
+class Material(MaterialBase):
 
-class Task(Material):
+	user = models.ForeignKey(User, related_name = 'primary_materials', on_delete = models.CASCADE)
+	topic = models.ForeignKey('Topic', related_name = 'primary_materials', on_delete = models.CASCADE)
+	professor = models.ManyToManyField('Professor', related_name='primary_materials')
+
+	# Model-level validation
+	def clean(self):
+		super(Material, self).clean()
+		
+		# Validate that user has an access to add material to topic.
+		try:
+			if self.topic not in self.user.profile.topics.all():
+				raise ValidationError("Access denied.")
+		except (AttributeError, ObjectDoesNotExist):
+			raise ValidationError("Invalid User or Topic.")
+
+
+class Task(MaterialBase):
 
 	# Additional fields.
+	user = models.ForeignKey(User, related_name = 'primary_tasks', on_delete = models.CASCADE)
+	topic = models.ForeignKey('Topic', related_name = 'primary_tasks', on_delete = models.CASCADE)
+	professor = models.ManyToManyField('Professor', related_name='primary_tasks')
 	deadline = models.DateField()
 
 
 	# Model-level validation
 	def clean(self):
-		
+		super(Task, self).clean()
+		# Validate that user has an access to add material to topic.
+		try:
+			if self.topic not in self.user.profile.topics.all():
+				raise ValidationError("Access denied.")
+		except (AttributeError, ObjectDoesNotExist):
+			raise ValidationError("Invalid User or Topic.")
+
 		# Validate that deadline is not a passed date. 
 		now = datetime.date.today()
 		date_difference = self.deadline - now
@@ -213,12 +231,48 @@ class Task(Material):
 	# Task methods.
 	@classmethod
 	def get_closest_tasks(cls, request):
-		"""
-		Returns tasks whose deadlines occurs 3 days from now. 
-		"""
-		now 		= datetime.date.today()
-		days_limit 	= datetime.timedelta(days = 4) 
-		return Task.objects.filter(topic__in = request.user.profile.topics.all(), deadline__range = (now, now+days_limit))
+		"""Returns tasks whose deadlines occurs 3 days from now."""
+		from itertools import chain
+		now = datetime.date.today()
+		days_limit = datetime.timedelta(days = 4) 
+		primary_tasks = Task.objects.filter(topic__in = request.user.profile.topics.all(), deadline__range = (now, now+days_limit))
+		secondary_tasks = UserContribution.objects.filter(status=3, content_type=3, topic__in=request.user.profile.topics.all(), deadline__range=(now, now+days_limit))	
+		return list(chain(primary_tasks, secondary_tasks))
+
+
+class UserContribution(MaterialBase):
+	
+	# Helper attributes
+	contribution_status = [(1, 'Pending'), (2, 'Rejected'), (3, 'Accepted')]
+
+	# Additional fields.
+	status = models.PositiveIntegerField(choices=contribution_status, default=1)
+	supervisior_id = models.PositiveIntegerField(blank=True)
+	deadline = models.DateField(blank=True, default=False)
+	user = models.ForeignKey(User, related_name = 'secondary_materials', on_delete = models.CASCADE)
+	topic = models.ForeignKey('Topic', related_name = 'secondary_materials', on_delete = models.CASCADE)
+	professor = models.ManyToManyField('Professor', related_name='secondary_materials')
+
+	# Model-level validation.
+	def clean(self):
+		super(UserContribution, self).clean()
+		
+		# Validate that user has an access to add material to topic.
+		try:
+			if self.topic not in self.user.profile.topics.all():
+				raise ValidationError("Access denied.")
+		except (AttributeError, ObjectDoesNotExist):
+			raise ValidationError("Invalid User or Topic.")
+
+		# Validate that deadline is not a passed date. 
+		if self.content_type == 3 or self.content_type == '3':
+			now = datetime.date.today()
+			date_difference = self.deadline - now
+			if date_difference.days <= 3:
+				raise ValidationError('Deadline date should be 3 days ahead at least.')
+
+	def __str__(self):
+		return self.user.username + ' ' +self.name
 
 
 class Professor(models.Model):
@@ -274,7 +328,7 @@ class Table(models.Model):
 
 		for day in range(TABLE_DAYS):
 			for period in range(TABLE_PERIODS):
-				table[day][period] = topics[day][period] + '\n' + places[day][period]
+				table[day][period] = topics[day][period] + ' @ ' + places[day][period]
 		
 		self.json = table 
 		
@@ -328,8 +382,8 @@ class UserTable(Table):
 					topic = Topic.objects.get(pk=topic_id)
 					topic = get_object_or_404(Topic, pk=topic_id)
 					table = topic.table.set_final_table()
-					user_table_topics[day][period] += '\n'+table[day][period]
-					user_table_places[day][period] += '\n'+table[day][period]
+					user_table_topics[day][period] += '@'+table[day][period]
+					user_table_places[day][period] += '@'+table[day][period]
 				except:
 					continue
 

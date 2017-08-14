@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
 from unittest import skip
-from cms.models import Topic, UserTopics, Material, Task, TopicTable, DepartmentTable, Professor
+from cms.models import Topic, UserTopics, Material, Task, TopicTable, DepartmentTable, Professor, TABLE_PERIODS, TABLE_DAYS, UserContribution
 from cms.views import update_user_topics
 from users.models import Department, UserProfile, Faculty, University
 
@@ -331,8 +331,8 @@ class MaterialTest(TestCase):
 
 	def test_material_topic_lays_outside_user_scope(self):
 		# Setup test
-		another_user 	= User.objects.create_user(username = 'test_user', password = '12684szsf4df8f5d')
-		material_test 	= Material.objects.create(
+		another_user = User.objects.create_user(username = 'test_user', password = '12684szsf4df8f5d')
+		material_test = Material.objects.create(
 				name 			= 'material',
 				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
 				link 			= 'http://www.docs.googssle.com',
@@ -346,7 +346,31 @@ class MaterialTest(TestCase):
 
 		# Exercise test
 		# Assert test
-		self.assertRaises(ValidationError, lambda: material_test.full_clean())		
+		self.assertRaises(ValidationError, lambda: material_test.full_clean())
+
+	def test_user_add_material_in_topic_in_another_dep(self):
+		# Setup test
+		another_dep = Department.objects.create(name = 'Test dep2')
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		self.user.profile.topics.add(another_topic)
+		material_test 	= Material.objects.create(
+				name 			= 'material',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.googssle.com',
+				year 			= '2123-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= another_topic
+			)
+
+		# Exercise test
+		topic_materials = another_topic.primary_materials.all()
+		
+		# Assert test
+		self.assertIn(material_test, topic_materials)
+		self.assertEqual(None, material_test.full_clean())
 
 class TaskTest(TestCase):
 	def setUp(self):
@@ -449,7 +473,7 @@ class TaskTest(TestCase):
 
 	def test_get_closest_three_dates_from_five(self):
 		# Setup test
-		now 	= datetime.datetime.now()
+		now = datetime.datetime.now()
 
 		# Create tasks with days starts with tomorrow ends with today+5 days. Should return 3 tasks.
 		for i in range(2, 7):	
@@ -468,11 +492,11 @@ class TaskTest(TestCase):
 				)
 		
 		# Exercise test
-		request 		= HttpRequest()
-		request.user 	= self.user
+		request = HttpRequest()
+		request.user = self.user
 
 		# Assert test
-		self.assertEqual(3, Task.get_closest_tasks(request).count())
+		self.assertEqual(3, len(Task.get_closest_tasks(request)))
 
 class TopicTableTest(TestCase):
 	def setUp(self):
@@ -754,7 +778,6 @@ class QueryTableTest(TestCase):
 		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table'][1][1])
 		self.assertIn(topics[4][4]+'\n'+places[4][4], request.context['table'][4][4])
 	
-	@skip
 	def test_query_just_days(self):
 		# Setup test
 		topics = [['']*6 for i in range(7)]
@@ -777,7 +800,6 @@ class QueryTableTest(TestCase):
 		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table'][1][1])
 		self.assertIn(topics[1][3]+'\n'+places[1][3], request.context['table'][1][3])
 
-	@skip
 	def test_query_just_periods(self):
 		# Setup test
 		topics = [['']*6 for i in range(7)]
@@ -799,6 +821,162 @@ class QueryTableTest(TestCase):
 		request = self.client.post(url, data=data)
 
 		# Assert test
-		# ['result_topicId_period']: dict key of where model combines topic and place.
 		self.assertIn(topics[1][2]+'\n'+places[1][2], request.context['table'][1][2])
 
+	def test_query_with_all_options(self):
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'Lecture'
+		places[1][1] = 'Hall 1'
+		topics[1][2] = 'Lecture'
+		places[1][2] = 'Hall 1'
+		TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
+		topics[2][3] = 'Section'
+		places[2][3] = 'Hall 2'
+		TopicTable.objects.create(topic=self.topic2, topics=topics, places=places)
+		periods = [i for i in range(6)]
+		days = [i for i in range(7)]
+		topics_ids = [1, 2, 3]
+		professors = [1, 2]
+		data = {'periods': periods, 'days':days, 'professors':professors, 'topics':topics_ids}
+		
+		# Exercise test
+		url = reverse('web_query_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Assert test
+		self.assertIn(topics[1][2]+'\n'+places[1][2], request.context['table'][1][2])
+	
+	def test_query_with_topic_has_no_table(self):
+		# Setup test
+		topics_ids = [3]
+		data = {'topics':topics_ids}
+		
+		# Exercise test
+		url = reverse('web_query_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+		empty_query = table = [ [ [0] for k in range(20) ] for j in range(TABLE_PERIODS) for i in range(TABLE_DAYS) ]
+
+		# Assert test
+
+		self.assertEqual(empty_query, request.context['table'])
+
+class UserContributionTest(TestCase):
+	def setUp(self):
+		self.uni 			= University.objects.create(name = 'Test university')
+		self.fac 			= Faculty.objects.create(name = 'Test faculty')
+		self.dep 			= Department.objects.create(name = 'Test dep')
+		self.topic 			= Topic.objects.create(name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
+		self.user 			= User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f')
+		self.user.profile 	= UserProfile.objects.create(university = self.uni, faculty = self.fac, department = self.dep)
+		self.material 		= UserContribution.objects.create(
+				name = 'test_material',
+				content = 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link = 'http://www.docs.google.com',
+				year = datetime.datetime.now(),
+				term = 1,
+				content_type = 1,
+				week_number = 1,
+				user = self.user,
+				topic = self.topic,
+				deadline = datetime.datetime.now(),
+				supervisior_id = 0
+			)
+		self.user.profile.topics.add(self.topic)
+
+	def test_user_add_material_in_topic_in_another_dep(self):
+		# Setup test
+		another_dep = Department.objects.create(name = 'Test dep2')
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		self.user.profile.topics.add(another_topic)
+		material_test 	= UserContribution.objects.create(
+				name 			= 'material',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.googssle.com',
+				year 			= '2123-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= another_topic,
+				deadline = datetime.datetime.now(),
+				supervisior_id = 0
+			)
+
+		# Exercise test
+		topic_materials = another_topic.secondary_materials.all()
+		
+		# Assert test
+		self.assertIn(material_test, topic_materials)
+		self.assertEqual(None, material_test.full_clean())
+
+	def test_user_add_task_with_current_deadline(self):
+		# Setup test
+		another_dep = Department.objects.create(name = 'Test dep2')
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		self.user.profile.topics.add(another_topic)
+		material_test 	= UserContribution.objects.create(
+				name 			= 'material',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.googssle.com',
+				year 			= datetime.datetime.now(),
+				term 			= 1,
+				content_type 	= 3,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= another_topic,
+				deadline = datetime.datetime.now(),
+				supervisior_id = 0
+			)
+
+		# Exercise test
+		topic_materials = another_topic.secondary_materials.all()
+		
+		# Assert test
+		with self.assertRaisesRegexp(ValidationError, 'Deadline date should be 3 days ahead at least.'):
+			material_test.full_clean()
+		self.assertRaises(ValidationError, lambda: material_test.full_clean())
+
+	def test_get_closest_tasks_with_user_contributions(self):
+		# Setup test
+		now = datetime.datetime.now()
+
+		# Create tasks with days starts with tomorrow ends with today+5 days. Should return 3 primary tasks.
+		# Should return 2 secondary tasks, as there're just 2 approved.
+		for i in range(2, 7):	
+			task_test 	= Task.objects.create(
+				name='test tasks',
+				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link='http://www.docs.'+str(i)+'.com',
+				year='2017-1-5',
+				term=1,
+				content_type=3,
+				week_number=1,
+				user=self.user,
+				topic=self.topic,
+				deadline=now+datetime.timedelta(days = i),
+			)
+			material_test 	= UserContribution.objects.create(
+				name='material',
+				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link='http://www.dosscs.'+str(i)+'.com',
+				year=datetime.datetime.now(),
+				term=1,
+				content_type=3,
+				week_number=1,
+				user=self.user,
+				topic=self.topic,
+				deadline=now+datetime.timedelta(days = i),
+				supervisior_id=0,
+				status=3 if not i%2 else 1
+			)
+		
+		# Exercise test
+		request = HttpRequest()
+		request.user = self.user
+
+		# Assert test
+		self.assertEqual(5, len(Task.get_closest_tasks(request)))
