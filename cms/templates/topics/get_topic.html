@@ -45,21 +45,21 @@
                           <a href="{% url 'display_doctor' doctor.id %}"><p>{{ doctor.name }}</p></a>
                       </div>
                     {% endfor %}
-                    <div class="right-ele">
-                        <div class="right-ele-head">
-                            <p>الامتحانات</p>
-                        </div>
-                        <div class="right-ele-body">
-                            <table class="table table-hover">
-                              <thead>
-                                <tr>
-                                  <th>السنه</th>
-                                  <th>الدكتور</th>
-                                  <th>الرابط</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {% if topic.exams %}
+                    {% if topic.exams.all|length > 0 %}
+                        <div class="right-ele">
+                            <div class="right-ele-head">
+                                <p>الامتحانات</p>
+                            </div>
+                            <div class="right-ele-body">
+                                <table class="table table-hover">
+                                  <thead>
+                                    <tr>
+                                      <th>السنه</th>
+                                      <th>الدكتور</th>
+                                      <th>الرابط</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
                                     {% for exam in topic.exams.all %}
                                         <tr>
                                           <td>{{ exam.year.year }}</td>
@@ -72,15 +72,11 @@
                                           <td><a href="{{ exam.link }}"><i class="fa fa-link" aria-hidden="true"></i></a></td>
                                         </tr>
                                     {% endfor %}
-                                {% else %}
-                                    <tr>
-                                        لا يوجد.
-                                    </tr>
-                                {% endif %}
-                              </tbody>
-                            </table>
+                                  </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
 
                     <div class="right-ele">
                         <div class="right-ele-head">
