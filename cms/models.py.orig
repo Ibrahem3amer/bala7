@@ -131,7 +131,7 @@ class MaterialBase(models.Model):
 
 	# Fields
 	name 			= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
-	content			= models.TextField(validators = [content_min_len_validator])
+	content			= models.CharField(max_length = 500, validators = [content_min_len_validator])
 	link 			= models.URLField(unique = True)
 	year 			= models.DateField()
 	term 			= models.PositiveIntegerField(choices = term_choices)
@@ -154,14 +154,6 @@ class MaterialBase(models.Model):
 		except ObjectDoesNotExist:
 			# RelatedObject handler.
 			self.week_number = 0
-
-        # Validate that user has an access to add material to topic.
-		try:
-			if self.user.profile.department.id != self.topic.department.id:
-				raise ValidationError("Access denied.")
-		except (AttributeError, ObjectDoesNotExist):
-			raise ValidationError("Invalid User or Topic.")
-
 
 
 	# Material's methods
@@ -194,6 +186,7 @@ class MaterialBase(models.Model):
 
 
 class Material(MaterialBase):
+<<<<<<< HEAD
 
 	user = models.ForeignKey(User, related_name = 'primary_materials', on_delete = models.CASCADE)
 	topic = models.ForeignKey('Topic', related_name = 'primary_materials', on_delete = models.CASCADE)
@@ -220,12 +213,7 @@ class Exam(MaterialBase):
 
 	# Model-level validation
 	def clean(self):
-
-		# Exams have no weeks, terms or type.
-		self.week_number = 0
-		self.term = 1
-		self.content_type = 1
-
+		super(Exam, self).clean()
 		# Validate that user has an access to add material to topic.
 		try:
 			if self.topic not in self.user.profile.topics.all():
@@ -233,6 +221,25 @@ class Exam(MaterialBase):
 		except (AttributeError, ObjectDoesNotExist):
 			raise ValidationError("Invalid User or Topic.")
 
+=======
+
+	user = models.ForeignKey(User, related_name = 'primary_materials', on_delete = models.CASCADE)
+	topic = models.ForeignKey('Topic', related_name = 'primary_materials', on_delete = models.CASCADE)
+	professor = models.ManyToManyField('Professor', related_name='primary_materials')
+
+	# Model-level validation
+	def clean(self):
+		super(Material, self).clean()
+		
+		# Validate that user has an access to add material to topic.
+		try:
+			if self.topic not in self.user.profile.topics.all():
+				raise ValidationError("Access denied.")
+		except (AttributeError, ObjectDoesNotExist):
+			raise ValidationError("Invalid User or Topic.")
+
+
+>>>>>>> f19fb668b5cde5ca85fea6d7260ab6c81eba666f
 class Task(MaterialBase):
 
 	# Additional fields.
@@ -303,6 +310,7 @@ class UserContribution(MaterialBase):
 
 	def __str__(self):
 		return self.user.username + ' ' +self.name
+<<<<<<< HEAD
 
 
 """
@@ -319,6 +327,8 @@ class UserPost(models.Model):
 	supervisior_id = models.PositiveIntegerField(blank=True)
 	last_modified = []
 """
+=======
+>>>>>>> f19fb668b5cde5ca85fea6d7260ab6c81eba666f
 
 
 class Professor(models.Model):

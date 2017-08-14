@@ -59,31 +59,24 @@
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr>
-                                  <td>2016</td>
-                                  <td>محمد الدسوقى</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                <tr>
-                                  <td>2015</td>
-                                  <td>حازم البكرى</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                <tr>
-                                  <td>2014</td>
-                                  <td>شريف بركات</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                <tr>
-                                  <td>2014</td>
-                                  <td>شريف بركات</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                <tr>
-                                  <td>2014</td>
-                                  <td>شريف بركات</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
+                                {% if topic.exams %}
+                                    {% for exam in topic.exams.all %}
+                                        <tr>
+                                          <td>{{ exam.year.year }}</td>
+                                          <td>
+                                            {% for prof in exam.professor.all %}
+                                                {{ prof.name }}
+                                                --
+                                            {% endfor %}
+                                          </td>
+                                          <td><a href="{{ exam.link }}"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        لا يوجد.
+                                    </tr>
+                                {% endif %}
                               </tbody>
                             </table>
                         </div>
