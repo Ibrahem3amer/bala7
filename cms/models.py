@@ -203,6 +203,23 @@ class Material(MaterialBase):
 			raise ValidationError("Invalid User or Topic.")
 
 
+class Exam(MaterialBase):
+
+	# Additional fields.
+	user = models.ForeignKey(User, related_name = 'exams', on_delete = models.CASCADE)
+	topic = models.ForeignKey('Topic', related_name = 'exams', on_delete = models.CASCADE)
+	professor = models.ManyToManyField('Professor', related_name='exams')
+
+	# Model-level validation
+	def clean(self):
+		super(Exam, self).clean()
+		# Validate that user has an access to add material to topic.
+		try:
+			if self.topic not in self.user.profile.topics.all():
+				raise ValidationError("Access denied.")
+		except (AttributeError, ObjectDoesNotExist):
+			raise ValidationError("Invalid User or Topic.")
+
 class Task(MaterialBase):
 
 	# Additional fields.
@@ -273,6 +290,22 @@ class UserContribution(MaterialBase):
 
 	def __str__(self):
 		return self.user.username + ' ' +self.name
+
+
+"""
+class UserPost(models.Model):
+	# Helpers 
+	contribution_status = [(1, 'Pending'), (2, 'Rejected'), (3, 'Accepted')]
+
+	# Attributes
+	title = models.CharField(max_length=200, validators=[GeneralCMSValidator.name_validator], default="N/A")
+	content = models.TextField()
+	user = models.ForeignKey(User, related_name = 'posts', on_delete = models.CASCADE)
+	topic = models.ForeignKey('Topic', related_name = 'posts', on_delete = models.CASCADE)
+	status = models.PositiveIntegerField(choices=contribution_status, default=1)
+	supervisior_id = models.PositiveIntegerField(blank=True)
+	last_modified = []
+"""
 
 
 class Professor(models.Model):
