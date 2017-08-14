@@ -277,7 +277,7 @@ class UserContribution(MaterialBase):
 
 	# Additional fields.
 	status = models.PositiveIntegerField(choices=contribution_status, default=1)
-	supervisior_id = models.PositiveIntegerField(blank=True)
+	supervisior_id = models.PositiveIntegerField(blank=True, default=0)
 	deadline = models.DateField(blank=True, default=False)
 	user = models.ForeignKey(User, related_name = 'secondary_materials', on_delete = models.CASCADE)
 	topic = models.ForeignKey('Topic', related_name = 'secondary_materials', on_delete = models.CASCADE)
@@ -305,20 +305,35 @@ class UserContribution(MaterialBase):
 		return self.user.username + ' ' +self.name
 
 
-"""
+
 class UserPost(models.Model):
+	
 	# Helpers 
-	contribution_status = [(1, 'Pending'), (2, 'Rejected'), (3, 'Accepted')]
+	post_status = [(1, 'Pending'), (2, 'Rejected'), (3, 'Accepted')]
 
 	# Attributes
 	title = models.CharField(max_length=200, validators=[GeneralCMSValidator.name_validator], default="N/A")
 	content = models.TextField()
 	user = models.ForeignKey(User, related_name = 'posts', on_delete = models.CASCADE)
 	topic = models.ForeignKey('Topic', related_name = 'posts', on_delete = models.CASCADE)
-	status = models.PositiveIntegerField(choices=contribution_status, default=1)
-	supervisior_id = models.PositiveIntegerField(blank=True)
-	last_modified = []
-"""
+	status = models.PositiveIntegerField(choices=post_status, default=1)
+	supervisior_id = models.PositiveIntegerField(blank=True, default=0)
+	last_modified = models.DateTimeField(auto_now=True)
+
+	def __str__(self):
+		return self.title
+
+
+class UserComment(models.Model):
+
+	# Attributes
+	content = models.TextField()
+	user = models.ForeignKey(User, related_name = 'comments', on_delete = models.CASCADE)
+	post = models.ForeignKey('UserPost', related_name = 'comments', on_delete = models.CASCADE)
+	last_modified = models.DateTimeField(auto_now=True)
+
+	def __str__(self):
+		return self.user.username + ' -> ' +self.post.title
 
 
 class Professor(models.Model):

@@ -1,7 +1,7 @@
 import json
 from django.contrib import admin
 from django.contrib.auth.models import User
-from cms.models import Topic, Material, Task, Professor, TopicTable, Exam
+from cms.models import Topic, Material, Task, Professor, TopicTable, Exam, UserPost, UserComment
 
 
 class TopicAdmin(admin.ModelAdmin):
@@ -153,9 +153,17 @@ class TopicTableAdmin(admin.ModelAdmin):
         super(TopicTableAdmin, self).save_model(request, obj, form, change)
 
 
+class UserPostAdmin(admin.ModelAdmin):
+    pass
+
+
+class UserCommentAdmin(admin.ModelAdmin):
+    pass
 
 admin.site.register(Topic, TopicAdmin)
 admin.site.register(Material, MaterialAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Exam, ExamAdmin)
 admin.site.register(Professor, ProfessorAdmin)
+admin.site.register(UserPost, UserPostAdmin)
+admin.site.register(UserComment, UserCommentAdmin)

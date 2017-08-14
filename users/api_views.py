@@ -9,8 +9,8 @@ from django.contrib.auth import authenticate, login
 from users.serializers import *
 from cms.serializers import UserTableSerializer
 from users.models import *
-from cms.models import DepartmentTable, Topic, UserContribution
-from cms.forms import UserContributionForm
+from cms.models import DepartmentTable, Topic, UserContribution, UserPost
+from cms.forms import UserContributionForm, UserPostForm
 from django.contrib.auth.models import User
 
 @api_view(['GET', 'POST'])
@@ -259,6 +259,48 @@ def change_contribution_status(request):
 	response = {}
 	try:
 		contribution = UserContribution.objects.get(id=request.POST.get('contribution_id', -1))
+		contribution.status = status
+		contribution.supervisior_id = request.user.id
+		contribution.save()
+		response['result'] = 'success'
+		return Response(
+			json.dumps(response)
+		)
+	except:
+		# Invalid contribution.
+		response['result'] = 'failure'
+		return Response(
+			json.dumps(response)
+		)
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def add_post(request):
+	"""Add new post to speicifc topic."""
+	if request.method == 'POST':
+		contrib_form = UserPostForm(request.POST, initial={'topic':request.POST.get('topic', -1), 'user':request.user.id})
+		response = {}
+		if contrib_form.is_valid():
+			contrib_form.save()
+			response['result'] = 'success'
+			return Response(
+				json.dumps(response)
+			)
+		else:
+			response['result'] = 'failure'
+			response['errors'] = contrib_form.errors
+			return Response(
+				json.dumps(response)
+			)
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def change_post_status(request):
+	"""changes the status of contribution from pending to approved/disapproved."""
+	status = 3 if request.POST.get('accept_button', 1) else (2 if request.POST.get('ignore_button', 1) else 1)
+	response = {}
+	try:
+		contribution = UserPost.objects.get(id=request.POST.get('post_id', -1))
 		contribution.status = status
 		contribution.supervisior_id = request.user.id
 		contribution.save()
