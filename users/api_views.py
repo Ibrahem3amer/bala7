@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login
 from users.serializers import *
 from cms.serializers import UserTableSerializer
 from users.models import *
-from cms.models import DepartmentTable, Topic, UserContribution, UserPost
+from cms.models import DepartmentTable, Topic, UserContribution, UserPost, UserComment
 from cms.forms import UserContributionForm, UserPostForm
 from django.contrib.auth.models import User
 
@@ -314,3 +314,69 @@ def change_post_status(request):
 		return Response(
 			json.dumps(response)
 		)
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def get_post_comments(request):
+	"""graps all post's comments."""
+
+	post_id = request.GET.get('post_id', 0)
+	if post_id:
+		comments = UserComment.objects.filter(post_id=post_id, status=1)
+		comments_serialized = CommentSerializer(comments, many=True)
+		return Response(comments_serialized.data)
+	else:
+		return Response({})
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def add_comment(request):
+	"""Add new comment to speicifc post."""
+	try:
+		user = request.user
+		post = request.GET.get('post_id', 0)
+		content = request.GET.get('comment_content', 0)
+		response = {}
+		if user and post and content: 
+			comment = UserComment.objects.create(
+					post=post,
+					user=user,
+					content= content
+				)
+			response['result'] = 'success'
+			return Response(
+				json.dumps(response)
+			)
+	except:
+		pass
+
+	response['result'] = 'failure'
+	return Response(
+		json.dumps(response)
+	)
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def delete_comment(request):
+	"""deletes comment from speicifc post."""
+	comment = request.POST.get('comment_id', 0)
+	response = {}
+	if comment and request.user.is_staff:
+		try:
+			comment = UserComment.objects.get(id=comment)
+			comment.status = 0
+			comment.supervisior_id = request.user.id
+			comment.save()
+			response['result'] = 'success'
+			return Response(
+				json.dumps(response)
+			)
+		except:
+			pass
+
+	# Invalid contribution.
+	response['result'] = 'failure'
+	return Response(
+		json.dumps(response)
+	)

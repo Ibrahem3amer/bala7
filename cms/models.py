@@ -325,11 +325,14 @@ class UserPost(models.Model):
 
 
 class UserComment(models.Model):
+	# Helpers
+	comment_status = [(0, 'Blocked'), (1, 'Accepted')]
 
 	# Attributes
 	content = models.TextField()
 	user = models.ForeignKey(User, related_name = 'comments', on_delete = models.CASCADE)
 	post = models.ForeignKey('UserPost', related_name = 'comments', on_delete = models.CASCADE)
+	status = models.PositiveIntegerField(choices=comment_status, default=1)
 	last_modified = models.DateTimeField(auto_now=True)
 
 	def __str__(self):
