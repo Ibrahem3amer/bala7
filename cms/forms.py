@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.forms.widgets import SelectDateWidget
 from django.shortcuts import get_object_or_404
-from cms.models import Material, Topic, UserContribution, Professor, UserPost
+from cms.models import Material, Topic, UserContribution, Professor
 from cms.validators import MaterialValidator
 
 class AddMaterialForm(forms.ModelForm):
@@ -36,6 +36,10 @@ class AddMaterialForm(forms.ModelForm):
 
 
 class UserContributionForm(forms.ModelForm):
+
+    # Helpers
+    def get_topic_weeks(self):
+        return range(self.topic.weeks)
 
     # Fields 
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control nj-input'}))
@@ -69,21 +73,3 @@ class UserContributionForm(forms.ModelForm):
         except:
             self.fields['professor'].queryset = []
         
-class UserPostForm(forms.ModelForm):
-    
-    # Fields
-    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control nj-input'}))
-    content = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control nj-textarea'}))
-    topic = forms.CharField(widget=forms.HiddenInput())
-    user = forms.CharField(widget=forms.HiddenInput())
-
-    class Meta:
-        model = UserPost
-        fields = ['title', 'content']
-
-    def __init__(self, *args, **kwargs):
-        super(UserPostForm, self).__init__(*args, **kwargs)
-        initial_arguments = kwargs.get('initial', None)
-        if initial_arguments:
-            self.instance.topic = get_object_or_404(Topic, pk=initial_arguments.get('topic', -1))
-            self.instance.user = get_object_or_404(User, pk=initial_arguments.get('user', -1))

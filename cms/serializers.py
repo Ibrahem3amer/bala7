@@ -17,23 +17,14 @@ class UserTableSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 
-class ProfessorSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Professor
-        fields = ('__all__')
-
-
 class TopicSerializer(serializers.ModelSerializer):
     department = serializers.PrimaryKeyRelatedField(read_only=True)
     faculty = serializers.PrimaryKeyRelatedField(read_only=True)
     table = TopicTableSerializer(read_only=True)
-    professors = ProfessorSerializer(read_only=True, many=True)
-
     
     class Meta:
         model   = Topic
-        fields  = ('id', 'name', 'desc', 'term', 'department', 'faculty', 'table', 'professors')
+        fields  = ('id', 'name', 'desc', 'term', 'department', 'faculty', 'table')
 
 class FacultyTopicsSerializer(serializers.ModelSerializer):
 
@@ -51,21 +42,10 @@ class MaterialSerializer(serializers.ModelSerializer):
 
     user    = serializers.PrimaryKeyRelatedField(read_only=True)
     topic   = serializers.PrimaryKeyRelatedField(read_only=True)
-    professor = ProfessorSerializer(read_only=True)
 
     class Meta:
         model   = Material
         fields  = ('__all__')
-
-
-class ExamSerializer(serializers.ModelSerializer):
-    
-    user = serializers.PrimaryKeyRelatedField(read_only=True)
-    topic = serializers.PrimaryKeyRelatedField(read_only=True)
-    professor = ProfessorSerializer(read_only=True, many=True)
-
-    model = Exam
-    fields = ('__all__')
     
 
 class TasksSerializer(serializers.ModelSerializer):
@@ -76,6 +56,13 @@ class TasksSerializer(serializers.ModelSerializer):
     class Meta:
         model   = Task
         fields  = ('__all__')
+
+
+class ProfessorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Professor
+        fields = ('__all__')
 
 
 class DepartmentTableSerializer(serializers.Serializer):

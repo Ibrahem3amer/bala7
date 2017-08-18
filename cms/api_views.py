@@ -10,7 +10,6 @@ from cms.views import restrict_access, within_user_domain, add_weeks_to_material
 from users.models import Faculty, Department, UserProfile
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated,))
 def topics_list(request, format = None):
     """
     Return a list of topics using GET
@@ -121,25 +120,6 @@ def tasks_list(request, format = None):
         tasks               = Task.get_closest_tasks(request)
         tasks_serialized    = TasksSerializer(tasks, many = True)
         return Response(tasks_serialized.data)
-
-@api_view(['GET'])
-@permission_classes((IsAuthenticated,))
-def exams_list(request, topic_id, format = None):
-    """List of topic's exams if GET."""
-
-    # Validates that user has an access on this instance. 
-    if not restrict_access(request, topic_id):
-        return Response(status = status.HTTP_400_BAD_REQUEST)
-
-    if request.method == 'GET':
-        try:
-            topic_instance = Topic.objects.get(pk = topic_id)
-        except Topic.DoesNotExist:
-            return Response(status = status.HTTP_404_NOT_FOUND)
-
-        exams = topic_instance.exams.all()
-        exams_serialized = ExamSerializer(exams, many=True)
-        return Response(exams_serialized.data)
 
 @api_view(['POST', 'GET'])
 @permission_classes((IsAuthenticated,))

@@ -9,8 +9,8 @@ from django.contrib.auth import authenticate, login
 from users.serializers import *
 from cms.serializers import UserTableSerializer
 from users.models import *
-from cms.models import DepartmentTable, Topic, UserContribution, UserPost, UserComment
-from cms.forms import UserContributionForm, UserPostForm
+from cms.models import DepartmentTable, Topic, UserContribution
+from cms.forms import UserContributionForm
 from django.contrib.auth.models import User
 
 @api_view(['GET', 'POST'])
@@ -272,111 +272,3 @@ def change_contribution_status(request):
 		return Response(
 			json.dumps(response)
 		)
-
-@api_view(['POST'])
-@permission_classes((IsAuthenticated,))
-def add_post(request):
-	"""Add new post to speicifc topic."""
-	if request.method == 'POST':
-		contrib_form = UserPostForm(request.POST, initial={'topic':request.POST.get('topic', -1), 'user':request.user.id})
-		response = {}
-		if contrib_form.is_valid():
-			contrib_form.save()
-			response['result'] = 'success'
-			return Response(
-				json.dumps(response)
-			)
-		else:
-			response['result'] = 'failure'
-			response['errors'] = contrib_form.errors
-			return Response(
-				json.dumps(response)
-			)
-
-@api_view(['POST'])
-@permission_classes((IsAuthenticated,))
-def change_post_status(request):
-	"""changes the status of contribution from pending to approved/disapproved."""
-	status = 3 if request.POST.get('accept_button', 1) else (2 if request.POST.get('ignore_button', 1) else 1)
-	response = {}
-	try:
-		contribution = UserPost.objects.get(id=request.POST.get('post_id', -1))
-		contribution.status = status
-		contribution.supervisior_id = request.user.id
-		contribution.save()
-		response['result'] = 'success'
-		return Response(
-			json.dumps(response)
-		)
-	except:
-		# Invalid contribution.
-		response['result'] = 'failure'
-		return Response(
-			json.dumps(response)
-		)
-
-
-@api_view(['GET'])
-@permission_classes((IsAuthenticated,))
-def get_post_comments(request):
-	"""graps all post's comments."""
-
-	post_id = request.GET.get('post_id', 0)
-	if post_id:
-		comments = UserComment.objects.filter(post_id=post_id, status=1)
-		comments_serialized = CommentSerializer(comments, many=True)
-		return Response(comments_serialized.data)
-	else:
-		return Response({})
-
-@api_view(['POST'])
-@permission_classes((IsAuthenticated,))
-def add_comment(request):
-	"""Add new comment to speicifc post."""
-	try:
-		user = request.user
-		post = request.GET.get('post_id', 0)
-		content = request.GET.get('comment_content', 0)
-		response = {}
-		if user and post and content: 
-			comment = UserComment.objects.create(
-					post=post,
-					user=user,
-					content= content
-				)
-			response['result'] = 'success'
-			return Response(
-				json.dumps(response)
-			)
-	except:
-		pass
-
-	response['result'] = 'failure'
-	return Response(
-		json.dumps(response)
-	)
-
-@api_view(['POST'])
-@permission_classes((IsAuthenticated,))
-def delete_comment(request):
-	"""deletes comment from speicifc post."""
-	comment = request.POST.get('comment_id', 0)
-	response = {}
-	if comment and request.user.is_staff:
-		try:
-			comment = UserComment.objects.get(id=comment)
-			comment.status = 0
-			comment.supervisior_id = request.user.id
-			comment.save()
-			response['result'] = 'success'
-			return Response(
-				json.dumps(response)
-			)
-		except:
-			pass
-
-	# Invalid contribution.
-	response['result'] = 'failure'
-	return Response(
-		json.dumps(response)
-	)

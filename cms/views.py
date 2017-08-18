@@ -5,8 +5,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.http import HttpResponse, Http404
 from django.urls import reverse
-from cms.models import Topic, UserTopics, Professor, DepartmentTable, UserTable, UserContribution, UserPost
-from cms.forms import AddMaterialForm, UserContributionForm, UserPostForm
+from cms.models import Topic, UserTopics, Professor, DepartmentTable, UserTable, UserContribution
+from cms.forms import AddMaterialForm, UserContributionForm
 
 def add_weeks_to_range(topic_weeks_range):
     """
@@ -105,12 +105,7 @@ def get_topic(request, dep_id=-1, topic_id=-1):
     user_contributon = UserContributionForm(initial={'topic':topic.id, 'user':request.user.id})
 
     # Get pending requests.
-    pending_contributions = UserContribution.objects.filter(status=1, topic=topic)
-
-    # Get discussion elements.
-    post_request = UserPostForm(initial={'user': request.user.id, 'topic': topic.id})
-    pending_posts = UserPost.objects.filter(status=1, topic=topic)
-    posts = UserPost.objects.filter(topic=topic, status=3)
+    pending_contributions = UserContribution.objects.filter(status=1)
 
     return render(
         request,
@@ -122,9 +117,6 @@ def get_topic(request, dep_id=-1, topic_id=-1):
             'sec_materials': secondary_materials,
             'contribution_form': user_contributon,
             'pending_contributions': pending_contributions,
-            'posts': posts,
-            'post_request':post_request,
-            'pending_posts':pending_posts,
         }
     )
 
