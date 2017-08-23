@@ -362,7 +362,7 @@ input , button:focus{
     left: 0px;
     right: 0px;
     padding-top: 40px;
-    z-index: 9999;
+    z-index: 1000;
 }
 .order-box input{
     width: 68%;
@@ -380,7 +380,7 @@ input , button:focus{
     left: 0px;
     right: 0px;
     padding-top: 40px;
-    z-index: 9999;
+    z-index: 1000;
 }
 .box-close-btn{
     position: absolute;
