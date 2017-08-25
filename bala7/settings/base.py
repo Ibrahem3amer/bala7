@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 SECRET_KEY = get_secret('SECRET_KEY')
 
 
-ALLOWED_HOSTS = ['local.ibrahem3amer.me', '127.0.0.1', 'www.najiba.com']
+ALLOWED_HOSTS = get_secret('ALLOWED_HOSTS')
 
 
 # Application definition
