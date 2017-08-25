@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from users.models import *
+from cms.models import UserComment
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -53,4 +54,10 @@ class UniversityLinkedSerializer(serializers.ModelSerializer):
 	class Meta:
 		model 	= University
 		fields 	= ('name', 'bio', 'headmaster', 'uni_type', 'faculties')
+
+class CommentSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = UserComment
+		fields = ('__all__')
 

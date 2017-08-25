@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<<<<<<< HEAD
+<html>
+=======
+<html dir="rtl" lang="ar">
+>>>>>>> f19fb668b5cde5ca85fea6d7260ab6c81eba666f
+<head>
+    <title>Table</title>
+    {% load admin_interface_extras %}
+    {% load dates %}
+<<<<<<< HEAD
+
+</head>
+<body>
+    <form method="POST" action="{% url 'web_query_table' %}">
+        {% csrf_token %}
+        <h1>Available doctors</h1>
+        <ul>
+            {% for prof in table.professors %}
+                <li>
+                    <input type="checkbox" name="professors" value="{{ prof.id }}">
+                    <a href="{% url 'display_doctor' prof.id %}">{{ prof.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <h1>Available topics</h1>
+        <ul>
+            {% for topic in table.available_topics %}
+                <li>
+                    <input type="checkbox" name="topics" value="{{ topic.id }}">
+                    <a href="{% url 'get_topic' topic.department.id topic.id %}">{{ topic.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <h1>Peroids</h1>
+        <ul>
+            {% for period in '123456' %}
+                <li>
+                    <input type="checkbox" name="periods" value="{{ forloop.counter }}">
+                    {{ forloop.counter }}
+                </li>
+            {% endfor %}
+        </ul>
+        <h1>Days</h1>
+        <ul>
+            {% for day in '1234567' %}
+                <li>
+                    <input type="checkbox" name="days" value="{{ forloop.counter }}">
+                    {{ forloop.counter0|num_to_day }}
+                </li>
+            {% endfor %}
+        </ul>
+        <input type="submit" name="query" />
+    </body>
+</form>
+=======
+    {% load staticfiles %}
+    
+    <meta charset="utf-8">
+    <!-- Internet Explorer meta -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- First Mobile meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> 
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/tableQuery.css' %}" rel="stylesheet">
+    <link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
+    <!--[if lt IE 9]>
+        <script src="js/html5shiv.min.js"></script>
+        <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+    
+    <!-- start navbar -->
+    {% include "public/navbar-user.html" %}
+    <!-- end navbar -->
+    <section class="all-content">
+        <div class="ads-section">
+            <img src="{% static 'pic/adv300x250.jpg' %}" alt="adv300x250">
+        </div>
+        <div class="content-section">
+            <div class="xs-ads">
+                <img src="{% static 'pic/adv-xs.jpg' %}" alt="320x100-adv">
+            </div>
+            <h1 class="headText">استعلام من جدول القسم</h1>
+            <div class="query-div">
+                <form method="POST" action="{% url 'web_query_table' %}">
+                    {% csrf_token %}
+                    <div class="formBlock">
+                        <p>اختر الدكتور</p>
+                        <div class="options-box">
+                            {% for prof in table.professors %}
+                                <div class="form-group">
+                                    <label for="professors{{ prof.id }}" class="checkLable"><input type="checkbox" name="professors" value="{{ prof.id }}" id="professors{{ prof.id }}">{{ prof.name }}</label>
+                                    <!-- <a href="{% url 'display_doctor' prof.id %}">{{ prof.name }}</a> -->
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="formBlock">
+                        <p>المواد المتاحة</p>
+                        <div class="options-box">
+                            {% for topic in table.available_topics %}
+                                <div class="form-group">
+                                    <label for="topics{{ topic.id }}" class="checkLable"><input type="checkbox" name="topics" value="{{ topic.id }}" id="topics{{ topic.id }}">{{ topic.name }}</label>
+                                    <!-- <a href="{% url 'get_topic' topic.department.id topic.id %}">{{ topic.name }}</a> -->
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="formBlock">
+                        <p>اختر فترات</p>
+                        <div class="options-box">
+                            {% for period in '123456' %}
+                                <div class="form-group">
+                                    <label for="periods{{ forloop.counter0 }}" class="checkLable"><input type="checkbox" name="periods" value="{{ forloop.counter0 }}" id="periods{{ forloop.counter0 }}">{{ forloop.counter }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="formBlock">
+                    <p>اختر يوم</p>
+                    <div class="options-box">
+                        {% for day in '1234567' %}
+                            <div class="form-group">
+                                <label for="days{{ forloop.counter0 }}" class="checkLable"><input type="checkbox" name="days" value="{{ forloop.counter0 }}" id="days{{ forloop.counter0 }}">{{ forloop.counter0|num_to_day }}</label>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                    <div class="submit-div">
+                        <input type="submit" name="query" class="nj-btn" value="استعلام" />
+                    </div>
+                    
+
+                </form>
+            </div>
+            
+        </div>
+    </section>
+    
+    <script>
+        $('.checkLable').click(function(){
+            if($(this).children('input').is(":checked")){
+                $(this).css('background-color','#8fd7ff');
+            }else{
+                $(this).css('background-color','#E1E2E1');
+            }
+        });
+    </script>
+</body>
+>>>>>>> f19fb668b5cde5ca85fea6d7260ab6c81eba666f
+</html>

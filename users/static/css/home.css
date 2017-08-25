@@ -1,203 +1,32 @@
+
 /*------------------------------------------- start home section ------------------------------------------*/
-.container{
-    margin-top: 0px;
-}
+
 /*- start control -*/
 .user-section{
     display: none;
 }
 /*- end control --*/
-
-/*--start notifi section -*/
-#notifi-section{
-    margin-top: 65px;
-    margin-bottom: 20px;
-    background-color: #a6bfcc;
-    padding: 15px;
-    height: 138px;
+/*------- start adv part -------*/
+.home-section .adv-part{
+    padding-top: 15px;
 }
-.announc-icon{
-    font-size: 80px;
-    float:right;
-    padding-right: 0px;
-    padding-left: 0px;
-    -webkit-transform:rotateY(180deg);
-    -moz-transform:rotateY(180deg);
-    -o-transform:rotateY(180deg);
-    -ms-transform:rotateY(180deg);
+.home-section .adv-part .ad-block{
+    border: 3px solid #E9EBEE;
+    box-shadow: 1px 1px 5px #333;
 }
-.note-element{
-    position: relative;
-    border: 0px solid #E9EBEE;    
-    width: calc(50% - 3px);
-    display: inline-block;
-    
+.home-section .adv-part .ad-block img{
+    width: 100%;
 }
-.note-element .note-head{
-    background-color: #ffdf7d;
-    border-bottom: 1px solid #ddd;
-}
-.note-element .note-head p{
-    font-size: 26px;
-    font-weight: bold;
-    padding: 5px 10px;
-    margin: 0px;
-}
-.note-element .note-head p i{
-    font-size: 12px;
-    padding-right: 7px;
-}
-.note-element .note-head .note-time{
-    position: absolute;
-    top: 9px;
-    left: 10px;
-    background-color: #d9534f;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 17px;
-    font-weight: bold;
-    padding: 2px 13px;
-    padding-top: 3px;
-    margin: 0px;
-    letter-spacing: 2px;
-}
-.note-element .note-content{
-    background-color: #fff;
-    text-align: center;
-    padding: 10px;
-    height: 58px;
-    overflow-y: auto;
-}
-.note-element .note-content p{
-    text-align: right;
-    margin: 0px;
-    font-size: 20px;
-    padding: 5px 25px;
-    font-weight: bold;
-}
-
-
-.btn-vertical-slider{ 
-    margin-left:0px;
-    cursor:pointer;
-    display: inline;
-}
-
-a {  cursor:pointer;}
-
-.carousel.vertical .carousel-inner{
-        height: 106px;
-    }
-.carousel.vertical .carousel-inner .item {
-  -webkit-transition: 0.3s linear top;
-     -moz-transition: 0.3s linear top;
-      -ms-transition: 0.3s linear top;
-       -o-transition: 0.3s linear top;
-          transition: 0.3s linear top;
-}
-
- .carousel.vertical .active {
-  top: 0;
-}
- .carousel.vertical .next {
-  top: 100%;
-}
- .carousel.vertical .prev {
-  top: -100%;
-}
- .carousel.vertical .next.left,
-.carousel.vertical .prev.right {
-  top: 0;
-}
- .carousel.vertical .active.left {
-  top: -100%;
-}
- .carousel.vertical .active.right {
-  top: 100%;
-}
- .carousel.vertical .item {
-    left: 0;
-     margin-top:0px; 
-     margin-left: 0px;
-     margin-right: 0px;
-}
-
-#carousel-div{
-    display: inline-block;
-    width: calc(100% - 45px);
-    height: 106px;
-}
-#arrows{
-    position: relative;
-    display: inline-block;
-    width: 26px;
-    height: 106px;
-    margin-right: 10px;
-    vertical-align: top;
-    text-align: center;
-}
-#arrows > div{
-    height: 70px;
-    margin: auto;
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-}
-@media (max-width: 767px){
-    #notifi-section{
-        margin-top: 54px;
-        padding: 10px;
-        height: 247px;
-    }
-    #carousel-div{
-        width: calc(100% - 37px);
-        height: 227px;
-    }
-    .carousel.vertical .carousel-inner{
-        height: 227px;
-    }
-    .note-element .note-content p{
-        font-size: 20px;
-        padding: 5px 15px;
-    }
-    .note-element{
-        display: block;
-        width: 100%;
-    }
-    .note-element:last-of-type{
-        margin-top: 15px;
-    }
-    #arrows{
-        height: 227px;
-        margin-right: 5px;
-        
-    }
-}
-
-/*--end notifi section -*/
-
+/*------- end adv part ---------*/
 
 /*------- start content part -------*/
 /*- start content element -*/
-#container-content {
-    background-color: #E9EBEE;
-}
-
 .home-section .content-part{
-    width: calc(100% - 350px);
-    background-color: #fff;
-    float: right;
-    height: auto;
-    padding: 20px;
-}
-@media (max-width:991px){
-    .home-section .content-part{
-        width: 100%;
-    }
+    padding-left: 0px;
 }
 .home-section .content-part .content-element{
-    border: 3px solid #E9EBEE;
-    
+    margin-top: 16px;
+    border: 3px solid #E9EBEE;    
 }
 .home-section .content-part .content-element .head{
     background-color: #d9edf7;
@@ -229,55 +58,68 @@ a {  cursor:pointer;}
     
 }
 /*--end content element -*/
-/*------- start adv part -------*/
-.left-home{
-    width: 330px;
+
+/*- strat note element -*/
+.home-section .content-part .note-element{
+    position: relative;
+    margin-top: 15px;
+    border: 3px solid #E9EBEE;    
+    
+}
+.home-section .content-part .note-element .note-head{
+    background-color: #ffdf7d;
+    border-bottom: 1px solid #ddd;
+}
+.home-section .content-part .note-element .note-head p{
+    font-size: 26px;
+    font-weight: bold;
+    padding: 5px 10px;
+    margin: 0px;
+}
+.home-section .content-part .note-element .note-head p i{
+    font-size: 12px;
+    padding-right: 7px;
+}
+.home-section .content-part .note-element .note-head .note-time{
+    position: absolute;
+    top: 9px;
+    left: 10px;
+    
+    background-color: #d9534f;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 2px 13px;
+    padding-top: 3px;
+    margin: 0px;
+    letter-spacing: 2px;
+}
+.home-section .content-part .note-element .note-content{
     background-color: #fff;
-    padding: 20px;
-    float: left;
-    margin-right: 20px;
+    text-align: center;
+    padding-top: 10px;
 }
-.home-section .adv-part{
-    padding-top: 0px;
+.home-section .content-part .note-element .note-content p{
+    text-align: right;
+    font-size: 20px;
+    padding: 5px 25px;
+    font-weight: bold;
 }
-.home-section .adv-part .ad-block{
-    border: 3px solid #E9EBEE;
-    box-shadow: 1px 1px 5px #333;
-}
-.home-section .adv-part .ad-block img{
-    width: 100%;
-}
-@media (max-width:991px){
-    .left-home{
-        display: none;
-    }
-}
-/*------- end adv part ---------*/
+/*- end note element -*/
+
 /*- start adv-xs -*/
 .adv-xs{
-    display: none;
     width: 320px;
     max-width: 100%;
     height: 100px;
     margin: auto;
     margin-top: 15px;
-    margin-bottom: 15px;
-}
-@media (max-width:991px){
-.adv-xs{
-    display: block;
-    width: 320px;
-    max-width: 100%;
-    height: 100px;
-    margin: auto;
-    margin-top: 15px;
-    margin-bottom: 15px;
 }
 .adv-xs img{
     width: 100%;
     height: 100%;
 }
-
 /*- end adv-xs -*/
 
 /*------- end content part ---------*/

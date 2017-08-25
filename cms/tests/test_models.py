@@ -537,7 +537,7 @@ class TopicTableTest(TestCase):
 		t_json = table.set_final_table()
 		
 		# Assert test
-		self.assertEqual(topics[1][1]+'\n'+places[1][1], t_json[1][1])
+		self.assertEqual(topics[1][1]+' @ '+places[1][1], t_json[1][1])
 
 	def test_table_display_correct_table_list_when_string_given(self):
 		"""Tests wether or not set return correct table list."""
@@ -554,7 +554,7 @@ class TopicTableTest(TestCase):
 		t_json = table.set_final_table()
 		
 		# Assert test
-		self.assertEqual(topics[1][1]+'\n'+places[1][1], t_json[1][1])
+		self.assertEqual(topics[1][1]+' @ '+places[1][1], t_json[1][1])
 
 class DepartmentTableTest(TestCase):
 	def setUp(self):
@@ -751,8 +751,8 @@ class QueryTableTest(TestCase):
 		request = self.client.post(url, data=data)
 
 		# Assert test
-		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table'][1][1])
-		self.assertNotIn(topics[4][4]+'\n'+places[4][4], request.context['table'][4][4])
+		self.assertIn(topics[1][1]+' @ '+places[1][1], request.context['table'][1][1])
+		self.assertNotIn(topics[4][4]+' @ '+places[4][4], request.context['table'][4][4])
 
 	def test_query_just_topics(self):
 		# Setup test
@@ -775,8 +775,8 @@ class QueryTableTest(TestCase):
 		request = self.client.post(url, data=data)
 
 		# Assert test
-		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table'][1][1])
-		self.assertIn(topics[4][4]+'\n'+places[4][4], request.context['table'][4][4])
+		self.assertIn(topics[1][1]+' @ '+places[1][1], request.context['table'][1][1])
+		self.assertIn(topics[4][4]+' @ '+places[4][4], request.context['table'][4][4])
 	
 	def test_query_just_days(self):
 		# Setup test
@@ -797,8 +797,8 @@ class QueryTableTest(TestCase):
 
 		# Assert test
 		# ['result_1'] is the dict key of where model combines topic and place.
-		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table'][1][1])
-		self.assertIn(topics[1][3]+'\n'+places[1][3], request.context['table'][1][3])
+		self.assertIn(topics[1][1]+' @ '+places[1][1], request.context['table'][1][1])
+		self.assertIn(topics[1][3]+' @ '+places[1][3], request.context['table'][1][3])
 
 	def test_query_just_periods(self):
 		# Setup test
@@ -821,7 +821,7 @@ class QueryTableTest(TestCase):
 		request = self.client.post(url, data=data)
 
 		# Assert test
-		self.assertIn(topics[1][2]+'\n'+places[1][2], request.context['table'][1][2])
+		self.assertIn(topics[1][2]+' @ '+places[1][2], request.context['table'][1][2])
 
 	def test_query_with_all_options(self):
 		# Setup test
@@ -847,7 +847,7 @@ class QueryTableTest(TestCase):
 		request = self.client.post(url, data=data)
 
 		# Assert test
-		self.assertIn(topics[1][2]+'\n'+places[1][2], request.context['table'][1][2])
+		self.assertIn(topics[1][2]+' @ '+places[1][2], request.context['table'][1][2])
 	
 	def test_query_with_topic_has_no_table(self):
 		# Setup test
