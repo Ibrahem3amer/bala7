@@ -4,7 +4,7 @@ from django.http import HttpRequest
 from django.core.exceptions import ValidationError 
 from unittest import skip
 from django.contrib.auth.models import User
-from cms.models import Topic, Material
+from cms.models import Topic, Material, Professor
 from cms.forms import AddMaterialForm
 from users.models import University, Faculty, Department, UserProfile
 
@@ -29,6 +29,7 @@ class AddMaterialFormTest(TestCase):
             )
         
         self.user.profile.topics.add(self.topic)
+        self.topic.professors.add(Professor.objects.create(name="gamal", faculty=self.fac))
 
     def test_intiaite_basic_form(self):
         # Setup test
@@ -42,6 +43,7 @@ class AddMaterialFormTest(TestCase):
             'term': 1,
             'content_type': 1,
             'week_number': 0,
+            'professor': [1],
         }
 
         # Exercise test

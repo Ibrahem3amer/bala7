@@ -157,7 +157,7 @@ class MaterialBase(models.Model):
 
         # Validate that user has an access to add material to topic.
 		try:
-			if self.topic not in self.user.profile.topics.all():
+			if self.user.profile.department.id != self.topic.department.id:
 				raise ValidationError("Access denied.")
 		except (AttributeError, ObjectDoesNotExist):
 			raise ValidationError("Invalid User or Topic.")
