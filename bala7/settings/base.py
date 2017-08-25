@@ -1,11 +1,15 @@
 import os
+import json
 from django.core.exceptions import ImproperlyConfigured
 
+path = os.path.dirname(__file__)+'/secrets.json'
+with open(path) as f:
+	secrets = json.loads(f.read())
 
-def get_env_variable(var_name):
+def get_secret(var_name):
 	"""Get the environment variable or return exception."""
 	try:
-		return os.environ[var_name]
+		return secrets[var_name]
 	except KeyError:
 		error_msg = "Set the {} environment variable".format(var_name)
 		raise ImproperlyConfigured(error_msg)
@@ -17,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_env_variable('SECRET_KEY')
+SECRET_KEY = get_secret('SECRET_KEY')
 
 
 ALLOWED_HOSTS = ['local.ibrahem3amer.me', '127.0.0.1', 'www.najiba.com']
@@ -148,7 +152,7 @@ SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['first_form_data']
 
 # Facebook auth settings
 SOCIAL_AUTH_FACEBOOK_KEY = '1907562042790610'
-SOCIAL_AUTH_FACEBOOK_SECRET = get_env_variable('FACEBOOK_SECRET')
+SOCIAL_AUTH_FACEBOOK_SECRET = get_secret('FACEBOOK_SECRET')
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 'fields': 'id, name, email, age_range'
@@ -156,4 +160,4 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 
 # Twiiter auth settings
 SOCIAL_AUTH_TWITTER_KEY = 'lHt8gjwWyvYWSkEdxkSc5C2C8'
-SOCIAL_AUTH_TWITTER_SECRET = get_env_variable('TWITTER_SECRET')
+SOCIAL_AUTH_TWITTER_SECRET = get_secret('TWITTER_SECRET')
