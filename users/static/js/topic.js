@@ -17,24 +17,108 @@ $(document).ready(function(){
     
     
     
-    
-    $("#contribute-form").fadeOut()
+    //--------------------------- open contribute-form
     $("#contribute-btn").click(function(){
         $("#request-form").fadeOut(function(){
             $("#contribute-form").toggle();
         });
     });
     
-    $("#request-form").fadeOut()
+    //--------------------------- open request-form
     $("#request-btn").click(function(){
         $("#contribute-form").fadeOut(function(){
             $("#request-form").toggle();
+            
         });
     });
     
-    //close btn for share-box and order-box
-    $('.box-close-btn').click(function(){
-        $(this).parent().fadeOut();
+    //-------------------------------------- start submit contribute-form
+    $('#contribution_form').ajaxForm({
+        success: function(responseText) { 
+            var res = JSON.parse(responseText);
+            if( res.result == 'failure'){
+                if(res.errors.name){
+                    $('#id_name').parent().children('.formLineError').remove();
+                    var lineError = '<div class="alert alert-warning formLineError" role="alert"> ' + res.errors.name + '</div>';
+                    $('#id_name').parent().prepend(lineError);
+                }else{ $('#id_name').parent().children('.formLineError').remove(); }
+
+                if(res.errors.content){
+                    $('#id_content').parent().children('.formLineError').remove();
+                    var lineError = '<div class="alert alert-warning formLineError" role="alert">' + res.errors.content + '</div>';
+                    $('#id_content').parent().prepend(lineError);
+                }else{ $('#id_content').parent().children('.formLineError').remove(); }
+
+                if(res.errors.link){
+                    $('#id_link').parent().children('.formLineError').remove();
+                    var lineError = '<div class="alert alert-warning formLineError" role="alert">' + res.errors.link + '</div>';
+                    $('#id_link').parent().prepend(lineError);
+                }else{ $('#id_link').parent().children('.formLineError').remove(); }
+
+                if(res.errors.__all__){//week number
+                    $('#id_week_number').parent().children('.formLineError').remove();
+                    var lineError = '<div class="alert alert-warning formLineError" role="alert">' + res.errors.__all__ + '</div>';
+                    $('#id_week_number').parent().prepend(lineError);
+                }else{ $('#id_week_number').parent().children('.formLineError').remove(); }     
+
+            }else if ( res.result == 'success'){
+                $('.share-box-body .contribution_form-body').fadeOut(function(){
+                    $('.share-box-body .success-div').fadeIn();
+                });
+            }
+        },//end of success
+        error: function(){
+            $('.share-box-body .contribution_form-body').fadeOut(function(){
+                $('.share-box-body .errors-div').fadeIn();
+            });
+        }//end of error
+    }); 
+    
+    //-------------------------------------- start submit order-box
+    $('#post_form').ajaxForm({
+        success: function(responseText) { 
+            var res = JSON.parse(responseText);
+            console.log(res.errors);
+            if( res.result == 'failure'){
+                if(res.errors.title){
+                    $('#id_title').parent().children('.formLineError').remove();
+                    var lineError = '<div class="alert alert-warning formLineError" role="alert"> ' + res.errors.title + '</div>';
+                    $('#id_title').parent().prepend(lineError);
+                }else{ $('#id_title').parent().children('.formLineError').remove(); }    
+            }else if ( res.result == 'success'){
+                $('.order-box-body .post_form-body').fadeOut(function(){
+                    $('.order-box-body .success-div').fadeIn();
+                });
+            }
+        },//end of success
+        error: function(){
+            $('.order-box-body .post_form-body').fadeOut(function(){
+                $('.order-box-body .errors-div').fadeIn();
+            });
+        }//end of error
+    });
+    
+    //close share-box
+    $('.share-box .box-close-btn').click(function(){
+        $('.share-box .success-div').fadeOut(1);
+        $('.share-box .errors-div').fadeOut(1);
+        $(this).parent().parent().parent().fadeOut(function(){
+            $('.share-box .contribution_form-body .formLineError').remove();
+            $('#contribution_form').trigger('reset');
+            $('.share-box .contribution_form-body').fadeIn(1);
+        });
+        
+    });
+    //close order-box
+    $('.order-box .box-close-btn').click(function(){
+        $('.order-box .success-div').fadeOut(1);
+        $('.order-box .errors-div').fadeOut(1);
+        $(this).parent().parent().parent().fadeOut(function(){
+            $('.order-box .post_form-body .formLineError').remove();
+            $('#post_form').trigger('reset');
+            $('.order-box .post_form-body').fadeIn(1);
+        });
+        
     });
     
     //show and hide comments
@@ -71,4 +155,6 @@ $(document).ready(function(){
             $(this).parent().next().next().slideDown();
         }
     });
+    
+    
 });

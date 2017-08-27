@@ -9,6 +9,10 @@ input , button:focus{
 .content-section div{
     vertical-align: top;
 }
+.formLineError{
+    padding: 5px 15px;
+    margin-bottom: 10px;
+}
 /*----- start adv div -----*/
 .adv-div{
     position: absolute;
@@ -356,53 +360,175 @@ input , button:focus{
     margin-bottom: 10px;
 }
 .order-box{
-    margin: auto;
-    position: absolute;
-    top: 75px;
+    display: none;
+    background-color: rgba(0,0,0,0.5);
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
     left: 0px;
     right: 0px;
-    padding-top: 40px;
-    z-index: 9999;
+    z-index: 10000;
 }
-.order-box input{
-    width: 68%;
+.order-box > .order-box-inner{
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    width: 375px;
+    max-width: 95%;
+    height: auto;
+    background-color: #fff;
+    border: 1px solid #E9EBEE;
+    overflow: hidden;
+    margin-top: 150px;
+}
+.order-box > .order-box-inner > .order-box-head{
+    position: relative;
+    height: 50px;
+    border-bottom: 1px solid #E9EBEE;
+}
+.order-box > .order-box-inner > .order-box-head > p{
+    line-height: 50px;
+    margin: 0px;
+    padding: 0px 15px;
+    font-size: 30px;
+    font-weight: bold;
+}
+.order-box > .order-box-inner > .order-box-body{
+    height: calc(100% - 50px);
+    width: 100%;
+    overflow-y: auto;
+    padding: 15px;
+}
+.order-box > .order-box-inner > .order-box-body .success-div{}
+.order-box > .order-box-inner > .order-box-body .errors-div{}
+.order-box > .order-box-inner .form-group{
+    margin-bottom: 15px;
+}
+.order-box > .order-box-inner .nj-label{
+    display: block;
+    width: 100%;
+    margin-bottom: 0px;
+}
+.order-box > .order-box-inner input{
+    width: 100%;
+}
+.order-box > .order-box-inner .nj-textarea{
+    height: 100px !important;
+    width: 100%;
+    margin-bottom: 0px;
+}
+.order-box > .order-box-inner .nj-select {
+    width: 100%;
+}
+
+.share-box{
+    display: none;
+    background-color: rgba(0,0,0,0.5);
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 10000;
+}
+.share-box > .share-box-inner{
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    width: 375px;
+    max-width: 95%;
+    max-height: calc(100% - 150px);
+    background-color: #fff;
+    border: 1px solid #E9EBEE;
+    overflow: hidden;
+}
+.share-box > .share-box-inner > .share-box-head{
+    position: relative;
+    height: 50px;
+    border-bottom: 1px solid #E9EBEE;
+}
+.share-box > .share-box-inner > .share-box-head > p{
+    line-height: 50px;
+    margin: 0px;
+    padding: 0px 15px;
+    font-size: 30px;
+    font-weight: bold;
+}
+.share-box > .share-box-inner > .share-box-body{
+    height: calc(100% - 50px);
+    width: calc(100% + 20px);
+    overflow-y: auto;
+    padding: 15px;
+    padding-left: 17px /* to felx hidden scrollbar */
+}
+.share-box > .share-box-inner > .share-box-body .success-div{
+    padding-left: 20px;
+}
+.share-box > .share-box-inner > .share-box-body .errors-div{
+    padding-left: 20px;
+}
+.share-box > .share-box-inner .form-group{
+    margin-bottom: 15px;
+}
+.share-box > .share-box-inner .nj-label{
+    display: block;
+    width: 100%;
+    margin-bottom: 0px;
+}
+.share-box > .share-box-inner input{
+    width: 100%;
+}
+.share-box > .share-box-inner .nj-textarea{
+    height: 100px !important;
+    width: 100%;
+    margin-bottom: 0px;
+}
+.share-box > .share-box-inner .nj-select {
+    width: 100%;
 }
 /*xs*/
 @media (max-width:767px){
-    .order-box  input{
+    /* to make scrollbar visiable */
+    .share-box > .share-box-inner > .share-box-body{
         width: 100%;
-    }  
+        padding: 15px;
+    }
+    .share-box > .share-box-inner > .share-box-body .success-div{
+        padding-left: 0px;
+    }
+    .share-box > .share-box-inner > .share-box-body .errors-div{
+        padding-left: 0px;
+    }
 }
-.share-box{
-    margin: auto;
-    position: absolute;
-    top: 75px;
-    left: 0px;
-    right: 0px;
-    padding-top: 40px;
-    z-index: 9999;
-}
+
 .box-close-btn{
     position: absolute;
-    top: 5px;
-    right: 10px;
-    
+    top: 11px;
+    left: 10px;   
+    color: #aaa;
 }
 .box-close-btn:hover{
     cursor: pointer;
+    color: #000;
 }
-.share-box input{
-    width: 68%;
+
+.success-div{
+    display: none;
+    color: red;
 }
-/*xs*/
-@media (max-width:767px){
-    .share-box input{
-        width: 100%;
-    }  
+.errors-div{
+    display: none;
+    color: red;
 }
-.contribute{
-    position: relative;
-}
+
 .nj-select{
     width: 68%;
     display: inline-block;

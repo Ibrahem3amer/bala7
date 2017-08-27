@@ -45,38 +45,49 @@
                           <a href="{% url 'display_doctor' doctor.id %}"><p>{{ doctor.name }}</p></a>
                       </div>
                     {% endfor %}
-                    {% if topic.exams.all|length > 0 %}
-                        <div class="right-ele">
-                            <div class="right-ele-head">
-                                <p>الامتحانات</p>
-                            </div>
-                            <div class="right-ele-body">
-                                <table class="table table-hover">
-                                  <thead>
-                                    <tr>
-                                      <th>السنه</th>
-                                      <th>الدكتور</th>
-                                      <th>الرابط</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {% for exam in topic.exams.all %}
-                                        <tr>
-                                          <td>{{ exam.year.year }}</td>
-                                          <td>
-                                            {% for prof in exam.professor.all %}
-                                                {{ prof.name }}
-                                                --
-                                            {% endfor %}
-                                          </td>
-                                          <td><a href="{{ exam.link }}"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                        </tr>
-                                    {% endfor %}
-                                  </tbody>
-                                </table>
-                            </div>
+                    <div class="right-ele">
+                        <div class="right-ele-head">
+                            <p>الامتحانات</p>
                         </div>
-                    {% endif %}
+                        <div class="right-ele-body">
+                            <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th>السنه</th>
+                                  <th>الدكتور</th>
+                                  <th>الرابط</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>2016</td>
+                                  <td>محمد الدسوقى</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>2015</td>
+                                  <td>حازم البكرى</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>2014</td>
+                                  <td>شريف بركات</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>2014</td>
+                                  <td>شريف بركات</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                <tr>
+                                  <td>2014</td>
+                                  <td>شريف بركات</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                        </div>
+                    </div>
 
                     <div class="right-ele">
                         <div class="right-ele-head">
@@ -169,7 +180,7 @@
                         </li>
                         {% if request.user.is_staff %}
                           <li role="presentation" class="tab">
-                              <a href="#requests" aria-controls="community" role="tab" data-toggle="tab">الطلبات <span>{{ pending_contributions|length|add:pending_posts|length }}</span></a>
+                              <a href="#requests" aria-controls="community" role="tab" data-toggle="tab">الطلبات <span>{{ pending_contributions|length }}</span></a>
                           </li>
                         {% endif %}
                     </ul>
@@ -281,45 +292,75 @@
                                     <a class="nj-btn" id="request-btn" href="#">طلب</a>
                                 </div>
 
-                                <div id="contribute-form" class="share-box nj-box col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2">
-                                    <i class="box-close-btn fa fa-times" aria-hidden="true"></i>
-                                    <form action="{% url 'api_add_contribution' %}" method="POST" id="contribution_form">
-                                        {% csrf_token %}
-                                        {% for field in contribution_form %}
-                                            {% if not field.is_hidden %}
-                                                <div class="form-group">
-                                                    {{ field.errors }}
-                                                    <label class="nj-label">{{ field.label }}</label>
-                                                    {{ field }}
+                                <div id="contribute-form" class="share-box">
+                                    <div class="share-box-inner">
+                                        <div class="share-box-head">
+                                            <i class="box-close-btn fa fa-times" aria-hidden="true"></i>
+                                            <p>إضافة مشاركة</p>
+                                        </div>
+                                        <div class="share-box-body">
+                                            <form action="{% url 'api_add_contribution' %}" method="POST" id="contribution_form">
+                                                {% csrf_token %}
+                                                <div class="errors-div">
+                                                    <div class="alert alert-danger" role="alert">حدث خطا اثناء الارسال ، برجاء المحاوله مره اخرى</div>
                                                 </div>
-                                            {% else %}
-                                                {{ field }}
-                                            {% endif %}
-                                        {% endfor %}
-                                        <input type="submit" name="contribution_submit" value="send" class="nj-btn" id="contribute-btn-send" />
-                                    </form>
+                                                <div class="success-div">
+                                                    <div class="alert alert-success" role="alert">تم ارسال المشاركه بنجاح </div>
+                                                </div>
+                                                <div class="contribution_form-body">
+                                                    {% for field in contribution_form %}
+                                                        {% if not field.is_hidden %}
+                                                            <div class="form-group">
+                                                                {{ field.errors }}
+                                                                <label class="nj-label">{{ field.label }}</label>
+                                                                {{ field }}
+                                                            </div>
+                                                        {% else %}
+                                                            {{ field }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <input type="submit" name="contribution_submit" value="send" class="nj-btn" id="contribute-btn-send" />
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
 
 
-                                <div id="request-form" class="order-box nj-box col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2">
-                                    <i class="box-close-btn fa fa-times" aria-hidden="true"></i>
-                                    <form action="{% url 'api_add_post' %}" method="POST" id="post_form">
-                                        {% csrf_token %}
-                                        {% for field in post_request %}
-                                            {% if not field.is_hidden %}
-                                                <div class="form-group">
-                                                    {{ field.errors }}
-                                                    <label class="nj-label">{{ field.label }}</label>
-                                                    {{ field }}
+                                <div id="request-form" class="order-box">
+                                    <div class="order-box-inner">
+                                        <div class="order-box-head">
+                                            <i class="box-close-btn fa fa-times" aria-hidden="true"></i>
+                                            <p>إضافة طلب</p>
+                                        </div>
+                                        <div class="order-box-body">
+                                            <form action="{% url 'api_add_post' %}" method="POST" id="post_form">
+                                                {% csrf_token %}
+                                                <div class="errors-div">
+                                                    <div class="alert alert-danger" role="alert">حدث خطا اثناء الارسال ، برجاء المحاوله مره اخرى</div>
                                                 </div>
-                                            {% else %}
-                                                {{ field }}
-                                            {% endif %}
-                                        {% endfor %}
-                                        <input type="submit" name="request_submit" value="send" class="nj-btn" id="contribute-btn-send" />
-                                    </form>
+                                                <div class="success-div">
+                                                    <div class="alert alert-success" role="alert">تم ارسال المشاركه بنجاح </div>
+                                                </div>
+                                                <div class="post_form-body">
+                                                    {% for field in post_request %}
+                                                        {% if not field.is_hidden %}
+                                                            <div class="form-group">
+                                                                {{ field.errors }}
+                                                                <label class="nj-label">{{ field.label }}</label>
+                                                                {{ field }}
+                                                            </div>
+                                                        {% else %}
+                                                            {{ field }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <input type="submit" name="request_submit" value="send" class="nj-btn" id="contribute-btn-send" />
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
-                                
+
                                 {% if posts %}
                                     {% for post in posts %}
                                         <div class="post">
@@ -368,31 +409,25 @@
                                     {% endfor %}
                                 {% endif %}
 
+                                
 
+                            </div>
+                        </div>
                         <div role="tabpanel" class="tab-pane fade " id="requests">
                             
-                            {% if pending_posts %}
-                                {% for p_post in pending_posts %}
-                                    <form method="POST" action="{% url 'api_change_post' %}">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="post_id" value="{{ p_post.id }}" />
-                                        <div class="request-view-box">
-                                            <div class="request-head">
-                                                <p>{{ p_post.user.username }}</p>
-                                                <span>{{ p_post.last_modified }}</span>
-                                            </div>
-                                            <div class="request-body">
-                                                <p>{{ p_post.content }}</p>
-                                            </div>
-                                            <div class="share-footer">
-                                                <input type="submit" name="accept_button" value="قبول" class="nj-btn" />
-                                                <input type="submit" name="ignore_button" value="رفض" class="nj-btn" />
-                                            </div>
-                                        </div>
-                                    </form>
-                                {% endfor %}
-                            {% endif %}
-
+                            <div class="request-view-box">
+                                <div class="request-head">
+                                    <p>هشام عبد اللطيف</p>
+                                    <span>1 يوليو ، الساعه 11:15م</span>
+                                </div>
+                                <div class="request-body">
+                                    <p>بالنسبه لتدريب المينا الاوراق المطلوبه اثبات قيد من الكليه ب ٢٥ جنيه وصورة بطاقه وهيتسلمو في( مبني شئون العاملين) في المينا اول ما تخش من البوابه الرئيسية علي اليمين ده بالنسبه لكل للناس الي ملت الفورمه والي مامملتش بردو.</p>
+                                </div>
+                                <div class="request-footer">
+                                    <button class="nj-btn">قبول</button>
+                                    <button class="nj-btn">رفض</button>
+                                </div>
+                            </div>
                             {% if pending_contributions %}
                                 {% for request in pending_contributions %}
                                     <form method="POST" action="{% url 'api_change_contribution' %}">
@@ -428,24 +463,10 @@
         </section>
         <!-- end page content -->
 
-
-
-        <script src="{% static 'js/topic.js' %}"></script>
-        <script type="text/javascript">
-            // Initiate Jquery form
-            $(document).ready(function (){
-                var options = {
-                    clearForm: true,
-                };
-
-                // Handling submission event.
-                $('#contribution_form').submit(function(){
-                    // Initiate edit form.
-                    $('#contribution_form').ajaxSubmit(options);
-                    return false;
-                });
-            });
-        </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+    <script src="http://malsup.github.com/jquery.form.js"></script>  
+    <script src="{% static 'js/topic.js' %}"></script>
+        
 	{% endif %}
 </body>
 </html>
