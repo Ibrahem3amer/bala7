@@ -376,7 +376,7 @@ input , button:focus{
     left: 0px;
     right: 0px;
     margin: auto;
-    width: 375px;
+    width: 450px;
     max-width: 95%;
     height: auto;
     background-color: #fff;
@@ -443,7 +443,7 @@ input , button:focus{
     left: 0px;
     right: 0px;
     margin: auto;
-    width: 375px;
+    width: 450px;
     max-width: 95%;
     max-height: calc(100% - 150px);
     background-color: #fff;
@@ -514,6 +514,8 @@ input , button:focus{
     top: 11px;
     left: 10px;   
     color: #aaa;
+    -webkit-transition: all .3s; /* Safari */
+    transition: all .3s;
 }
 .box-close-btn:hover{
     cursor: pointer;
@@ -606,6 +608,15 @@ input , button:focus{
 .post-content p{
     margin: 0px;
 }
+.post-content > div{
+    display: none;
+    position: relative;
+    margin: 0px;
+    margin-top: 15px;
+    margin-bottom: -10px;
+    padding: 5px 15px;
+    
+}
 .show-hide-comments{
     padding: 5px 15px;
     border-bottom:  1px solid #E9EBEE;
@@ -613,10 +624,15 @@ input , button:focus{
 .show-hide-comments p{
     margin: 0px;
     display: inline-block;
+    color: #555;
+    background-color: rgba(0,0,0,0);
+    
+    -webkit-transition: all .3s; /* Safari */
+    transition: all .3s;
 }
 .show-hide-comments p:hover{
     cursor: pointer;
-    color: #555;
+    color: #000;
 }
 .write-comment{
     height: 51px;
@@ -635,6 +651,7 @@ input , button:focus{
     overflow-y: auto;
 }
 .comment{
+    position: relative;
     padding: 5px 15px;
     border-bottom:  1px solid #E9EBEE;
 }
@@ -650,7 +667,13 @@ input , button:focus{
     padding: 0px 15px;
     font-size: 22px;
 }
-
+.comment-time{
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 18px;
+    color: #888;
+}
 /* END COMMUNITY */
 
 

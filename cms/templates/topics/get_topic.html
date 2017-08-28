@@ -368,42 +368,25 @@
                                                 <div class="publisher-name"><p>{{ post.user.username }}</p></div>
                                                 <div class="post-content">
                                                     <p>{{ post.content }}</p>
+                                                    <div class="alert alert-warning no-comments-note" role="alert">لا يوجد تعليقات لهذا المنشور.</div>
+                                                    <div class="alert alert-danger error-note" role="alert">حدث حطأ اثناء تحميل التعليقات ، برجاء المحاوله مرة اخرى.</div>
                                                 </div>
                                             </div>
                                             <div class="show-hide-comments">
-                                                <p><i class="fa fa-comments" aria-hidden="true"></i><span> إظهار التعليقات</span></p>
+                                                <form action="{% url 'api_get_post_comments' %}" method="get" id="get-comments-form{{ post.id }}">
+                                                    <input type="hidden" name="post_id" value="{{ post.id }}" class="post_id_holder">
+                                                    <p class="get-comments-btn"><i class="fa fa-comments" aria-hidden="true"></i><span> إظهار التعليقات</span></p>
+                                                </form>
                                             </div>
                                             <div class="write-comment">
                                                 <input type="text" class="nj-input" placeholder="اكتب تعليق...">
                                             </div>
-                                            <input type="hidden" name="post_id" value="{{ post.id }}" class="post_id_holder">
                                             <div class="post-comments">
-
-                                                <div class="comment">
+                                                <!--<div class="comment">
                                                     <p class="publisher-name">محمد على</p>
                                                     <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
-                                                </div>
-                                                <div class="comment">
-                                                    <p class="publisher-name">سمير محمد</p>
-                                                    <p class="comment-content">معلش يا جماعه في بوست تاني انا نزلتو في ورقه زياده لازم تتطبع وتتملي مع الورق</p>
-                                                </div>
-                                                <div class="comment">
-                                                    <p class="publisher-name">محمد على</p>
-                                                    <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
-                                                </div>
-                                                <div class="comment">
-                                                    <p class="publisher-name">سمير محمد</p>
-                                                    <p class="comment-content">معلش يا جماعه في بوست تاني انا نزلتو في ورقه زياده لازم تتطبع وتتملي مع الورق</p>
-                                                </div>
-                                                <div class="comment">
-                                                    <p class="publisher-name">محمد على</p>
-                                                    <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
-                                                </div>
-                                                <div class="comment">
-                                                    <p class="publisher-name">سمير محمد</p>
-                                                    <p class="comment-content">معلش يا جماعه في بوست تاني انا نزلتو في ورقه زياده لازم تتطبع وتتملي مع الورق</p>
-                                                </div>
-
+                                                    <span class="comment-time">2017-08-27T23:40:12</span>
+                                                </div>-->
                                             </div>
                                         </div>
                                     {% endfor %}

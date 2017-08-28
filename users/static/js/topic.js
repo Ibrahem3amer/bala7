@@ -121,19 +121,95 @@ $(document).ready(function(){
         
     });
     
-    //show and hide comments
-    $('.show-hide-comments p').click(function(){
-        if( $(this).parent().nextAll('.post-comments').css('display') == 'none'){
-            $(this).html('<i class="fa fa-comments" aria-hidden="true"></i><span> إخفاء التعليقات</span>');
-            $(this).parent().nextAll('.post-comments').fadeIn();
+    //---------------------------- show and hide comments
+//    $('.show-hide-comments p').click(function(){
+//        if( $(this).parent().nextAll('.post-comments').css('display') == 'none'){
+//            $(this).html('<i class="fa fa-comments" aria-hidden="true"></i><span> إخفاء التعليقات</span>');
+//            $(this).parent().nextAll('.post-comments').fadeIn();
+//        }
+//        else if( $(this).parent().nextAll('.post-comments').css('display') == 'block'){
+//            $(this).html('<i class="fa fa-comments" aria-hidden="true"></i><span> إظهار التعليقات</span>');
+//            $(this).parent().nextAll('.post-comments').fadeOut();
+//        }
+//    });
+    
+    
+    //------------------------------- get post comments 
+    $('.get-comments-btn').click(function(){
+        if( $(this).parent().parent().nextAll('.post-comments').css('display') == 'none'){
+            
+            //send request
+            var form_id = '#' + $(this).parent().attr('id');
+            var type = $(form_id).attr('method');
+            var url = $(form_id).attr('action');
+            $.ajax({
+                type: type,
+                url: url,
+                data: $(form_id).serialize(),
+                success: function(result){
+                    //hidden error note
+                    $(form_id).parent().parent().children('.post-body').children('.post-content').children('.error-note').css('display','none');
+                    
+                    if( result.length == 0){
+                        $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').css('display','none');
+                        //show no-comments note
+                        $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').slideDown(200);
+                    }
+                    else{
+                        //hidden no-comments-note
+                        $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').css('display','none');
+                        //add each comment to comments section 
+                        for(var i=0; i < result.length; i++){
+                            var comment = '<div class="comment"><p class="publisher-name"> ' + result[i].user + '</p><p class="comment-content"> ' + result[i].content + '</p><span class="comment-time">' + result[i].last_modified + '</span></div>';
+                            $(form_id).parent().nextAll('.post-comments').append(comment);
+                        }
+                        //change button text
+                        $(form_id).children('.get-comments-btn').html('<i class="fa fa-comments" aria-hidden="true"></i><span> إخفاء التعليقات</span>');
+                        //show comments section 
+                        $(form_id).parent().nextAll('.post-comments').slideDown();
+                    }
+
+                },
+                error: function(){
+                    //remove no-comments-note
+                    $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').css('display','none');
+                    //show hidden note
+                    $(form_id).parent().parent().children('.post-body').children('.post-content').children('.error-note').css('display','none');
+                    //show error note
+                    $(form_id).parent().parent().children('.post-body').children('.post-content').children('.error-note').slideDown(200);
+                }
+            });//end ajax  
         }
-        else if( $(this).parent().nextAll('.post-comments').css('display') == 'block'){
+        else if( $(this).parent().parent().nextAll('.post-comments').css('display') == 'block'){
             $(this).html('<i class="fa fa-comments" aria-hidden="true"></i><span> إظهار التعليقات</span>');
-            $(this).parent().nextAll('.post-comments').fadeOut();
+            $(this).parent().parent().nextAll('.post-comments').slideUp(function(){
+                $(this).html('');
+            });
         }
+        
+        
     });
     
-    //show add new week box
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //------------------------------- show add new week box
     $('#add-week-btn').click(function(){
         $('#new-week-box').slideToggle();
     });
@@ -142,7 +218,7 @@ $(document).ready(function(){
         $('#new-week-box').slideUp();
     });
     
-    // edit week
+    //------------------------------------ edit week
     $('.edit-week-icon').click(function(event){
         var weekDisplay = $(this).parent().next().css('display');
         if( weekDisplay == 'none'){
