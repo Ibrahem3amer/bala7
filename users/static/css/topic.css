@@ -626,6 +626,10 @@ input , button:focus{
     display: inline-block;
     color: #555;
     background-color: rgba(0,0,0,0);
+    -webkit-user-select: none;
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none;
     
     -webkit-transition: all .3s; /* Safari */
     transition: all .3s;
@@ -638,6 +642,7 @@ input , button:focus{
     display: none;
 }
 .write-comment{
+    position: relative;
     height: 51px;
     background-color: #F6F7F9;
     border-bottom:  1px solid #E9EBEE;
@@ -647,10 +652,23 @@ input , button:focus{
     width: 100%;
     padding: 10px;
 }
+.write-comment i{
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 20px;
+    color: #555;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+.write-comment i:hover{
+    color: #000;
+    cursor: pointer;
+}
 .post-comments{
     display: none;
     background-color: #F6F7F9;
-    max-height: 300px;
+    max-height: 375px;
     overflow-y: auto;
 }
 .comment{

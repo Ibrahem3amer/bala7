@@ -335,8 +335,8 @@ def add_comment(request):
 	"""Add new comment to speicifc post."""
 	try:
 		user = request.user
-		post = request.GET.get('post_id', 0)
-		content = request.GET.get('comment_content', 0)
+		post = post = UserPost.objects.get(id=request.POST.get('post_id', 0))
+		content = request.POST.get('comment_content', 0)
 		response = {}
 		if user and post and content: 
 			comment = UserComment.objects.create(

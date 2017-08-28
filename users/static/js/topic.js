@@ -123,58 +123,15 @@ $(document).ready(function(){
     
     
     //------------------------------- get post comments 
+    //when click on show comments
     $('.get-comments-btn').click(function(){
         if( $(this).parent().parent().nextAll('.post-comments').css('display') == 'none'){
-            
-            //send request
+            //get form options 
             var form_id = '#' + $(this).parent().attr('id');
             var type = $(form_id).attr('method');
             var url = $(form_id).attr('action');
-            $.ajax({
-                type: type,
-                url: url,
-                data: $(form_id).serialize(),
-                beforeSend: function(){
-                    //show loading
-                    $(form_id).children('.loading').css('display','inline-block');
-                },
-                success: function(result){
-                    //hide loading
-                    $(form_id).children('.loading').css('display','none');
-                    //hidden error note
-                    $(form_id).parent().parent().children('.post-body').children('.post-content').children('.error-note').css('display','none');
-                    
-                    if( result.length == 0){
-                        $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').css('display','none');
-                        //show no-comments note
-                        $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').slideDown(200);
-                    }
-                    else{
-                        //hidden no-comments-note
-                        $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').css('display','none');
-                        //add each comment to comments section 
-                        for(var i=0; i < result.length; i++){
-                            var comment = '<div class="comment"><p class="publisher-name"> ' + result[i].user + '</p><p class="comment-content"> ' + result[i].content + '</p><span class="comment-time">' + result[i].last_modified + '</span></div>';
-                            $(form_id).parent().nextAll('.post-comments').append(comment);
-                        }
-                        //change button text
-                        $(form_id).children('.get-comments-btn').html('<i class="fa fa-comments" aria-hidden="true"></i><span> إخفاء التعليقات</span>');
-                        //show comments section 
-                        $(form_id).parent().nextAll('.post-comments').slideDown();
-                    }
-
-                },
-                error: function(){
-                    //hide loading
-                    $(form_id).children('.loading').css('display','none');
-                    //hide no-comments-note
-                    $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').css('display','none');
-                    //show hidden note
-                    $(form_id).parent().parent().children('.post-body').children('.post-content').children('.error-note').css('display','none');
-                    //show error note
-                    $(form_id).parent().parent().children('.post-body').children('.post-content').children('.error-note').slideDown(200);
-                }
-            });//end ajax  
+            //call get_comments()
+            get_comments(form_id,type,url);
         }
         else if( $(this).parent().parent().nextAll('.post-comments').css('display') == 'block'){
             $(this).html('<i class="fa fa-comments" aria-hidden="true"></i><span> إظهار التعليقات</span>');
@@ -182,11 +139,112 @@ $(document).ready(function(){
                 $(this).html('');
             });
         }
-        
-        
     });
-    
-    
+    function get_comments(form_id,type,url){
+        var form_id = form_id;
+        var type = type;
+        var url = url;
+        $.ajax({
+            type: type,
+            url: url,
+            data: $(form_id).serialize(),
+            beforeSend: function(){
+                //show loading
+                $(form_id).children('.loading').css('display','inline-block');
+            },
+            success: function(result){
+                //hide loading
+                $(form_id).children('.loading').css('display','none');
+                //hidden error note
+                $(form_id).parent().parent().children('.post-body').children('.post-content').children('.error-note').css('display','none');
+
+                if( result.length == 0){
+                    $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').css('display','none');
+                    //show no-comments note
+                    $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').slideDown(200);
+                }
+                else{
+                    //hidden no-comments-note
+                    $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').css('display','none');
+                    //clear old comments
+                    $(form_id).parent().nextAll('.post-comments').html('');
+                    //add each comment to comments section 
+                    for(var i= result.length ; i > 0 ; i--){
+                        var comment = '<div class="comment"><p class="publisher-name"> ' + result[i-1].user + '</p><p class="comment-content"> ' + result[i-1].content + '</p><span class="comment-time">' + result[i-1].last_modified + '</span></div>';
+                        $(form_id).parent().nextAll('.post-comments').append(comment);
+                    }
+                    //change button text
+                    $(form_id).children('.get-comments-btn').html('<i class="fa fa-comments" aria-hidden="true"></i><span> إخفاء التعليقات</span>');
+                    //show comments section 
+                    $(form_id).parent().nextAll('.post-comments').slideDown();
+                    $(form_id).parent().nextAll('.post-comments').css('overflow-y','auto');
+                }
+
+            },
+            error: function(){
+                //hide loading
+                $(form_id).children('.loading').css('display','none');
+                //hide no-comments-note
+                $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').css('display','none');
+                //show hidden note
+                $(form_id).parent().parent().children('.post-body').children('.post-content').children('.error-note').css('display','none');
+                //show error note
+                $(form_id).parent().parent().children('.post-body').children('.post-content').children('.error-note').slideDown(200);
+            }
+        });//end ajax  
+    }
+    //-------------------------------------------- add comment 
+    //get form options and call add_comment()
+    $('.add-comment-btn').click(function(){
+        //get options for ajax
+        var form_id = '#' + $(this).parent().attr('id');
+        var type = $(form_id).attr('method');
+        var url = $(form_id).attr('action');
+        //call add_comment function
+        add_comment(form_id,type,url);
+    });
+    //prevent enter from submiting add-comment-form && call add_comment()
+    $('.comment-content').keydown(function(event){
+        if(event.keyCode == 13){
+            event.preventDefault();
+            //click on add-comment-btn
+            $(this).next('.add-comment-btn').trigger('click');
+        }
+    });
+    function add_comment(form_id,type,url){
+        var form_id = form_id;
+        var type = type;
+        var url = url;
+        // send ajax
+        $.ajax({
+            type: type,
+            url: url,
+            data: $(form_id).serialize(),
+            beforeSend: function(){
+                console.log('start add comment');
+            },
+            success: function(responseText){
+                var res = JSON.parse(responseText);
+                if(res.result == 'failure'){
+                    alert("you can't comment on this post");
+                }
+                else if( res.result == 'success'){
+                    //get options for get_comments()
+                    var get_comments_form_id = '#' + $(form_id).parent().parent().children('.show-hide-comments').children('form').attr('id');
+                    var get_comments_form_type = $(get_comments_form_id).attr('method');
+                    var get_comments_form_url = $(get_comments_form_id).attr('action');
+                    //call get_comments()
+                    get_comments(get_comments_form_id,get_comments_form_type,get_comments_form_url);
+                }
+                //clear comment content input
+                $(form_id).children('.comment-content').val('');
+                
+            },
+            error: function(error){
+                alert("حدث خطأ اثناء الارسال ، برجاء المحاوله مره اخرى");
+            }
+        });
+    }//end of add_comment()
     
     //------------------------------- show add new week box
     $('#add-week-btn').click(function(){
