@@ -121,18 +121,6 @@ $(document).ready(function(){
         
     });
     
-    //---------------------------- show and hide comments
-//    $('.show-hide-comments p').click(function(){
-//        if( $(this).parent().nextAll('.post-comments').css('display') == 'none'){
-//            $(this).html('<i class="fa fa-comments" aria-hidden="true"></i><span> إخفاء التعليقات</span>');
-//            $(this).parent().nextAll('.post-comments').fadeIn();
-//        }
-//        else if( $(this).parent().nextAll('.post-comments').css('display') == 'block'){
-//            $(this).html('<i class="fa fa-comments" aria-hidden="true"></i><span> إظهار التعليقات</span>');
-//            $(this).parent().nextAll('.post-comments').fadeOut();
-//        }
-//    });
-    
     
     //------------------------------- get post comments 
     $('.get-comments-btn').click(function(){
@@ -146,7 +134,13 @@ $(document).ready(function(){
                 type: type,
                 url: url,
                 data: $(form_id).serialize(),
+                beforeSend: function(){
+                    //show loading
+                    $(form_id).children('.loading').css('display','inline-block');
+                },
                 success: function(result){
+                    //hide loading
+                    $(form_id).children('.loading').css('display','none');
                     //hidden error note
                     $(form_id).parent().parent().children('.post-body').children('.post-content').children('.error-note').css('display','none');
                     
@@ -171,7 +165,9 @@ $(document).ready(function(){
 
                 },
                 error: function(){
-                    //remove no-comments-note
+                    //hide loading
+                    $(form_id).children('.loading').css('display','none');
+                    //hide no-comments-note
                     $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').css('display','none');
                     //show hidden note
                     $(form_id).parent().parent().children('.post-body').children('.post-content').children('.error-note').css('display','none');
@@ -189,23 +185,6 @@ $(document).ready(function(){
         
         
     });
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     

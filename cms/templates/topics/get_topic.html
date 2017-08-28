@@ -376,6 +376,7 @@
                                                 <form action="{% url 'api_get_post_comments' %}" method="get" id="get-comments-form{{ post.id }}">
                                                     <input type="hidden" name="post_id" value="{{ post.id }}" class="post_id_holder">
                                                     <p class="get-comments-btn"><i class="fa fa-comments" aria-hidden="true"></i><span> إظهار التعليقات</span></p>
+                                                    <i class="fa fa-spinner fa-spin fa-fw loading"></i>
                                                 </form>
                                             </div>
                                             <div class="write-comment">

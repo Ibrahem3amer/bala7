@@ -634,6 +634,9 @@ input , button:focus{
     cursor: pointer;
     color: #000;
 }
+.show-hide-comments .loading{
+    display: none;
+}
 .write-comment{
     height: 51px;
     background-color: #F6F7F9;
