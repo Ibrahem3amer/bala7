@@ -9,6 +9,10 @@ input , button:focus{
 .content-section div{
     vertical-align: top;
 }
+.formLineError{
+    padding: 5px 15px;
+    margin-bottom: 10px;
+}
 /*----- start adv div -----*/
 .adv-div{
     position: absolute;
@@ -272,32 +276,36 @@ input , button:focus{
 .week-content{
     padding: 0px;
     padding-top: 30px;
-    padding-bottom: 15px;
+    padding-bottom: 20px;
 }
 .content-row{
     padding: 0px 15px;
 }
+.week-content .resourse-name{
+    text-align: right;
+    padding-right: 30px;
+}
+.week-content .resourse-name i{
+    padding-left: 5px;
+    vertical-align: middle;
+    color: #0064B7;
+}
 .assets{
-    width: calc(100% - 30px);
-    margin: auto;
+    width: 100%;
     overflow: hidden;
-    border: 1px solid #ddd;
+    
 }
 .assets-h{
-    padding-right: 10px;
+    padding-right: 25px;
     text-align: right;
     font-weight: bold;
     font-size: 24px;
-    margin: 5px;
+    margin: 10px 0px;
     border-bottom: 1px solid #ddd;
 }
-.assets-body{
-    max-height: 70px;
-    overflow: hidden;
-    overflow-y: auto;  
-}
+.assets-body{}
 .assets-body > .row{
-    height: 35px;
+    margin: 0px;
 }
 .assets-body > .row:hover{
     background-color: #eaeaea;
@@ -352,53 +360,177 @@ input , button:focus{
     margin-bottom: 10px;
 }
 .order-box{
-    margin: auto;
-    position: absolute;
-    top: 75px;
+    display: none;
+    background-color: rgba(0,0,0,0.5);
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
     left: 0px;
     right: 0px;
-    padding-top: 40px;
-    z-index: 9999;
+    z-index: 10000;
 }
-.order-box input{
-    width: 68%;
+.order-box > .order-box-inner{
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    width: 450px;
+    max-width: 95%;
+    height: auto;
+    background-color: #fff;
+    border: 1px solid #E9EBEE;
+    overflow: hidden;
+    margin-top: 150px;
+}
+.order-box > .order-box-inner > .order-box-head{
+    position: relative;
+    height: 50px;
+    border-bottom: 1px solid #E9EBEE;
+}
+.order-box > .order-box-inner > .order-box-head > p{
+    line-height: 50px;
+    margin: 0px;
+    padding: 0px 15px;
+    font-size: 30px;
+    font-weight: bold;
+}
+.order-box > .order-box-inner > .order-box-body{
+    height: calc(100% - 50px);
+    width: 100%;
+    overflow-y: auto;
+    padding: 15px;
+}
+.order-box > .order-box-inner > .order-box-body .success-div{}
+.order-box > .order-box-inner > .order-box-body .errors-div{}
+.order-box > .order-box-inner .form-group{
+    margin-bottom: 15px;
+}
+.order-box > .order-box-inner .nj-label{
+    display: block;
+    width: 100%;
+    margin-bottom: 0px;
+}
+.order-box > .order-box-inner input{
+    width: 100%;
+}
+.order-box > .order-box-inner .nj-textarea{
+    height: 100px !important;
+    width: 100%;
+    margin-bottom: 0px;
+}
+.order-box > .order-box-inner .nj-select {
+    width: 100%;
+}
+
+.share-box{
+    display: none;
+    background-color: rgba(0,0,0,0.5);
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 10000;
+}
+.share-box > .share-box-inner{
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    width: 450px;
+    max-width: 95%;
+    max-height: calc(100% - 150px);
+    background-color: #fff;
+    border: 1px solid #E9EBEE;
+    overflow: hidden;
+}
+.share-box > .share-box-inner > .share-box-head{
+    position: relative;
+    height: 50px;
+    border-bottom: 1px solid #E9EBEE;
+}
+.share-box > .share-box-inner > .share-box-head > p{
+    line-height: 50px;
+    margin: 0px;
+    padding: 0px 15px;
+    font-size: 30px;
+    font-weight: bold;
+}
+.share-box > .share-box-inner > .share-box-body{
+    height: calc(100% - 50px);
+    width: calc(100% + 20px);
+    overflow-y: auto;
+    padding: 15px;
+    padding-left: 17px /* to felx hidden scrollbar */
+}
+.share-box > .share-box-inner > .share-box-body .success-div{
+    padding-left: 20px;
+}
+.share-box > .share-box-inner > .share-box-body .errors-div{
+    padding-left: 20px;
+}
+.share-box > .share-box-inner .form-group{
+    margin-bottom: 15px;
+}
+.share-box > .share-box-inner .nj-label{
+    display: block;
+    width: 100%;
+    margin-bottom: 0px;
+}
+.share-box > .share-box-inner input{
+    width: 100%;
+}
+.share-box > .share-box-inner .nj-textarea{
+    height: 100px !important;
+    width: 100%;
+    margin-bottom: 0px;
+}
+.share-box > .share-box-inner .nj-select {
+    width: 100%;
 }
 /*xs*/
 @media (max-width:767px){
-    .order-box  input{
+    /* to make scrollbar visiable */
+    .share-box > .share-box-inner > .share-box-body{
         width: 100%;
-    }  
+        padding: 15px;
+    }
+    .share-box > .share-box-inner > .share-box-body .success-div{
+        padding-left: 0px;
+    }
+    .share-box > .share-box-inner > .share-box-body .errors-div{
+        padding-left: 0px;
+    }
 }
-.share-box{
-    margin: auto;
-    position: absolute;
-    top: 75px;
-    left: 0px;
-    right: 0px;
-    padding-top: 40px;
-    z-index: 9999;
-}
+
 .box-close-btn{
     position: absolute;
-    top: 5px;
-    right: 10px;
-    
+    top: 11px;
+    left: 10px;   
+    color: #aaa;
+    -webkit-transition: all .3s; /* Safari */
+    transition: all .3s;
 }
 .box-close-btn:hover{
     cursor: pointer;
+    color: #000;
 }
-.share-box input{
-    width: 68%;
+
+.success-div{
+    display: none;
+    color: red;
 }
-/*xs*/
-@media (max-width:767px){
-    .share-box input{
-        width: 100%;
-    }  
+.errors-div{
+    display: none;
+    color: red;
 }
-.contribute{
-    position: relative;
-}
+
 .nj-select{
     width: 68%;
     display: inline-block;
@@ -476,6 +608,15 @@ input , button:focus{
 .post-content p{
     margin: 0px;
 }
+.post-content > div{
+    display: none;
+    position: relative;
+    margin: 0px;
+    margin-top: 15px;
+    margin-bottom: -10px;
+    padding: 5px 15px;
+    
+}
 .show-hide-comments{
     padding: 5px 15px;
     border-bottom:  1px solid #E9EBEE;
@@ -483,12 +624,25 @@ input , button:focus{
 .show-hide-comments p{
     margin: 0px;
     display: inline-block;
+    color: #555;
+    background-color: rgba(0,0,0,0);
+    -webkit-user-select: none;
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none;
+    
+    -webkit-transition: all .3s; /* Safari */
+    transition: all .3s;
 }
 .show-hide-comments p:hover{
     cursor: pointer;
-    color: #555;
+    color: #000;
+}
+.show-hide-comments .loading{
+    display: none;
 }
 .write-comment{
+    position: relative;
     height: 51px;
     background-color: #F6F7F9;
     border-bottom:  1px solid #E9EBEE;
@@ -498,13 +652,27 @@ input , button:focus{
     width: 100%;
     padding: 10px;
 }
+.write-comment i{
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 20px;
+    color: #555;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+.write-comment i:hover{
+    color: #000;
+    cursor: pointer;
+}
 .post-comments{
     display: none;
     background-color: #F6F7F9;
-    max-height: 300px;
+    max-height: 375px;
     overflow-y: auto;
 }
 .comment{
+    position: relative;
     padding: 5px 15px;
     border-bottom:  1px solid #E9EBEE;
 }
@@ -520,7 +688,13 @@ input , button:focus{
     padding: 0px 15px;
     font-size: 22px;
 }
-
+.comment-time{
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 18px;
+    color: #888;
+}
 /* END COMMUNITY */
 
 

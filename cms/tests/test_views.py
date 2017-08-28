@@ -9,7 +9,7 @@ from cms.models import Topic
 from cms.views import get_topic 
 
 
-class Access_restriction(TestCase):
+class AccessRestriction(TestCase):
     def setUp(self):
         self.user           = User.objects.create(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
         self.uni            = University.objects.create(name = 'test_university')
@@ -105,3 +105,95 @@ class Access_restriction(TestCase):
 
         # Assert test
         self.assertTrue(flag)
+
+class TableViews(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username = 'ssss', email = 'tesssst@test.com', password = 'secrettt23455')
+        self.fac = Faculty.objects.create()
+        self.dep = Department.objects.create(faculty = self.fac)
+        UserProfile.objects.create(user=self.user, department = self.dep, faculty = self.fac)
+        self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
+    
+    def test_page_load_on_get(self):
+        # Setup test
+        url = reverse('web_dep_table')
+        request = self.client.login(username="ssss", password="secrettt23455")
+
+        # Exercise test
+        request = self.client.get(url)
+
+        # Assert test
+        self.assertEqual(200, request.status_code)
+        self.assertTemplateUsed(request, 'tables/table_main.html')
+
+    def test_page_redirect_on_post(self):
+        # Setup test
+        url = reverse('web_dep_table')
+        request = self.client.login(username="ssss", password="secrettt23455")
+
+        # Exercise test
+        request = self.client.post(url)
+
+        # Assert test
+        self.assertEqual(302, request.status_code)
+
+    def test_page_redirect_on_no_profile(self):
+        # Setup test
+        user = User.objects.create_user(
+            username='test_username',
+            email='tesssst@test.com',
+            password='secrettt23455'
+        )
+        url = reverse('web_dep_table')
+        request = self.client.login(username="test_username", password="secrettt23455")
+
+        # Exercise test
+        request = self.client.get(url)
+
+        # Assert test
+        self.assertEqual(302, request.status_code)
+
+class UserTableViews(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username = 'ssss', email = 'tesssst@test.com', password = 'secrettt23455')
+        self.fac = Faculty.objects.create()
+        self.dep = Department.objects.create(faculty = self.fac)
+        UserProfile.objects.create(user=self.user, department = self.dep, faculty = self.fac)
+        self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
+
+    def test_page_load_on_get(self):
+        # Setup test
+        url = reverse('web_user_table')
+        request = self.client.login(username="ssss", password="secrettt23455")
+
+        # Exercise test
+        request = self.client.get(url)
+
+        # Assert test
+        self.assertEqual(200, request.status_code)
+        self.assertTemplateUsed(request, 'tables/user_table.html')
+
+    def test_page_load_if_no_profile(self):
+        # Setup test
+        url = reverse('web_user_table')
+        another_user = User.objects.create_user(username = 'xxxss', email = 'tesssst@test.com', password = 'secrettt23455')
+        request = self.client.login(username="xxxss", password="secrettt23455")
+
+        # Exercise test
+        request = self.client.get(url)
+
+        # Assert test
+        self.assertEqual(200, request.status_code)
+        self.assertTemplateUsed(request, 'tables/user_table.html')
+
+    def test_post_when_no_choices(self):
+        # Setup test
+        url = reverse('web_user_table')
+        data = {}
+        request = self.client.login(username="xxxss", password="secrettt23455")
+
+        # Exercise test
+        request = self.client.post(url, data=data)
+
+        # Assert test
+        self.assertEqual(302, request.status_code)

@@ -200,15 +200,20 @@ a:hover, a:active, a:open, a:visited{
     display: inline-block;
     line-height: 40px;
     background-color: #0091ea;
+    border: 0px solid #000;
     
-
-    
+    -webkit-transition: all .5s ease; /* Safari */
+    transition: all .5s ease;
 }
 .nj-btn:hover{
     color: #fff;
     text-decoration: none;
     background-color: #0064b7;
     cursor: pointer;
+    
+    -webkit-transform: translate(0px, -2px); /* Safari */
+    transform: translate(0px, -2px);
+    box-shadow: 3px 3px 5px #cbcbcb;
 }
 .nj-btn:visited,.nj-btn:focus{
     text-decoration: none;

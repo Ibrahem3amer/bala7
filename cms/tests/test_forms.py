@@ -4,7 +4,7 @@ from django.http import HttpRequest
 from django.core.exceptions import ValidationError 
 from unittest import skip
 from django.contrib.auth.models import User
-from cms.models import Topic, Material
+from cms.models import Topic, Material, Professor
 from cms.forms import AddMaterialForm
 from users.models import University, Faculty, Department, UserProfile
 
@@ -28,6 +28,8 @@ class AddMaterialFormTest(TestCase):
                 topic           = self.topic
             )
         
+        self.user.profile.topics.add(self.topic)
+        self.topic.professors.add(Professor.objects.create(name="gamal", faculty=self.fac))
 
     def test_intiaite_basic_form(self):
         # Setup test
@@ -41,6 +43,7 @@ class AddMaterialFormTest(TestCase):
             'term': 1,
             'content_type': 1,
             'week_number': 0,
+            'professor': [1],
         }
 
         # Exercise test
@@ -79,26 +82,6 @@ class AddMaterialFormTest(TestCase):
             'name': 'material',
             'content': 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
             'link': 'http://onedrive.live.com/',
-            'year': '2017-1-5',
-            'term': 1,
-            'content_type': 1,
-            'week_number': 0,
-        }
-
-        # Exercise test
-        form = AddMaterialForm(data = data)
-        
-        # Assert test
-        self.assertFalse(form.is_valid())      
-
-    def test_add_material_with_broken_link(self):
-        # Setup test
-        data = {
-            'user': 1,
-            'topic': 1,
-            'name': 'material',
-            'content': 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
-            'link': 'https://www.fuckthisbrokenlink.com',
             'year': '2017-1-5',
             'term': 1,
             'content_type': 1,

@@ -3,8 +3,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 media/
-
-
 .idea/
 
 # C extensions
@@ -105,3 +103,5 @@ db.sqlite3
 .idea
 .DS_Store
 .DS_STORE
+keys.bashrc
+secrets.json
