@@ -1,9 +1,17 @@
 @import url('https://fonts.googleapis.com/css?family=Cairo');
 
+<<<<<<< HEAD
 body{
     background-color: #E9EAEA;
     font-family: 'Cairo', sans-serif;
     font-size: 16px;
+=======
+
+body{
+    background-color: #E9EBEE;
+    font-family: 'Cairo', sans-serif;
+    font-size: 24px;
+>>>>>>> 83a879074306f5aa48b2972d1cfb428b9b7c119c
 }
 .container{
     background-color: #E9EAEA;
@@ -39,6 +47,7 @@ a:hover, a:active, a:open, a:visited{
 .navbar{
     background-color: #fff; 
     height: 70px;
+<<<<<<< HEAD
     padding-top: 10px;
     padding-bottom: 10px;
     border-radius: 0px;
@@ -46,6 +55,8 @@ a:hover, a:active, a:open, a:visited{
 }
 #nj-nav > ul{
     padding: 0px;
+=======
+>>>>>>> 83a879074306f5aa48b2972d1cfb428b9b7c119c
 }
 #nj-nav > ul.nav.navbar-nav.navbar-right > li.dropdown.open > a ,
 #nj-nav > ul.nav.navbar-nav.navbar-left > li > a{
@@ -54,9 +65,18 @@ a:hover, a:active, a:open, a:visited{
 #nj-nav > ul > li{
     float: right;
 }
+<<<<<<< HEAD
 .navbar li{
     list-style: none;
     display: inline-block;
+=======
+
+.navbar{
+    border-radius: 0px;
+    margin-bottom: 15px;
+    border: 0px solid #000;
+    min-height :0px;
+>>>>>>> 83a879074306f5aa48b2972d1cfb428b9b7c119c
 }
 #nj-nav > ul > li >a{
     color: #000;
@@ -114,9 +134,12 @@ a:hover, a:active, a:open, a:visited{
 @media (max-width:767px){
     .navbar{
         height: 70px;
+<<<<<<< HEAD
     }
     .navbar-nav{
         margin-top: 0px;
+=======
+>>>>>>> 83a879074306f5aa48b2972d1cfb428b9b7c119c
     }
 #nj-nav > ul.nav.navbar-nav.navbar-right > li.dropdown,
 #nj-nav > ul.nav.navbar-nav.navbar-right > li.dropdown:hover,
@@ -206,14 +229,20 @@ a:hover, a:active, a:open, a:visited{
     transition: all .5s ease;
 }
 .nj-btn:hover{
+<<<<<<< HEAD
     color:#fff;
     background-color: #46c9b6;
+=======
+    color:#46c9b6;
+    background-color: transparent;
+>>>>>>> 83a879074306f5aa48b2972d1cfb428b9b7c119c
     text-decoration: none;
     cursor: pointer;
     border: 2px solid #46c9b6;
     
     -webkit-transform: translate(0px, -2px); /* Safari */
     transform: translate(0px, -2px);
+<<<<<<< HEAD
 }
 
 .nj-btn-log{
@@ -225,6 +254,34 @@ a:hover, a:active, a:open, a:visited{
     color: #fff !important;
     background-color: #46c9b6;
     border: 2px solid #46c9b6;
+=======
+    box-shadow: 3px 3px 5px #cbcbcb;
+}
+
+.nj-btn-log{
+    background-color: transparent;
+    border: 2px solid #34B3A0;
+    color: #34B3A0 !important;
+}
+.nj-btn-log:hover{
+    color: #fff !important;
+    background-color: #46c9b6;
+    border: 2px solid #46c9b6;
+}
+
+
+
+.nj-input{
+    display: inline-block;
+    width: 30%;
+    font-size: 20px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    border-top-right-radius:10px;
+    border-bottom-left-radius:10px;
+    border: 2px solid #E9EBEE;   
+    height: 40px;
+>>>>>>> 83a879074306f5aa48b2972d1cfb428b9b7c119c
 }
 .nj-box{
     background-color: #fff;
