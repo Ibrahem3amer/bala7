@@ -2,9 +2,9 @@ input , button:focus{
     outline: none;
 }
 .content-section{
-    margin-top: 65px;
+    margin-top: 90px;
     width: 100%;
-    height: calc(100vh - 65px);
+    height: calc(100vh - 80px);
 }
 .content-section div{
     vertical-align: top;
@@ -13,25 +13,6 @@ input , button:focus{
     padding: 5px 15px;
     margin-bottom: 10px;
 }
-/*----- start adv div -----*/
-.adv-div{
-    position: absolute;
-    left: 0px;
-    top: 65px;
-    width: 330px;
-    height: calc(100vh - 65px);
-    padding: 15px;
-}
-.adv-div img{
-    max-width: 100%;
-}
-/*xs*/
-@media (max-width:1199px){
-    .adv-div{
-        display: none;
-    }
-}
-/*----- end adv div --------*/
 
 /*----- start center div ----*/
 /*sm*/
@@ -638,6 +619,7 @@ input , button:focus{
     display: none;
 }
 .write-comment{
+    position: relative;
     height: 51px;
     background-color: #F6F7F9;
     border-bottom:  1px solid #E9EBEE;
@@ -646,6 +628,19 @@ input , button:focus{
 .write-comment input{
     width: 100%;
     padding: 10px;
+}
+.write-comment i{
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 20px;
+    color: #555;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+.write-comment i:hover{
+    color: #000;
+    cursor: pointer;
 }
 .post-comments{
     display: none;

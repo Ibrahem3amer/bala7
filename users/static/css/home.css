@@ -1,126 +1,175 @@
-
 /*------------------------------------------- start home section ------------------------------------------*/
-
+.container{
+    margin-top: 0px;
+}
 /*- start control -*/
 .user-section{
     display: none;
 }
 /*- end control --*/
-/*------- start adv part -------*/
-.home-section .adv-part{
-    padding-top: 15px;
+
+/*--start notifi section -*/
+#notifi-section{
+    margin-top: 70px;
+    background-color:#a6bfcc;
+    padding: 15px 15px;
+    height: 200px;
+    margin-bottom: 20px;
 }
-.home-section .adv-part .ad-block{
-    border: 3px solid #E9EBEE;
-    box-shadow: 1px 1px 5px #333;
+#notifi-section .item-content{
+    border: 2px solid  #778f9b;
+    height: 80px;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-right: 5%;
+    padding-left: 5%;
+    margin-bottom: 5px;
+    overflow: auto;
+    text-align: center;
+
 }
-.home-section .adv-part .ad-block img{
+#team_info{
+    height: 180px;
+    text-align: center;
+    margin: auto;
+}
+#team_info img{
+    height: 80%;
+}
+#team_info a{
+    font-size: 34px;
+    display: block;
+    margin: auto;
+}
+#carousel-div{
+    display: inline-block;
     width: 100%;
+    height: auto;
 }
-/*------- end adv part ---------*/
+
+#arrows{
+    position: relative;
+    display: inline-block;
+    height: 200px;
+    text-align: center;
+    margin: auto;
+}
+#arrows > div{
+    height: 70px;
+    margin: auto;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+}
+@media (max-width: 767px){
+    #notifi-section{
+        padding: 15px;
+        height: 400px;
+
+    }
+    #carousel-div{
+        width: calc(100% - 37px);
+        height: 200px;
+
+    }
+    .carousel.vertical .carousel-inner{
+        height:200px;
+
+    }
+    
+    #arrows{
+        margin: auto;
+    }
+}
+
+.btn-vertical-slider{ 
+    margin-left:0px;
+    cursor:pointer;
+    display: inline;
+}
+
+a {  cursor:pointer;}
+
+.carousel.vertical .carousel-inner{
+        height: auto;
+    }
+.carousel.vertical .carousel-inner .item {
+  -webkit-transition: 0.3s linear top;
+     -moz-transition: 0.3s linear top;
+      -ms-transition: 0.3s linear top;
+       -o-transition: 0.3s linear top;
+          transition: 0.3s linear top;
+}
+
+ .carousel.vertical .active {
+  top: 0;
+}
+ .carousel.vertical .next {
+  top: 100%;
+}
+ .carousel.vertical .prev {
+  top: -100%;
+}
+ .carousel.vertical .next.left,
+.carousel.vertical .prev.right {
+  top: 0;
+}
+ .carousel.vertical .active.left {
+  top: -100%;
+}
+ .carousel.vertical .active.right {
+  top: 100%;
+}
+ .carousel.vertical .item {
+    left: 0;
+     margin-top:0px; 
+     margin-left: 0px;
+     margin-right: 0px;
+}
+
+
+/*--end notifi section -*/
+
 
 /*------- start content part -------*/
 /*- start content element -*/
-.home-section .content-part{
-    padding-left: 0px;
+.content-section .content-part .content-element{
 }
-.home-section .content-part .content-element{
-    margin-top: 16px;
-    border: 3px solid #E9EBEE;    
+.content-section .content-part .content-element .head{
+    background-color: #a6bfcc;
+    border: 1px solid #a6bfcc;
 }
-.home-section .content-part .content-element .head{
-    background-color: #d9edf7;
-    border-bottom: 1px solid #ddd;
-}
-.home-section .content-part .content-element .head p{
-    font-size: 26px;
+.content-section .content-part .content-element .head p{
+    font-size: 20px;
     font-weight: bold;
     padding: 5px 10px;
     margin: 0px;
 }
-.home-section .content-part .content-element .content{
+.content-section .content-part .content-element .content{
     background-color: #fff;
     text-align: center;
     padding-top: 15px;
-    padding-bottom: 5px;
-    
+    padding-bottom: 10px; 
+    border-right: 3px solid #a6bfcc;  
+    border-left: 3px solid #a6bfcc;  
+    border-bottom: 3px solid #a6bfcc;  
+
 }
-.home-section .content-part .content-element .content div{
+.content-section .content-part .content-element .content div{
     vertical-align: top;
 }
-.home-section .content-part .content-element .content div p{
-    font-size: 20px;
+.content-section .content-part .content-element .content div p{
     font-weight: bold;
     margin: 0px;
 }
-.home-section .content-part .content-element .content div a i{
-    font-size: 20px;
-    
+.link_icon{
+    color: #000;
+}
+.link_icon:hover{
+    color: #46c9b6;
 }
 /*--end content element -*/
 
-/*- strat note element -*/
-.home-section .content-part .note-element{
-    position: relative;
-    margin-top: 15px;
-    border: 3px solid #E9EBEE;    
-    
-}
-.home-section .content-part .note-element .note-head{
-    background-color: #ffdf7d;
-    border-bottom: 1px solid #ddd;
-}
-.home-section .content-part .note-element .note-head p{
-    font-size: 26px;
-    font-weight: bold;
-    padding: 5px 10px;
-    margin: 0px;
-}
-.home-section .content-part .note-element .note-head p i{
-    font-size: 12px;
-    padding-right: 7px;
-}
-.home-section .content-part .note-element .note-head .note-time{
-    position: absolute;
-    top: 9px;
-    left: 10px;
-    
-    background-color: #d9534f;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 17px;
-    font-weight: bold;
-    padding: 2px 13px;
-    padding-top: 3px;
-    margin: 0px;
-    letter-spacing: 2px;
-}
-.home-section .content-part .note-element .note-content{
-    background-color: #fff;
-    text-align: center;
-    padding-top: 10px;
-}
-.home-section .content-part .note-element .note-content p{
-    text-align: right;
-    font-size: 20px;
-    padding: 5px 25px;
-    font-weight: bold;
-}
-/*- end note element -*/
-
-/*- start adv-xs -*/
-.adv-xs{
-    width: 320px;
-    max-width: 100%;
-    height: 100px;
-    margin: auto;
-    margin-top: 15px;
-}
-.adv-xs img{
-    width: 100%;
-    height: 100%;
-}
-/*- end adv-xs -*/
 
 /*------- end content part ---------*/
 

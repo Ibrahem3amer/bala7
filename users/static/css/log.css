@@ -1,46 +1,37 @@
-.form-group input{
-    display: inline-block;
-    width: 30%;
-    font-size: 20px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    border-top-right-radius:10px;
-    border-bottom-left-radius:10px;
-    border: 2px solid #E9EBEE;   
-    height: 40px;
-    width: 60%;
-}
-
-@media (max-width:767px){
-    .navbar{
-        height: 54px;
-    }
-}
 .container{
-    background-color: #E9EBEE;
+    background-color: #E9EAEA;
+    padding-right: 10% !important;
+    padding-left: 10% !important;
+    padding-top: 5% !important;
+    padding-bottom: 5% !important;
+    height: auto;
 }
-
+.log{
+    margin-bottom: 50px;
+}
 .title{
     font-size: 30px;
     margin-bottom: 30px;
 }
-.login-outer-div{
-    border: 3px solid #64c1ff;    
-    box-shadow: 1px 1px 10px #888;
+.wel-pic{
+    float: right !important;
+    margin: auto;
+    text-align: center;
 }
-.form-group{
-    margin-bottom: 10px;
+.wel-pic img{
+    height: 300px;
+    vertical-align: middle;
 }
-.log-label{
-    display: inline-table;
-    width: 40%;
-    max-width: 35%;
+#remember-check{
+    float: right;
+    padding: 0px;
 }
-.nj-input{
-    width: 60%;
+.inline{
+   width: auto;
+    display: inline;
 }
 .log-btn{
-    width: 50%;
+    width: 100%;
     text-align: center;
     display: inline-block;
     margin-top: 20px;
@@ -49,23 +40,20 @@
 }
 .log-option{
     vertical-align: middle;
-    float:left;
-    margin-top: 10px;
-    margin-left: 20px;
+    margin-left: 0px;
+    display: block;
+    text-align: center;
 }
 .social-log{
     font-size: 35px;
     display: inline-block;
-    text-align: center;
     vertical-align: middle;
-    margin-top: 10px;
     
 }
 .title-2{
-    margin-right: 10px;
     font-size: 25px;
     display: inline-block;
-    width: 120px;
+    vertical-align: middle;
 }
 .fb:hover{
     color: #3B5998;
@@ -73,50 +61,17 @@
 .tw:hover{
     color: #44A1DA;
 }
-@media (max-width:620px){
-    .log-btn{
-        width: 100%;
-    }
-    .log-option{
-        text-align: center;
-        display: block;
-        float: none;
-        margin-top: 0px;
-    }
-    .log-label{
-    display: inline-table;
-    width: 50%;
-    max-width: 100%;
-    }
-    .nj-input{
-        width: 100%;
-        float: left;
-    }
-    .remember-label{
-        width: 0px;
-    }
 
-}
-.break-line{
-    border-top: 2px dashed #d7d7d7;
-    margin-bottom: 10px;
-    margin-top: 10px;
-}
-.break-line-v{
-    border-left: 5px solid #000;
-    height: 50px;
-    display: inline-block;
-    vertical-align: middle;
-}
+
 .pass-forget-link:hover,.new-acc-link:hover{
-    color: #64c1ff;
+    color: #46c9b6;
     
 }
 .pass-forget-link{
     text-decoration: none !important;
     color: #000;
-    float: right;
-    padding-left: 30px;
+    float: left;
+
 }
 .new-acc-link{
     text-decoration: none !important;
@@ -124,19 +79,3 @@
     float: left;
 }
 
-@media (max-width:500px){
-    
-    .pass-forget-link{
-        text-decoration: none !important;
-        display: block;
-        text-align: center;
-        float: none;
-        margin-right: 35px;
-    }
-    .new-acc-link{
-        text-decoration: none !important;
-        display: block;
-        float: none;  
-        text-align: center;
-    }
-}

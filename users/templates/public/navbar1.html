@@ -1,2 +1,37 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    {% load staticfiles %}
+    
+	<meta charset="utf-8">
+    <title>Najiba | نجيبه</title>
+    <!-- Internet Explorer meta -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- First Mobile meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> 
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/home-visitor.css' %}" rel="stylesheet">
+    <link href="{% static 'css/nav-visitor.css' %}" rel="stylesheet">
+    <!--[if lt IE 9]>
+        <script src="js/html5shiv.min.js"></script>
+        <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    
+</head>
+<body>
 <nav class="navbar navbar-default navbar-fixed-top">
-</nav>
+        <ul class="hidden-xs">
+            <li><a href="{% url 'web_signup' %}" id="id_sign_up" class="nj-btn">انشاء حساب جديد</a></li>
+            <li><a href="{% url 'login' %}" id="id_sign_in" class="nj-btn nj-btn-log">تسجيل دخول</a></li>
+        </ul>
+        <div id="logo">
+            <img src="{% static 'pic/logo.png' %}" onmouseover="this.src='{% static 'pic/logohover.png' %}'" onmouseout="this.src='{% static 'pic/logo.png' %}'">
+        </div>
+</nav>               
+</body>

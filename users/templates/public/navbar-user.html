@@ -1,3 +1,5 @@
+
+    {% load staticfiles %}
 <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid ">
             <!--  toggle get grouped for better mobile display -->
@@ -8,14 +10,21 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+                <div id="logo" class="visible-xs">
+                        <img src="{% static 'pic/logo.png' %}" onmouseover="this.src='{% static 'pic/logohover.png' %}'" onmouseout="this.src='{% static 'pic/logo.png' %}'">
+                    </div>
 
                 <!--START xs icons -->
                 <ul class="xs-nav-icons">
                     <li class="dropdown visible-xs">
                         <a class-"sub" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-cog nav-fa" aria-hidden="true"></i></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'web_user_profile' %}"><i class="fa fa-user nav-fa-xs " aria-hidden="true"></i>الصفحة الشخصية</a></li>
-                            <li><a href="{% url 'logout' %}?next={% url 'home_visitor' %}"><i class="fa fa-sign-out nav-fa-xs " aria-hidden="true"></i>تسجيل خروج</a></li>
+                            <li>
+                                <a href="{% url 'web_user_profile' %}"><i class="fa fa-user nav-fa-xs " aria-hidden="true"></i>الصفحة الشخصية</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'logout' %}?next={% url 'home_visitor' %}"><i class="fa fa-sign-out nav-fa-xs " aria-hidden="true"></i>تسجيل خروج</a>
+                            </li>
                         </ul>
                     </li>
 
@@ -50,6 +59,9 @@
                          </li>
 
                     </ul>
+                    <div id="logo" class="hidden-xs">
+                        <img src="{% static 'pic/logo.png' %}" onmouseover="this.src='{% static 'pic/logohover.png' %}'" onmouseout="this.src='{% static 'pic/logo.png' %}'">
+                    </div>
                 </div>
             {% endif %}
     <!-- /.navbar-collapse -->

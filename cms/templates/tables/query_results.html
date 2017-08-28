@@ -29,13 +29,17 @@
     <!-- start navbar -->
     {% include "public/navbar-user.html" %}
     <!-- end navbar -->
-    <section class="all-content">
-        <div class="ads-section">
-            <img src="{% static 'pic/adv300x250.jpg' %}" alt="adv300x250">
+    <section class="all-content container">
+        <div class="hidden-xs left">
+            <div class="adv-part">
+                <div class="ad-block">
+                    <a href="#"><img src="{% static 'pic/adv.jpg' %}"></a> 
+                </div>
+            </div>
         </div>
-        <div class="content-section">
-            <div class="xs-ads">
-                <img src="{% static 'pic/adv-xs.jpg' %}" alt="320x100-adv">
+        <div class="content-part">
+            <div class="adv-xs hidden-md">
+                <img src="{% static 'pic/adv-xs.jpg' %}">
             </div>
             <h1 class="table-h">نتائج الاستعلام</h1>
             {% if messages %}

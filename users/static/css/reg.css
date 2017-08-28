@@ -1,134 +1,108 @@
-.form-group input{
-    display: inline-block;
-    width: 30%;
-    font-size: 20px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    border-top-right-radius:10px;
-    border-bottom-left-radius:10px;
-    border: 2px solid #E9EBEE;   
-    height: 40px;
-    width: 60%;
-}
-
-@media (max-width:767px){
-    .navbar{
-        height: 54px;
-    }
-}
 .container{
-    background-color: #E9EBEE;
+    background-color: #E9EAEA;
+    padding-right: 10% !important;
+    padding-left: 10% !important;
+    padding-top: 5% !important;
+    padding-bottom: 5% !important;
+    height: auto;
+}
+.reg{
+    margin-bottom: 50px;
+}
+.wel-pic{
+    float: right !important;
+    margin: auto;
+    text-align: center;
+}
+.wel-pic img{
+    height: 300px;
+    vertical-align: middle;
 }
 .title{
     font-size: 30px;
     margin-bottom: 30px;
     vertical-align: middle;
 }
-.done{
-    text-align: center;
-}
-.new-symbol{
-    vertical-align: middle;
-}
-.nj-box{
-    border: 3px solid #64c1ff;    
-    box-shadow: 1px 1px 10px #888;
-    margin-bottom: 20px;
-}
-.notfound-box{
-    margin-top: 0px;
-    margin-bottom: 30px;
-}
-.form-group{
-    margin-bottom: 10px;
-}
 .nj-label{
-    padding-right: 20px;
-    padding-left: 20px;
-    display: inline-table;
-    width: 30%;
-}
-.nj-input{
-    width: 60%;
-    padding: 15px;
-}
-
-.nj-select{
-    width: 60%;
-    display: inline-block;
-    cursor:pointer;
-    border-top-right-radius:10px;
-    border-bottom-left-radius:10px;
-    border: 2px solid #E9EBEE;   
-    height: 40px;
-    box-shadow: 0 3px 0 #E9EBEE;
-    font-size: 20px;
-}
-.nj-select:focus{
-    outline: none;
-    border-color: #66afe9;
-    box-shadow: 0px 0px 6px #66afe9;
-}
-.form-control{
-    padding-top: 0px;
-    margin-bottom: 10px;
-}
-@media (max-width:450px){
-    .nj-label{
-        padding-left: 50px;
-    }
-    .nj-select{
-        width: 100%;
-        float: left;
-        max-width: 100%;
-    }
-}
-.next-btn{
-    float: left;
-    border: 0px;
-    border-radius: 0px;
-    height: 46px;
-    width: auto;
-}
-.back-btn{
-    float: right;
+    display: block;
+    font-size: 24px;
 }
 .have-acc{
     display: inline-block;
     margin-top: 10px;
     font-size: 18px;
     vertical-align: middle;
-
+}
+.form-group #ask{
+    display: inline;
+    text-decoration: none;
+    font-size: 15px;
+    color: red;
+}
+.form-group #ask:hover{
+    text-decoration: none;
+    font-size: 15px;
+    color: #46c9b6;
+}
+.inline{
+    display:inline;
 }
 .have-acc-link{
     color: #000;
     text-decoration: underline;
 }
 .have-acc-link:hover{
-    color: #64c1ff;
-    
+    color: #46c9b6;
 }
+
+.sad-pic{
+    float: left!important;
+    margin: auto;
+    text-align: center;
+}
+.sad-pic img{
+    height: 300px;
+    vertical-align: middle;
+}
+
+.new-symbol{
+    vertical-align: middle;
+}
+
+.notfound-box{
+    margin-top: 0px;
+    margin-bottom: 30px;
+}
+
+.next-btn{
+    float: left;
+    border: 0px;
+    border-radius: 0px;
+    height: 46px;
+    width: auto;
+    width: 100%;
+    margin-top: 10px;
+}
+.back-btn{
+    float: right;
+}
+
 
 .log-option{
     vertical-align: middle;
-    margin-top: 10px;
-    margin-left: 20px;
+    margin-left: 0px;
     display: block;
-    text-align: center;
 }
 .social-log{
     font-size: 35px;
     display: inline-block;
-    text-align: center;
     vertical-align: middle;
-    margin-top: 10px;
     
 }
 .title-2{
-    margin-right: 10px;
     font-size: 25px;
     display: inline-block;
-    width: 150px;
+    vertical-align: middle;
 }
 .fb:hover{
     color: #3B5998;
@@ -138,17 +112,6 @@
 }
 
 
-@media (max-width:700px){
-    .nj-label{
-        display: inline-table;
-        width: 100%;
-        max-width: 100%;
-        }
-    .nj-input{
-        width: 100%;
-        float: left;
-    }
-}
 .not-found1{
     margin-bottom: 0px;
     font-size: 30px;

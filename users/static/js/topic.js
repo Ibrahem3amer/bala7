@@ -186,7 +186,55 @@ $(document).ready(function(){
         
     });
     
-    
+    //-------------------------------------------- add comment 
+    //get form options and call add_comment()
+    $('.add-comment-btn').click(function(){
+        //get options for ajax
+        var form_id = '#' + $(this).parent().attr('id');
+        var type = $(form_id).attr('method');
+        var url = $(form_id).attr('action');
+        //call add_comment function
+        add_comment(form_id,type,url);
+    });
+    //prevent enter from submiting add-comment-form && call add_comment()
+    $('.comment-content').keydown(function(event){
+        if(event.keyCode == 13){
+            event.preventDefault();
+            //click on add-comment-btn
+            $(this).next('.add-comment-btn').trigger('click');
+        }
+    });
+    function add_comment(form_id,type,url){
+        var form_id = form_id;
+        var type = type;
+        var url = url;
+        console.log(form_id +',' + type +',' + url);
+        // send ajax
+        $.ajax({
+            type: type,
+            url: url,
+            data: $(form_id).serialize(),
+            beforeSend: function(){
+                console.log('start add comment');
+            },
+            success: function(responseText){
+                var res = JSON.parse(responseText);
+                if(res.result == 'failure'){
+                    console.log('Done but request refused:');
+                    
+                    
+                }
+                else if( res.result == 'success'){
+                    console.log('Done and request accept:');
+                }
+                //clear comment content input
+                $(form_id).children('.comment-content').val('');
+            },
+            error: function(error){
+                console.log('error :' + error);
+            }
+        });
+    }//end of add_comment()
     
     //------------------------------- show add new week box
     $('#add-week-btn').click(function(){

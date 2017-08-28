@@ -34,18 +34,17 @@
         <!-- start page content -->
         <section class="content-section">
             <div class="container">
-                <div class="row">
-                    <div class="adv-part col-sm-3 hidden-xs">
+                 <div class="hidden-xs left">
+                    <div class="adv-part">
                         <div class="ad-block">
                             <a href="#"><img src="{% static 'pic/adv.jpg' %}"></a> 
                         </div>
                     </div>
-                    <div class="content-part col-sm-9">
-
-                        <div class="adv-xs visible-xs">
-                            <img src="{% static 'pic/adv-xs.jpg' %}">
-                        </div>
-
+                </div>
+                <div class="content-part">
+                    <div class="adv-xs hidden-md">
+                        <img src="{% static 'pic/adv-xs.jpg' %}">
+                    </div>
                         {% if messages %}
                             <ul class="messages">
                                 {% for message in messages %}
@@ -113,7 +112,6 @@
                                         <input class="nj-input" type="text" id="section" value="5" readonly >
                                     </div>
                                 </div>
-
                             </div>
                             <div class="choose-univ">
                                 <form action="{% url 'web_change_info' %}" method="POST">
@@ -198,12 +196,9 @@
                                     <button class="true-submit-btn" type="submit"><i class="fa fa-check"></i></button>
                                 </form>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
-            </div>
         </section>
         <!-- end page content -->
 
