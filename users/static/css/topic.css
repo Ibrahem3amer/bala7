@@ -684,16 +684,30 @@ input , button:focus{
     font-size: 28px;
     margin: 0px;
 }
-.comment-content{
+.comment .comment-content{
     padding: 0px 15px;
     font-size: 22px;
 }
-.comment-time{
+.comment .comment-time{
     position: absolute;
-    top: 10px;
+    top: 15px;
     left: 15px;
     font-size: 18px;
     color: #888;
+}
+.comment .comment-delet{
+    display: none;
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+    color: #888;
+    
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+.comment .comment-delet:hover{
+    color: #000;
+    cursor: pointer;
 }
 /* END COMMUNITY */
 
