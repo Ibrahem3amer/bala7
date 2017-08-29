@@ -170,7 +170,7 @@ $(document).ready(function(){
                     $(form_id).parent().nextAll('.post-comments').html('');
                     //add each comment to comments section 
                     for(var i= result.length ; i > 0 ; i--){
-                        var comment = '<div class="comment"><p class="publisher-name"> ' + result[i-1].user + '</p><p class="comment-content"> ' + result[i-1].content + '</p><span class="comment-time">' + result[i-1].last_modified + '</span></div>';
+                        var comment = '<div class="comment"><form action="/api/comments/delete" method="post" id="delete-comment-form' + result[i-1].id + '"><input type="hidden" name="comment_id" value="' + result[i-1].id + '" class="comment_id_holder"><p class="publisher-name"> ' + result[i-1].user + '</p><p class="comment-content"> ' + result[i-1].content + '</p><span class="comment-time">' + result[i-1].last_modified + '</span><i class="fa fa-trash comment-delet" aria-hidden="true"></i></form></div>';
                         $(form_id).parent().nextAll('.post-comments').append(comment);
                     }
                     //change button text
@@ -178,6 +178,15 @@ $(document).ready(function(){
                     //show comments section 
                     $(form_id).parent().nextAll('.post-comments').slideDown();
                     $(form_id).parent().nextAll('.post-comments').css('overflow-y','auto');
+                    
+                    
+                    //- delete comment 
+                    $('.comment-delet').click(function(){
+                        var comment_form_id = '#' + $(this).parent().attr('id');
+                        var comment_form_type = $(this).parent().attr('method');
+                        var comment_form_url = $(this).parent().attr('action');
+                        delete_comment(comment_form_id,comment_form_type,comment_form_url);
+                    });
                 }
 
             },
@@ -245,6 +254,70 @@ $(document).ready(function(){
             }
         });
     }//end of add_comment()
+    
+    //---------------------------------------------- delete comment 
+    // using jQuery to get csrftoken
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    
+    // call inside get_comments() to can access comments
+    function delete_comment(form_id,type,url){
+        var form_id = form_id;
+        var type = type;
+        var url = url;
+        console.log(form_id);
+        console.log(type);
+        console.log(url);
+        // send ajax
+        $.ajax({
+            type: type,
+            url: url,
+            data: $(form_id).serialize(),
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
+            success: function(responseText){
+                console.log(responseText);
+                var res = JSON.parse(responseText);
+                console.log(res);
+                if(res.result == 'failure'){
+                    
+                }
+                else if( res.result == 'success'){
+                    //get options for get_comments()
+                    var get_comments_form_id = '#' + $(form_id).parent().parent().parent().children('.show-hide-comments').children('form').attr('id');
+                    var get_comments_form_type = $(get_comments_form_id).attr('method');
+                    var get_comments_form_url = $(get_comments_form_id).attr('action');
+                    //call get_comments()
+                    get_comments(get_comments_form_id,get_comments_form_type,get_comments_form_url);
+                }
+            },
+            error: function(error){
+                alert("حدث خطأ اثناء الارسال ، برجاء المحاوله مره اخرى");
+            }
+        });
+    }
+    
     
     //------------------------------- show add new week box
     $('#add-week-btn').click(function(){

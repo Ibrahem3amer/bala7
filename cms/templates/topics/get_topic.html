@@ -389,11 +389,22 @@
                                                 
                                                 
                                             </div>
+                                            {% if request.user.is_staff %}
+                                                <style>
+                                                    .comment .comment-delet{
+                                                        display: block;
+                                                    }
+                                                </style>
+                                            {% endif %}
                                             <div class="post-comments">
                                                 <!--<div class="comment">
-                                                    <p class="publisher-name">محمد على</p>
-                                                    <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
-                                                    <span class="comment-time">2017-08-27T23:40:12</span>
+                                                    <form action="api_delete_comment" method="post" id="delete-comment-form">
+                                                        <input type="hidden" name="comment_id" value="comment.id" class="comment_id_holder">
+                                                        <p class="publisher-name">محمد على</p>
+                                                        <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
+                                                        <span class="comment-time">2017-08-27T23:40:12</span>
+                                                        <i class="fa fa-trash comment-delet" aria-hidden="true"></i>
+                                                    </form>
                                                 </div>-->
                                             </div>
                                         </div>
