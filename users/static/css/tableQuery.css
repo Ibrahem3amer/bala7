@@ -10,9 +10,7 @@
     }
 }
 
-
 /*---------- start content style ----------*/
-
 
 .headText{
     margin: 15px;
@@ -50,7 +48,6 @@
     -webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;
     user-select: none;  
 }
-
 .formBlock .form-group > label:hover{
     cursor: pointer;
 }

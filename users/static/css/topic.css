@@ -2,9 +2,9 @@ input , button:focus{
     outline: none;
 }
 .content-section{
-    margin-top: 90px;
+    margin-top: 65px;
     width: 100%;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 65px);
 }
 .content-section div{
     vertical-align: top;
@@ -13,6 +13,25 @@ input , button:focus{
     padding: 5px 15px;
     margin-bottom: 10px;
 }
+/*----- start adv div -----*/
+.adv-div{
+    position: absolute;
+    left: 0px;
+    top: 65px;
+    width: 330px;
+    height: calc(100vh - 65px);
+    padding: 15px;
+}
+.adv-div img{
+    max-width: 100%;
+}
+/*xs*/
+@media (max-width:1199px){
+    .adv-div{
+        display: none;
+    }
+}
+/*----- end adv div --------*/
 
 /*----- start center div ----*/
 /*sm*/
@@ -607,6 +626,10 @@ input , button:focus{
     display: inline-block;
     color: #555;
     background-color: rgba(0,0,0,0);
+    -webkit-user-select: none;
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none;
     
     -webkit-transition: all .3s; /* Safari */
     transition: all .3s;
@@ -645,7 +668,7 @@ input , button:focus{
 .post-comments{
     display: none;
     background-color: #F6F7F9;
-    max-height: 300px;
+    max-height: 375px;
     overflow-y: auto;
 }
 .comment{
@@ -661,16 +684,30 @@ input , button:focus{
     font-size: 28px;
     margin: 0px;
 }
-.comment-content{
+.comment .comment-content{
     padding: 0px 15px;
     font-size: 22px;
 }
-.comment-time{
+.comment .comment-time{
     position: absolute;
-    top: 10px;
+    top: 15px;
     left: 15px;
     font-size: 18px;
     color: #888;
+}
+.comment .comment-delet{
+    display: none;
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+    color: #888;
+    
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+.comment .comment-delet:hover{
+    color: #000;
+    cursor: pointer;
 }
 /* END COMMUNITY */
 
@@ -815,7 +852,7 @@ input , button:focus{
     padding: 5px 15px;
     text-align: left;
 }
-.share-footer button{
+.share-footer input{
     height: 34px;
     line-height: 34px;
     padding: 0px;

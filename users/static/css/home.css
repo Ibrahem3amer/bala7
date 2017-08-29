@@ -11,13 +11,13 @@
 /*--start notifi section -*/
 #notifi-section{
     margin-top: 70px;
-    background-color:#a6bfcc;
+    background-color:#E1E2E1;
     padding: 15px 15px;
     height: 200px;
     margin-bottom: 20px;
 }
 #notifi-section .item-content{
-    border: 2px solid  #778f9b;
+    border: 2px solid  #a6bfcc;
     height: 80px;
     padding-top: 1%;
     padding-bottom: 1%;
@@ -30,16 +30,6 @@
 }
 #team_info{
     height: 180px;
-    text-align: center;
-    margin: auto;
-}
-#team_info img{
-    height: 80%;
-}
-#team_info a{
-    font-size: 34px;
-    display: block;
-    margin: auto;
 }
 #carousel-div{
     display: inline-block;

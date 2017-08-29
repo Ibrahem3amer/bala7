@@ -16,7 +16,6 @@ body{
 .navbar #logo{
     display: inline-block;
     position: absolute;
-<<<<<<< HEAD
     margin: auto;
     left: 0px;
     right: 0px;
@@ -28,12 +27,6 @@ body{
 .navbar #logo img{
     height: 50px;
     width: 39px;
-=======
-    left: 50%;
-}
-.navbar #logo img{
-    height: 50px;
->>>>>>> 83a879074306f5aa48b2972d1cfb428b9b7c119c
     cursor: pointer;
 }
 .navbar ul li a {

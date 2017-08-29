@@ -380,13 +380,31 @@
                                                 </form>
                                             </div>
                                             <div class="write-comment">
-                                                <input type="text" class="nj-input" placeholder="اكتب تعليق...">
+                                                <form action="{% url 'api_add_comment' %}" method="post" id="add-comment-form{{ post.id }}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="post_id" value="{{ post.id }}" class="post_id_holder">
+                                                    <input type="text" name="comment_content" class="nj-input comment-content" placeholder="اكتب تعليق..." autocomplete="off">
+                                                    <i class="fa fa-paper-plane add-comment-btn" aria-hidden="true"></i>
+                                                </form>
+                                                
+                                                
                                             </div>
+                                            {% if request.user.is_staff %}
+                                                <style>
+                                                    .comment .comment-delet{
+                                                        display: block;
+                                                    }
+                                                </style>
+                                            {% endif %}
                                             <div class="post-comments">
                                                 <!--<div class="comment">
-                                                    <p class="publisher-name">محمد على</p>
-                                                    <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
-                                                    <span class="comment-time">2017-08-27T23:40:12</span>
+                                                    <form action="api_delete_comment" method="post" id="delete-comment-form">
+                                                        <input type="hidden" name="comment_id" value="comment.id" class="comment_id_holder">
+                                                        <p class="publisher-name">محمد على</p>
+                                                        <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
+                                                        <span class="comment-time">2017-08-27T23:40:12</span>
+                                                        <i class="fa fa-trash comment-delet" aria-hidden="true"></i>
+                                                    </form>
                                                 </div>-->
                                             </div>
                                         </div>
@@ -399,6 +417,7 @@
                         </div>
                         <div role="tabpanel" class="tab-pane fade " id="requests">
                             
+<!--
                             <div class="request-view-box">
                                 <div class="request-head">
                                     <p>هشام عبد اللطيف</p>
@@ -412,6 +431,29 @@
                                     <button class="nj-btn">رفض</button>
                                 </div>
                             </div>
+-->
+                            {% if pending_posts %}
+                                {% for p_post in pending_posts %}
+                                    <form method="POST" action="{% url 'api_change_post' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="post_id" value="{{ p_post.id }}" />
+                                        <div class="request-view-box">
+                                            <div class="request-head">
+                                                <p>{{ p_post.user.username }}</p>
+                                                <span>{{ p_post.last_modified }}</span>
+                                            </div>
+                                            <div class="request-body">
+                                                <p>{{ p_post.content }}</p>
+                                            </div>
+                                            <div class="share-footer">
+                                                <input type="submit" name="accept_button" value="قبول" class="nj-btn" />
+                                                <input type="submit" name="ignore_button" value="رفض" class="nj-btn" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                {% endfor %}
+                            {% endif %}
+                            
                             {% if pending_contributions %}
                                 {% for request in pending_contributions %}
                                     <form method="POST" action="{% url 'api_change_contribution' %}">
@@ -426,7 +468,7 @@
                                                 <p><span>نوع المحتوى <span class="colon">:</span></span> <span>{{ request.content_type }}</span></p>
                                                 <p><span>عنوان المحتوى <span class="colon">:</span></span> <span>{{ request.name }}</span></p>
                                                 <p><span>الاسبوع <span class="colon">:</span></span> <span>{{ request.week_number }}</span></p>
-                                                <p><span> <span class="colon">:</span></span> <span><a href="{{ request.link }}" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></span></p>
+                                                <p><span> رابط التحميل <span class="colon">:</span></span> <span><a href="{{ request.link }}" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></span></p>
                                             </div>
                                             <div class="share-footer">
                                                 <input type="submit" name="accept_button" value="قبول" class="nj-btn" />
@@ -436,7 +478,7 @@
                                     </form>
                                 {% endfor %}
                             {% endif %}
-                             
+                            
                         </div><!-- end requests tab -->
                     </div>
                 </div>
