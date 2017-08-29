@@ -297,7 +297,7 @@ def add_post(request):
 @permission_classes((IsAuthenticated,))
 def change_post_status(request):
 	"""changes the status of contribution from pending to approved/disapproved."""
-	status = 3 if request.POST.get('accept_button', 1) else (2 if request.POST.get('ignore_button', 1) else 1)
+	status = 3 if request.POST.get('accept_button', 0) else (2 if request.POST.get('ignore_button', 0) else 1)
 	response = {}
 	try:
 		contribution = UserPost.objects.get(id=request.POST.get('post_id', -1))

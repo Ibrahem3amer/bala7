@@ -852,7 +852,7 @@ input , button:focus{
     padding: 5px 15px;
     text-align: left;
 }
-.share-footer button{
+.share-footer input{
     height: 34px;
     line-height: 34px;
     padding: 0px;
