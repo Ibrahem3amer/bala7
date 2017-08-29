@@ -160,6 +160,8 @@ $(document).ready(function(){
 
                 if( result.length == 0){
                     $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').css('display','none');
+                    //clear old comments
+                    $(form_id).parent().nextAll('.post-comments').html('');
                     //show no-comments note
                     $(form_id).parent().parent().children('.post-body').children('.post-content').children('.no-comments-note').slideDown(200);
                 }
