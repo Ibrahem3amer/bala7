@@ -2,7 +2,7 @@ $(document).ready(function(){
     
     //right div out
     $('#right-arrow').click(function(){
-        $('.right-div').animate({right: "-295px"});
+        $('.right-div').animate({right: "-296px"});
         $(this).fadeOut(function(){
             $('#left-arrow').fadeIn();
         }); 
@@ -237,7 +237,7 @@ $(document).ready(function(){
             success: function(responseText){
                 var res = JSON.parse(responseText);
                 if(res.result == 'failure'){
-                    alert("you can't comment on this post");
+                    alert("you can't sent this comment");
                 }
                 else if( res.result == 'success'){
                     //get options for get_comments()
@@ -320,29 +320,6 @@ $(document).ready(function(){
         });
     }
     
-    
-    //------------------------------- show add new week box
-    $('#add-week-btn').click(function(){
-        $('#new-week-box').slideToggle();
-    });
-    //close new week box
-    $('.week-head i').click(function(){
-        $('#new-week-box').slideUp();
-    });
-    
-    //------------------------------------ edit week
-    $('.edit-week-icon').click(function(event){
-        var weekDisplay = $(this).parent().next().css('display');
-        if( weekDisplay == 'none'){
-            $(this).removeClass('fa-cog').addClass('fa-times');
-            $(this).parent().next().slideDown();
-            $(this).parent().next().next().slideUp();
-        }else{
-            $(this).removeClass('fa-times').addClass('fa-cog');
-            $(this).parent().next().slideUp();
-            $(this).parent().next().next().slideDown();
-        }
-    });
     
     
 });

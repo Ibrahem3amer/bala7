@@ -32,7 +32,7 @@
     
 	{% if topic %}
         <!-- start page content -->
-        <section class="content-section">
+        <section class="content-section container">
             <div class="right-div">
                 <div class="arrows-div">
                     <i id="right-arrow" class="fa fa-chevron-right move-arrow" aria-hidden="true"></i>
@@ -64,26 +64,7 @@
                                   <td>محمد الدسوقى</td>
                                   <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
                                 </tr>
-                                <tr>
-                                  <td>2015</td>
-                                  <td>حازم البكرى</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                <tr>
-                                  <td>2014</td>
-                                  <td>شريف بركات</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                <tr>
-                                  <td>2014</td>
-                                  <td>شريف بركات</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                <tr>
-                                  <td>2014</td>
-                                  <td>شريف بركات</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
+                                
                               </tbody>
                             </table>
                         </div>
@@ -168,7 +149,7 @@
                 </div>
 
             </div>
-            <div class="center-div">
+            <div class="center-div content-part">
                 <div class="tabs">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs nav-heads" role="tablist">
@@ -189,40 +170,7 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane fade in  active" id="content">
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                <div class="row">
-                                    <div class="sm-md-ads">
-                                        <img src="{% static 'pic/adv728x90.png' %}">
-                                    </div>
-                                    <div class="xs-ads">
-                                        <img src="{% static 'pic/adv-xs.jpg' %}">
-                                    </div>
-                                </div>
-                                
-                                {% if request.user.is_staff %}
-                                  <div class="add-week">
-                                      <button id="add-week-btn" class="nj-btn">اضافة اسبوع</button>
-                                      <form action="" method="post">
-                                          <div id="new-week-box">
-                                              <div class="week-head">
-                                                  <p class="week-name">الاسبوع الرابع</p>
-                                                  <i class="fa fa-times" aria-hidden="true"></i>
-                                              </div>
-
-                                              <div class="week-body">
-                                                  <p><span>عنوان المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                  <p><span>رابط المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                  <p><span>عنوان السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                  <p><span>رابط السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                  <p><span>عنوان التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                  <p><span>رابط التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                              </div>
-                                              <div class="week-footer">
-                                                  <button type="submit" class="nj-btn">اضافه</button>
-                                              </div>
-                                          </div>
-                                      </form>
-                                  </div>
-                                {% endif %}
+                            
                                 
                                 {% if weeks_days %}
                                   {% for week_title in weeks_days %}
@@ -234,11 +182,6 @@
                                         </div>
                                         <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="headingOne">
                                             <div class="panel-body">
-                                                {% if request.user.is_staff %}
-                                                  <div class="edit-div">
-                                                      <i class="fa fa-cog edit-week-icon" aria-hidden="true"></i>
-                                                  </div>
-                                                {% endif %}
                                                 <div class="edit-week">
                                                     <form action="" method="post">
                                                         <p><span>عنوان المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
@@ -483,8 +426,10 @@
                     </div>
                 </div>
             </div>
-            <div class="adv-div">
-                <img src="{% static 'pic/adv300x250.jpg' %}">
+            <div class="left">
+                <div class="ad-block">
+                    <img src="{% static 'pic/adv300x250.jpg' %}">
+                </div>
             </div>
         </section>
         <!-- end page content -->
