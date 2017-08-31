@@ -322,6 +322,21 @@ $(document).ready(function(){
     
     
     //------------------------------------------------------------ accept and ignore post 
+    //show and hidden accept div
+    $('.accept-a').click(function(){
+        $(this).parent().slideUp();
+        $(this).parent().parent().children('.accept-div').slideDown();
+    });
+    $('.cancel-btn').click(function(){
+        $(this).parent().slideUp();
+        $(this).parent().parent().children('.share-footer').slideDown();
+    });
+    //show and hidden ignore div
+    $('.ignore-a').click(function(){
+        $(this).parent().slideUp();
+        $(this).parent().parent().children('.ignore-div').slideDown();
+    });
+    //submit the post form 
     var post_form_id;
     $('.post-form').ajaxForm({
         beforeSubmit: function(arr, $form, options) {           
