@@ -6,10 +6,15 @@ input , button:focus{
 }
 .content-section div{
     vertical-align: top;
+    overflow-wrap: break-word;
 }
 .formLineError{
     padding: 5px 15px;
     margin-bottom: 10px;
+}
+.badge{
+    font-size: 14px;
+    background-color: #999;
 }
 /*----- start adv div -----*/
 
@@ -49,6 +54,12 @@ input , button:focus{
     padding: 15px;
     user-select: none;
 }
+.center-div ul li a:hover .badge{
+    background-color: #34B3A0;
+}
+.nav-tabs > li.active > a > .badge, .nav-tabs > li.active > a:hover > .badge, .nav-tabs > li.active > a:focus > .badge{
+    background-color: #34B3A0;
+}
 .center-div ul li a:hover{
     background-color: #fff;
     color: #34B3A0;
@@ -56,6 +67,7 @@ input , button:focus{
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
     color: #34B3A0;
 }
+
 #content,#community{
     padding-top: 40px;
 }
@@ -102,52 +114,7 @@ input , button:focus{
     -webkit-transform: rotate(180deg); /* Safari */
     transform: rotate(180deg);
 }
-.edit-week{
-    display: none;
-    padding: 30px 15px;
-}
-.edit-week > form{
-    position: relative;
-}
-.edit-week p{
-    display: inline-block;
-    width: 49%;
-    padding: 0px 10px;
-}
-.edit-week p span{
-    display: inline-block;
-}
-.edit-week > form > p > span:first-of-type{
-    text-align: right;
-    position: relative;
-    width: 110px;
-}
-.edit-week > form > p > span:last-of-type{
-    padding: 0px;
-    width: calc(100% - 110px);
-}
-.edit-week input{
-    padding: 5px;
-    width: 100%;
-}
-.edit-week > form > button{
-    margin-top: 15px;
-    width: 100px;
-    padding: 0px;
-}
-/*xs*/
-@media (max-width:767px){
-    .edit-week > form > p{
-        width: 100%;
-        padding: 0px;
-    } 
-    .edit-week > form > p > span:first-of-type{
-        vertical-align: top;
-    }
-    .edit-week > form > button{
-        margin-top: 10px;
-    }
-}
+
 .week-content{
     padding: 0px;
     padding-top: 30px;

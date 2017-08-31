@@ -33,6 +33,7 @@
 	{% if topic %}
         <!-- start page content -->
         <section class="content-section container">
+            
             <div class="right-div">
                 <div class="arrows-div">
                     <i id="right-arrow" class="fa fa-chevron-right move-arrow" aria-hidden="true"></i>
@@ -161,7 +162,7 @@
                         </li>
                         {% if request.user.is_staff %}
                           <li role="presentation" class="tab">
-                              <a href="#requests" aria-controls="community" role="tab" data-toggle="tab">الطلبات <span>{{ pending_contributions|length }}</span></a>
+                              <a href="#requests" aria-controls="community" role="tab" data-toggle="tab">الطلبات <span id="requests-number"  class="badge"><!--{{ pending_contributions|length }} {{pending_posts|length }} --></span></a>
                           </li>
                         {% endif %}
                     </ul>
@@ -182,17 +183,6 @@
                                         </div>
                                         <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="headingOne">
                                             <div class="panel-body">
-                                                <div class="edit-week">
-                                                    <form action="" method="post">
-                                                        <p><span>عنوان المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
-                                                        <p><span>رابط المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
-                                                        <p><span>عنوان السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
-                                                        <p><span>رابط السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
-                                                        <p><span>عنوان التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
-                                                        <p><span>رابط التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
-                                                        <button type="submit" class="nj-btn">حفظ</button>
-                                                    </form>
-                                                </div>
                                                 <div class="week-content">
                                                     {% if weeks_materials|week_number:forloop.counter %}
                                                       {% for material in weeks_materials|week_number:forloop.counter %}
@@ -360,24 +350,9 @@
                         </div>
                         <div role="tabpanel" class="tab-pane fade " id="requests">
                             
-<!--
-                            <div class="request-view-box">
-                                <div class="request-head">
-                                    <p>هشام عبد اللطيف</p>
-                                    <span>1 يوليو ، الساعه 11:15م</span>
-                                </div>
-                                <div class="request-body">
-                                    <p>بالنسبه لتدريب المينا الاوراق المطلوبه اثبات قيد من الكليه ب ٢٥ جنيه وصورة بطاقه وهيتسلمو في( مبني شئون العاملين) في المينا اول ما تخش من البوابه الرئيسية علي اليمين ده بالنسبه لكل للناس الي ملت الفورمه والي مامملتش بردو.</p>
-                                </div>
-                                <div class="request-footer">
-                                    <button class="nj-btn">قبول</button>
-                                    <button class="nj-btn">رفض</button>
-                                </div>
-                            </div>
--->
                             {% if pending_posts %}
                                 {% for p_post in pending_posts %}
-                                    <form method="POST" action="{% url 'api_change_post' %}">
+                                    <form method="POST" action="{% url 'api_change_post' %}" id="post-request-form{{ p_post.id }}" class="post-form">
                                         {% csrf_token %}
                                         <input type="hidden" name="post_id" value="{{ p_post.id }}" />
                                         <div class="request-view-box">
@@ -399,7 +374,7 @@
                             
                             {% if pending_contributions %}
                                 {% for request in pending_contributions %}
-                                    <form method="POST" action="{% url 'api_change_contribution' %}">
+                                    <form method="POST" action="{% url 'api_change_contribution' %}" id="contribution-request-form{{ request.id }}" class="contribution-form" >
                                         {% csrf_token %}
                                         <input type="hidden" name="contribution_id" value="{{ request.id }}" />
                                         <div class="share-view-box">
@@ -411,7 +386,7 @@
                                                 <p><span>نوع المحتوى <span class="colon">:</span></span> <span>{{ request.content_type }}</span></p>
                                                 <p><span>عنوان المحتوى <span class="colon">:</span></span> <span>{{ request.name }}</span></p>
                                                 <p><span>الاسبوع <span class="colon">:</span></span> <span>{{ request.week_number }}</span></p>
-                                                <p><span> رابط التحميل <span class="colon">:</span></span> <span><a href="{{ request.link }}" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></span></p>
+                                                <p><span> رابط التحميل <span class="colon">:</span></span> <span><a href="{{ request.link }}" class="assets-link" target="_blank"><i class="fa fa-link" aria-hidden="true"></i></a></span></p>
                                             </div>
                                             <div class="share-footer">
                                                 <input type="submit" name="accept_button" value="قبول" class="nj-btn" />

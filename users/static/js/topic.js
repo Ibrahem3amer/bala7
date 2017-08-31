@@ -321,5 +321,66 @@ $(document).ready(function(){
     }
     
     
+    //------------------------------------------------------------ accept and ignore post 
+    var post_form_id;
+    $('.post-form').ajaxForm({
+        beforeSubmit: function(arr, $form, options) {           
+            post_form_id = '#post-request-form' + arr[1].value;
+        },
+        success: function(responseText) { 
+            console.log(responseText);
+                var res = JSON.parse(responseText);
+                console.log(res);
+                if(res.result == 'failure'){
+                    alert('لا يمكن تنفيذ طلبك ')
+                }
+                else if( res.result == 'success'){
+                    console.log('request done successfully');
+                    $(post_form_id).fadeOut(function(){
+                        $(this).remove();
+                        numberOfRequests();
+                    });
+                }
+        },//end of success
+        error: function(){
+            alert("حدث خطأ اثناء الارسال ، برجاء المحاوله مره اخرى");
+        }//end of error
+    }); 
+    
+    //------------------------------------------------------------- accept and ignore contributions
+    var contribution_form_id;
+    $('.contribution-form').ajaxForm({
+        beforeSubmit: function(arr, $form, options) {           
+            contribution_form_id = '#contribution-request-form' + arr[1].value;
+        },
+        success: function(responseText) { 
+            console.log(responseText);
+                var res = JSON.parse(responseText);
+                console.log(res);
+                if(res.result == 'failure'){
+                    alert('لا يمكن تنفيذ طلبك ')
+                }
+                else if( res.result == 'success'){
+                    console.log('request done successfully');
+                    $(contribution_form_id).fadeOut(function(){
+                        $(this).remove();
+                        numberOfRequests();
+                    });
+                }
+        },//end of success
+        error: function(){
+            alert("حدث خطأ اثناء الارسال ، برجاء المحاوله مره اخرى");
+        }//end of error
+    });
+    // calc number of binding posts and contributions
+    function numberOfRequests(){
+        var number_of_requests = $('.post-form , .contribution-form').length;
+        $('#requests-number').html(number_of_requests);
+    }
+    numberOfRequests();
+    
+    
+    
+    
     
 });
