@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
     <link href="{% static 'css/home-visitor.css' %}" rel="stylesheet">
-    <link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
+    <link href="{% static 'css/nav-visitor.css' %}" rel="stylesheet">
     <!--[if lt IE 9]>
         <script src="js/html5shiv.min.js"></script>
         <script src="js/respond.min.js"></script>
@@ -26,28 +26,78 @@
 </head>
 <body>
     <!-- start navbar -->
-    {% include "public/navbar1.html" %}
+        {% include "public/navbar1.html" %}
+
     <!-- end navbar -->
     
     
     <!-- start content -->
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 nj-box  content-div ">
-                <p id="id_description"> نلفت انتباه حضراتكم ان الاعلانات فى هذا الموقع ليست للمنفعة الشخصية و انما تتوجه لدعم الفقراء من العاملين بهذا الموقع</p>
-                {% if user.is_authenticated %}
-                    <p>Welcome, {{ user.username }}. Welcome in Najiba.</p>
-                {% else %}
-                    <!--<p>Welcome, new user. Please log in.</p>-->
-                    <p>مرحبا بك , من فضلك قم بتسجيل الدخول</p>
-                    <a href="{% url 'web_signup' %}" id="id_sign_up" class="nj-btn btns-pos">انشاء حساب</a><br>
-                    <a href="{% url 'login' %}" id="id_sign_in" class="nj-btn btns-pos">تسجيل دخول</a>
-                {% endif %}
-                
-                
-            </div>
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.username }}. Welcome in Najiba.</p>
+    {% else %}
+        <!--<p>Welcome, new user. Please log in.</p>-->
+    <div id="banner">
+        <div id="content">
+            <b>سلوجان. حلو. وجميل.</b>
+            <p>كلام حلو وجميل خالص</p>
+            <p>كلام حلو وجميل بس</p>
+            <a href="{% url 'web_signup' %}" id="id_sign_up" class="nj-btn">انشاء حساب جديد</a>
+            <a href="{% url 'login' %}" id="id_sign_in" class="nj-btn nj-btn-log">تسجيل دخول</a>
         </div>
     </div>
+    <h1 id="time-title" class="center">نجيبه بتعمل إيه؟</h1>
+    <div id="time_line">   
+        <div class="row left_pic">
+            <div class="col-sm-5 col-xs-12  center">
+                <img class="time_pic" src="{% static 'pic/n%20-%20welcome1.png' %}"> 
+            </div>
+            <div class="col-sm-2 xs-hidden ">
+                <div class="line center">
+                    <div class="circle"></div>
+                    <div class="line_inner"></div>
+                </div>
+            </div>
+            <div class="col-sm-5 col-xs-12 item ">
+                <h1>تُنبهك</h1>
+                <p>
+                    تُنبهك نجيبة دوماً بمواعيد تسليم تساكاتك ومواعيد امتحاناتك
+                </p>
+            </div>
+        </div>
+        
+        
+        
+        <div class="row right_pic">
+            <div class="col-sm-5 col-xs-12 item hidden-xs">
+                <h1>تُنبهك</h1>
+                <p>
+                    تُنبهك نجيبة دوماً بمواعيد تسليم تساكاتك ومواعيد امتحاناتك
+                </p>
+            </div>
+            <div class="col-sm-5 col-xs-12  center show-xs">
+                <img class="time_pic" src="{% static 'pic/n%20-%20welcome1.png' %}">
+            </div>
+            <div class="col-sm-2 xs-hidden ">
+                <div class="line center">
+                    <div class="circle"></div>
+                    <div class="line_inner"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="col-sm-5 col-xs-12  center hidden-xs">
+                <img class="time_pic" src="{% static 'pic/n%20-%20welcome1.png' %}">
+            </div>
+            <div class="col-sm-5 col-xs-12 item show-xs">
+                <h1>تُنبهك</h1>
+                <p>
+                    تُنبهك نجيبة دوماً بمواعيد تسليم تساكاتك ومواعيد امتحاناتك
+                </p>
+            </div>
+        </div>
+    </div>        
+    {% endif %}
+                
+                
     <!-- end content -->
     
 </body>
