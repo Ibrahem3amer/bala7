@@ -224,7 +224,8 @@ class MaterialTest(TestCase):
 		self.dep 			= Department.objects.create(name = 'Test dep')
 		self.topic 			= Topic.objects.create(name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
 		self.user 			= User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f')
-		self.user.profile 	= UserProfile.objects.create(university = self.uni, faculty = self.fac, department = self.dep)
+		self.user.profile 	= UserProfile.objects.create(user=self.user, university = self.uni, faculty = self.fac, department = self.dep)
+		self.user.profile.topics.add(self.topic)
 		self.material 		= Material.objects.create(
 				name 			= 'test_material',
 				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
@@ -273,7 +274,8 @@ class MaterialTest(TestCase):
 
 		# Exercise test
 		# Assert test
-		self.assertRaises(ValidationError, lambda: material_test.full_clean())
+		with self.assertRaisesRegexp(ValidationError, 'Name cannot start with number, should consist of characters.'):
+			material_test.full_clean()
 
 	def test_add_material_with_empty_content(self):
 		# Setup test
@@ -291,7 +293,8 @@ class MaterialTest(TestCase):
 
 		# Exercise test
 		# Assert test
-		self.assertRaises(ValidationError, lambda: material_test.full_clean())
+		with self.assertRaisesRegexp(ValidationError, 'This field cannot be blank.'):
+			material_test.full_clean()
 
 	def test_add_material_with_content_less_than_50(self):
 		# Setup test
@@ -309,7 +312,8 @@ class MaterialTest(TestCase):
 
 		# Exercise test
 		# Assert test
-		self.assertRaises(ValidationError, lambda: material_test.full_clean())
+		with self.assertRaisesRegexp(ValidationError, 'Material Description should be more than 50 characters.'):
+			material_test.full_clean()
 
 	def test_add_material_with_week_number_that_doesnot_exist(self):
 		# Setup test
@@ -327,11 +331,13 @@ class MaterialTest(TestCase):
 
 		# Exercise test
 		# Assert test
-		self.assertRaises(ValidationError, lambda: material_test.full_clean())	
+		with self.assertRaisesRegexp(ValidationError, 'Week number is not found.'):
+			material_test.full_clean()
 
 	def test_material_topic_lays_outside_user_scope(self):
 		# Setup test
 		another_user = User.objects.create_user(username = 'test_user', password = '12684szsf4df8f5d')
+		UserProfile.objects.create(user=another_user, university = self.uni, faculty = self.fac, department = self.dep)
 		material_test = Material.objects.create(
 				name 			= 'material',
 				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
@@ -346,7 +352,8 @@ class MaterialTest(TestCase):
 
 		# Exercise test
 		# Assert test
-		self.assertRaises(ValidationError, lambda: material_test.full_clean())
+		with self.assertRaisesRegexp(ValidationError, 'Access denied.'):
+			material_test.full_clean()
 
 	def test_user_add_material_in_topic_in_another_dep(self):
 		# Setup test
@@ -371,6 +378,173 @@ class MaterialTest(TestCase):
 		# Assert test
 		self.assertIn(material_test, topic_materials)
 		self.assertEqual(None, material_test.full_clean())
+
+	def test_get_user_latest_primary_materails_with_no_limit(self):
+		""" Returns leatest 3 materials added."""
+		# Setup test
+		another_dep = Department.objects.create(name = 'Test dep2')
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		self.user.profile.topics.add(another_topic)
+		for i in range(5):
+			Material.objects.create(
+					name 			= 'test_material',
+					content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+					link 			= 'http://www.do'+str(i)+'cs.godogle.com',
+					term 			= 1,
+					content_type 	= 1,
+					week_number 	= 1,
+					user 			= self.user,
+					topic 			= self.topic
+			)
+		for i in range(5):
+			Material.objects.create(
+					name 			= 'ss'+str(i),
+					content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+					link 			= 'http://www.do'+str((i+1)*7)+'cs.godogle.com',
+					term 			= 1,
+					content_type 	= 1,
+					week_number 	= 1,
+					user 			= self.user,
+					topic 			= another_topic,
+			)
+
+		# Exercise test
+		latest_primary_materials = Material.get_user_materails(user_obj=self.user)
+		
+		# Assert test
+		self.assertTrue(len(latest_primary_materials) == 6)
+
+	def test_get_user_latest_primary_materails_with_limit(self):
+		""" Returns leatest N materials added."""
+		# Setup test
+		another_dep = Department.objects.create(name = 'Test dep2')
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		self.user.profile.topics.add(another_topic)
+		for i in range(10):
+			Material.objects.create(
+				name='test_material',
+				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link='http://www.do'+str(i)+'cs.godogle.com',
+				term=1,
+				content_type=1,
+				week_number=1,
+				user=self.user,
+				topic=self.topic,
+			)
+		for i in range(10):
+			Material.objects.create(
+				name='ss'+str(i),
+				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link='http://www.do'+str((i+1)*150)+'cs.godogle.com',
+				term=1,
+				content_type=1,
+				week_number=1,
+				user=self.user,
+				topic=another_topic,
+			)
+
+		# Exercise test
+		latest_primary_materials = Material.get_user_materails(user_obj=self.user, limit=7)
+		
+		# Assert test
+		self.assertTrue(len(latest_primary_materials) == 14)
+		self.assertIn(Material.objects.last(), latest_primary_materials)
+
+	def test_get_user_latest_primary_materails_with_materials_lt_3(self):
+		""" Returns leatest (N < 3) materials added."""
+		# Setup test
+		Material.objects.create(
+			name='test_material',
+			content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+			link='http://www.doddasASSASDFXCVcs.godogle.com',
+			term=1,
+			content_type=1,
+			week_number=1,
+			user=self.user,
+			topic=self.topic,
+		)
+
+		# Exercise test
+		latest_primary_materials = Material.get_user_materails(user_obj=self.user)
+		
+		# Assert test
+		self.assertTrue(len(latest_primary_materials) == 2)
+		self.assertIn(Material.objects.last(), latest_primary_materials)
+
+	def test_get_user_latest_primary_materails_with_no_materials(self):
+		""" Returns empty list."""
+		
+		# Setup test
+		Material.objects.all().delete()
+
+		# Exercise test
+		latest_primary_materials = Material.get_user_materails(user_obj=self.user)
+		
+		# Assert test
+		self.assertTrue(len(latest_primary_materials) == 0)
+		self.assertEqual([], latest_primary_materials)
+
+	def test_get_user_latest_primary_materails_with_no_topics(self):
+		""" Returns empty list."""
+		# Setup test
+		Topic.objects.all().delete()
+
+		# Exercise test
+		latest_primary_materials = Material.get_user_materails(user_obj=self.user)
+		
+		# Assert test
+		self.assertTrue(len(latest_primary_materials) == 0)
+		self.assertEqual([], latest_primary_materials)
+
+	def test_get_user_latest_accepted_secondary_materails_with_no_limit(self):
+		""" Returns leatest 3 materials added."""
+		# Setup test
+		another_dep = Department.objects.create(name = 'Test dep2')
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		self.user.profile.topics.add(another_topic)
+		for i in range(5):
+			UserContribution.objects.create(
+				name='test_material',
+				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link='http://www.dod'+str((i+1)*150)+'ASDFXCVcs.godogle.com',
+				term=1,
+				content_type=1,
+				week_number=1,
+				status=3,
+				user=self.user,
+				topic=self.topic,
+			)
+		for i in range(5):
+			UserContribution.objects.create(
+				name='ss'+str(i),
+				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link='http://www.do'+str((i+1)*150)+'cs.godogle.com',
+				term=1,
+				content_type=1,
+				week_number=1,
+				status=1,
+				user=self.user,
+				topic=another_topic,
+			)
+
+		# Exercise test
+		latest_primary_materials = UserContribution.get_user_materails(user_obj=self.user)
+		
+		# Assert test
+		self.assertTrue(len(latest_primary_materials) == 3)
+
+
+	def test_get_user_latest_secondary_materails_with_no_topics(self):
+		""" Returns empty list."""
+		# Setup test
+		Topic.objects.all().delete()
+
+		# Exercise test
+		latest_primary_materials = UserContribution.get_user_materails(user_obj=self.user)
+		
+		# Assert test
+		self.assertTrue(len(latest_primary_materials) == 0)
+		self.assertEqual([], latest_primary_materials)
 
 class TaskTest(TestCase):
 	def setUp(self):
@@ -537,7 +711,7 @@ class TopicTableTest(TestCase):
 		t_json = table.set_final_table()
 		
 		# Assert test
-		self.assertEqual(topics[1][1]+'\n'+places[1][1], t_json[1][1])
+		self.assertEqual(topics[1][1]+' @ '+places[1][1], t_json[1][1])
 
 	def test_table_display_correct_table_list_when_string_given(self):
 		"""Tests wether or not set return correct table list."""
@@ -554,7 +728,7 @@ class TopicTableTest(TestCase):
 		t_json = table.set_final_table()
 		
 		# Assert test
-		self.assertEqual(topics[1][1]+'\n'+places[1][1], t_json[1][1])
+		self.assertEqual(topics[1][1]+' @ '+places[1][1], t_json[1][1])
 
 class DepartmentTableTest(TestCase):
 	def setUp(self):
@@ -751,8 +925,8 @@ class QueryTableTest(TestCase):
 		request = self.client.post(url, data=data)
 
 		# Assert test
-		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table'][1][1])
-		self.assertNotIn(topics[4][4]+'\n'+places[4][4], request.context['table'][4][4])
+		self.assertIn(topics[1][1]+' @ '+places[1][1], request.context['table'][1][1])
+		self.assertNotIn(topics[4][4]+' @ '+places[4][4], request.context['table'][4][4])
 
 	def test_query_just_topics(self):
 		# Setup test
@@ -775,8 +949,8 @@ class QueryTableTest(TestCase):
 		request = self.client.post(url, data=data)
 
 		# Assert test
-		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table'][1][1])
-		self.assertIn(topics[4][4]+'\n'+places[4][4], request.context['table'][4][4])
+		self.assertIn(topics[1][1]+' @ '+places[1][1], request.context['table'][1][1])
+		self.assertIn(topics[4][4]+' @ '+places[4][4], request.context['table'][4][4])
 	
 	def test_query_just_days(self):
 		# Setup test
@@ -797,8 +971,8 @@ class QueryTableTest(TestCase):
 
 		# Assert test
 		# ['result_1'] is the dict key of where model combines topic and place.
-		self.assertIn(topics[1][1]+'\n'+places[1][1], request.context['table'][1][1])
-		self.assertIn(topics[1][3]+'\n'+places[1][3], request.context['table'][1][3])
+		self.assertIn(topics[1][1]+' @ '+places[1][1], request.context['table'][1][1])
+		self.assertIn(topics[1][3]+' @ '+places[1][3], request.context['table'][1][3])
 
 	def test_query_just_periods(self):
 		# Setup test
@@ -821,7 +995,7 @@ class QueryTableTest(TestCase):
 		request = self.client.post(url, data=data)
 
 		# Assert test
-		self.assertIn(topics[1][2]+'\n'+places[1][2], request.context['table'][1][2])
+		self.assertIn(topics[1][2]+' @ '+places[1][2], request.context['table'][1][2])
 
 	def test_query_with_all_options(self):
 		# Setup test
@@ -847,7 +1021,7 @@ class QueryTableTest(TestCase):
 		request = self.client.post(url, data=data)
 
 		# Assert test
-		self.assertIn(topics[1][2]+'\n'+places[1][2], request.context['table'][1][2])
+		self.assertIn(topics[1][2]+' @ '+places[1][2], request.context['table'][1][2])
 	
 	def test_query_with_topic_has_no_table(self):
 		# Setup test

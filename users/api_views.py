@@ -255,7 +255,7 @@ def add_contribution(request):
 @permission_classes((IsAuthenticated,))
 def change_contribution_status(request):
 	"""changes the status of contribution from pending to approved/disapproved."""
-	status = 3 if request.POST['accept_button'] else (2 if request.POST['ignore_button'] else 1)
+	status = 3 if request.POST.get('accept_button', 0) else (2 if request.POST.get('ignore_button', 0) else 1)
 	response = {}
 	try:
 		contribution = UserContribution.objects.get(id=request.POST.get('contribution_id', -1))
@@ -297,7 +297,7 @@ def add_post(request):
 @permission_classes((IsAuthenticated,))
 def change_post_status(request):
 	"""changes the status of contribution from pending to approved/disapproved."""
-	status = 3 if request.POST.get('accept_button', 1) else (2 if request.POST.get('ignore_button', 1) else 1)
+	status = 3 if request.POST.get('accept_button', 0) else (2 if request.POST.get('ignore_button', 0) else 1)
 	response = {}
 	try:
 		contribution = UserPost.objects.get(id=request.POST.get('post_id', -1))
@@ -333,11 +333,11 @@ def get_post_comments(request):
 @permission_classes((IsAuthenticated,))
 def add_comment(request):
 	"""Add new comment to speicifc post."""
+	response = {}
 	try:
 		user = request.user
-		post = request.GET.get('post_id', 0)
-		content = request.GET.get('comment_content', 0)
-		response = {}
+		post = post = UserPost.objects.get(id=request.POST.get('post_id', 0))
+		content = request.POST.get('comment_content', 0)
 		if user and post and content: 
 			comment = UserComment.objects.create(
 					post=post,

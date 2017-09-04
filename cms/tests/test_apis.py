@@ -8,11 +8,21 @@ from users.models import Department, Faculty, University, UserProfile
 
 
 class TopicAPITest(APITestCase):
+    def setUp(self):
+        self.uni        = University.objects.create(name = 'Test university')
+        self.fac        = Faculty.objects.create(name = 'Test faculty')
+        self.dep        = Department.objects.create(name = 'Test dep')
+        self.topic      = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
+        self.user       = User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
+        self.profile    = UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
+
     def test_return_list_of_topics(self):
         # Setup test
         url = reverse('api_topics_list')
 
         # Exercise test
+        self.user.profile.topics.add(self.topic)
+        self.client.force_authenticate(user=self.user)
         response = self.client.get(url)
 
         # Assert test
@@ -116,9 +126,9 @@ class QueryTableAPITest(APITestCase):
         self.assertNotEqual(request.status_code, status.HTTP_404_NOT_FOUND)
         list_response = json.loads(request.data)
         self.maxDiff = None
-        self.assertIn(topics[1][1]+'\n'+places[1][1], list_response[1][1])
-        self.assertIn(topics[1][3]+'\n'+places[1][3], list_response[1][3])
-        self.assertIn(topics[4][4]+'\n'+places[4][4], list_response[4][4])
+        self.assertIn(topics[1][1]+' @ '+places[1][1], list_response[1][1])
+        self.assertIn(topics[1][3]+' @ '+places[1][3], list_response[1][3])
+        self.assertIn(topics[4][4]+' @ '+places[4][4], list_response[4][4])
 
     def test_auth_user_query_table_with_days(self):
         # Setup test
@@ -142,9 +152,9 @@ class QueryTableAPITest(APITestCase):
         # Assert test
         self.assertNotEqual(request.status_code, status.HTTP_404_NOT_FOUND)
         list_response = json.loads(request.data)
-        self.assertIn(topics[1][1]+'\n'+places[1][1], list_response[1][1])
-        self.assertIn(topics[1][3]+'\n'+places[1][3], list_response[1][3])
-        self.assertNotIn(topics[4][4]+'\n'+places[4][4], list_response[4][4])
+        self.assertIn(topics[1][1]+' @ '+places[1][1], list_response[1][1])
+        self.assertIn(topics[1][3]+' @ '+places[1][3], list_response[1][3])
+        self.assertNotIn(topics[4][4]+' @ '+places[4][4], list_response[4][4])
 
     def test_unauth_user_query_table(self):
         # Setup test
@@ -205,9 +215,9 @@ class MainTableAPITest(APITestCase):
         self.assertNotEqual(request.status_code, status.HTTP_404_NOT_FOUND)
         list_response = json.loads(request.data)
         self.maxDiff = None
-        self.assertIn(topics[1][1]+'\n'+places[1][1], list_response[0][1][1])
-        self.assertIn(topics[1][3]+'\n'+places[1][3], list_response[0][1][3])
-        self.assertIn(topics[4][4]+'\n'+places[4][4], list_response[1][4][4])
+        self.assertIn(topics[1][1]+' @ '+places[1][1], list_response[0][1][1])
+        self.assertIn(topics[1][3]+' @ '+places[1][3], list_response[0][1][3])
+        self.assertIn(topics[4][4]+' @ '+places[4][4], list_response[1][4][4])
 
     def test_user_with_no_profile_displays_main_table(self):
         # Setup test

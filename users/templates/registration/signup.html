@@ -29,9 +29,14 @@
     <!-- end navbar -->
     
     <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 nj-box ">
-                <div class="title"><i class="fa fa-plus-square new-symbol" aria-hidden="true"></i> إنشاء حساب المرحلة "{{ stage_num }}" </div>
+        <div class="row reg">
+             <div class="col-sm-4 col-xs-12 wel-pic">
+                <img class="" src="{% static 'pic/n%20-%20welcome1.png' %}"> 
+            </div>
+            <div class="col-sm-8 col-xs-12 ">
+                <div class="title">
+                    <i class="fa fa-plus-square new-symbol" aria-hidden="true"></i> إنشاء حساب المرحلة "{{ stage_num }}
+                </div>
                 <form id="id_registeration_form" action="{% url 'web_signup_second_form' %}" method="get">
                     <div class="form-group">
                         {% if error %}
@@ -41,14 +46,16 @@
                         <select id="id_select_university" name="selected_university"  class="form-control select nj-select"></select>
                     </div>
                     <div class="form-group">
-                        <label class="nj-label" for="id_select_faculty">الكلية</label>
+                        <label class="nj-label inline" for="id_select_faculty">الكلية</label>    
+                        <a href="#not_found" id="ask">كليتك مش موجوده؟</a>
+
                         <select id="id_select_faculty" name="selected_faculty" class="form-control select nj-select">
                             <option value="" disabled selected>اختر الكليه</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="nj-label" for="id_select_department">القسم</label>
-                        <select id="id_select_department" name="selected_department" class="form-control select nj-select">
+                        <select id="id_select_department" name="selected_department" class="form-control nj-select">
                             <option value="" disabled selected>اختر القسم</option>
                         </select>
                     </div>
@@ -64,9 +71,15 @@
                     <input type="submit" name="submit_signup_data" id="id_submit_signup_data" class="nj-btn next-btn" value="التالى">
                 </form>
             </div>
+           
         </div>
-        <div class="row">
-            <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 nj-box notfound-box">
+        
+        
+        <div id="not_found" class="row">
+            <div class="col-sm-4 col-xs-12 sad-pic">
+                <img class="" src="{% static 'pic/n-sad2.png' %}"> 
+            </div>
+            <div class="col-sm-8 col-xs-12">
                 <div class="not-found1"><i class="fa fa-exclamation-triangle new-symbol" aria-hidden="true"></i> كليتك مش موجوده؟</div>
                 <div class="not-found2" >اضف بياناتك وهنتواصل معاك عند إضافة كليتك :)</div>
                 <form id="id_notify_form" action="{% url 'thankyou' %}">
