@@ -531,7 +531,6 @@ class MaterialTest(TestCase):
 		latest_primary_materials = UserContribution.get_user_materails(user_obj=self.user)
 		
 		# Assert test
-		print(latest_primary_materials)
 		self.assertTrue(len(latest_primary_materials) == 3)
 
 

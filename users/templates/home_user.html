@@ -132,20 +132,24 @@
                             <div class="adv-xs hidden-md">
                                 <img src="{% static 'pic/adv-xs.jpg' %}">
                             </div>
+                            {% if primary %}
+                                {% for material in primary %}
+                                    <div class="content-element">
 
-                            <div class="content-element">
-                                <div class="head">
-                                    <p>الاسبوع الاول | ذكاء صناعى</p>
-                                </div>
-                                <div class="content">
-                                    <div class="row">
-                                        <div class="col-xs-4"><a class="link_icon" href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                        <div class="col-xs-4"><p>عنوان المحاضرة</p></div>
-                                        <div class="col-xs-4"><p>المحاضرة</p></div>
+                                        <div class="head">
+                                            <p>{{ material.topic.name }}</p>
+                                        </div>
+                                        <div class="content">
+                                            <div class="row">
+                                                <div class="col-xs-4"><a class="link_icon" href="{{ material.link }}"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                <div class="col-xs-4"><p>{{ material.name }}</p></div>
+                                                <div class="col-xs-4"><p>{{ material.user.username }}</p></div>
+                                            </div>
+
+                                        </div>
                                     </div>
-
-                                </div>
-                            </div>
+                                {% endfor %}
+                            {% endif %}
                         </div>
                 </div>
             </section>
