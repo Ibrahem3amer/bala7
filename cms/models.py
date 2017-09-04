@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.validators import RegexValidator, MinLengthValidator, validate_comma_separated_integer_list
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.conf import settings
+from django.utils import timezone
 from django.contrib.auth.models import User
 from cms.validators import GeneralCMSValidator
 
@@ -162,12 +163,32 @@ class MaterialBase(models.Model):
 
 
 	# Material's methods
+
+	@classmethod
+	def get_user_materails(cls, user_obj, limit=None):
+		""" Returns the leastest materials with limit >= 3."""
+		try:
+			limit = 3 if limit is None else limit
+			materials = []
+			for topic in user_obj.profile.topics.all():
+				try:
+					materials_query = cls.objects.filter(topic=topic, status=3).order_by('-id')[:limit]
+				except:
+					# Model has no status.
+					materials_query = cls.objects.filter(topic=topic).order_by('-id')[:limit]
+				materials += list(materials_query)
+			return materials
+		except ObjectDoesNotExist:
+			return []
+
+
 	@classmethod
 	def get_department_materials(cls, department):
 		"""
 		Returns list of materials that assoicate to specific departmnet. 
 		"""
 		return 
+
 
 	@classmethod
 	def get_year_materials(cls, year, term = None):
@@ -176,12 +197,14 @@ class MaterialBase(models.Model):
 		"""
 		return 
 
+
 	@classmethod
 	def get_prof_materials(cls, professor, term = None):
 		"""
 		Returns list of materials that assoicate to specific professor in current year within specific term or all 3 terms. 
 		"""
 		return
+
 
 	def make_pdf_link(self):
 		"""
@@ -196,16 +219,7 @@ class Material(MaterialBase):
 	topic = models.ForeignKey('Topic', related_name = 'primary_materials', on_delete = models.CASCADE)
 	professor = models.ManyToManyField('Professor', related_name='primary_materials')
 
-	# Model-level validation
-	def clean(self):
-		super(Material, self).clean()
-		
-		# Validate that user has an access to add material to topic.
-		try:
-			if self.topic not in self.user.profile.topics.all():
-				raise ValidationError("Access denied.")
-		except (AttributeError, ObjectDoesNotExist):
-			raise ValidationError("Invalid User or Topic.")
+
 
 
 class Exam(MaterialBase):
@@ -217,18 +231,12 @@ class Exam(MaterialBase):
 
 	# Model-level validation
 	def clean(self):
+		super(Exam, self).clean()
 
 		# Exams have no weeks, terms or type.
 		self.week_number = 0
 		self.term = 1
 		self.content_type = 1
-
-		# Validate that user has an access to add material to topic.
-		try:
-			if self.topic not in self.user.profile.topics.all():
-				raise ValidationError("Access denied.")
-		except (AttributeError, ObjectDoesNotExist):
-			raise ValidationError("Invalid User or Topic.")
 
 class Task(MaterialBase):
 
@@ -242,12 +250,6 @@ class Task(MaterialBase):
 	# Model-level validation
 	def clean(self):
 		super(Task, self).clean()
-		# Validate that user has an access to add material to topic.
-		try:
-			if self.topic not in self.user.profile.topics.all():
-				raise ValidationError("Access denied.")
-		except (AttributeError, ObjectDoesNotExist):
-			raise ValidationError("Invalid User or Topic.")
 
 		# Validate that deadline is not a passed date. 
 		now = datetime.date.today()
@@ -275,21 +277,15 @@ class UserContribution(MaterialBase):
 	# Additional fields.
 	status = models.PositiveIntegerField(choices=contribution_status, default=1)
 	supervisior_id = models.PositiveIntegerField(blank=True, default=0)
-	deadline = models.DateField(blank=True, default=False)
+	deadline = models.DateField(blank=True, default=timezone.now)
 	user = models.ForeignKey(User, related_name = 'secondary_materials', on_delete = models.CASCADE)
 	topic = models.ForeignKey('Topic', related_name = 'secondary_materials', on_delete = models.CASCADE)
 	professor = models.ManyToManyField('Professor', related_name='secondary_materials')
 
+
 	# Model-level validation.
 	def clean(self):
 		super(UserContribution, self).clean()
-		
-		# Validate that user has an access to add material to topic.
-		try:
-			if self.topic not in self.user.profile.topics.all():
-				raise ValidationError("Access denied.")
-		except (AttributeError, ObjectDoesNotExist):
-			raise ValidationError("Invalid User or Topic.")
 
 		# Validate that deadline is not a passed date. 
 		if self.content_type == 3 or self.content_type == '3':
