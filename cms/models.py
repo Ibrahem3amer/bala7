@@ -24,9 +24,6 @@ class Topic(models.Model):
 	department 	= models.ForeignKey('users.Department', related_name = 'topics', on_delete = models.CASCADE)
 	faculty 	= models.ForeignKey('users.Faculty', related_name = 'topics', on_delete = models.CASCADE, null = True)
 	professors 	= models.ManyToManyField('Professor', related_name = 'topics')
-	# Table -> A foriegn key that points to the table associated with this topic.
-	# Lectures -> A list of materials that represents all primary content for the topic.
-	# Contributions -> A list of materials that represents all secondary content for the topic.	
 	
 	def __str__(self):
 		return self.name
@@ -133,7 +130,7 @@ class MaterialBase(models.Model):
 	name 			= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
 	content			= models.TextField(validators = [content_min_len_validator])
 	link 			= models.URLField(unique = True)
-	year 			= models.DateField()
+	year 			= models.DateField(auto_now=True)
 	term 			= models.PositiveIntegerField(choices = term_choices)
 	content_type	= models.PositiveIntegerField(choices = type_choices)
 	week_number 	= models.PositiveIntegerField()

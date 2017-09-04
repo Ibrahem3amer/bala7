@@ -27,11 +27,6 @@ class AddMaterialForm(forms.ModelForm):
         if link_validation != 1:
             raise forms.ValidationError("Material link should lead to pdf file, should not be broken link.")
 
-        # Validate that date is not future date.
-        date_validation = MaterialValidator.validate_date(form_cleaned_data['year'])
-        if date_validation != 1:
-            raise forms.ValidationError("Material date should not be in the future.")
-
         return form_cleaned_data
 
 
