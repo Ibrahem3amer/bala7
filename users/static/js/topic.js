@@ -2,7 +2,7 @@ $(document).ready(function(){
     
     //right div out
     $('#right-arrow').click(function(){
-        $('.right-div').animate({right: "-295px"});
+        $('.right-div').animate({right: "-296px"});
         $(this).fadeOut(function(){
             $('#left-arrow').fadeIn();
         }); 
@@ -237,7 +237,7 @@ $(document).ready(function(){
             success: function(responseText){
                 var res = JSON.parse(responseText);
                 if(res.result == 'failure'){
-                    alert("you can't comment on this post");
+                    alert("you can't sent this comment");
                 }
                 else if( res.result == 'success'){
                     //get options for get_comments()
@@ -321,28 +321,81 @@ $(document).ready(function(){
     }
     
     
-    //------------------------------- show add new week box
-    $('#add-week-btn').click(function(){
-        $('#new-week-box').slideToggle();
+    //------------------------------------------------------------ accept and ignore post 
+    //show and hidden accept div
+    $('.accept-a').click(function(){
+        $(this).parent().slideUp();
+        $(this).parent().parent().children('.accept-div').slideDown();
     });
-    //close new week box
-    $('.week-head i').click(function(){
-        $('#new-week-box').slideUp();
+    $('.cancel-btn').click(function(){
+        $(this).parent().slideUp();
+        $(this).parent().parent().children('.share-footer').slideDown();
     });
+    //show and hidden ignore div
+    $('.ignore-a').click(function(){
+        $(this).parent().slideUp();
+        $(this).parent().parent().children('.ignore-div').slideDown();
+    });
+    //submit the post form 
+    var post_form_id;
+    $('.post-form').ajaxForm({
+        beforeSubmit: function(arr, $form, options) {           
+            post_form_id = '#post-request-form' + arr[1].value;
+        },
+        success: function(responseText) { 
+            console.log(responseText);
+                var res = JSON.parse(responseText);
+                console.log(res);
+                if(res.result == 'failure'){
+                    alert('لا يمكن تنفيذ طلبك ')
+                }
+                else if( res.result == 'success'){
+                    console.log('request done successfully');
+                    $(post_form_id).fadeOut(function(){
+                        $(this).remove();
+                        numberOfRequests();
+                    });
+                }
+        },//end of success
+        error: function(){
+            alert("حدث خطأ اثناء الارسال ، برجاء المحاوله مره اخرى");
+        }//end of error
+    }); 
     
-    //------------------------------------ edit week
-    $('.edit-week-icon').click(function(event){
-        var weekDisplay = $(this).parent().next().css('display');
-        if( weekDisplay == 'none'){
-            $(this).removeClass('fa-cog').addClass('fa-times');
-            $(this).parent().next().slideDown();
-            $(this).parent().next().next().slideUp();
-        }else{
-            $(this).removeClass('fa-times').addClass('fa-cog');
-            $(this).parent().next().slideUp();
-            $(this).parent().next().next().slideDown();
-        }
+    //------------------------------------------------------------- accept and ignore contributions
+    var contribution_form_id;
+    $('.contribution-form').ajaxForm({
+        beforeSubmit: function(arr, $form, options) {           
+            contribution_form_id = '#contribution-request-form' + arr[1].value;
+        },
+        success: function(responseText) { 
+            console.log(responseText);
+                var res = JSON.parse(responseText);
+                console.log(res);
+                if(res.result == 'failure'){
+                    alert('لا يمكن تنفيذ طلبك ')
+                }
+                else if( res.result == 'success'){
+                    console.log('request done successfully');
+                    $(contribution_form_id).fadeOut(function(){
+                        $(this).remove();
+                        numberOfRequests();
+                    });
+                }
+        },//end of success
+        error: function(){
+            alert("حدث خطأ اثناء الارسال ، برجاء المحاوله مره اخرى");
+        }//end of error
     });
+    // calc number of binding posts and contributions
+    function numberOfRequests(){
+        var number_of_requests = $('.post-form , .contribution-form').length;
+        $('#requests-number').html(number_of_requests);
+    }
+    numberOfRequests();
+    
+    
+    
     
     
 });

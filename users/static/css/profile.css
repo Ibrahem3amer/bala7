@@ -148,7 +148,7 @@
 }
 .materials label{
     padding: 5px 10px;    
-    background-color: #46c9b6;
+    background-color: #a6bfcc;
     color: #333;
     margin-bottom: 5px;
     margin-top: 5px;
@@ -186,9 +186,11 @@
     background-color: #E1E2E1;
     margin-bottom: 5px;
     margin-top: 5px;
+    
+    user-select: none;
 }
 .active-checkbox{
-    background-color: #46c9b6!important;
+    background-color: #a6bfcc !important;
 }
 .radio input[type="radio"], 
 .radio-inline input[type="radio"], 

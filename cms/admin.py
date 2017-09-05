@@ -161,6 +161,7 @@ class UserCommentAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Topic, TopicAdmin)
+admin.site.register(TopicTable, TopicTableAdmin)
 admin.site.register(Material, MaterialAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Exam, ExamAdmin)

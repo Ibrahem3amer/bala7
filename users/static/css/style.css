@@ -197,7 +197,7 @@ a:hover, a:active, a:open, a:visited{
     background-color: #34B3A0;
     border: 2px solid #34B3A0;
     
-    font-size: 24px;
+    font-size: 20px;
     padding: 3px 20px;
     text-decoration: none;
     display: inline-block;
@@ -304,7 +304,7 @@ select{
 /* page structure */
 /*------- start adv part -------*/
 .content-part{
-    width: calc(100% - 350px);
+    width: calc(100% - 360px);
     background-color: #fff;
     float: right;
     height: auto;
@@ -317,20 +317,18 @@ select{
 }
 
 .left{
-    width: 330px;
+    width: 340px;
     background-color: #fff;
     padding: 20px;
     float: left;
     margin-right: 20px;
+    user-select: none;
 }
-.adv-part{
-    padding-top: 0px;
+
+.left > .ad-block{
+    width: 300px;
 }
-.adv-part .ad-block{
-    border: 3px solid #E9EBEE;
-    box-shadow: 1px 1px 5px #333;
-}
-.adv-part .ad-block img{
+.left > .ad-block  img{
     width: 100%;
 }
 @media (max-width:991px){

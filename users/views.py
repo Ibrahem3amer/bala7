@@ -4,8 +4,9 @@ from django.contrib import messages
 from django.http import HttpResponse
 from users.models import University, Faculty, Department, UserProfile 
 from users.forms import UserSignUpForm
-from cms.models import UserTopics, Task
+from cms.models import UserTopics, Task, Material, UserContribution
 
+UPDATES_LIMIT = 3
 
 def home_visitor(request):
 	if request.user.is_authenticated:
@@ -32,7 +33,19 @@ def home_user(request):
 	# Getting user tasks deadlines. 
 	tasks = Task.get_closest_tasks(request)
 
-	return render(request, 'home_user.html', {'tasks': tasks})
+	# Getting user materials updateds.
+	primary_materials = Material.get_user_materails(user_obj=request.user, limit=UPDATES_LIMIT)
+	secondary_materials = UserContribution.get_user_materails(user_obj=request.user, limit=UPDATES_LIMIT)
+
+	return render(
+		request,
+		'home_user.html',
+		{
+			'tasks': tasks,
+			'primary': primary_materials,
+			'secondary': secondary_materials
+		}
+	)
 
 @login_required
 def user_profile(request):

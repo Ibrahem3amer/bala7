@@ -333,11 +333,11 @@ def get_post_comments(request):
 @permission_classes((IsAuthenticated,))
 def add_comment(request):
 	"""Add new comment to speicifc post."""
+	response = {}
 	try:
 		user = request.user
 		post = post = UserPost.objects.get(id=request.POST.get('post_id', 0))
 		content = request.POST.get('comment_content', 0)
-		response = {}
 		if user and post and content: 
 			comment = UserComment.objects.create(
 					post=post,

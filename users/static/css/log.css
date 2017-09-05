@@ -26,6 +26,9 @@
     float: right;
     padding: 0px;
 }
+#remember-check input{
+    height: 13px;
+}
 .inline{
    width: auto;
     display: inline;

@@ -2,59 +2,29 @@ input , button:focus{
     outline: none;
 }
 .content-section{
-    margin-top: 65px;
-    width: 100%;
-    height: calc(100vh - 65px);
+    margin-top: 90px;
 }
 .content-section div{
     vertical-align: top;
+    overflow-wrap: break-word;
 }
 .formLineError{
     padding: 5px 15px;
     margin-bottom: 10px;
 }
+.badge{
+    font-size: 14px;
+    background-color: #999;
+}
 /*----- start adv div -----*/
-.adv-div{
-    position: absolute;
-    left: 0px;
-    top: 65px;
-    width: 330px;
-    height: calc(100vh - 65px);
-    padding: 15px;
-}
-.adv-div img{
-    max-width: 100%;
-}
-/*xs*/
-@media (max-width:1199px){
-    .adv-div{
-        display: none;
-    }
-}
+
+
 /*----- end adv div --------*/
 
 /*----- start center div ----*/
-/*sm*/
 
 .center-div{
-    width: calc(100% - 330px - 25px);
-    min-height: calc(100% - 65px);
-    float: left;
-    margin-left: 330px;
-    margin-top: 15px;
-    display: inline-block;
-    z-index: 0;
-    
-    background-color: #fff;
-    
-    padding: 15px;
-}
-@media (max-width:1199px){
-    .center-div{
-        width: 100%;
-        margin-left: 0px;
-        padding-right: 25px;
-    }
+    min-height: calc ( 100vh - 90px) !important;
 }
 /*START TABS STYLE*/
 .center-div .tabs .nav-heads{
@@ -75,106 +45,39 @@ input , button:focus{
     flex: 1;
 }
 .center-div ul li a{
+    font-size: 20px;
+    font-weight: bold;
     border: 0px solid #ddd;
     border-radius: 0px;
-    background-color: #d9edf7;
+    background-color: #fff;
+    color: #555;
+    padding: 15px;
+    user-select: none;
 }
+.center-div ul li a:hover .badge{
+    background-color: #34B3A0;
+}
+.nav-tabs > li.active > a > .badge, .nav-tabs > li.active > a:hover > .badge, .nav-tabs > li.active > a:focus > .badge{
+    background-color: #34B3A0;
+}
+.center-div ul li a:hover{
+    background-color: #fff;
+    color: #34B3A0;
+}
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
+    color: #34B3A0;
+}
+
 #content,#community{
-    padding-top: 10px;
+    padding-top: 40px;
 }
 
 /*END TABS STYLE*/
 /*START CONTENT STYLE*/
-#add-week-btn{
-    display: block;
-    margin: auto;
-    margin-bottom: 10px;
-}
-#new-week-box{
-    display: none;
-    width: 80%;
-    border: 2px solid #E9EBEE;
-    margin: auto;
-    margin-bottom: 30px;
-}
-#new-week-box > .week-head{
-    position: relative;
-    background-color: #F6F7F9;
-    padding: 5px 15px;
-    border-bottom: 1px solid #E9EBEE;
-}
-#new-week-box > .week-head > .week-name{
-    color: #365899;
-    font-weight: bold;
-    font-size: 26px;
-    margin: 0px;
-    line-height: 40px;
-}
-#new-week-box > .week-head i{
-    color: #666;
-    position: absolute;
-    left: 15px;
-    top: 12px;
-    -webkit-transition: all .5s; /* Safari */
-    transition: all .5s;
-}
-#new-week-box > .week-head i:hover{
-    cursor: pointer;
-    color: #333;
-}
-.week-body{
-    padding: 15px 30px;
-}
-
-#new-week-box > .week-body > p{
-    padding: 0px 5px;
-    display: inline-block;
-    width: 49%;
-}
-.colon{
-    position: absolute;
-    left: 5px;
-}
-#new-week-box > .week-body > p > span:first-of-type{
-    color: #365899;
-    position: relative;
-    display: inline-block;
-    width: 110px;
-}
-#new-week-box input{
-     width: calc(100% - 110px);
-    padding: 5px;
-}
-#new-week-box > .week-footer{
-    text-align: left;
-    background-color: #F6F7F9;
-    padding: 5px 15px;
-    border-top: 1px solid #E9EBEE;
-}
-#new-week-box > .week-footer > button{
-    height: 34px;
-    line-height: 34px;
-    padding: 0px;
-    margin: 3px 0px;
-    width: 100px;
-}
-/*xs*/
-@media (max-width:767px){
-    #add-week-btn{
-      width: 150px !important;  
-    }
-    #new-week-box{
-        width: 95%;
-    }
-    #new-week-box > .week-body > p{
-        width: 100%;
-    }
-}
-
 
 .panel-group .panel {
     border-radius: 0px;
-    border: 2px solid #E9EBEE;
+    border: 2px solid #a6bfcc;
 }
 .panel-heading{
     border-radius: 0px;
@@ -182,14 +85,15 @@ input , button:focus{
 }
 .panel .panel-heading{
     position: relative;
-    background-color: #d9edf7;
+    background-color: #a6bfcc;
     border-bottom: 0px solid #ddd;
+    user-select: none;
 }
 .panel .panel-heading:hover{
     cursor: pointer;
 }
 .panel .panel-heading .panel-title{
-    font-size: 26px;
+    font-size: 20px;
     font-weight: bold;
     padding: 5px 10px;
     margin: 0px;
@@ -204,75 +108,13 @@ input , button:focus{
     padding: 0px;
     min-height: 60px;
 }
-.edit-div{
-    position: relative;
-    height: 50px;
-    border-bottom: 1px solid #ddd;
-}
-.edit-week-icon{
-    color: #666;
-    position: absolute;
-    left: 15px;
-    top: 13px;
-    -webkit-transition: all .5s; /* Safari */
-    transition: all .5s;
-    z-index: 999;
-}
-.edit-week-icon:hover{
-    cursor: pointer;
-    color: #333;
-}
+
 .panel-body > .edit-div > .fa-cog:hover{
     -ms-transform: rotate(180deg); /* IE 9 */
     -webkit-transform: rotate(180deg); /* Safari */
     transform: rotate(180deg);
 }
-.edit-week{
-    display: none;
-    padding: 30px 15px;
-}
-.edit-week > form{
-    position: relative;
-}
-.edit-week p{
-    display: inline-block;
-    width: 49%;
-    padding: 0px 10px;
-}
-.edit-week p span{
-    display: inline-block;
-}
-.edit-week > form > p > span:first-of-type{
-    text-align: right;
-    position: relative;
-    width: 110px;
-}
-.edit-week > form > p > span:last-of-type{
-    padding: 0px;
-    width: calc(100% - 110px);
-}
-.edit-week input{
-    padding: 5px;
-    width: 100%;
-}
-.edit-week > form > button{
-    margin-top: 15px;
-    width: 100px;
-    padding: 0px;
-}
-/*xs*/
-@media (max-width:767px){
-    .edit-week > form > p{
-        width: 100%;
-        padding: 0px;
-    } 
-    .edit-week > form > p > span:first-of-type{
-        vertical-align: top;
-    }
-    .edit-week > form > button{
-        margin-top: 10px;
-    }
-}
+
 .week-content{
     padding: 0px;
     padding-top: 30px;
@@ -299,7 +141,7 @@ input , button:focus{
     padding-right: 25px;
     text-align: right;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 20px;
     margin: 10px 0px;
     border-bottom: 1px solid #ddd;
 }
@@ -334,6 +176,9 @@ input , button:focus{
 .btn-div{
     text-align: center;
     margin-bottom: 10px;
+}
+.btn-div a{
+    width: 150px;
 }
 .nj-label{
     width: 30%;
@@ -393,7 +238,7 @@ input , button:focus{
     line-height: 50px;
     margin: 0px;
     padding: 0px 15px;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: bold;
 }
 .order-box > .order-box-inner > .order-box-body{
@@ -459,7 +304,7 @@ input , button:focus{
     line-height: 50px;
     margin: 0px;
     padding: 0px 15px;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: bold;
 }
 .share-box > .share-box-inner > .share-box-body{
@@ -568,16 +413,10 @@ input , button:focus{
 }
 
 .post{
-    width: 80%;
+    width: 100%;
     margin: auto;
     margin-bottom: 15px;
     border: 2px solid #E9EBEE;
-}
-/*xs*/
-@media (max-width:767px){
-    .post{
-        width: 95%;
-    }
 }
 .post-body{
     position: relative;
@@ -586,12 +425,13 @@ input , button:focus{
 }
 .post-body .publisher-name{
     background-color: #F6F7F9;
-    padding: 5px 15px;
+    padding: 10px 15px;
     border-bottom:  1px solid #E9EBEE;
 }
 .post-body .publisher-name p{
     color: #365899;
-    font-size: 28px;
+    font-size: 20px;
+    font-weight: bold;
     margin: 0px;
 }
 .post-body .post-time{
@@ -607,21 +447,24 @@ input , button:focus{
 }
 .post-content p{
     margin: 0px;
+    overflow-wrap: break-word;
 }
 .post-content > div{
     display: none;
     position: relative;
+    font-weight: bold;
     margin: 0px;
     margin-top: 15px;
     margin-bottom: -10px;
-    padding: 5px 15px;
+    padding: 10px 15px;
     
 }
 .show-hide-comments{
-    padding: 5px 15px;
+    padding: 10px 15px;
     border-bottom:  1px solid #E9EBEE;
 }
 .show-hide-comments p{
+    font-size: 18px;
     margin: 0px;
     display: inline-block;
     color: #555;
@@ -681,18 +524,18 @@ input , button:focus{
 }
 .comment .publisher-name{
     color: #365899;
-    font-size: 28px;
+    font-size: 18px;
     margin: 0px;
+    margin-bottom: 5px;
 }
 .comment .comment-content{
     padding: 0px 15px;
-    font-size: 22px;
 }
 .comment .comment-time{
     position: absolute;
     top: 15px;
     left: 15px;
-    font-size: 18px;
+    font-size: 12px;
     color: #888;
 }
 .comment .comment-delet{
@@ -742,18 +585,27 @@ input , button:focus{
 }
 
 /*--- start requests ---*/
+.post-form .nj-btn{
+    width: 130px;
+    padding: 0px;
+    height: 37px;
+    line-height: 34px;
+    border-radius: 0px;
+}
+.contribution-form .nj-btn{
+    width: 130px;
+    padding: 0px;
+    height: 37px;
+    line-height: 34px;
+    border-radius: 0px;
+}
 .request-view-box{
-    width: 80%;
+    width: 100%;
     border: 2px solid #E9EBEE;
     margin: auto;
     margin-top: 30px;
 }
-/*xs*/
-@media (max-width:767px){
-    .request-view-box{
-        width: 95%;
-    }
-}
+
 .request-head{
     position: relative;
     background-color: #F6F7F9;
@@ -762,15 +614,16 @@ input , button:focus{
 }
 .request-head p{
     color: #365899;
-    font-size: 28px;
+    font-size: 20px;
+    font-weight: bold;
     margin: 0px;
 }
 .request-head span{
     position: absolute;
     left: 15px;
-    top: 14px;
-    font-size: 18px;
-    color: #666;
+    top: 11px;
+    font-size: 12px;
+    color: #888;
 }
 .request-body{
     padding: 25px 30px;
@@ -792,16 +645,10 @@ input , button:focus{
     width: 100px;
 }
 .share-view-box{
-    width: 80%;
+    width: 100%;
     border: 2px solid #E9EBEE;
     margin: auto;
     margin-top: 30px;
-}
-/*xs*/
-@media (max-width:767px){
-    .share-view-box{
-        width: 95%;
-    }
 }
 .share-head{
     position: relative;
@@ -811,15 +658,16 @@ input , button:focus{
 }
 .share-head p{
     color: #365899;
-    font-size: 28px;
+    font-size: 20px;
+    font-weight: bold;
     margin: 0px;
 }
 .share-head span{
     position: absolute;
     left: 15px;
-    top: 14px;
-    font-size: 18px;
-    color: #666;
+    top: 11px;
+    font-size: 12px;
+    color: #888;
 }
 .share-body{
     padding: 25px 30px;
@@ -842,9 +690,8 @@ input , button:focus{
     position: relative;
     color: #365899;
     font-weight: bold;
-    font-size: 24px;
     display: inline-block;
-    width: 100px;
+    width: 108px;
 }
 .share-footer{
     border-top: 1px solid #E9EBEE;
@@ -859,6 +706,15 @@ input , button:focus{
     margin: 3px 0px;
     width: 100px;
 }
+.accept-div , .ignore-div{
+    display: none;
+    text-align: center;
+    padding: 30px;
+    border-top: 1px solid #E9EBEE;
+}
+.accept-div p , .ignore-div p{
+    margin-bottom: 25px;
+}
 /*--- end requests ---*/
 /*----- end center div -------*/
 
@@ -869,12 +725,14 @@ input , button:focus{
 .right-div{
     direction: ltr;
     position: fixed;
-    right: -295px;
-    top: 65px;
+    right: -296px;
+    top: 70px;
     width: 320px;
-    height: calc(100vh - 65px);
+    height: calc(100vh - 70px);
     z-index: 1;
     display: inline-block;
+    
+    user-select: none;
 }
 .arrows-div{
     display: inline-block;
@@ -925,7 +783,9 @@ input , button:focus{
     padding-top: 3px;
     text-align: center;
     color: #fff;
-    font-size: 34px;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 12px 3px;
 }
 .right-ele-body{
     width: 100%;
@@ -940,8 +800,8 @@ input , button:focus{
 }
 
 .right-ele-body table td:nth-child(1), th:nth-child(1) { width: 55px; }
-.right-ele-body table th:nth-child(2) { width: 145px; }
-.right-ele-body table td:nth-child(2) { width: 145px; }
+.right-ele-body table th:nth-child(2) { width: 142px; }
+.right-ele-body table td:nth-child(2) { width: 146px; }
 .right-ele-body table td:nth-child(3), th:nth-child(3) { width: 49px; }
 
 .right-ele-body table td a i{    
@@ -951,16 +811,17 @@ input , button:focus{
 .right-ele-body table tbody{   
     display: block;
     overflow: auto;
-    height: 150px;
+    height: auto;
+    max-height: 161px;
     width: 290px;/*to make scroll bar out */
 }
 .right-ele-body table thead{    
     position: relative;
     display: block;
 }
-.materials-table-h th:nth-child(1){width: 200px;text-align: right;padding-right: 15px;}
+.materials-table-h th:nth-child(1){width: 197px;text-align: right;padding-right: 15px;}
 .materials-table-h th:nth-child(2){width: 49px !important;}
-.materials-table-b tr td:nth-child(1){width: 200px !important;text-align: right;padding-right: 15px;}
+.materials-table-b tr td:nth-child(1){width: 201px !important;text-align: right;padding-right: 15px;}
 .materials-table-b tr td:nth-child(2){width: 49px !important;}
 .doctor-name{
     background-color: #6FB353;
@@ -971,7 +832,9 @@ input , button:focus{
     margin-bottom: 3px;
     text-align: center;
     color: #fff;
-    font-size: 34px;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 3px;
 }
 .doctor-name a:hover{
     text-decoration: none;

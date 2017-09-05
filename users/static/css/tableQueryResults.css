@@ -79,3 +79,12 @@
 /*-- end table style --*/
 
 /*---------- end content style ----------*/
+
+/*----------------------------------------------------- another design --------------------------------------------*/
+.left{
+    margin-left: 20px;
+}
+.content-part{
+    width: calc(100% - 400px);
+    float: left;
+}

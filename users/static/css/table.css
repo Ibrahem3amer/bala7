@@ -80,3 +80,13 @@
     margin-bottom: 5px;
 }
 /*---------- end content style ----------*/
+
+
+/*----------------------------------------------------- another design --------------------------------------------*/
+.left{
+    margin-left: 20px;
+}
+.content-part{
+    width: calc(100% - 400px);
+    float: left;
+}

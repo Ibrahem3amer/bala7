@@ -11,113 +11,84 @@
 /*--start notifi section -*/
 #notifi-section{
     margin-top: 70px;
-    background-color:#E1E2E1;
-    padding: 15px 15px;
-    height: 200px;
+    background-color:#a6bfcc;
+    padding: 10px 15px;
+    height: 300px;
     margin-bottom: 20px;
+    overflow-y: scroll;
 }
-#notifi-section .item-content{
-    border: 2px solid  #a6bfcc;
-    height: 80px;
-    padding-top: 1%;
-    padding-bottom: 1%;
-    padding-right: 5%;
-    padding-left: 5%;
-    margin-bottom: 5px;
-    overflow: auto;
+
+.card{
+    height: 130px;
+    border: 1px solid #fff;
+    background-color: #fff;
+    margin-bottom: 10px;
+}
+.card-header {
+    border-bottom: 1px solid #fff;  
+    padding:5px;
+}
+.card-block{
+    padding:5px;
+}
+.card span{
+    padding: 5px 5px;
+    float: left;
+}
+.card-event{
+    border: 2px solid #D9EDF7;
+}
+.card-event .card-header{
+    background-color: #D9EDF7;
+}
+.card-task{
+    border: 2px solid #F2DEDE;
+}
+.card-task .card-header{
+    background-color: #F2DEDE;
+}
+.tasks .fl{
+    float: right;
+}
+.team{
     text-align: center;
-
-}
-#team_info{
-    height: 180px;
-}
-#carousel-div{
-    display: inline-block;
-    width: 100%;
-    height: auto;
-}
-
-#arrows{
-    position: relative;
-    display: inline-block;
+    border: 2px solid #F0F0F0;
     height: 200px;
-    text-align: center;
-    margin: auto;
+    margin-top: 70px;
+    margin-bottom: 10px;
 }
-#arrows > div{
-    height: 70px;
-    margin: auto;
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
+.team img{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #f3f3f3;
+    position: relative;
+    margin-top: -75px;
 }
-@media (max-width: 767px){
-    #notifi-section{
-        padding: 15px;
-        height: 400px;
-
-    }
-    #carousel-div{
-        width: calc(100% - 37px);
-        height: 200px;
-
-    }
-    .carousel.vertical .carousel-inner{
-        height:200px;
-
-    }
-    
-    #arrows{
-        margin: auto;
-    }
+.team img:hover{
+    border: 3px solid #6de5d0;
+    transition: 1s ease;
 }
-
-.btn-vertical-slider{ 
-    margin-left:0px;
-    cursor:pointer;
-    display: inline;
+.team b{
+    margin-top: 10px;
+    display: block;
 }
-
-a {  cursor:pointer;}
-
-.carousel.vertical .carousel-inner{
-        height: auto;
-    }
-.carousel.vertical .carousel-inner .item {
-  -webkit-transition: 0.3s linear top;
-     -moz-transition: 0.3s linear top;
-      -ms-transition: 0.3s linear top;
-       -o-transition: 0.3s linear top;
-          transition: 0.3s linear top;
+.team .social{
+    font-size: 50px;
 }
-
- .carousel.vertical .active {
-  top: 0;
+.social a{
+    text-decoration: none;
+    color: #000;
 }
- .carousel.vertical .next {
-  top: 100%;
+.fa-facebook-square:hover{
+    color: #3B5998;
 }
- .carousel.vertical .prev {
-  top: -100%;
+.fa-twitter-square:hover{
+    color: #1B95E0;
 }
- .carousel.vertical .next.left,
-.carousel.vertical .prev.right {
-  top: 0;
+.fa-envelope:hover{
+    color: #EA4335;
 }
- .carousel.vertical .active.left {
-  top: -100%;
-}
- .carousel.vertical .active.right {
-  top: 100%;
-}
- .carousel.vertical .item {
-    left: 0;
-     margin-top:0px; 
-     margin-left: 0px;
-     margin-right: 0px;
-}
-
-
 /*--end notifi section -*/
 
 
