@@ -1,7 +1,7 @@
 import json
 from django.contrib import admin
 from django.contrib.auth.models import User
-from cms.models import Topic, Material, Task, Professor, TopicTable
+from cms.models import Topic, Material, Task, Professor, TopicTable, Exam, UserPost, UserComment
 
 
 class TopicAdmin(admin.ModelAdmin):
@@ -30,6 +30,12 @@ class MaterialAdmin(admin.ModelAdmin):
 
         return super(MaterialAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        """Limits the choices of professors for the limit of user."""
+        if db_field.name == "professor" and not request.user.is_superuser:
+            kwargs["queryset"]  = Professor.objects.filter(faculty_id=request.user.profile.faculty.id)
+        
+        return super(MaterialAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)      
     
     def get_queryset(self, request):
         """
@@ -40,8 +46,47 @@ class MaterialAdmin(admin.ModelAdmin):
             return qs.filter(content_type__lt = 3)
         return qs.filter(topic_id__in = request.user.profile.topics.all(), content_type__lt = 3)
 
+class ExamAdmin(admin.ModelAdmin):
+
+    exclude = ('content_type', 'term', 'week_number')
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """
+        Assigns default value for User field. limits Topics field to user's topics. 
+        """
+        if db_field.name == "user":
+            kwargs["queryset"]  = User.objects.filter(id = request.user.id)
+            kwargs["initial"]   = request.user.id
+        elif db_field.name == "topic" and not request.user.is_superuser:
+            kwargs["queryset"]  = Topic.objects.filter(id__in = request.user.profile.topics.all())
+
+        return super(ExamAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        """Limits the choices of professors for the limit of user."""
+        if db_field.name == "professor" and not request.user.is_superuser:
+            kwargs["queryset"]  = Professor.objects.filter(faculty_id=request.user.profile.faculty.id)
+        
+        return super(ExamAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)        
+
+    def get_queryset(self, request):
+        """
+        Returns materials that lays in SV scope in case of staff, returns all materials otherwise. 
+        """
+        qs = super(ExamAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs.filter(content_type__lt = 3)
+        return qs.filter(topic_id__in = request.user.profile.topics.all(), content_type__lt = 3)
+
 
 class TaskAdmin(admin.ModelAdmin):
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        """Limits the choices of professors for the limit of user."""
+        if db_field.name == "professor" and not request.user.is_superuser:
+            kwargs["queryset"]  = Professor.objects.filter(faculty_id=request.user.profile.faculty.id)
+        
+        return super(TaskAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)       
 
     def get_queryset(self, request):
         """
@@ -108,9 +153,18 @@ class TopicTableAdmin(admin.ModelAdmin):
         super(TopicTableAdmin, self).save_model(request, obj, form, change)
 
 
+class UserPostAdmin(admin.ModelAdmin):
+    pass
+
+
+class UserCommentAdmin(admin.ModelAdmin):
+    pass
 
 admin.site.register(Topic, TopicAdmin)
+admin.site.register(TopicTable, TopicTableAdmin)
 admin.site.register(Material, MaterialAdmin)
 admin.site.register(Task, TaskAdmin)
+admin.site.register(Exam, ExamAdmin)
 admin.site.register(Professor, ProfessorAdmin)
-admin.site.register(TopicTable, TopicTableAdmin)
+admin.site.register(UserPost, UserPostAdmin)
+admin.site.register(UserComment, UserCommentAdmin)

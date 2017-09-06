@@ -1,31 +1,6 @@
 body{
     background-color: #E9EAEA;
 }
-.navbar{
-    padding-top: 10px;
-    padding-bottom: 10px;
-  
-}
-.navbar li{
-    list-style: none;
-    display: inline-block;
-}
-.navbar ul {
-    display: inline-block;
-}
-.navbar #logo{
-    display: inline-block;
-    position: absolute;
-    left: 50%;
-}
-.navbar #logo img{
-    height: 50px;
-    cursor: pointer;
-}
-.navbar ul li a {
-    text-decoration: none;
-}
-
 #banner{
 
     background-image: url(/static/pic/school.png);

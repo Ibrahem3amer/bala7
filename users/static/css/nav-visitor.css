@@ -16,10 +16,17 @@ body{
 .navbar #logo{
     display: inline-block;
     position: absolute;
-    left: 50%;
+    margin: auto;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    height: 50px;
+    width: 39px;
 }
 .navbar #logo img{
     height: 50px;
+    width: 39px;
     cursor: pointer;
 }
 .navbar ul li a {

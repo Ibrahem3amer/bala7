@@ -35,93 +35,131 @@
             {% include "public/navbar-user.html" %}
             <!-- end navbar -->
             <!-- start page content -->
-            <section class="home-section">
+            <section class="content-section">
                 <div id="notifi-section">
-                    <!--
-                    <div class="notifi-icon-div">
-                        <i class="fa fa-bullhorn announc-icon" aria-hidden="true"></i>
-                    </div>
-                    -->
-                    <div id="carousel-div">
-                        <div id="myCarousel" class="vertical-slider carousel vertical slide" data-ride="carousel">
-                            
-                            
-                            <!-- Carousel items -->
-                            <div class="carousel-inner ">
-
-                                <!--/item-->
-                                <div class="item active">
-                                    
-                                        <div class="item-content">
-                                            <div class="note-element">
-                                                <div class="note-head">
-                                                    <p>اختبار نظم تشغيل</p>
-                                                    <p class="note-time">2017/4/25<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </p>
-                                                </div>
-                                                <div class="note-content">
-                                                    <p>تم تحديد موعد اختبار نظم التشغيل يوم الثلاثاء</p>
-                                                </div>
-                                            </div>
-                                            <div class="note-element">
-                                                <div class="note-head">
-                                                    <p>اختبار نظم تشغيل</p>
-                                                    <p class="note-time">2017/4/25<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </p>
-                                                </div>
-                                                <div class="note-content">
-                                                    <p>تم تحديد موعد اختبار نظم التشغيل يوم الثلاثاء</p>
-                                                </div>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="team">
+                                <img src="{% static 'pic/teampic.jpg' %}">
+                                <b>
+                                    bla bla bla
+                                    bla bla bla
+                                    bla bla bla
+                                    bla bla bla
+                                    bla bla bla
+                                    bla bla bla
+                                </b>
+                                <div class="social">
+                                    <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                                    <a href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
+                                    <a href="#"><i class="fa fa-twitter-square" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-xs-12">
+                            <div class="row tasks">
+                                <div class="col-sm-3 col-xs-6 fl">
+                                    <div class="card card-event">
+                                        <div class="card-header">
+                                            <div class="card-title">
+                                                <b class="name">برمجة</b>
+                                                <span class="label label-danger">الاحد 25/9</span>
                                             </div>
                                         </div>
+                                        <div class="card-block">
+                                            <p>
+                                                تاسك البرمجه يوم الاحد قاعه 1
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <!--/item-->
-
-                                <!--/item-->
-                                <div class="item ">
-                                        <div class="item-content">
-                                            <div class="note-element">
-                                                <div class="note-head">
-                                                    <p>اختبار نظم تشغيل</p>
-                                                    <p class="note-time">2017/4/25<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </p>
-                                                </div>
-                                                <div class="note-content">
-                                                    <p>تم تحديد موعد اختبار نظم التشغيل يوم الثلاثاء</p>
-                                                </div>
-                                            </div>
-                                            <div class="note-element">
-                                                <div class="note-head">
-                                                    <p>اختبار نظم تشغيل2</p>
-                                                    <p class="note-time">2017/4/25<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> </p>
-                                                </div>
-                                                <div class="note-content">
-                                                    <p>تم تحديد موعد اختبار نظم التشغيل يوم الثلاثاء</p>
-                                                </div>
+                                <div class="col-sm-3 col-xs-6 fl">
+                                    <div class="card card-task">
+                                        <div class="card-header">
+                                            <div class="card-title">
+                                                <b class="name">برمجة</b>
+                                                <span class="label label-danger">الاحد 25/9</span>
                                             </div>
                                         </div>
+                                        <div class="card-block">
+                                            <p>
+                                                تاسك البرمجه يوم الاحد قاعه 1
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <!--/item-->
-
+                                <div class="col-sm-3 col-xs-6 fl">
+                                    <div class="card card-event">
+                                        <div class="card-header">
+                                            <div class="card-title">
+                                                <b class="name">برمجة</b>
+                                                <span class="label label-danger">الاحد 25/9</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-block">
+                                            <p>
+                                                تاسك البرمجه يوم الاحد قاعه 1
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-6 fl">
+                                    <div class="card card-task">
+                                        <div class="card-header">
+                                            <div class="card-title">
+                                                <b class="name">برمجة</b>
+                                                <span class="label label-danger">الاحد 25/9</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-block">
+                                            <p>
+                                                تاسك البرمجه يوم الاحد قاعه 1
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-6 fl">
+                                    <div class="card card-event">
+                                        <div class="card-header">
+                                            <div class="card-title">
+                                                <b class="name">برمجة</b>
+                                                <span class="label label-danger">الاحد 25/9</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-block">
+                                            <p>
+                                                تاسك البرمجه يوم الاحد قاعه 1
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-6 fl">
+                                    <div class="card card-task">
+                                        <div class="card-header">
+                                            <div class="card-title">
+                                                <b class="name">برمجة</b>
+                                                <span class="label label-danger">الاحد 25/9</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-block">
+                                            <p>
+                                                تاسك البرمجه يوم الاحد قاعه 1
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                             </div>
                             
+                            
                         </div>
                     </div>
-                    
-                    <div id="arrows">
-                        <div>
-                            <span data-slide="next" class="btn-vertical-slider fa fa-arrow-circle-up"
-                            style="font-size: 30px"></span><br>
-                            <span data-slide="prev" class="btn-vertical-slider fa fa-arrow-circle-down"style="color: Black; font-size: 30px"></span>
-                        </div>
-                    </div>
-                    
                 </div>
                 
-                <div id="container-content" class="container">                
-                    <div id="out-row">
-                        <div class="hidden-xs left-home">
-                            <div class="adv-part">
-                                <div class="ad-block">
-                                    <a href="#"><img src="{% static 'pic/adv.jpg' %}"></a> 
-                                </div>
+                <div class="container">                
+                        <div class="hidden-xs left">
+                            <div class="ad-block">
+                                <a href="#"><img src="{% static 'pic/adv300x250.jpg' %}"></a> 
                             </div>
                         </div>
                         
@@ -129,22 +167,25 @@
                             <div class="adv-xs hidden-md">
                                 <img src="{% static 'pic/adv-xs.jpg' %}">
                             </div>
+                            {% if primary %}
+                                {% for material in primary %}
+                                    <div class="content-element">
 
-                            <div class="content-element">
-                                <div class="head">
-                                    <p>الاسبوع الاول | ذكاء صناعى</p>
-                                </div>
-                                <div class="content">
-                                    <div class="row">
-                                        <div class="col-xs-4"><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                        <div class="col-xs-4"><p>عنوان المحاضرة</p></div>
-                                        <div class="col-xs-4"><p>المحاضرة</p></div>
+                                        <div class="head">
+                                            <p>{{ material.topic.name }}</p>
+                                        </div>
+                                        <div class="content">
+                                            <div class="row">
+                                                <div class="col-xs-4"><a class="link_icon" href="{{ material.link }}"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                <div class="col-xs-4"><p>{{ material.name }}</p></div>
+                                                <div class="col-xs-4"><p>{{ material.user.username }}</p></div>
+                                            </div>
+
+                                        </div>
                                     </div>
-
-                                </div>
-                            </div>
+                                {% endfor %}
+                            {% endif %}
                         </div>
-                    </div>
                 </div>
             </section>
             <!-- end page content -->
