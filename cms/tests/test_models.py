@@ -839,10 +839,6 @@ class EventTest(TestCase):
 		self.assertTrue(len(user_events) == 10)
 
 
-
-
-
-
 class TopicTableTest(TestCase):
 	def setUp(self):
 		self.uni       	= University.objects.create(name = 'Test university')
