@@ -12,5 +12,6 @@ python:
 install:
   - pip install -r requirements/ci.txt
 script:
+  - make makemigrations
   - make migrate
   - make test
