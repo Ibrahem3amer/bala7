@@ -676,40 +676,171 @@ class TaskTest(TestCase):
 class EventTest(TestCase):
 	def setUp(self):
 		self.uni       	= University.objects.create(name = 'Test university')
-		self.fac        = Faculty.objects.create(name = 'Test faculty')
+		self.fac        = Faculty.objects.create(name = 'Test faculty', university=self.uni)
 		self.dep        = Department.objects.create(name = 'Test dep')
 		self.topic      = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
 		self.user 		= User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
-		self.profile   	= UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
-		self.material 	= Material.objects.create(
-				name 			= 'test_material',
-				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
-				link 			= 'http://www.docs.google.com',
-				year 			= '2017-1-5',
-				term 			= 1,
-				content_type 	= 1,
-				week_number 	= 1,
-				user 			= self.user,
-				topic 			= self.topic
-			)
+		self.profile = UserProfile.objects.create(
+			user=self.user,
+			department=self.dep,
+			faculty=self.fac,
+			university=self.uni
+		)
 		self.event = Event.objects.create(
 				name='test_event',
 				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
 				deadline=datetime.date.today()+datetime.timedelta(days = 4),
 				dep=self.dep
-			)
+		)
 
-		self.user.profile.topics.add(self.topic)
 
 	def test_get_user_dep_events(self):
 		
 		# Setup test
-		user_events = Event.get_closest_events()
+		request = HttpRequest()
+		request.user = self.user
 
 		# Exercise test
+		user_events = Event.get_closest_events(request)
+
 		# Assert test
 		self.assertIn(self.event, user_events)
 		self.assertTrue(len(user_events) == 1)
+
+
+	def test_get_user_global_events(self):
+		""" Returns 2 events that relate to another deps and faculties."""
+		
+		# Setup test
+		Event.objects.all().delete()
+		another_dep = Department.objects.create(name='another', faculty=self.fac)
+		
+		Event.objects.create(
+			name='test_event1',
+			content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+			deadline=datetime.date.today()+datetime.timedelta(days=4),
+			dep=another_dep,
+			faculty=self.fac,
+		)
+
+		Event.objects.create(
+			name='test_event',
+			content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+			deadline=datetime.date.today()+datetime.timedelta(days=4),
+			dep=another_dep,
+			university=self.uni,
+		)
+		request = HttpRequest()
+		request.user = self.user
+
+		# Exercise test
+		user_events = Event.get_closest_events(request)
+
+		# Assert test
+		self.assertNotIn(self.event, user_events)
+		self.assertTrue(len(user_events) == 2)
+
+
+	def test_get_user_events_when_no_events(self):
+		
+		# Setup test
+		Event.objects.all().delete()
+		request = HttpRequest()
+		request.user = self.user
+
+		# Exercise test
+		user_events = Event.get_closest_events(request)
+
+		# Assert test
+		self.assertNotIn(self.event, user_events)
+		self.assertTrue(len(user_events) == 0)
+		self.assertEqual(user_events, [])
+
+
+	def test_get_user_events_when_no_userprofile(self):
+		
+		# Setup test
+		user = User.objects.create_user(username='ibrahemsdsd', password='dasd56asda6s4das4')
+		request = HttpRequest()
+		request.user = user
+
+		# Exercise test
+		user_events = Event.get_closest_events(request)
+
+		# Assert test
+		self.assertNotIn(self.event, user_events)
+		self.assertTrue(len(user_events) == 0)
+		self.assertEqual(user_events, [])
+
+
+	def test_get_user_events_from_multiple_events(self):
+		""" Returns 10 events out of 17 events."""
+		
+		# Setup test
+		another_dep = Department.objects.create(name='another', faculty=self.fac)
+		another_fac = Faculty.objects.create(name='another_fac', university=self.uni)
+		
+		# Far away events.
+		for i in range(2):
+			Event.objects.create(
+				name='test_event',
+				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				deadline=datetime.date.today()+datetime.timedelta(days = 15),
+				dep=self.dep,
+			)
+
+		# Near events.
+		for i in range(3):
+			Event.objects.create(
+				name='test_event',
+				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				deadline=datetime.date.today()+datetime.timedelta(days = 2),
+				dep=self.dep,
+			)
+
+		# Near events from another deps with faculty-wide option.
+		for i in range(5):
+			Event.objects.create(
+				name='test_event',
+				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				deadline=datetime.date.today()+datetime.timedelta(days = 2),
+				dep=another_dep,
+				faculty=self.fac,
+			)
+
+		# Near events from another deps with faculty-wide option.
+		for i in range(1):
+			Event.objects.create(
+				name='test_event',
+				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				deadline=datetime.date.today()+datetime.timedelta(days = 2),
+				dep=another_dep,
+				faculty=another_fac,
+				university=self.uni,
+			)
+
+		# Passed-away events.
+		for i in range(5):
+			Event.objects.create(
+				name='test_event',
+				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				deadline=datetime.date.today()-datetime.timedelta(days = 10),
+				dep=self.dep,
+			)
+
+		request = HttpRequest()
+		request.user = self.user
+
+		# Exercise test
+		user_events = Event.get_closest_events(request)
+
+		# Assert test
+		self.assertIn(self.event, user_events)
+		self.assertTrue(len(user_events) == 10)
+
+
+
+
 
 
 class TopicTableTest(TestCase):

@@ -293,7 +293,7 @@ class Event(models.Model):
 	# Methods.
 	@classmethod
 	def get_closest_events(cls, request):
-		"""Returns events whose deadlines occurs 3 days from now."""
+		""" Returns events whose deadlines occurs 3 days from now."""
 		from itertools import chain
 		events = []
 		try:
@@ -304,8 +304,8 @@ class Event(models.Model):
 				deadline__range=(now, now+days_limit)
 			)
 			global_events = cls.objects.filter(
-				university=request.user.profile.university,
-				faculty=request.user.profile.university,
+				models.Q(university=request.user.profile.university) |
+				models.Q(faculty=request.user.profile.faculty),
 				deadline__range=(now, now+days_limit)
 			)
 			updates = cls.objects.filter(
@@ -318,6 +318,8 @@ class Event(models.Model):
 
 		return events
 
+	def __str__(self):
+		return self.name
 
 
 class UserContribution(MaterialBase):
