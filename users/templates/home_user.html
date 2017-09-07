@@ -2,6 +2,7 @@
 <html dir="rtl" lang="ar">
     <head>
         {% load staticfiles %}
+        {% load dates %}
     
         <meta charset="utf-8">
         <title>Najiba | نجيبه</title>
@@ -37,88 +38,124 @@
             <!-- start page content -->
             <section class="content-section">
                 <div id="notifi-section">
-                    <div id="carousel-div">
-                        <div class="row">
-                            <div id="team_info" class="col-md-4 col-xs-12">
-                                teaaam  
-                            </div>
-                            <div id="arrows" class="col-sm-1 col-xs-1">
-                                <div>
-                                    <span data-slide="next" class="btn-vertical-slider fa fa-arrow-circle-up"
-                                    style="font-size: 30px"></span><br>
-                                    <span data-slide="prev" class="btn-vertical-slider fa fa-arrow-circle-down"style="color: Black; font-size: 30px"></span>
-                                </div>
-                            </div>
-                            <div class="col-sm-7 col-xs-10">
-                                 <div id="myCarousel" class="vertical-slider carousel vertical slide" data-ride="carousel">
-                                    <!-- Carousel items -->
-                                    <div class="carousel-inner ">
-                                        <!--/item-->
-                                        <div class="item active">
-                                            <div class="item-content">
-                                                <p>
-                                                    يوجد تاسك برمجة يوم 1 
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="item-content">
-                                                <p>
-                                                    يوجد تاسك برمجة يوم 2 
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <!--/item-->
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="col-sm-7 col-xs-10">
-                                 <div id="myCarousel" class="myCarousel1 vertical-slider carousel vertical slide" data-ride="carousel">
-                                    <!-- Carousel items -->
-                                    <div class="carousel-inner ">
-                                        <!--/item-->
-                                        <div class="item active">
-                                            <div class="item-content">
-                                                <p>
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                    يوجد ايفينت بلا بلا
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="item-content">
-                                                <p>
-                                                    يوجد تاسك برمجة يوم 22 
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <!--/item-->
-                                    </div>
-
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <div class="team">
+                                <img src="{% static 'pic/teampic.jpg' %}">
+                                <b>
+                                    bla bla bla
+                                    bla bla bla
+                                    bla bla bla
+                                    bla bla bla
+                                    bla bla bla
+                                    bla bla bla
+                                </b>
+                                <div class="social">
+                                    <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                                    <a href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
+                                    <a href="#"><i class="fa fa-twitter-square" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                         </div>
-                       
+                        <div class="col-md-8 col-xs-12">
+                            <div class="row tasks">
+                                <div class="col-sm-3 col-xs-6 fl">
+                                    <div class="card card-event">
+                                        <div class="card-header">
+                                            <div class="card-title">
+                                                <b class="name">برمجة</b>
+                                                <span class="label label-danger">الاحد 25/9</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-block">
+                                            <p>
+                                                تاسك البرمجه يوم الاحد قاعه 1
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-6 fl">
+                                    <div class="card card-task">
+                                        <div class="card-header">
+                                            <div class="card-title">
+                                                <b class="name">برمجة</b>
+                                                <span class="label label-danger">الاحد 25/9</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-block">
+                                            <p>
+                                                تاسك البرمجه يوم الاحد قاعه 1
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-6 fl">
+                                    <div class="card card-event">
+                                        <div class="card-header">
+                                            <div class="card-title">
+                                                <b class="name">برمجة</b>
+                                                <span class="label label-danger">الاحد 25/9</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-block">
+                                            <p>
+                                                تاسك البرمجه يوم الاحد قاعه 1
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-6 fl">
+                                    <div class="card card-task">
+                                        <div class="card-header">
+                                            <div class="card-title">
+                                                <b class="name">برمجة</b>
+                                                <span class="label label-danger">الاحد 25/9</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-block">
+                                            <p>
+                                                تاسك البرمجه يوم الاحد قاعه 1
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-3 col-xs-6 fl">
+                                    <div class="card card-event">
+                                        <div class="card-header">
+                                            <div class="card-title">
+                                                <b class="name">برمجة</b>
+                                                <span class="label label-danger">الاحد 25/9</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-block">
+                                            <p>
+                                                تاسك البرمجه يوم الاحد قاعه 1
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-6 fl">
+                                    <div class="card card-task">
+                                        <div class="card-header">
+                                            <div class="card-title">
+                                                <b class="name">برمجة</b>
+                                                <span class="label label-danger">الاحد 25/9</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-block">
+                                            <p>
+                                                تاسك البرمجه يوم الاحد قاعه 1
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                            
+                        </div>
                     </div>
-                    
-                    
-                    
                 </div>
                 
                 <div class="container">                
