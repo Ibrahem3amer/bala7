@@ -7,10 +7,14 @@ before_install:
   - sudo apt-get install -qq firefox automake libtool libreadline6 libreadline6-dev libreadline-dev
   - sudo apt-get install -qq libsqlite3-dev libxml2 libxml2-dev libssl-dev libbz2-dev wget curl llvm
 language: python
+services:
+  - postgresql
 python:
   - "3.5"
 install:
   - pip install -r requirements/ci.txt
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
 script:
   - make reset
   - make makemigrations
