@@ -1,7 +1,7 @@
 import datetime
 from django.db import models
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.validators import RegexValidator, MinLengthValidator, validate_comma_separated_integer_list
+from django.core.validators import RegexValidator, MinLengthValidator, MaxLengthValidator, validate_comma_separated_integer_list
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.conf import settings
 from django.utils import timezone
@@ -125,7 +125,7 @@ class MaterialBase(models.Model):
 	type_choices = [(1, 'Lecture'), (2, 'Asset'), (3, 'Task')]
 
 	# Model Validator
-	content_min_len_validator	= MinLengthValidator(50, 'Material Description should be more than 50 characters.')
+	content_min_len_validator = MinLengthValidator(50, 'Material Description should be more than 50 characters.')
 
 	# Fields
 	name 			= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
@@ -244,7 +244,6 @@ class Task(MaterialBase):
 	professor = models.ManyToManyField('Professor', related_name='primary_tasks')
 	deadline = models.DateField()
 
-
 	# Model-level validation
 	def clean(self):
 		super(Task, self).clean()
@@ -255,7 +254,7 @@ class Task(MaterialBase):
 		if date_difference.days <= 3:
 			raise ValidationError('Deadline date should be 3 days ahead at least.')
 
-	# Task methods.
+	# Methods.
 	@classmethod
 	def get_closest_tasks(cls, request):
 		"""Returns tasks whose deadlines occurs 3 days from now."""
@@ -265,6 +264,60 @@ class Task(MaterialBase):
 		primary_tasks = Task.objects.filter(topic__in = request.user.profile.topics.all(), deadline__range = (now, now+days_limit))
 		secondary_tasks = UserContribution.objects.filter(status=3, content_type=3, topic__in=request.user.profile.topics.all(), deadline__range=(now, now+days_limit))	
 		return list(chain(primary_tasks, secondary_tasks))
+
+
+class Event(models.Model):
+	
+	# Model Validator
+	content_min_len_validator = MaxLengthValidator(30, 'Event description should not be more than 30 characters.')
+
+	# Additional feilds.
+	name = models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
+	content = models.TextField(validators = [content_min_len_validator])
+	dep = models.ForeignKey('users.Department', related_name='department_events', on_delete=models.CASCADE)
+	faculty = models.ForeignKey('users.Faculty', related_name='faculty_events', on_delete=models.CASCADE, null=True)
+	university = models.ForeignKey('users.University', related_name='university_events', on_delete=models.CASCADE, null=True)
+	all_app = models.BooleanField(default=False)
+	deadline = models.DateField()
+
+	# Model-level validation
+	def clean(self):
+		super(Event, self).clean()
+
+		# Validate that deadline is not a passed date. 
+		now = datetime.date.today()
+		date_difference = self.deadline - now
+		if date_difference.days <= 3:
+			raise ValidationError('Deadline date should be 3 days ahead at least.')
+
+	# Methods.
+	@classmethod
+	def get_closest_events(cls, request):
+		"""Returns events whose deadlines occurs 3 days from now."""
+		from itertools import chain
+		events = []
+		try:
+			now = datetime.date.today()
+			days_limit = datetime.timedelta(days = 4) 
+			local_events = cls.objects.filter(
+				dep=request.user.profile.department,
+				deadline__range=(now, now+days_limit)
+			)
+			global_events = cls.objects.filter(
+				university=request.user.profile.university,
+				faculty=request.user.profile.university,
+				deadline__range=(now, now+days_limit)
+			)
+			updates = cls.objects.filter(
+				all_app=True,
+				deadline__range=(now, now+days_limit)
+			)
+			events = list(chain(local_events, global_events, updates))
+		except:
+			pass
+
+		return events
+
 
 
 class UserContribution(MaterialBase):

@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
 from unittest import skip
-from cms.models import Topic, UserTopics, Material, Task, TopicTable, DepartmentTable, Professor, TABLE_PERIODS, TABLE_DAYS, UserContribution
+from cms.models import *
 from cms.views import update_user_topics
 from users.models import Department, UserProfile, Faculty, University
 
@@ -671,6 +671,46 @@ class TaskTest(TestCase):
 
 		# Assert test
 		self.assertEqual(3, len(Task.get_closest_tasks(request)))
+
+
+class EventTest(TestCase):
+	def setUp(self):
+		self.uni       	= University.objects.create(name = 'Test university')
+		self.fac        = Faculty.objects.create(name = 'Test faculty')
+		self.dep        = Department.objects.create(name = 'Test dep')
+		self.topic      = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
+		self.user 		= User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
+		self.profile   	= UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
+		self.material 	= Material.objects.create(
+				name 			= 'test_material',
+				content 		= 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				link 			= 'http://www.docs.google.com',
+				year 			= '2017-1-5',
+				term 			= 1,
+				content_type 	= 1,
+				week_number 	= 1,
+				user 			= self.user,
+				topic 			= self.topic
+			)
+		self.event = Event.objects.create(
+				name='test_event',
+				content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+				deadline=datetime.date.today()+datetime.timedelta(days = 4),
+				dep=self.dep
+			)
+
+		self.user.profile.topics.add(self.topic)
+
+	def test_get_user_dep_events(self):
+		
+		# Setup test
+		user_events = Event.get_closest_events()
+
+		# Exercise test
+		# Assert test
+		self.assertIn(self.event, user_events)
+		self.assertTrue(len(user_events) == 1)
+
 
 class TopicTableTest(TestCase):
 	def setUp(self):
