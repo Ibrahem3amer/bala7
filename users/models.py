@@ -28,14 +28,25 @@ class University(Entity):
 	uni_type 	= models.CharField(max_length = 10, default = 'public')
 
 class Faculty(Entity):
-	university 	= models.ForeignKey(University, related_name = 'faculties', on_delete = models.CASCADE, default = 1)
+	university 	= models.ForeignKey(
+		University,
+		related_name='faculties',
+		on_delete=models.CASCADE,
+		null=True
+	)
+
 	def __str__(self):
 		return self.university.name +' - '+ self.name
 
 
 class Department(Entity):
-	dep_type 	= models.CharField(max_length=10, default='normal')
-	faculty 	= models.ForeignKey(Faculty, related_name = 'departments', on_delete = models.CASCADE, default = 1)
+	dep_type = models.CharField(max_length=10, default='normal')
+	faculty = models.ForeignKey(
+		Faculty,
+		related_name='departments',
+		on_delete=models.CASCADE,
+		null=True
+	)
 	def __str__(self):
 		return self.faculty.name +' - '+ self.name
 
@@ -51,8 +62,6 @@ class UserProfile(models.Model):
 	academic_stats = models.CharField(max_length = 20, default = 'unset')
 	last_active_device = models.CharField(max_length = 200)
 	topics = models.ManyToManyField(Topic) 
-	#posts 				= 'relationship with posts'
-	#replies 			= 'relationship with replies'
 
 	@classmethod
 	def make_form_new_profile(cls, user_obj, department=None, faculty=None, university=None):
