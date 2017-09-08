@@ -67,11 +67,9 @@ def within_user_domain(user_obj, list_of_topics_ids):
     user_faculty_departments = user_obj.profile.faculty.departments.all().values_list('id', flat=True)
     request_topics = Topic.objects.filter(id__in = list_of_topics_ids).values_list('department', flat=True)
     for topic_id in list_of_topics_ids:
-        try:
+        topic = Topic.objects.filter(id=topic_id).exists()
+        if topic:
             request_topics = request_topics | Topic.objects.filter(id=topic_id).values_list('department', flat=True)
-        except:
-            # False id.
-            continue
 
     # Check if all topics in incoming request hold an accessible department id.
     for topic in request_topics:
