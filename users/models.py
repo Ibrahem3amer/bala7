@@ -61,7 +61,9 @@ class UserProfile(models.Model):
 	count_of_replies = models.IntegerField(default = 0)
 	academic_stats = models.CharField(max_length = 20, default = 'unset')
 	last_active_device = models.CharField(max_length = 200)
-	topics = models.ManyToManyField(Topic) 
+	topics = models.ManyToManyField(
+		Topic
+	) 
 
 	@classmethod
 	def make_form_new_profile(cls, user_obj, department=None, faculty=None, university=None):
