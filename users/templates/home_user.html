@@ -1,179 +1,119 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
-    <head>
-        {% load staticfiles %}
-    
-        <meta charset="utf-8">
-        <title>Najiba | نجيبه</title>
-        <!-- Internet Explorer meta -->
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <!-- First Mobile meta -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Bootstrap -->
-        <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> 
-        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
-        <link href="{% static 'css/style.css' %}" rel="stylesheet">
-        <link href="{% static 'css/home.css' %}" rel="stylesheet">
-        <link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
-        <!-- owl-carousel -->
-        <link href="{% static 'OwlCarousel/owl.carousel.css' %}" rel="stylesheet">
-        <link href="{% static 'OwlCarousel/owl.carousel.min.css' %}" rel="stylesheet">
-        <link href="{% static 'OwlCarousel/owl.theme.default.min.css' %}" rel="stylesheet">
-        <!--[if lt IE 9]>
-            <script src="js/html5shiv.min.js"></script>
-            <script src="js/respond.min.js"></script>
-        <![endif]-->
+	<head>
+		{% load staticfiles %}
+	
+		<meta charset="utf-8">
+		<title>Najiba | نجيبه</title>
+		<!-- Internet Explorer meta -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!-- First Mobile meta -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- Bootstrap -->
+		<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> 
+		<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+		<link href="{% static 'css/style.css' %}" rel="stylesheet">
+		<link href="{% static 'css/home.css' %}" rel="stylesheet">
+		<link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
+		<!-- owl-carousel -->
+		<link href="{% static 'OwlCarousel/owl.carousel.css' %}" rel="stylesheet">
+		<link href="{% static 'OwlCarousel/owl.carousel.min.css' %}" rel="stylesheet">
+		<link href="{% static 'OwlCarousel/owl.theme.default.min.css' %}" rel="stylesheet">
+		<!--[if lt IE 9]>
+			<script src="js/html5shiv.min.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
 
-        <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
-        <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    </head>
-    <body>
-        
-        {% if user.is_authenticated %}
-        
-            {% if profile_error %}
-                <h1>{{ profile_error }}</h1>
-            {% endif%}
+		<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	</head>
+	<body>
+		
+		{% if user.is_authenticated %}
+		
+			{% if profile_error %}
+				<h1>{{ profile_error }}</h1>
+			{% endif%}
 
-            <!-- start navbar -->
-            {% include "public/navbar-user.html" %}
-            <!-- end navbar -->
-            <!-- start page content -->
-            <section class="content-section">
-                <div id="notifi-section">
-                    <div class="row">
-                        <div class="col-md-4 col-xs-12 team">
-                            <div class="team-head">
-                                <img src="{% static 'pic/team-logo.jpg' %}">
-                                <p>Colourfly</p>
-                            </div>
-                            <div class="team-body">
-                                <p>للصين واستمرت لبولندا، مدن بـ, و الأول جزيرتي تعد, لم فمرّ الجو والفرنسي أخر. مع ضرب يتبقّ اقتصادية وبريطانيا. كما يطول عشوائية تم. ميناء والعتاد حول ما. تعديل مكثّفة لبولندا، ما حدى.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-8 col-xs-12 tasks">
-                                <div class="owl-carousel">                
-                                  <div class="carousel-element">
-                                    <div class="card card-event">
-                                        <div class="card-header">
-                                            <div class="card-title">
-                                                <b class="name">برمجة</b>
-                                                <span class="label label-danger">الاحد 25/9</span>
-                                            </div>
-                                        </div>
-                                        <div class="card-block">
-                                            <p>
-                                                تاسك البرمجه يوم الاحد قاعه 1
-                                            </p>
-                                        </div>
-                                    </div>
-                                  </div>
-                                  <div class="carousel-element">
-                                    <div class="card card-event">
-                                        <div class="card-header">
-                                            <div class="card-title">
-                                                <b class="name">برمجة</b>
-                                                <span class="label label-danger">الاحد 25/9</span>
-                                            </div>
-                                        </div>
-                                        <div class="card-block">
-                                            <p>
-                                                تاسك البرمجه يوم الاحد قاعه 1
-                                            </p>
-                                        </div>
-                                    </div>
-                                  </div>
-                                  <div class="carousel-element">
-                                    <div class="card card-event">
-                                        <div class="card-header">
-                                            <div class="card-title">
-                                                <b class="name">برمجة</b>
-                                                <span class="label label-danger">الاحد 25/9</span>
-                                            </div>
-                                        </div>
-                                        <div class="card-block">
-                                            <p>
-                                                تاسك البرمجه يوم الاحد قاعه 1
-                                            </p>
-                                        </div>
-                                    </div>
-                                  </div>
-                                  <div class="carousel-element">
-                                    <div class="card card-event">
-                                        <div class="card-header">
-                                            <div class="card-title">
-                                                <b class="name">برمجة</b>
-                                                <span class="label label-danger">الاحد 25/9</span>
-                                            </div>
-                                        </div>
-                                        <div class="card-block">
-                                            <p>
-                                                تاسك البرمجه يوم الاحد قاعه 1
-                                            </p>
-                                        </div>
-                                    </div>
-                                  </div>
-                                  <div class="carousel-element">
-                                    <div class="card card-event">
-                                        <div class="card-header">
-                                            <div class="card-title">
-                                                <b class="name">برمجة</b>
-                                                <span class="label label-danger">الاحد 25/9</span>
-                                            </div>
-                                        </div>
-                                        <div class="card-block">
-                                            <p>
-                                                تاسك البرمجه يوم الاحد قاعه 1
-                                            </p>
-                                        </div>
-                                    </div>
-                                  </div>
-                                </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="nj-container">                
-                    <div class="left">
-                        <div class="ad-block">
-                            <a href="#"><img src="{% static 'pic/adv300x250.jpg' %}"></a> 
-                        </div>
-                    </div>
+			<!-- start navbar -->
+			{% include "public/navbar-user.html" %}
+			<!-- end navbar -->
+			<!-- start page content -->
+			<section class="content-section">
+				<div id="notifi-section">
+					<div class="row">
+						<div class="col-md-4 col-xs-12 team">
+							<div class="team-head">
+								<img src="{% static 'pic/team-logo.jpg' %}">
+								<p>Colourfly</p>
+							</div>
+							<div class="team-body">
+								<p>للصين واستمرت لبولندا، مدن بـ, و الأول جزيرتي تعد, لم فمرّ الجو والفرنسي أخر. مع ضرب يتبقّ اقتصادية وبريطانيا. كما يطول عشوائية تم. ميناء والعتاد حول ما. تعديل مكثّفة لبولندا، ما حدى.</p>
+							</div>
+						</div>
+						<div class="col-md-8 col-xs-12 tasks">
+							<div class="owl-carousel">                
+							  <div class="carousel-element">
+								<div class="card card-event">
+									<div class="card-header">
+										<div class="card-title">
+											<b class="name">برمجة</b>
+											<span class="label label-danger">الاحد 25/9</span>
+										</div>
+									</div>
+									<div class="card-block">
+										<p>
+											تاسك البرمجه يوم الاحد قاعه 1
+										</p>
+									</div>
+								</div>
+							  </div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="nj-container">                
+					<div class="left">
+						<div class="ad-block">
+							<a href="#"><img src="{% static 'pic/adv300x250.jpg' %}"></a> 
+						</div>
+					</div>
 
-                    <div class="content-part">
-                        <div class="Horizontal-adv">
-                            <img src="{% static 'pic/adv-xs.jpg' %}">
-                        </div>
-                        {% if primary %}
-                            {% for material in primary %}
-                                <div class="content-element">
+					<div class="content-part">
+						<div class="Horizontal-adv">
+							<img src="{% static 'pic/adv-xs.jpg' %}">
+						</div>
+						{% if primary %}
+							{% for material in primary %}
+								<div class="content-element">
 
-                                    <div class="head">
-                                        <p>{{ material.topic.name }}</p>
-                                    </div>
-                                    <div class="content">
-                                        <div class="row">
-                                            <div class="col-xs-2 col-sm-4"><a class="link_icon" href="{{ material.link }}" target="_blank"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                            <div class="col-xs-10 col-sm-4"><p>{{ material.name }}</p></div>
-                                            <div class="col-sm-4 hidden-xs"><p>{{ material.user.username }}</p></div>
-                                        </div>
+									<div class="head">
+										<p>{{ material.topic.name }}</p>
+									</div>
+									<div class="content">
+										<div class="row">
+											<div class="col-xs-2 col-sm-4"><a class="link_icon" href="{{ material.link }}" target="_blank"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+											<div class="col-xs-10 col-sm-4"><p>{{ material.name }}</p></div>
+											<div class="col-sm-4 hidden-xs"><p>{{ material.user.username }}</p></div>
+										</div>
 
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
-            </section>
-            <!-- end page content -->
+									</div>
+								</div>
+							{% endfor %}
+						{% endif %}
+					</div>
+				</div>
+			</section>
+			<!-- end page content -->
 
-        {% else %}
-                <p>Welcome, new user. Please log in.</p>
-                <a href="{% url 'web_signup' %}" id="id_sign_up">sign up</a>
-                <a href="{% url 'login' %}" id="id_sign_in">sign in</a>
-        {% endif %}
-        <script src="{% static 'js/home.js' %}"></script>
-        <!-- owl-carousel -->
-        <script src="{% static 'OwlCarousel/owl.carousel.min.js' %}"></script>
-    </body>
+		{% else %}
+				<p>Welcome, new user. Please log in.</p>
+				<a href="{% url 'web_signup' %}" id="id_sign_up">sign up</a>
+				<a href="{% url 'login' %}" id="id_sign_in">sign in</a>
+		{% endif %}
+		<script src="{% static 'js/home.js' %}"></script>
+		<!-- owl-carousel -->
+		<script src="{% static 'OwlCarousel/owl.carousel.min.js' %}"></script>
+	</body>
 </html>
