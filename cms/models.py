@@ -242,7 +242,7 @@ class Task(MaterialBase):
 	user = models.ForeignKey(User, related_name = 'primary_tasks', on_delete = models.CASCADE)
 	topic = models.ForeignKey('Topic', related_name = 'primary_tasks', on_delete = models.CASCADE)
 	professor = models.ManyToManyField('Professor', related_name='primary_tasks')
-	deadline = models.DateField()
+	deadline = models.DateField(default=timezone.now)
 
 	# Model-level validation
 	def clean(self):
@@ -294,7 +294,7 @@ class Event(models.Model):
 		blank=True
 	)
 	all_app = models.BooleanField(default=False)
-	deadline = models.DateField()
+	deadline = models.DateField(default=timezone.now)
 
 	# Model-level validation
 	def clean(self):
