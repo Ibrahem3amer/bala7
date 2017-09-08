@@ -32,19 +32,17 @@
     <!-- end navbar -->
     
         <section class="content-section">
-         <div class="container">                
-                        <div class="hidden-xs left">
-                            <div class="adv-part">
-                                <div class="ad-block">
-                                    <a href="#"><img src="{% static 'pic/adv.jpg' %}"></a> 
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="content-part">
-                            <div class="adv-xs hidden-md">
-                                <img src="{% static 'pic/adv-xs.jpg' %}">
-                            </div>
+         <div class="nj-container">                
+                <div class="left">
+                    <div class="ad-block">
+                        <a href="#"><img src="{% static 'pic/adv300x250.jpg' %}"></a> 
+                    </div>
+                </div>
+
+                <div class="content-part">
+                    <div class="Horizontal-adv">
+                        <img src="{% static 'pic/adv-xs.jpg' %}">
+                    </div>
                     <div id="doc-box">
                         <img src="{{ request.scheme }}://{{ request.get_host }}/{% get_media_prefix %}{{ doctor.picture }}"/>
                         <p><b>{{ doctor.name }}</b></p>
