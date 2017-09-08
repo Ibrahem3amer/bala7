@@ -71,7 +71,7 @@ def within_user_domain(user_obj, list_of_topics_ids):
             request_topics = request_topics | Topic.objects.filter(id=topic_id).values_list('department', flat=True)
         except:
             # False id.
-            pass
+            continue
 
     # Check if all topics in incoming request hold an accessible department id.
     for topic in request_topics:
