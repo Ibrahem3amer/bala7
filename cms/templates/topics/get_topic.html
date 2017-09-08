@@ -32,7 +32,8 @@
     
 	{% if topic %}
         <!-- start page content -->
-        <section class="content-section">
+        <section class="content-section nj-container">
+            
             <div class="right-div">
                 <div class="arrows-div">
                     <i id="right-arrow" class="fa fa-chevron-right move-arrow" aria-hidden="true"></i>
@@ -45,38 +46,30 @@
                           <a href="{% url 'display_doctor' doctor.id %}"><p>{{ doctor.name }}</p></a>
                       </div>
                     {% endfor %}
-                    {% if topic.exams.all|length > 0 %}
-                        <div class="right-ele">
-                            <div class="right-ele-head">
-                                <p>الامتحانات</p>
-                            </div>
-                            <div class="right-ele-body">
-                                <table class="table table-hover">
-                                  <thead>
-                                    <tr>
-                                      <th>السنه</th>
-                                      <th>الدكتور</th>
-                                      <th>الرابط</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {% for exam in topic.exams.all %}
-                                        <tr>
-                                          <td>{{ exam.year.year }}</td>
-                                          <td>
-                                            {% for prof in exam.professor.all %}
-                                                {{ prof.name }}
-                                                --
-                                            {% endfor %}
-                                          </td>
-                                          <td><a href="{{ exam.link }}"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                        </tr>
-                                    {% endfor %}
-                                  </tbody>
-                                </table>
-                            </div>
+                    <div class="right-ele">
+                        <div class="right-ele-head">
+                            <p>الامتحانات</p>
                         </div>
-                    {% endif %}
+                        <div class="right-ele-body">
+                            <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th>السنه</th>
+                                  <th>الدكتور</th>
+                                  <th>الرابط</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>2016</td>
+                                  <td>محمد الدسوقى</td>
+                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                </tr>
+                                
+                              </tbody>
+                            </table>
+                        </div>
+                    </div>
 
                     <div class="right-ele">
                         <div class="right-ele-head">
@@ -157,7 +150,11 @@
                 </div>
 
             </div>
-            <div class="center-div">
+            <div class="center-div content-part">
+                <div class="Horizontal-adv">
+                    <img src="{% static 'pic/adv-xs.jpg' %}">
+                </div>
+                
                 <div class="tabs">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs nav-heads" role="tablist">
@@ -169,7 +166,7 @@
                         </li>
                         {% if request.user.is_staff %}
                           <li role="presentation" class="tab">
-                              <a href="#requests" aria-controls="community" role="tab" data-toggle="tab">الطلبات <span>{{ pending_contributions|length|add:pending_posts|length }}</span></a>
+                              <a href="#requests" aria-controls="community" role="tab" data-toggle="tab">الطلبات <span id="requests-number"  class="badge"><!--{{ pending_contributions|length }} {{pending_posts|length }} --></span></a>
                           </li>
                         {% endif %}
                     </ul>
@@ -178,40 +175,7 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane fade in  active" id="content">
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                <div class="row">
-                                    <div class="sm-md-ads">
-                                        <img src="{% static 'pic/adv728x90.png' %}">
-                                    </div>
-                                    <div class="xs-ads">
-                                        <img src="{% static 'pic/adv-xs.jpg' %}">
-                                    </div>
-                                </div>
-                                
-                                {% if request.user.is_staff %}
-                                  <div class="add-week">
-                                      <button id="add-week-btn" class="nj-btn">اضافة اسبوع</button>
-                                      <form action="" method="post">
-                                          <div id="new-week-box">
-                                              <div class="week-head">
-                                                  <p class="week-name">الاسبوع الرابع</p>
-                                                  <i class="fa fa-times" aria-hidden="true"></i>
-                                              </div>
-
-                                              <div class="week-body">
-                                                  <p><span>عنوان المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                  <p><span>رابط المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                  <p><span>عنوان السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                  <p><span>رابط السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                  <p><span>عنوان التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                                  <p><span>رابط التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input"></span></p>
-                                              </div>
-                                              <div class="week-footer">
-                                                  <button type="submit" class="nj-btn">اضافه</button>
-                                              </div>
-                                          </div>
-                                      </form>
-                                  </div>
-                                {% endif %}
+                            
                                 
                                 {% if weeks_days %}
                                   {% for week_title in weeks_days %}
@@ -223,29 +187,13 @@
                                         </div>
                                         <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="headingOne">
                                             <div class="panel-body">
-                                                {% if request.user.is_staff %}
-                                                  <div class="edit-div">
-                                                      <i class="fa fa-cog edit-week-icon" aria-hidden="true"></i>
-                                                  </div>
-                                                {% endif %}
-                                                <div class="edit-week">
-                                                    <form action="" method="post">
-                                                        <p><span>عنوان المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
-                                                        <p><span>رابط المحاضره <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
-                                                        <p><span>عنوان السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
-                                                        <p><span>رابط السكشن <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
-                                                        <p><span>عنوان التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
-                                                        <p><span>رابط التاسك <span class="colon">:</span></span><span><input type="text" class="nj-input" value=""></span></p>
-                                                        <button type="submit" class="nj-btn">حفظ</button>
-                                                    </form>
-                                                </div>
                                                 <div class="week-content">
                                                     {% if weeks_materials|week_number:forloop.counter %}
                                                       {% for material in weeks_materials|week_number:forloop.counter %}
                                                         <div class="row content-row">
-                                                            <div class="col-xs-8 col-sm-4"><a href="{{ material.link }}"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                            <div class="col-xs-8 col-sm-4 hidden-xs"><p class="assets-time">{{ material.user.username }} | {{ material.year }}</p></div>
-                                                            <div class="col-xs-4 col-sm-4"><p class="resourse-name">{% if material.content_type == 1 %} <i class="fa fa-book" aria-hidden="true"></i> {% elif material.content_type == 2 %} <i class="fa fa-sticky-note" aria-hidden="true"></i> {% else %} <i class="fa fa-tasks" aria-hidden="true"></i> {% endif %}{{ material.name }}</p></div>
+                                                            <div class="col-xs-2 col-sm-2"><a href="{{ material.link }}"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                            <div class="col-sm-5 hidden-xs"><p class="assets-time">{{ material.user.username }} | {{ material.year }}</p></div>
+                                                            <div class="col-xs-10 col-sm-5"><p class="resourse-name">{% if material.content_type == 1 %} <i class="fa fa-book" aria-hidden="true"></i> {% elif material.content_type == 2 %} <i class="fa fa-sticky-note" aria-hidden="true"></i> {% else %} <i class="fa fa-tasks" aria-hidden="true"></i> {% endif %}{{ material.name }}</p></div>
                                                         </div>
                                                       {% endfor %}
                                                     {% endif %}
@@ -256,9 +204,9 @@
                                                             {% if sec_materials and sec_materials|week_number:forloop.counter %}
                                                               {% for material in sec_materials|week_number:forloop.counter %}
                                                                 <div class="row">
-                                                                    <div class="col-xs-8 col-sm-4"><p>{{ material.name }}</p></div>
-                                                                    <div class="col-sm-4 hidden-xs"><p class="assets-time">{{ material.user.username }} | {{ material.year }}</p></div>
-                                                                    <div class="col-xs-4 col-sm-4"><a href="{{ material.link }}" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                                    <div class="col-xs-10 col-sm-5 assest-name"><p>{{ material.name }}</p></div>
+                                                                    <div class="col-sm-5 hidden-xs"><p class="assets-time">{{ material.user.username }} | {{ material.year }}</p></div>
+                                                                    <div class="col-xs-2 col-sm-2"><a href="{{ material.link }}" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></div>
                                                                 </div>
                                                               {% endfor %}
                                                             {% endif %}
@@ -281,45 +229,75 @@
                                     <a class="nj-btn" id="request-btn" href="#">طلب</a>
                                 </div>
 
-                                <div id="contribute-form" class="share-box nj-box col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2">
-                                    <i class="box-close-btn fa fa-times" aria-hidden="true"></i>
-                                    <form action="{% url 'api_add_contribution' %}" method="POST" id="contribution_form">
-                                        {% csrf_token %}
-                                        {% for field in contribution_form %}
-                                            {% if not field.is_hidden %}
-                                                <div class="form-group">
-                                                    {{ field.errors }}
-                                                    <label class="nj-label">{{ field.label }}</label>
-                                                    {{ field }}
+                                <div id="contribute-form" class="share-box">
+                                    <div class="share-box-inner">
+                                        <div class="share-box-head">
+                                            <i class="box-close-btn fa fa-times" aria-hidden="true"></i>
+                                            <p>إضافة مشاركة</p>
+                                        </div>
+                                        <div class="share-box-body">
+                                            <form action="{% url 'api_add_contribution' %}" method="POST" id="contribution_form">
+                                                {% csrf_token %}
+                                                <div class="errors-div">
+                                                    <div class="alert alert-danger" role="alert">حدث خطا اثناء الارسال ، برجاء المحاوله مره اخرى</div>
                                                 </div>
-                                            {% else %}
-                                                {{ field }}
-                                            {% endif %}
-                                        {% endfor %}
-                                        <input type="submit" name="contribution_submit" value="send" class="nj-btn" id="contribute-btn-send" />
-                                    </form>
+                                                <div class="success-div">
+                                                    <div class="alert alert-success" role="alert">تم ارسال المشاركه بنجاح </div>
+                                                </div>
+                                                <div class="contribution_form-body">
+                                                    {% for field in contribution_form %}
+                                                        {% if not field.is_hidden %}
+                                                            <div class="form-group">
+                                                                {{ field.errors }}
+                                                                <label class="nj-label">{{ field.label }}</label>
+                                                                {{ field }}
+                                                            </div>
+                                                        {% else %}
+                                                            {{ field }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <input type="submit" name="contribution_submit" value="send" class="nj-btn" id="contribute-btn-send" />
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
 
 
-                                <div id="request-form" class="order-box nj-box col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2">
-                                    <i class="box-close-btn fa fa-times" aria-hidden="true"></i>
-                                    <form action="{% url 'api_add_post' %}" method="POST" id="post_form">
-                                        {% csrf_token %}
-                                        {% for field in post_request %}
-                                            {% if not field.is_hidden %}
-                                                <div class="form-group">
-                                                    {{ field.errors }}
-                                                    <label class="nj-label">{{ field.label }}</label>
-                                                    {{ field }}
+                                <div id="request-form" class="order-box">
+                                    <div class="order-box-inner">
+                                        <div class="order-box-head">
+                                            <i class="box-close-btn fa fa-times" aria-hidden="true"></i>
+                                            <p>إضافة طلب</p>
+                                        </div>
+                                        <div class="order-box-body">
+                                            <form action="{% url 'api_add_post' %}" method="POST" id="post_form">
+                                                {% csrf_token %}
+                                                <div class="errors-div">
+                                                    <div class="alert alert-danger" role="alert">حدث خطا اثناء الارسال ، برجاء المحاوله مره اخرى</div>
                                                 </div>
-                                            {% else %}
-                                                {{ field }}
-                                            {% endif %}
-                                        {% endfor %}
-                                        <input type="submit" name="request_submit" value="send" class="nj-btn" id="contribute-btn-send" />
-                                    </form>
+                                                <div class="success-div">
+                                                    <div class="alert alert-success" role="alert">تم ارسال المشاركه بنجاح </div>
+                                                </div>
+                                                <div class="post_form-body">
+                                                    {% for field in post_request %}
+                                                        {% if not field.is_hidden %}
+                                                            <div class="form-group">
+                                                                {{ field.errors }}
+                                                                <label class="nj-label">{{ field.label }}</label>
+                                                                {{ field }}
+                                                            </div>
+                                                        {% else %}
+                                                            {{ field }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <input type="submit" name="request_submit" value="send" class="nj-btn" id="contribute-btn-send" />
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
-                                
+
                                 {% if posts %}
                                     {% for post in posts %}
                                         <div class="post">
@@ -327,53 +305,58 @@
                                                 <div class="publisher-name"><p>{{ post.user.username }}</p></div>
                                                 <div class="post-content">
                                                     <p>{{ post.content }}</p>
+                                                    <div class="alert alert-warning no-comments-note" role="alert">لا يوجد تعليقات لهذا المنشور.</div>
+                                                    <div class="alert alert-danger error-note" role="alert">حدث حطأ اثناء تحميل التعليقات ، برجاء المحاوله مرة اخرى.</div>
                                                 </div>
                                             </div>
                                             <div class="show-hide-comments">
-                                                <p><i class="fa fa-comments" aria-hidden="true"></i><span> إظهار التعليقات</span></p>
+                                                <form action="{% url 'api_get_post_comments' %}" method="get" id="get-comments-form{{ post.id }}">
+                                                    <input type="hidden" name="post_id" value="{{ post.id }}" class="post_id_holder">
+                                                    <p class="get-comments-btn"><i class="fa fa-comments" aria-hidden="true"></i><span> إظهار التعليقات</span></p>
+                                                    <i class="fa fa-spinner fa-spin fa-fw loading"></i>
+                                                </form>
                                             </div>
                                             <div class="write-comment">
-                                                <input type="text" class="nj-input" placeholder="اكتب تعليق...">
+                                                <form action="{% url 'api_add_comment' %}" method="post" id="add-comment-form{{ post.id }}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="post_id" value="{{ post.id }}" class="post_id_holder">
+                                                    <input type="text" name="comment_content" class="nj-input comment-content" placeholder="اكتب تعليق..." autocomplete="off">
+                                                    <i class="fa fa-paper-plane add-comment-btn" aria-hidden="true"></i>
+                                                </form>
+                                                
+                                                
                                             </div>
-                                            <input type="hidden" name="post_id" value="{{ post.id }}" class="post_id_holder">
+                                            {% if request.user.is_staff %}
+                                                <style>
+                                                    .comment .comment-delet{
+                                                        display: block;
+                                                    }
+                                                </style>
+                                            {% endif %}
                                             <div class="post-comments">
-
-                                                <div class="comment">
-                                                    <p class="publisher-name">محمد على</p>
-                                                    <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
-                                                </div>
-                                                <div class="comment">
-                                                    <p class="publisher-name">سمير محمد</p>
-                                                    <p class="comment-content">معلش يا جماعه في بوست تاني انا نزلتو في ورقه زياده لازم تتطبع وتتملي مع الورق</p>
-                                                </div>
-                                                <div class="comment">
-                                                    <p class="publisher-name">محمد على</p>
-                                                    <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
-                                                </div>
-                                                <div class="comment">
-                                                    <p class="publisher-name">سمير محمد</p>
-                                                    <p class="comment-content">معلش يا جماعه في بوست تاني انا نزلتو في ورقه زياده لازم تتطبع وتتملي مع الورق</p>
-                                                </div>
-                                                <div class="comment">
-                                                    <p class="publisher-name">محمد على</p>
-                                                    <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
-                                                </div>
-                                                <div class="comment">
-                                                    <p class="publisher-name">سمير محمد</p>
-                                                    <p class="comment-content">معلش يا جماعه في بوست تاني انا نزلتو في ورقه زياده لازم تتطبع وتتملي مع الورق</p>
-                                                </div>
-
+                                                <!--<div class="comment">
+                                                    <form action="api_delete_comment" method="post" id="delete-comment-form">
+                                                        <input type="hidden" name="comment_id" value="comment.id" class="comment_id_holder">
+                                                        <p class="publisher-name">محمد على</p>
+                                                        <p class="comment-content">اخر ميعاد للتقديم امتي يابشمهندس؟</p>
+                                                        <span class="comment-time">2017-08-27T23:40:12</span>
+                                                        <i class="fa fa-trash comment-delet" aria-hidden="true"></i>
+                                                    </form>
+                                                </div>-->
                                             </div>
                                         </div>
                                     {% endfor %}
                                 {% endif %}
 
+                                
 
+                            </div>
+                        </div>
                         <div role="tabpanel" class="tab-pane fade " id="requests">
                             
                             {% if pending_posts %}
                                 {% for p_post in pending_posts %}
-                                    <form method="POST" action="{% url 'api_change_post' %}">
+                                    <form method="POST" action="{% url 'api_change_post' %}" id="post-request-form{{ p_post.id }}" class="post-form">
                                         {% csrf_token %}
                                         <input type="hidden" name="post_id" value="{{ p_post.id }}" />
                                         <div class="request-view-box">
@@ -385,17 +368,27 @@
                                                 <p>{{ p_post.content }}</p>
                                             </div>
                                             <div class="share-footer">
+                                                <a class="nj-btn accept-a">قبول</a>
+                                                <a class="nj-btn ignore-a">رفض</a>
+                                            </div>
+                                            <div class="accept-div">
+                                                <p>هل انت متاكد من رغبتك فى قبول هذة المشاركه ؟</p>
                                                 <input type="submit" name="accept_button" value="قبول" class="nj-btn" />
+                                                <a class="nj-btn cancel-btn">إلغاء الامر</a>
+                                            </div>
+                                            <div class="ignore-div">
+                                                <p>هل انت متاكد من رغبتك فى رفض هذة المشاركه ؟</p>
                                                 <input type="submit" name="ignore_button" value="رفض" class="nj-btn" />
+                                                <a class="nj-btn cancel-btn">إلغاء الامر</a>
                                             </div>
                                         </div>
                                     </form>
                                 {% endfor %}
                             {% endif %}
-
+                            
                             {% if pending_contributions %}
                                 {% for request in pending_contributions %}
-                                    <form method="POST" action="{% url 'api_change_contribution' %}">
+                                    <form method="POST" action="{% url 'api_change_contribution' %}" id="contribution-request-form{{ request.id }}" class="contribution-form" >
                                         {% csrf_token %}
                                         <input type="hidden" name="contribution_id" value="{{ request.id }}" />
                                         <div class="share-view-box">
@@ -407,45 +400,43 @@
                                                 <p><span>نوع المحتوى <span class="colon">:</span></span> <span>{{ request.content_type }}</span></p>
                                                 <p><span>عنوان المحتوى <span class="colon">:</span></span> <span>{{ request.name }}</span></p>
                                                 <p><span>الاسبوع <span class="colon">:</span></span> <span>{{ request.week_number }}</span></p>
-                                                <p><span> <span class="colon">:</span></span> <span><a href="{{ request.link }}" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></span></p>
+                                                <p><span> رابط التحميل <span class="colon">:</span></span> <span><a href="{{ request.link }}" class="assets-link" target="_blank"><i class="fa fa-link" aria-hidden="true"></i></a></span></p>
                                             </div>
                                             <div class="share-footer">
+                                                <a class="nj-btn accept-a">قبول</a>
+                                                <a class="nj-btn ignore-a">رفض</a>
+                                            </div>
+                                            <div class="accept-div">
+                                                <p>هل انت متاكد من رغبتك فى قبول هذة المشاركه ؟</p>
                                                 <input type="submit" name="accept_button" value="قبول" class="nj-btn" />
+                                                <a class="nj-btn cancel-btn">إلغاء الامر</a>
+                                            </div>
+                                            <div class="ignore-div">
+                                                <p>هل انت متاكد من رغبتك فى رفض هذة المشاركه ؟</p>
                                                 <input type="submit" name="ignore_button" value="رفض" class="nj-btn" />
+                                                <a class="nj-btn cancel-btn">إلغاء الامر</a>
                                             </div>
                                         </div>
                                     </form>
                                 {% endfor %}
                             {% endif %}
-                             
+                            
                         </div><!-- end requests tab -->
                     </div>
                 </div>
             </div>
-            <div class="adv-div">
-                <img src="{% static 'pic/adv300x250.jpg' %}">
+            <div class="left">
+                <div class="ad-block">
+                    <img src="{% static 'pic/adv300x250.jpg' %}">
+                </div>
             </div>
         </section>
         <!-- end page content -->
 
-
-
-        <script src="{% static 'js/topic.js' %}"></script>
-        <script type="text/javascript">
-            // Initiate Jquery form
-            $(document).ready(function (){
-                var options = {
-                    clearForm: true,
-                };
-
-                // Handling submission event.
-                $('#contribution_form').submit(function(){
-                    // Initiate edit form.
-                    $('#contribution_form').ajaxSubmit(options);
-                    return false;
-                });
-            });
-        </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+    <script src="http://malsup.github.com/jquery.form.js"></script>  
+    <script src="{% static 'js/topic.js' %}"></script>
+        
 	{% endif %}
 </body>
 </html>

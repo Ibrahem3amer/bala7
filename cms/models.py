@@ -1,9 +1,10 @@
 import datetime
 from django.db import models
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.validators import RegexValidator, MinLengthValidator, validate_comma_separated_integer_list
+from django.core.validators import RegexValidator, MinLengthValidator, MaxLengthValidator, validate_comma_separated_integer_list
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.conf import settings
+from django.utils import timezone
 from django.contrib.auth.models import User
 from cms.validators import GeneralCMSValidator
 
@@ -24,9 +25,6 @@ class Topic(models.Model):
 	department 	= models.ForeignKey('users.Department', related_name = 'topics', on_delete = models.CASCADE)
 	faculty 	= models.ForeignKey('users.Faculty', related_name = 'topics', on_delete = models.CASCADE, null = True)
 	professors 	= models.ManyToManyField('Professor', related_name = 'topics')
-	# Table -> A foriegn key that points to the table associated with this topic.
-	# Lectures -> A list of materials that represents all primary content for the topic.
-	# Contributions -> A list of materials that represents all secondary content for the topic.	
 	
 	def __str__(self):
 		return self.name
@@ -127,13 +125,13 @@ class MaterialBase(models.Model):
 	type_choices = [(1, 'Lecture'), (2, 'Asset'), (3, 'Task')]
 
 	# Model Validator
-	content_min_len_validator	= MinLengthValidator(50, 'Material Description should be more than 50 characters.')
+	content_min_len_validator = MinLengthValidator(50, 'Material Description should be more than 50 characters.')
 
 	# Fields
 	name 			= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
 	content			= models.TextField(validators = [content_min_len_validator])
 	link 			= models.URLField(unique = True)
-	year 			= models.DateField()
+	year 			= models.DateField(auto_now=True)
 	term 			= models.PositiveIntegerField(choices = term_choices)
 	content_type	= models.PositiveIntegerField(choices = type_choices)
 	week_number 	= models.PositiveIntegerField()
@@ -165,12 +163,32 @@ class MaterialBase(models.Model):
 
 
 	# Material's methods
+
+	@classmethod
+	def get_user_materails(cls, user_obj, limit=None):
+		""" Returns the leastest materials with limit >= 3."""
+		try:
+			limit = 3 if limit is None else limit
+			materials = []
+			for topic in user_obj.profile.topics.all():
+				try:
+					materials_query = cls.objects.filter(topic=topic, status=3).order_by('-id')[:limit]
+				except:
+					# Model has no status.
+					materials_query = cls.objects.filter(topic=topic).order_by('-id')[:limit]
+				materials += list(materials_query)
+			return materials
+		except ObjectDoesNotExist:
+			return []
+
+
 	@classmethod
 	def get_department_materials(cls, department):
 		"""
 		Returns list of materials that assoicate to specific departmnet. 
 		"""
 		return 
+
 
 	@classmethod
 	def get_year_materials(cls, year, term = None):
@@ -179,12 +197,14 @@ class MaterialBase(models.Model):
 		"""
 		return 
 
+
 	@classmethod
 	def get_prof_materials(cls, professor, term = None):
 		"""
 		Returns list of materials that assoicate to specific professor in current year within specific term or all 3 terms. 
 		"""
 		return
+
 
 	def make_pdf_link(self):
 		"""
@@ -199,17 +219,6 @@ class Material(MaterialBase):
 	topic = models.ForeignKey('Topic', related_name = 'primary_materials', on_delete = models.CASCADE)
 	professor = models.ManyToManyField('Professor', related_name='primary_materials')
 
-	# Model-level validation
-	def clean(self):
-		super(Material, self).clean()
-		
-		# Validate that user has an access to add material to topic.
-		try:
-			if self.topic not in self.user.profile.topics.all():
-				raise ValidationError("Access denied.")
-		except (AttributeError, ObjectDoesNotExist):
-			raise ValidationError("Invalid User or Topic.")
-
 
 class Exam(MaterialBase):
 
@@ -220,18 +229,12 @@ class Exam(MaterialBase):
 
 	# Model-level validation
 	def clean(self):
+		super(Exam, self).clean()
 
 		# Exams have no weeks, terms or type.
 		self.week_number = 0
 		self.term = 1
 		self.content_type = 1
-
-		# Validate that user has an access to add material to topic.
-		try:
-			if self.topic not in self.user.profile.topics.all():
-				raise ValidationError("Access denied.")
-		except (AttributeError, ObjectDoesNotExist):
-			raise ValidationError("Invalid User or Topic.")
 
 class Task(MaterialBase):
 
@@ -241,16 +244,9 @@ class Task(MaterialBase):
 	professor = models.ManyToManyField('Professor', related_name='primary_tasks')
 	deadline = models.DateField()
 
-
 	# Model-level validation
 	def clean(self):
 		super(Task, self).clean()
-		# Validate that user has an access to add material to topic.
-		try:
-			if self.topic not in self.user.profile.topics.all():
-				raise ValidationError("Access denied.")
-		except (AttributeError, ObjectDoesNotExist):
-			raise ValidationError("Invalid User or Topic.")
 
 		# Validate that deadline is not a passed date. 
 		now = datetime.date.today()
@@ -258,7 +254,7 @@ class Task(MaterialBase):
 		if date_difference.days <= 3:
 			raise ValidationError('Deadline date should be 3 days ahead at least.')
 
-	# Task methods.
+	# Methods.
 	@classmethod
 	def get_closest_tasks(cls, request):
 		"""Returns tasks whose deadlines occurs 3 days from now."""
@@ -270,6 +266,80 @@ class Task(MaterialBase):
 		return list(chain(primary_tasks, secondary_tasks))
 
 
+class Event(models.Model):
+
+	# Model Validator
+	content_max_len_validator = MaxLengthValidator(200, 'Event description should not be more than 300 characters.')
+
+	# Additional feilds.
+	name = models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
+	content = models.TextField(validators = [content_max_len_validator])
+	dep = models.ForeignKey(
+		'users.Department',
+		related_name='department_events',
+		on_delete=models.CASCADE
+	)
+	faculty = models.ForeignKey(
+		'users.Faculty',
+		related_name='faculty_events',
+		on_delete=models.CASCADE,
+		null=True,
+		blank=True
+	)
+	university = models.ForeignKey(
+		'users.University',
+		related_name='university_events',
+		on_delete=models.CASCADE,
+		null=True,
+		blank=True
+	)
+	all_app = models.BooleanField(default=False)
+	deadline = models.DateField()
+
+	# Model-level validation
+	def clean(self):
+		super(Event, self).clean()
+
+		# Validate that deadline is not a passed date. 
+		if not self.deadline:
+			raise ValidationError('Enter valid deadline.')
+		now = datetime.date.today()
+		date_difference = self.deadline - now
+		if date_difference.days <= 3:
+			raise ValidationError('Deadline date should be 3 days ahead at least.')
+
+	# Methods.
+	@classmethod
+	def get_closest_events(cls, request):
+		""" Returns events whose deadlines occurs 3 days from now."""
+		from itertools import chain
+		events = []
+		try:
+			now = datetime.date.today()
+			days_limit = datetime.timedelta(days = 4) 
+			local_events = cls.objects.filter(
+				dep=request.user.profile.department,
+				deadline__range=(now, now+days_limit)
+			)
+			global_events = cls.objects.filter(
+				models.Q(university=request.user.profile.university) |
+				models.Q(faculty=request.user.profile.faculty),
+				deadline__range=(now, now+days_limit)
+			)
+			updates = cls.objects.filter(
+				all_app=True,
+				deadline__range=(now, now+days_limit)
+			)
+			events = list(chain(local_events, global_events, updates))
+		except:
+			pass
+
+		return events
+
+	def __str__(self):
+		return self.name
+
+
 class UserContribution(MaterialBase):
 	
 	# Helper attributes
@@ -278,21 +348,15 @@ class UserContribution(MaterialBase):
 	# Additional fields.
 	status = models.PositiveIntegerField(choices=contribution_status, default=1)
 	supervisior_id = models.PositiveIntegerField(blank=True, default=0)
-	deadline = models.DateField(blank=True, default=False)
+	deadline = models.DateField(blank=True, default=timezone.now)
 	user = models.ForeignKey(User, related_name = 'secondary_materials', on_delete = models.CASCADE)
 	topic = models.ForeignKey('Topic', related_name = 'secondary_materials', on_delete = models.CASCADE)
 	professor = models.ManyToManyField('Professor', related_name='secondary_materials')
 
+
 	# Model-level validation.
 	def clean(self):
 		super(UserContribution, self).clean()
-		
-		# Validate that user has an access to add material to topic.
-		try:
-			if self.topic not in self.user.profile.topics.all():
-				raise ValidationError("Access denied.")
-		except (AttributeError, ObjectDoesNotExist):
-			raise ValidationError("Invalid User or Topic.")
 
 		# Validate that deadline is not a passed date. 
 		if self.content_type == 3 or self.content_type == '3':

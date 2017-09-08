@@ -32,9 +32,17 @@
     <!-- end navbar -->
     
         <section class="content-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-9 col-xs-12 r-float" id="out">
+         <div class="nj-container">                
+                <div class="left">
+                    <div class="ad-block">
+                        <a href="#"><img src="{% static 'pic/adv300x250.jpg' %}"></a> 
+                    </div>
+                </div>
+
+                <div class="content-part">
+                    <div class="Horizontal-adv">
+                        <img src="{% static 'pic/adv-xs.jpg' %}">
+                    </div>
                     <div id="doc-box">
                         <img src="{{ request.scheme }}://{{ request.get_host }}/{% get_media_prefix %}{{ doctor.picture }}"/>
                         <p><b>{{ doctor.name }}</b></p>
@@ -60,13 +68,7 @@
 
                     </div>
                 </div>
-                 <div class="adv-part col-md-3 col-xs-12 r-float">
-                    <div class="ad-block">
-                        <a href="#"><img src="{% static 'pic/adv300x250.jpg' %}"></a> 
-                    </div>
-                </div>
             </div>
-        </div>
     </section>
       
    

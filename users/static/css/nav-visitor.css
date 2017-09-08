@@ -1,0 +1,34 @@
+body{
+    background-color: #E9EAEA;
+}
+.navbar{
+    padding-top: 10px;
+    padding-bottom: 10px;
+  
+}
+.navbar li{
+    list-style: none;
+    display: inline-block;
+}
+.navbar ul {
+    display: inline-block;
+}
+.navbar #logo{
+    display: inline-block;
+    position: absolute;
+    margin: auto;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    height: 50px;
+    width: 39px;
+}
+.navbar #logo img{
+    height: 50px;
+    width: 39px;
+    cursor: pointer;
+}
+.navbar ul li a {
+    text-decoration: none;
+}

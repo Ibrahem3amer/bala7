@@ -1,7 +1,8 @@
 import json
 from django.contrib import admin
 from django.contrib.auth.models import User
-from cms.models import Topic, Material, Task, Professor, TopicTable, Exam, UserPost, UserComment
+from users.models import Department, Faculty, University
+from cms.models import Topic, Material, Task, Professor, TopicTable, Exam, UserPost, UserComment, Event
 
 
 class TopicAdmin(admin.ModelAdmin):
@@ -98,11 +99,42 @@ class TaskAdmin(admin.ModelAdmin):
         return qs.filter(topic_id__in = request.user.profile.topics.all())
 
 
+class EventAdmin(admin.ModelAdmin):
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """ limits department to user's departments."""
+        if db_field.name == 'dep':
+            if not request.user.is_superuser:
+                kwargs["queryset"] = Department.objects.filter(id=request.user.profile.department.id)
+            else:
+                kwargs["queryset"] = Department.objects.all()
+        elif db_field.name == 'faculty' and request.user.is_superuser:
+            kwargs["queryset"] = Faculty.objects.all()
+        elif db_field.name == 'university' and request.user.is_superuser:
+            kwargs["queryset"] = University.objects.all()
+        
+        return super(EventAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def get_queryset(self, request):
+        """ Returns events that lays in SV scope in case of staff, returns all events otherwise."""
+        qs = super(EventAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(dep=request.user.profile.department)
+
+    def get_form(self, request, obj=None, **kwargs):
+        """ Hides all_app label from staff."""
+        if not request.user.is_superuser:
+            self.exclude = ('all_app', 'faculty', 'university')
+        return super(EventAdmin, self).get_form(request, obj, **kwargs)
+
+
 class ProfessorAdmin(admin.ModelAdmin):
     pass
 
 
 class TopicTableAdmin(admin.ModelAdmin):
+    
     fields = ['topic']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -161,9 +193,11 @@ class UserCommentAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Topic, TopicAdmin)
+admin.site.register(TopicTable, TopicTableAdmin)
 admin.site.register(Material, MaterialAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Exam, ExamAdmin)
 admin.site.register(Professor, ProfessorAdmin)
 admin.site.register(UserPost, UserPostAdmin)
 admin.site.register(UserComment, UserCommentAdmin)
+admin.site.register(Event, EventAdmin)

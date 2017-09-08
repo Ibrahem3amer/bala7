@@ -3,39 +3,8 @@
     font-weight: normal;
 }
 /*------------------------------------------- start content-section ------------------------------------------*/
-/*------- start adv part -------*/
-.content-section .adv-part{
-    padding-top: 15px;
-}
-.content-section .adv-part .ad-block{
-    border: 3px solid #E9EBEE;
-    box-shadow: 1px 1px 5px #333;
-}
-.content-section .adv-part .ad-block img{
-    width: 100%;
-}
-/*------- end adv part ---------*/
-
-/*------- start content part -------*/
-
-
-/*- start adv-xs -*/
-.adv-xs{
-    width: 320px;
-    max-width: 100%;
-    height: 100px;
-    margin: auto;
-    margin-top: 15px;
-}
-.adv-xs img{
-    width: 100%;
-    height: 100%;
-}
-/*- end adv-xs -*/
-
-.content-part{
-    padding-bottom: 30px;
-    padding-left: 0px;
+.content-section{
+    margin-top: 90px;
 }
 #change-personal-data-alert{
     width: 75%;
@@ -62,10 +31,10 @@
 }
 .small-ele-head{
     position: relative;
-    background-color: #d9edf7;
+    background-color: #a6bfcc;
     padding: 5px 15px;
     font-weight: bold;
-    font-size: 28px;
+    font-size: 20px;
 }
 .small-ele-head i{
     position: absolute;
@@ -112,29 +81,28 @@
 }
 .small-ele-content input{
     text-align: center;
-    min-width: 350px;
+    min-width: 100%;
     margin-left: 120px;
 }
 .small-ele-content select{
     text-align: center;
-    width: 350px;
-    margin-left: 120px;
+    width: 100%;
 }
 
 /*sm*/
 @media (min-width:768px) and (max-width:991px){
    .small-ele-content input{
-        min-width: 250px;
+        min-width: 100%;
     }    
     .small-ele-content select{
-        width: 250px;
+        width: 100%;
     }
 }
 /*xs*/
 @media (max-width:767px){
     .small-ele-content input{
         display: block;
-        min-width: 250px;
+        min-width: 100%;
         max-width: 100%;
         margin: auto;
     }
@@ -183,10 +151,8 @@
 }
 .materials label{
     padding: 5px 10px;    
-    background-color: #8fd7ff;
+    background-color: #a6bfcc;
     color: #333;
-    border-top-right-radius: 15px;
-    border-bottom-left-radius: 15px;
     margin-bottom: 5px;
     margin-top: 5px;
 }
@@ -221,13 +187,13 @@
 .checkbox label{
     padding: 5px 10px;    
     background-color: #E1E2E1;
-    border-top-right-radius: 15px;
-    border-bottom-left-radius: 15px;
     margin-bottom: 5px;
     margin-top: 5px;
+    
+    user-select: none;
 }
 .active-checkbox{
-    background-color: #8fd7ff!important;
+    background-color: #a6bfcc !important;
 }
 .radio input[type="radio"], 
 .radio-inline input[type="radio"], 
@@ -246,7 +212,7 @@
 .modal-header{
     text-align: right;
     padding: 10px 15px;
-    background-color: #d9edf7;
+    background-color: #a6bfcc;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
 }
@@ -270,12 +236,13 @@
     text-align: center;
 }
 .modal-body label{
-    width: 120px;
+    width:100%;
+    float: right;
     text-align: right;
 }
 .modal-body input{
     margin-right:0px;
-    width: 250px;
+    width: 100%;
     max-width: 100%;
 }
 .modal-body input:focus {

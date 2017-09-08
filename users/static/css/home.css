@@ -1,126 +1,200 @@
-
 /*------------------------------------------- start home section ------------------------------------------*/
-
+.container{
+    margin-top: 0px;
+}
 /*- start control -*/
 .user-section{
     display: none;
 }
 /*- end control --*/
-/*------- start adv part -------*/
-.home-section .adv-part{
-    padding-top: 15px;
+
+/*--start notifi section -*/
+#notifi-section{
+    background-image: url(/static/pic/school.png);
+    background-repeat: repeat;
+    margin-top: 70px;
+    background-color:#a6bfcc;
+    padding: 20px;
+    height: auto;
+    margin-bottom: 20px;
+    overflow-y: auto;
 }
-.home-section .adv-part .ad-block{
-    border: 3px solid #E9EBEE;
-    box-shadow: 1px 1px 5px #333;
+#notifi-section .row{
+    padding: 0px;margin: 0px;
 }
-.home-section .adv-part .ad-block img{
-    width: 100%;
+.tasks{
+    padding: 0px;
+    padding-left: 10px;
 }
-/*------- end adv part ---------*/
+.owl-carousel{
+    direction: ltr;
+}
+.carousel-element{
+    padding: 0px;
+    padding-left: 10px;
+}
+.card{
+    direction: rtl;
+    height: 130px;
+    border: 1px solid #fff;
+    background-color: #fff;
+    margin-bottom: 0px;
+}
+.card-header {
+    background-color: #34B3A0;
+    color: #fff;
+    border-bottom: 1px solid #fff;  
+    padding:5px;
+}
+.card-header-event {
+    background-color: #022237;
+    color: #fff;
+    border-bottom: 1px solid #fff;  
+    padding:5px;
+}
+.card-block{
+    padding:5px;
+    text-align: center;
+}
+.card-block p{
+    overflow: hidden;
+    max-height: 70px;
+}
+.card span{
+    padding: 5px 5px;
+    float: left;
+}
+.card-event{
+    border: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.card-event .card-header{
+    background-color: #34B3A0;
+}
+.card-task{
+    border: 2px solid #F2DEDE;
+}
+.card-task .card-header{
+    background-color: #F2DEDE;
+}
+.team{
+    height: auto;
+    max-height: 130px;
+    overflow: hidden;
+    padding: 0px;padding-right: 20px;
+    border-right: 1px solid #D9EDF7;
+}
+.team > .team-head{
+    float: left;
+    display: inline-block;
+    height: 100%;
+    width: 100px;
+}
+.team > .team-head > img{
+    display: block;
+    float: left;
+/*    border-radius: 100%;*/
+    height: 80px;
+    width: 80px;
+    margin-bottom: 10px;
+/*    margin-top: 30px;*/
+}
+.team > .team-head > p{
+    text-align: left;
+    font-size: 24px;
+    font-weight: bold;
+}
+.team > .team-body{
+    float: left;
+    display: inline-block;
+    height: 100%;
+    width: calc(100% - 100px);
+}
+.team > .team-body > p{
+/*    margin-top: 70px;*/
+    
+}
+/*xs and sm*/
+@media (max-width:991px){
+    #notifi-section{
+        padding-left: 10px;
+    }
+    .tasks{
+        padding-left: 0px;
+    }
+    .team{
+        display: none;
+    }
+}
+/*--end notifi section -*/
+
 
 /*------- start content part -------*/
 /*- start content element -*/
-.home-section .content-part{
-    padding-left: 0px;
+.content-section .content-part .content-element{
 }
-.home-section .content-part .content-element{
-    margin-top: 16px;
-    border: 3px solid #E9EBEE;    
+.content-section .content-part .content-element .head{
+    background-color: #a6bfcc;
+    border: 1px solid #a6bfcc;
 }
-.home-section .content-part .content-element .head{
-    background-color: #d9edf7;
-    border-bottom: 1px solid #ddd;
-}
-.home-section .content-part .content-element .head p{
-    font-size: 26px;
+.content-section .content-part .content-element .head p{
+    font-size: 20px;
     font-weight: bold;
     padding: 5px 10px;
     margin: 0px;
 }
-.home-section .content-part .content-element .content{
+.content-section .content-part .content-element .content{
     background-color: #fff;
     text-align: center;
     padding-top: 15px;
-    padding-bottom: 5px;
+    padding-bottom: 10px; 
+    border-right: 3px solid #a6bfcc;  
+    border-left: 3px solid #a6bfcc;  
+    border-bottom: 3px solid #a6bfcc;  
+    margin-bottom: 20px;
+}
+.content-section .content-part .content-element .content div{
+    vertical-align: top;
     
 }
-.home-section .content-part .content-element .content div{
-    vertical-align: top;
-}
-.home-section .content-part .content-element .content div p{
-    font-size: 20px;
+
+.content-section .content-part .content-element .content div p{
     font-weight: bold;
     margin: 0px;
 }
-.home-section .content-part .content-element .content div a i{
-    font-size: 20px;
-    
+
+.content-section .content-part .content-element .content > .row > div:last-of-type > p{
+    text-align: right;
+    padding-right: 20px;
 }
+.content-section .content-part .content-element .content > .row > div:first-of-type > a{
+    float: left;
+    margin-left: 20px;
+}
+.link_icon{
+    color: #000;
+}
+.link_icon:hover{
+    color: #46c9b6;
+}
+/*xs*/
+@media (max-width:767px){
+    .content-section .content-part .content-element .content > .row > div > p{
+        text-align: right;
+        padding-right: 10px;
+    }
+    .content-section .content-part .content-element .content > .row > div:first-of-type{
+        padding: 0px;
+        text-align: right;
+    }
+    .content-section .content-part .content-element .content > .row > div:first-of-type > a{
+        margin-left: 25px;
+    }
+}
+
+
 /*--end content element -*/
 
-/*- strat note element -*/
-.home-section .content-part .note-element{
-    position: relative;
-    margin-top: 15px;
-    border: 3px solid #E9EBEE;    
-    
-}
-.home-section .content-part .note-element .note-head{
-    background-color: #ffdf7d;
-    border-bottom: 1px solid #ddd;
-}
-.home-section .content-part .note-element .note-head p{
-    font-size: 26px;
-    font-weight: bold;
-    padding: 5px 10px;
-    margin: 0px;
-}
-.home-section .content-part .note-element .note-head p i{
-    font-size: 12px;
-    padding-right: 7px;
-}
-.home-section .content-part .note-element .note-head .note-time{
-    position: absolute;
-    top: 9px;
-    left: 10px;
-    
-    background-color: #d9534f;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 17px;
-    font-weight: bold;
-    padding: 2px 13px;
-    padding-top: 3px;
-    margin: 0px;
-    letter-spacing: 2px;
-}
-.home-section .content-part .note-element .note-content{
-    background-color: #fff;
-    text-align: center;
-    padding-top: 10px;
-}
-.home-section .content-part .note-element .note-content p{
-    text-align: right;
-    font-size: 20px;
-    padding: 5px 25px;
-    font-weight: bold;
-}
-/*- end note element -*/
-
-/*- start adv-xs -*/
-.adv-xs{
-    width: 320px;
-    max-width: 100%;
-    height: 100px;
-    margin: auto;
-    margin-top: 15px;
-}
-.adv-xs img{
-    width: 100%;
-    height: 100%;
-}
-/*- end adv-xs -*/
 
 /*------- end content part ---------*/
 

@@ -30,13 +30,16 @@
     <!-- start navbar -->
     {% include "public/navbar-user.html" %}
     <!-- end navbar -->
-    <section class="all-content">
-        <div class="ads-section">
-            <img src="{% static 'pic/adv300x250.jpg' %}" alt="adv300x250">
+    <section class="all-content nj-container">
+        <div class="hidden-xs left">
+            <div class="ad-block">
+                <a href="#"><img src="{% static 'pic/adv300x250.jpg' %}"></a> 
+            </div>
         </div>
-        <div class="content-section">
-            <div class="xs-ads">
-                <img src="{% static 'pic/adv-xs.jpg' %}" alt="320x100-adv">
+
+        <div class="content-part">
+            <div class="Horizontal-adv">
+                <img src="{% static 'pic/adv-xs.jpg' %}">
             </div>
             <h1 class="table-h">جدول القسم</h1>            
             <div class="userTable-div">
