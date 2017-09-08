@@ -32,7 +32,7 @@
     
 	{% if topic %}
         <!-- start page content -->
-        <section class="content-section container">
+        <section class="content-section nj-container">
             
             <div class="right-div">
                 <div class="arrows-div">
@@ -151,6 +151,10 @@
 
             </div>
             <div class="center-div content-part">
+                <div class="Horizontal-adv">
+                    <img src="{% static 'pic/adv-xs.jpg' %}">
+                </div>
+                
                 <div class="tabs">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs nav-heads" role="tablist">
@@ -187,9 +191,9 @@
                                                     {% if weeks_materials|week_number:forloop.counter %}
                                                       {% for material in weeks_materials|week_number:forloop.counter %}
                                                         <div class="row content-row">
-                                                            <div class="col-xs-8 col-sm-4"><a href="{{ material.link }}"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-                                                            <div class="col-xs-8 col-sm-4 hidden-xs"><p class="assets-time">{{ material.user.username }} | {{ material.year }}</p></div>
-                                                            <div class="col-xs-4 col-sm-4"><p class="resourse-name">{% if material.content_type == 1 %} <i class="fa fa-book" aria-hidden="true"></i> {% elif material.content_type == 2 %} <i class="fa fa-sticky-note" aria-hidden="true"></i> {% else %} <i class="fa fa-tasks" aria-hidden="true"></i> {% endif %}{{ material.name }}</p></div>
+                                                            <div class="col-xs-2 col-sm-2"><a href="{{ material.link }}"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                            <div class="col-sm-5 hidden-xs"><p class="assets-time">{{ material.user.username }} | {{ material.year }}</p></div>
+                                                            <div class="col-xs-10 col-sm-5"><p class="resourse-name">{% if material.content_type == 1 %} <i class="fa fa-book" aria-hidden="true"></i> {% elif material.content_type == 2 %} <i class="fa fa-sticky-note" aria-hidden="true"></i> {% else %} <i class="fa fa-tasks" aria-hidden="true"></i> {% endif %}{{ material.name }}</p></div>
                                                         </div>
                                                       {% endfor %}
                                                     {% endif %}
@@ -200,9 +204,9 @@
                                                             {% if sec_materials and sec_materials|week_number:forloop.counter %}
                                                               {% for material in sec_materials|week_number:forloop.counter %}
                                                                 <div class="row">
-                                                                    <div class="col-xs-8 col-sm-4"><p>{{ material.name }}</p></div>
-                                                                    <div class="col-sm-4 hidden-xs"><p class="assets-time">{{ material.user.username }} | {{ material.year }}</p></div>
-                                                                    <div class="col-xs-4 col-sm-4"><a href="{{ material.link }}" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></div>
+                                                                    <div class="col-xs-10 col-sm-5 assest-name"><p>{{ material.name }}</p></div>
+                                                                    <div class="col-sm-5 hidden-xs"><p class="assets-time">{{ material.user.username }} | {{ material.year }}</p></div>
+                                                                    <div class="col-xs-2 col-sm-2"><a href="{{ material.link }}" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></div>
                                                                 </div>
                                                               {% endfor %}
                                                             {% endif %}

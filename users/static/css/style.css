@@ -10,7 +10,11 @@ body{
     min-height: calc(100vh - 80px);
     margin-top: 90px;
 }
-
+.nj-container{
+    width: calc(100% - 40px);
+    float: left;
+    margin-left: 20px;
+}
 button{
     border: 0px;
     font-weight: normal;
@@ -44,12 +48,21 @@ a:hover, a:active, a:open, a:visited{
     border-radius: 0px;
     border: 0px solid #000;
 }
+.navbar-left{
+    position: absolute;
+    left: 20px;
+    text-align: left;
+}
+.navbar-left > li >a >i{
+    padding: 0px !important;
+}
 #nj-nav > ul{
     padding: 0px;
 }
 #nj-nav > ul.nav.navbar-nav.navbar-right > li.dropdown.open > a ,
 #nj-nav > ul.nav.navbar-nav.navbar-left > li > a{
     background-image: none;
+    padding-left: 0px;
 }
 #nj-nav > ul > li{
     float: right;
@@ -62,6 +75,9 @@ a:hover, a:active, a:open, a:visited{
     color: #000;
     font-size:20px ;
     padding-left: 20px;
+}
+#nj-nav > ul > li >a:first-of-type{
+    padding-right: 20px;
 }
 @media (max-width:992px){
     #nj-nav > ul > li >a{
@@ -310,7 +326,7 @@ select{
     height: auto;
     padding: 20px;
 }
-@media (max-width:991px){
+@media (max-width:1199px){
     .content-part{
         width: 100%;
     }
@@ -331,33 +347,27 @@ select{
 .left > .ad-block  img{
     width: 100%;
 }
-@media (max-width:991px){
+@media (max-width:1199px){
     .left{
         display: none;
     }
 }
 /*------- end adv part ---------*/
 /*- start adv-xs -*/
-.adv-xs{
+.Horizontal-adv{
     display: none;
     width: 320px;
     max-width: 100%;
     height: 100px;
     margin: auto;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 0px;
+    margin-bottom: 20px;
 }
-@media (max-width:991px){
-.adv-xs{
+@media (max-width:1199px){
+.Horizontal-adv{
     display: block;
-    width: 320px;
-    max-width: 100%;
-    height: 100px;
-    margin: auto;
-    margin-top: 15px;
-    margin-bottom: 15px;
 }
-.adv-xs img{
+.Horizontal-adv img{
     width: 100%;
     height: 100%;
 }

@@ -11,113 +11,105 @@
 /*--start notifi section -*/
 #notifi-section{
     margin-top: 70px;
-    background-color:#E1E2E1;
-    padding: 15px 15px;
-    height: 200px;
-    margin-bottom: 20px;
-}
-#notifi-section .item-content{
-    border: 2px solid  #a6bfcc;
-    height: 80px;
-    padding-top: 1%;
-    padding-bottom: 1%;
-    padding-right: 5%;
-    padding-left: 5%;
-    margin-bottom: 5px;
-    overflow: auto;
-    text-align: center;
-
-}
-#team_info{
-    height: 180px;
-}
-#carousel-div{
-    display: inline-block;
-    width: 100%;
+    background-color:#a6bfcc;
+    padding: 20px;
     height: auto;
+    margin-bottom: 20px;
+    overflow-y: auto;
 }
-
-#arrows{
-    position: relative;
+#notifi-section .row{
+    padding: 0px;margin: 0px;
+}
+.tasks{
+    padding: 0px;
+    padding-left: 10px;
+}
+.owl-carousel{
+    direction: ltr;
+}
+.carousel-element{
+    padding: 0px;
+    padding-left: 10px;
+}
+.card{
+    direction: rtl;
+    height: 130px;
+    border: 1px solid #fff;
+    background-color: #fff;
+    margin-bottom: 0px;
+}
+.card-header {
+    border-bottom: 1px solid #fff;  
+    padding:5px;
+}
+.card-block{
+    padding:5px;
+}
+.card span{
+    padding: 5px 5px;
+    float: left;
+}
+.card-event{
+    border: 2px solid #D9EDF7;
+}
+.card-event .card-header{
+    background-color: #D9EDF7;
+}
+.card-task{
+    border: 2px solid #F2DEDE;
+}
+.card-task .card-header{
+    background-color: #F2DEDE;
+}
+.team{
+    height: auto;
+    max-height: 130px;
+    overflow: hidden;
+    padding: 0px;padding-right: 20px;
+    border-right: 1px solid #D9EDF7;
+}
+.team > .team-head{
+    float: left;
     display: inline-block;
-    height: 200px;
-    text-align: center;
-    margin: auto;
+    height: 100%;
+    width: 100px;
 }
-#arrows > div{
-    height: 70px;
-    margin: auto;
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
+.team > .team-head > img{
+    display: block;
+    float: left;
+/*    border-radius: 100%;*/
+    height: 80px;
+    width: 80px;
+    margin-bottom: 10px;
+/*    margin-top: 30px;*/
 }
-@media (max-width: 767px){
-    #notifi-section{
-        padding: 15px;
-        height: 400px;
-
-    }
-    #carousel-div{
-        width: calc(100% - 37px);
-        height: 200px;
-
-    }
-    .carousel.vertical .carousel-inner{
-        height:200px;
-
-    }
+.team > .team-head > p{
+    text-align: left;
+    font-size: 24px;
+    font-weight: bold;
+}
+.team > .team-body{
+    float: left;
+    display: inline-block;
+    height: 100%;
+    width: calc(100% - 100px);
+}
+.team > .team-body > p{
+/*    margin-top: 70px;*/
     
-    #arrows{
-        margin: auto;
+}
+/*xs and sm*/
+@media (max-width:991px){
+    #notifi-section{
+        padding-left: 10px;
+    }
+    .tasks{
+        padding-left: 0px;
+    }
+    .team{
+        display: none;
     }
 }
-
-.btn-vertical-slider{ 
-    margin-left:0px;
-    cursor:pointer;
-    display: inline;
-}
-
-a {  cursor:pointer;}
-
-.carousel.vertical .carousel-inner{
-        height: auto;
-    }
-.carousel.vertical .carousel-inner .item {
-  -webkit-transition: 0.3s linear top;
-     -moz-transition: 0.3s linear top;
-      -ms-transition: 0.3s linear top;
-       -o-transition: 0.3s linear top;
-          transition: 0.3s linear top;
-}
-
- .carousel.vertical .active {
-  top: 0;
-}
- .carousel.vertical .next {
-  top: 100%;
-}
- .carousel.vertical .prev {
-  top: -100%;
-}
- .carousel.vertical .next.left,
-.carousel.vertical .prev.right {
-  top: 0;
-}
- .carousel.vertical .active.left {
-  top: -100%;
-}
- .carousel.vertical .active.right {
-  top: 100%;
-}
- .carousel.vertical .item {
-    left: 0;
-     margin-top:0px; 
-     margin-left: 0px;
-     margin-right: 0px;
-}
-
-
 /*--end notifi section -*/
 
 
@@ -143,14 +135,25 @@ a {  cursor:pointer;}
     border-right: 3px solid #a6bfcc;  
     border-left: 3px solid #a6bfcc;  
     border-bottom: 3px solid #a6bfcc;  
-
+    margin-bottom: 20px;
 }
 .content-section .content-part .content-element .content div{
     vertical-align: top;
+    
 }
+
 .content-section .content-part .content-element .content div p{
     font-weight: bold;
     margin: 0px;
+}
+
+.content-section .content-part .content-element .content > .row > div:last-of-type > p{
+    text-align: right;
+    padding-right: 20px;
+}
+.content-section .content-part .content-element .content > .row > div:first-of-type > a{
+    float: left;
+    margin-left: 20px;
 }
 .link_icon{
     color: #000;
@@ -158,6 +161,22 @@ a {  cursor:pointer;}
 .link_icon:hover{
     color: #46c9b6;
 }
+/*xs*/
+@media (max-width:767px){
+    .content-section .content-part .content-element .content > .row > div > p{
+        text-align: right;
+        padding-right: 10px;
+    }
+    .content-section .content-part .content-element .content > .row > div:first-of-type{
+        padding: 0px;
+        text-align: right;
+    }
+    .content-section .content-part .content-element .content > .row > div:first-of-type > a{
+        margin-left: 25px;
+    }
+}
+
+
 /*--end content element -*/
 
 

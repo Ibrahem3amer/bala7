@@ -4,12 +4,15 @@
     margin-bottom: 80px;
     }
 }
+.content-section{
+    margin-top: 90px;
+}
 #doc-box{
     padding-top: 30px;
     border: 2px solid #F0F0F0;
     text-align: center;
     margin-bottom: 20px;
-    margin-top: 60px;
+    margin-top: 90px;
 }
 #doc-box img{
     height: 150px;

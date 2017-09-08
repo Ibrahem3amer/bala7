@@ -69,8 +69,8 @@
     border-top: 1px dashed #ddd;
     margin: 0px;
     padding: 5px 0px;
-    line-height: 25px;
-    font-size: 20px;
+    line-height: 20px;
+    font-size: 14px;
     font-weight: bold;
 }
 .userTable-div > table  tr > td > p:first-of-type{
@@ -80,11 +80,3 @@
 
 /*---------- end content style ----------*/
 
-/*----------------------------------------------------- another design --------------------------------------------*/
-.left{
-    margin-left: 20px;
-}
-.content-part{
-    width: calc(100% - 400px);
-    float: left;
-}

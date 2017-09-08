@@ -1,15 +1,6 @@
 .all-content{
     margin-top: 90px;
-    height: calc( 100vh - 80px);
 }
-/*xs*/
-@media (max-width:767px){
-    .all-content{
-        margin-top: 90px;
-        height: calc( 100vh - 80px);
-    }
-}
-
 /*---------- start content style ----------*/
 
 .headText{

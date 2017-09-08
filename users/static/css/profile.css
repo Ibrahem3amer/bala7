@@ -3,6 +3,9 @@
     font-weight: normal;
 }
 /*------------------------------------------- start content-section ------------------------------------------*/
+.content-section{
+    margin-top: 90px;
+}
 #change-personal-data-alert{
     width: 75%;
     margin: auto;
