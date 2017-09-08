@@ -10,6 +10,8 @@
 
 /*--start notifi section -*/
 #notifi-section{
+    background-image: url(/static/pic/school.png);
+    background-repeat: repeat;
     margin-top: 70px;
     background-color:#a6bfcc;
     padding: 20px;
@@ -39,21 +41,35 @@
     margin-bottom: 0px;
 }
 .card-header {
+    background-color: #34B3A0;
+    color: #fff;
+    border-bottom: 1px solid #fff;  
+    padding:5px;
+}
+.card-header-event {
+    background-color: #022237;
+    color: #fff;
     border-bottom: 1px solid #fff;  
     padding:5px;
 }
 .card-block{
     padding:5px;
+    text-align: center;
+}
+.card-block p{
+    overflow: hidden;
+    max-height: 70px;
 }
 .card span{
     padding: 5px 5px;
     float: left;
 }
 .card-event{
-    border: 2px solid #D9EDF7;
+    border: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .card-event .card-header{
-    background-color: #D9EDF7;
+    background-color: #34B3A0;
 }
 .card-task{
     border: 2px solid #F2DEDE;

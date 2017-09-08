@@ -2,6 +2,7 @@
 <html dir="rtl" lang="ar">
 	<head>
 		{% load staticfiles %}
+		{% load dates %}
 	
 		<meta charset="utf-8">
 		<title>Najiba | نجيبه</title>
@@ -52,22 +53,45 @@
 							</div>
 						</div>
 						<div class="col-md-8 col-xs-12 tasks">
-							<div class="owl-carousel">                
-							  <div class="carousel-element">
-								<div class="card card-event">
-									<div class="card-header">
-										<div class="card-title">
-											<b class="name">برمجة</b>
-											<span class="label label-danger">الاحد 25/9</span>
+							<div class="owl-carousel">
+								{% if tasks %}
+									{% for task in tasks %}          
+										<div class="carousel-element">
+											<div class="card card-event">
+												<div class="card-header">
+													<div class="card-title">
+														<b class="name">{{ task.name }}</b>
+														<span class="label label-danger">{{ task.deadline|date_to_day }}</span>
+													</div>
+												</div>
+												<div class="card-block">
+													<p>
+														{{ task.content }}
+													</p>
+												</div>
+											</div>
 										</div>
-									</div>
-									<div class="card-block">
-										<p>
-											تاسك البرمجه يوم الاحد قاعه 1
-										</p>
-									</div>
-								</div>
-							  </div>
+									{% endfor %}
+								{% endif %}
+								{% if events %}
+									{% for event in events %}          
+										<div class="carousel-element">
+											<div class="card card-event">
+												<div class="card-header-event">
+													<div class="card-title">
+														<b class="name">{{ event.name }}</b>
+														<span class="label label-danger">{{ event.deadline|date_to_day }}</span>
+													</div>
+												</div>
+												<div class="card-block">
+													<p>
+														{{ event.content }}
+													</p>
+												</div>
+											</div>
+										</div>
+									{% endfor %}
+								{% endif %}
 							</div>
 						</div>
 					</div>

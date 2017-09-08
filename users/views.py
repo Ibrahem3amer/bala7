@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from users.models import University, Faculty, Department, UserProfile 
 from users.forms import UserSignUpForm
-from cms.models import UserTopics, Task, Material, UserContribution
+from cms.models import UserTopics, Task, Material, UserContribution, Event
 
 UPDATES_LIMIT = 3
 
@@ -33,6 +33,9 @@ def home_user(request):
 	# Getting user tasks deadlines. 
 	tasks = Task.get_closest_tasks(request)
 
+	# Getting local/global evetns and app updates.
+	events = Event.get_closest_events(request)
+
 	# Getting user materials updateds.
 	primary_materials = Material.get_user_materails(user_obj=request.user, limit=UPDATES_LIMIT)
 	secondary_materials = UserContribution.get_user_materails(user_obj=request.user, limit=UPDATES_LIMIT)
@@ -43,7 +46,8 @@ def home_user(request):
 		{
 			'tasks': tasks,
 			'primary': primary_materials,
-			'secondary': secondary_materials
+			'secondary': secondary_materials, 
+			'events': events
 		}
 	)
 

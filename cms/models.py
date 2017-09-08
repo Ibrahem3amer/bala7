@@ -267,16 +267,32 @@ class Task(MaterialBase):
 
 
 class Event(models.Model):
-	
+
 	# Model Validator
-	content_min_len_validator = MaxLengthValidator(30, 'Event description should not be more than 30 characters.')
+	content_max_len_validator = MaxLengthValidator(200, 'Event description should not be more than 300 characters.')
 
 	# Additional feilds.
 	name = models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
-	content = models.TextField(validators = [content_min_len_validator])
-	dep = models.ForeignKey('users.Department', related_name='department_events', on_delete=models.CASCADE)
-	faculty = models.ForeignKey('users.Faculty', related_name='faculty_events', on_delete=models.CASCADE, null=True)
-	university = models.ForeignKey('users.University', related_name='university_events', on_delete=models.CASCADE, null=True)
+	content = models.TextField(validators = [content_max_len_validator])
+	dep = models.ForeignKey(
+		'users.Department',
+		related_name='department_events',
+		on_delete=models.CASCADE
+	)
+	faculty = models.ForeignKey(
+		'users.Faculty',
+		related_name='faculty_events',
+		on_delete=models.CASCADE,
+		null=True,
+		blank=True
+	)
+	university = models.ForeignKey(
+		'users.University',
+		related_name='university_events',
+		on_delete=models.CASCADE,
+		null=True,
+		blank=True
+	)
 	all_app = models.BooleanField(default=False)
 	deadline = models.DateField()
 
@@ -285,6 +301,8 @@ class Event(models.Model):
 		super(Event, self).clean()
 
 		# Validate that deadline is not a passed date. 
+		if not self.deadline:
+			raise ValidationError('Enter valid deadline.')
 		now = datetime.date.today()
 		date_difference = self.deadline - now
 		if date_difference.days <= 3:
