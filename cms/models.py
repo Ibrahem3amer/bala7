@@ -105,15 +105,9 @@ class UserTopics(object):
 	@classmethod
 	def update_topics(cls, request, user_topics):
 		"""
-		Accepts ids of topics, validates them and update user's own topics to the queryset. 
+		Accepts validated topics, update user's own topics to the queryset. 
 		"""
-		# Validating existence of each topic, pass if one of them doesn't exist.
-		try:
-			topics = Topic.objects.filter(id__in = user_topics)
-		except Topic.DoesNotExist:
-			pass
-
-		if not topics:
+		if not user_topics:
 			return False
 		else:
 			request.user.profile.topics = user_topics

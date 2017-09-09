@@ -77,7 +77,7 @@ def within_user_domain(user_obj, list_of_topics_ids):
         if topic.department not in user_faculty_departments:
             return False
 
-    return True
+    return true_topics
 
 @login_required
 def get_topic(request, dep_id=-1, topic_id=-1):
@@ -141,12 +141,16 @@ def update_user_topics(request):
     if request.method == 'POST':
         user_topics = request.POST.getlist('chosen_list[]', None)
         # Validates that user has an access to these topics.
-        if not user_topics or not within_user_domain(request.user, user_topics):
-            messages.add_message(request, messages.ERROR, 'You chose empty or unavailabe topics')
+        if (not user_topics):
+            messages.add_message(request, messages.ERROR, 'You chose empty topics')
             return redirect(reverse('web_user_profile'))
 
+        validated_topics = within_user_domain(request.user, user_topics)
+        if not validated_topics:
+            messages.add_message(request, messages.ERROR, 'You chose unavailabe topics')
+            return redirect(reverse('web_user_profile'))
 
-        if(UserTopics.update_topics(request, user_topics)):
+        if(UserTopics.update_topics(request, validated_topics)):
             messages.add_message(request, messages.SUCCESS, 'Topics updated successfully')
         else:
             messages.add_message(request, messages.ERROR, 'Select valid topics')
