@@ -8,6 +8,7 @@ from cms.models import Topic, Material, Professor
 from cms.forms import AddMaterialForm
 from users.models import University, Faculty, Department, UserProfile
 
+@skip
 class AddMaterialFormTest(TestCase):
     def setUp(self):
         self.uni            = University.objects.create(name = 'Test university')

@@ -980,7 +980,8 @@ class DepartmentTableTest(TestCase):
 class UserTableTest(TestCase):
 	def setUp(self):
 		self.user = User.objects.create_user(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
-		self.fac = Faculty.objects.create()
+		self.uni = University.objects.create()
+		self.fac = Faculty.objects.create(university=self.uni)
 		self.dep = Department.objects.create(faculty = self.fac)
 		UserProfile.objects.create(user=self.user, department = self.dep, faculty = self.fac)
 		self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
@@ -1029,7 +1030,12 @@ class UserTableTest(TestCase):
 		request = self.client.post(url, data=data)
 
 		# Exercise test
-		data = {'choices[]': ['1_5_1', '1_4_3', '1_1_1']}
+		choices_list = [
+			str(self.topic.pk)+'_5'+'_1',
+			str(self.topic.pk)+'_1'+'_1',
+			str(self.topic.pk)+'_4'+'_3',
+		]
+		data = {'choices[]': choices_list}
 		request = self.client.post(url, data=data)
 
 
@@ -1046,7 +1052,14 @@ class UserTableTest(TestCase):
 		topics[1][1] = 'topic_test_user'
 		topics[2][3] = 'another_test'
 		topic_table = TopicTable.objects.create(topic=self.topic, topics=topics, places=places)
-		data = {'choices[]': ['1_5_1', '5_5_5', '1_4_3', '1_1_1', '2_3_4']}
+		choices_list = [
+			str(self.topic.pk)+'_5'+'_1',
+			str(self.topic.pk)+'_5'+'_5',
+			str(self.topic.pk)+'_4'+'_3',
+			str(self.topic.pk)+'_1'+'_1',
+			str(self.topic.pk)+'_3'+'_4',
+		]
+		data = {'choices[]': choices_list}
 
 		# Exercise test
 		url = reverse('web_user_table')
@@ -1059,14 +1072,17 @@ class UserTableTest(TestCase):
 class QueryTableTest(TestCase):
 	def setUp(self):
 		self.user = User.objects.create_user(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
-		self.fac = Faculty.objects.create()
+		self.uni = University.objects.create()
+		self.fac = Faculty.objects.create(university=self.uni)
 		self.dep = Department.objects.create(faculty = self.fac)
 		UserProfile.objects.create(user=self.user, department = self.dep, faculty = self.fac)
 		self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
 		self.topic2 = Topic.objects.create(name = 'topic name2', desc = 'ddddd', term = 2, department = self.dep)
 		self.topic3 = Topic.objects.create(name = 'topic name3', desc = 'ddddd', term = 3, department = self.dep)
-		self.topic.professors.add(Professor.objects.create(name="gamal", faculty=self.fac))
-		self.topic2.professors.add(Professor.objects.create(name="meshmesh", faculty=self.fac))
+		self.prof1 = Professor.objects.create(name="gamal", faculty=self.fac)
+		self.prof2 = Professor.objects.create(name="meshmesh", faculty=self.fac)
+		self.topic.professors.add(self.prof1)
+		self.topic2.professors.add(self.prof2)
 		self.user.profile.topics.add(self.topic)
 		self.user.profile.topics.add(self.topic2)
 		self.user.profile.topics.add(self.topic3)
@@ -1083,7 +1099,7 @@ class QueryTableTest(TestCase):
 		topics[4][4] = 'another_lecture'
 		places[4][4] = 'another_lecture'
 		TopicTable.objects.create(topic=self.topic3, topics=topics, places=places)
-		professors = [1,2]
+		professors = [self.prof1.pk,self.prof2.pk]
 		data = {'professors': professors}
 		
 		# Exercise test
@@ -1107,7 +1123,7 @@ class QueryTableTest(TestCase):
 		topics[4][4] = 'another_lecture'
 		places[4][4] = 'another_lecture'
 		TopicTable.objects.create(topic=self.topic3, topics=topics, places=places)
-		topics_list = [self.topic.id, self.topic3.id]
+		topics_list = [self.topic.pk, self.topic3.pk]
 		data = {'topics': topics_list}
 		
 		# Exercise test
@@ -1178,8 +1194,8 @@ class QueryTableTest(TestCase):
 		TopicTable.objects.create(topic=self.topic2, topics=topics, places=places)
 		periods = [i for i in range(6)]
 		days = [i for i in range(7)]
-		topics_ids = [1, 2, 3]
-		professors = [1, 2]
+		topics_ids = [self.topic.pk, self.topic2.pk, self.topic3.pk]
+		professors = [self.prof1.pk,self.prof2.pk]
 		data = {'periods': periods, 'days':days, 'professors':professors, 'topics':topics_ids}
 		
 		# Exercise test
