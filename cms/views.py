@@ -64,12 +64,17 @@ def within_user_domain(user_obj, list_of_topics_ids):
     """
     Validates that topics are within the same faculty of user's.
     """
-    user_faculty_departments = user_obj.profile.faculty.departments.all().values_list('id', flat=True)
-    request_topics = Topic.objects.filter(id__in = list_of_topics_ids).values_list('department', flat=True)
+    user_faculty_departments = user_obj.profile.faculty.departments.all()
+    true_topics = []
+    for topic_id in list_of_topics_ids:
+        try:
+            true_topics.append(Topic.objects.get(id=topic_id))
+        except:
+            continue
 
     # Check if all topics in incoming request hold an accessible department id.
-    for topic in request_topics:
-        if topic not in user_faculty_departments:
+    for topic in true_topics:
+        if topic.department not in user_faculty_departments:
             return False
 
     return True

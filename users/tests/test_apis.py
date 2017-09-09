@@ -56,14 +56,14 @@ class UsersAPITest(APITestCase):
 
 	def test_get_specific_user(self):
 		# Setup test
-		url = reverse('api_user', kwargs={'pk':1})
-		u = User.objects.create(username = 'ididididid', email = 'sdsadasd@test.com', password = '111115555888dddd')
+		user = User.objects.create_user(username="teeest", password="sdfsd56f4sd8fs8df4sd")
+		url = reverse('api_user', kwargs={'pk':user.id})
 
 		# Exercise test
 		response = self.client.get(url)
 
 		# Assert test
-		self.assertEqual(response.data, {'id':1, 'username':'ididididid', 'email': 'sdsadasd@test.com', 'password': '111115555888dddd'})
+		self.assertEqual(response.data['username'], user.username)
 
 	def test_get_list_of_univs(self):
 		# Setup test

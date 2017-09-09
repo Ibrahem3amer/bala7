@@ -192,14 +192,14 @@ class UserTopicsTest(TestCase):
 	def test_update_topics_with_correct_ids_that_user_cannot_access(self):
 		# Setup test	
 		self.user.profile.topics.add(self.topic)
-		another_faculty 				= Faculty.objects.create()
-		another_dep_user_cannot_access 	= Department.objects.create(faculty = another_faculty)
-		new_topic 	= []
-		t1 			= Topic.objects.create(name = 'topic_new_2', desc = 'ddddd', term = 1, department = another_dep_user_cannot_access)
+		another_faculty = Faculty.objects.create()
+		another_dep_user_cannot_access = Department.objects.create(faculty = another_faculty)
+		new_topic = []
+		t1 = Topic.objects.create(name = 'topic_new_2', desc = 'ddddd', term = 1, department = another_dep_user_cannot_access)
 		new_topic.append(t1.id)
-		t2 			= Topic.objects.create(name = 'topic_new_3', desc = 'ddddd', term = 2, department = another_dep_user_cannot_access)
+		t2 = Topic.objects.create(name = 'topic_new_3', desc = 'ddddd', term = 2, department = another_dep_user_cannot_access)
 		new_topic.append(t2.id)
-		t3 			= Topic.objects.create(name = 'topic_new_4', desc = 'ddddd', term = 3, department = another_dep_user_cannot_access)
+		t3 = Topic.objects.create(name = 'topic_new_4', desc = 'ddddd', term = 3, department = another_dep_user_cannot_access)
 		new_topic.append(t3.id)
 
 
