@@ -152,7 +152,7 @@ class DepartmentModelTest(TestCase):
 		saved_dep = Department.objects.get(name = 'software engineering')
 
 		# Assert test
-		self.assertEqual(1, saved_dep.id)
+		self.assertEqual(dep1.pk, saved_dep.pk)
 
 	def test_save_Department_with_no_values(self):
 		# Setup test

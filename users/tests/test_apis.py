@@ -77,8 +77,8 @@ class UsersAPITest(APITestCase):
 
 	def test_get_univ_linked(self):
 		# Setup test
-		University.objects.create()
-		url = reverse('api_univ', kwargs={'pk':1})
+		u = University.objects.create()
+		url = reverse('api_univ', kwargs={'pk': u.pk})
 
 		# Exercise test
 		response = self.client.get(url)
