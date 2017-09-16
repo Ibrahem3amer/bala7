@@ -26,3 +26,5 @@ DATABASES = {
         'HOST': get_secret('PRODUCTION_DB_HOST'),
     }
 }
+
+SESSION_ENGIN = 'django.contrib.sessions.backends.cached_db'
