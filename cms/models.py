@@ -450,7 +450,8 @@ class Table(models.Model):
 
 		for day in range(TABLE_DAYS):
 			for period in range(TABLE_PERIODS):
-				table[day][period] = topics[day][period] + ' @ ' + places[day][period]
+				if topics[day][period]:
+					table[day][period] = topics[day][period] + ' @ ' + places[day][period]
 		
 		self.json = table 
 		
@@ -505,8 +506,9 @@ class UserTable(Table):
 						topic = Topic.objects.get(pk=topic_id)
 						topic = get_object_or_404(Topic, pk=topic_id)
 						table = topic.table.set_final_table()
-						user_table_topics[day][period] += ' | '+table[day][period]
-						user_table_places[day][period] += ' | '+table[day][period]
+						if table[day][period]:
+							user_table_topics[day][period] += ' | '+table[day][period]
+							user_table_places[day][period] += ' | '+table[day][period]
 					except:
 						continue
 				except:
