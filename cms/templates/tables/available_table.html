@@ -69,7 +69,7 @@
                                     <td>
                                         {% for topic_table in table %}
                                             {% if topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0|length > 3 %}
-                                                <input type="checkbox" name="choices[]" value="{{ topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}_{{ day-1 }}_{{ period-1 }}">
+                                                <input type="checkbox" name="choices[]" value="{{ topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}_{{ day|add:'-1' }}_{{ period|add:'-1' }}">
                                                 <p>{{ topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}</p>
                                             {% endif %}
                                         {% endfor %}

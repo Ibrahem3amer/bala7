@@ -505,13 +505,14 @@ class UserTable(Table):
 						topic = Topic.objects.get(pk=topic_id)
 						topic = get_object_or_404(Topic, pk=topic_id)
 						table = topic.table.set_final_table()
-						user_table_topics[day][period] += '@'+table[day][period]
-						user_table_places[day][period] += '@'+table[day][period]
+						user_table_topics[day][period] += ' | '+table[day][period]
+						user_table_places[day][period] += ' | '+table[day][period]
 					except:
 						continue
 				except:
 					# Topic_id isn't an int, sent from available_table.
 					topic_id, day, period = choice_arr[0], int(choice_arr[1]), int(choice_arr[2])
+					user_table_topics[day][period] += ' | '
 					user_table_topics[day][period] += topic_id
 					user_table_places[day][period] += ''
 

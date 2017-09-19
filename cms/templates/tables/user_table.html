@@ -67,7 +67,6 @@
                             {% for period in '123456' %}
                                 <td>
                                     <p>{{ request.user.profile.table|get_table_list|dynamic_index:forloop.parentloop.counter0|dynamic_index:forloop.counter0 }}</p>
-                                    
                                 </td>
                             {% endfor %}
                         </tr>
