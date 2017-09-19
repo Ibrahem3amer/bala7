@@ -5,11 +5,22 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import validate_password
 from cms.models import Topic
+from cms.validators import GeneralCMSValidator
  
 import re
 
 
-# Create your models here.
+class SVProfile(models.Model):
+
+	# Attributes
+	name = models.CharField(max_length=200, validators=[GeneralCMSValidator.name_validator])
+	desc = models.TextField()
+	logo = models.ImageField(default='doctor.jpg')
+
+	def __str__(self):
+		return self.name
+
+
 class Entity(models.Model):
 	name 		= models.CharField(max_length = 100, default = 'no name')
 	bio 		= models.CharField(max_length = 200, default = 'no data initialized')
@@ -47,8 +58,17 @@ class Department(Entity):
 		on_delete=models.CASCADE,
 		null=True
 	)
+	team = models.ForeignKey(
+		SVProfile,
+		related_name='departments',
+		on_delete=models.CASCADE,
+		null=True,
+		blank=True
+	)
+
 	def __str__(self):
 		return self.faculty.name +' - '+ self.name
+
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(User,related_name = 'profile', on_delete = models.CASCADE, null = True)

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 	<head>
+		{% load static %}
 		{% load staticfiles %}
 		{% load dates %}
 	
@@ -42,18 +43,28 @@
 			<!-- start page content -->
 			<section class="content-section">
 				<div id="notifi-section">
+					
 					<div class="row">
 						<div class="col-md-4 col-xs-12 team">
-							<div class="team-head">
-								<img src="{% static 'pic/team-logo.jpg' %}">
-								<p>Colourfly</p>
-							</div>
-							<div class="team-body">
-								<p>للصين واستمرت لبولندا، مدن بـ, و الأول جزيرتي تعد, لم فمرّ الجو والفرنسي أخر. مع ضرب يتبقّ اقتصادية وبريطانيا. كما يطول عشوائية تم. ميناء والعتاد حول ما. تعديل مكثّفة لبولندا، ما حدى.</p>
-							</div>
+							{% if request.user.profile.department.team %}
+								<div class="team-head">
+									<img src="{{ request.scheme }}://{{ request.get_host }}/{% get_media_prefix %}{{ request.user.profile.department.team.logo }}"/>
+									<p>{{ request.user.profile.department.team.name }}</p>
+								</div>
+								<div class="team-body">
+									<p>{{ request.user.profile.department.team.desc }}</p>
+								</div>
+							{% else %}
+								<div class="team-head">
+									المحتوى ده بيتقدم ليك من ناس جدعان!
+								</div>
+							{% endif %}
 						</div>
 						<div class="col-md-8 col-xs-12 tasks">
 							<div class="owl-carousel">
+								{% if not tasks and not events %}
+									<p>مفيش عندك أي تاسكات أو ايفنتات الفترة الجاية، عيش يا معلم :)</p>
+								{% endif %}
 								{% if tasks %}
 									{% for task in tasks %}          
 										<div class="carousel-element">
