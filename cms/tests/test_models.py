@@ -1038,10 +1038,37 @@ class UserTableTest(TestCase):
 		data = {'choices[]': choices_list}
 		request = self.client.post(url, data=data)
 
+	def test_update_user_table_from_department_table(self):
+		"""updates user table for an existing table."""
+		
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'topic test user'
+		topics[2][3] = 'another test'
+		topics[5][1] = 'existing table'
+		topics[4][3] = 'another cell'
+		topics[1][1] = 'same cell as previous'
+		index1 = topics[1][1]+'_'+'1'+'_'+'1'
+		index2 = topics[2][3]+'_'+'2'+'_'+'3'
+		data = {'choices[]': [index1, index2]}
+		url = reverse('web_user_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Exercise test
+		choices_list = [
+			topics[5][1]+'_5'+'_1',
+			topics[1][1]+'_1'+'_1',
+			topics[4][3]+'_4'+'_3',
+		]
+		data = {'choices[]': choices_list}
+		request = self.client.post(url, data=data)
+
 
 		# Assert test
-		self.assertIn('existing_table', self.user.profile.table.topics)
-		self.assertIn('same_cell_as_previous', self.user.profile.table.topics)
+		self.assertIn('existing table', self.user.profile.table.topics)
+		self.assertIn('same cell as previous', self.user.profile.table.topics)
 
 	def test_assign_user_table_with_fake_topics(self):
 		"""updates user table for non-existing table (first time)."""

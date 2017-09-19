@@ -253,22 +253,23 @@ def user_table(request):
     elif request.method == 'POST':
         # Checking for table existence. 
         choices = request.POST.getlist('choices[]', None) or request.session.get('choices', None)
-        if len(choices) > 0:
-            # Initiate a user table.
-            user_table = UserTable.initiate_user_table(choices)
-            # Create new Instance of user table.
-            try:
-                UserTable.objects.update_or_create(
-                    user_profile=request.user.profile,
-                    defaults={
-                        'topics': user_table[0],
-                        'places': user_table[1]
-                    }
-                )
-            except ObjectDoesNotExist:
-                messages.add_message(request, messages.ERROR, 'Please update your profile.')
-                return redirect('web_user_profile')
-        else:
+        try:
+            if choices and len(choices) > 0:
+                # Initiate a user table.
+                user_table = UserTable.initiate_user_table(choices)
+                # Create new Instance of user table.
+                try:
+                    UserTable.objects.update_or_create(
+                        user_profile=request.user.profile,
+                        defaults={
+                            'topics': user_table[0],
+                            'places': user_table[1]
+                        }
+                    )
+                except ObjectDoesNotExist:
+                    messages.add_message(request, messages.ERROR, 'Please update your profile.')
+                    return redirect('web_user_profile')
+        except:
             messages.add_message(request, messages.ERROR, 'You did not choose any topics.')
         
         return redirect('web_user_table')
