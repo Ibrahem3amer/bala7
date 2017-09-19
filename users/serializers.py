@@ -16,7 +16,7 @@ class UserProfileSerialzer(serializers.ModelSerializer):
 class DepratmentSerializer(serializers.ModelSerializer):
 	class Meta:
 		model 	= Department
-		fields 	= ('id', 'name', 'bio', 'headmaster', 'dep_type')
+		fields 	= ('id', 'name', 'bio', 'headmaster')
 
 
 class FacultySerializer(serializers.ModelSerializer):
@@ -30,12 +30,12 @@ class UniversitySerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model 	= University
-		fields 	= ('id', 'name', 'bio', 'headmaster', 'uni_type')
+		fields 	= ('id', 'name', 'bio', 'headmaster')
 
 class DepratmentLinkedSerializer(serializers.ModelSerializer):
 	class Meta:
 		model 	= Department
-		fields 	= ('id', 'name', 'bio', 'headmaster', 'dep_type')
+		fields 	= ('id', 'name', 'bio', 'headmaster')
 
 
 class FacultyLinkedSerializer(serializers.ModelSerializer):
@@ -53,7 +53,7 @@ class UniversityLinkedSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model 	= University
-		fields 	= ('name', 'bio', 'headmaster', 'uni_type', 'faculties')
+		fields 	= ('name', 'bio', 'headmaster', 'faculties')
 
 class CommentSerializer(serializers.ModelSerializer):
 

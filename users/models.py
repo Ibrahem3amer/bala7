@@ -4,7 +4,7 @@ from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import validate_password
-from cms.models import Topic
+from cms.models import Topic, Professor
 from cms.validators import GeneralCMSValidator
  
 import re
@@ -22,11 +22,18 @@ class SVProfile(models.Model):
 
 
 class Entity(models.Model):
-	name 		= models.CharField(max_length = 100, default = 'no name')
-	bio 		= models.CharField(max_length = 200, default = 'no data initialized')
-	location 	= models.CharField(max_length = 200, default = 'no data initialized')
-	headmaster 	= models.CharField(max_length = 200, default = 'Professors name')
-	rank		= models.IntegerField(default = -1)
+
+	# Helpers
+	type_choices = [(1, 'عام'), (2, 'خاص'), (3, 'أهلي')]
+	study_choices = [(1, 'فصول دراسية'), (2, 'ساعات معتمدة'), (3, 'غير ذلك')]
+
+	# Attributes 
+	name = models.CharField(max_length = 100, default = 'no name')
+	bio = models.TextField(null=True, blank=True)
+	location = models.TextField(null=True, blank=True)
+	rank = models.PositiveIntegerField(default=0)
+	entity_type = models.PositiveIntegerField(choices=type_choices, default=1)
+	study_type = models.PositiveIntegerField(choices=study_choices, default=1)
 
 	class Meta:
 		abstract = True
@@ -35,13 +42,25 @@ class Entity(models.Model):
 		return self.name
 
 class University(Entity):
-	# Determines the type of the university: public, private, ... etc.
-	uni_type 	= models.CharField(max_length = 10, default = 'public')
+	headmaster = models.ForeignKey(
+		Professor,
+		related_name='managed_universities',
+		on_delete=models.CASCADE,
+		null=True
+	)
 
 class Faculty(Entity):
-	university 	= models.ForeignKey(
+
+	# Attributes
+	university = models.ForeignKey(
 		University,
 		related_name='faculties',
+		on_delete=models.CASCADE,
+		null=True
+	)
+	headmaster = models.ForeignKey(
+		Professor,
+		related_name='managed_faculties',
 		on_delete=models.CASCADE,
 		null=True
 	)
@@ -51,7 +70,8 @@ class Faculty(Entity):
 
 
 class Department(Entity):
-	dep_type = models.CharField(max_length=10, default='normal')
+
+	# Attributes
 	faculty = models.ForeignKey(
 		Faculty,
 		related_name='departments',
@@ -71,16 +91,42 @@ class Department(Entity):
 
 
 class UserProfile(models.Model):
-	user = models.OneToOneField(User,related_name = 'profile', on_delete = models.CASCADE, null = True)
-	department = models.ForeignKey(Department, related_name = 'depart_users', on_delete = models.SET_NULL, null = True)
-	faculty = models.ForeignKey(Faculty, related_name = 'fac_users', on_delete = models.SET_NULL, null = True)
-	university = models.ForeignKey(University, related_name = 'uni_users', on_delete = models.SET_NULL, null = True)
+
+	# Helpers
+	gender_choices = [(1, 'ذكر'), (2, 'أنثى'), (3, 'غير ذلك')]
+	status_choices = [(1, 'ناجح'), (2, 'راسب'), (3, 'ناجح بمواد'), (4, 'تحشسن مجموع')]
+
+	# Attributes
 	level = models.IntegerField(default = 1)
-	gender = models.CharField(max_length = 8, default = 'unset')
+	gender = models.PositiveIntegerField(choices=gender_choices, default=3)
 	count_of_posts = models.IntegerField(default = 0)
 	count_of_replies = models.IntegerField(default = 0)
-	academic_stats = models.CharField(max_length = 20, default = 'unset')
+	academic_stats = models.PositiveIntegerField(choices=status_choices, default=1)
 	last_active_device = models.CharField(max_length = 200)
+	user = models.OneToOneField(
+		User,
+		related_name='profile',
+		on_delete=models.CASCADE,
+		null=True
+	)
+	department = models.ForeignKey(
+		Department,
+		related_name='depart_users',
+		on_delete=models.SET_NULL,
+		null=True
+	)
+	faculty = models.ForeignKey(
+		Faculty,
+		related_name='fac_users',
+		on_delete=models.SET_NULL,
+		null=True
+	)
+	university = models.ForeignKey(
+		University,
+		related_name='uni_users',
+		on_delete=models.SET_NULL,
+		null=True
+	)
 	topics = models.ManyToManyField(
 		Topic
 	) 

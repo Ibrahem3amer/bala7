@@ -64,8 +64,7 @@ class UniversityModelTest(TestCase):
 		saved_university = University.objects.get()
 
 		# Assert test
-		self.assertEqual('no data initialized', saved_university.bio)
-		self.assertEqual('public', saved_university.uni_type)
+		self.assertEqual(1, saved_university.entity_type)
 		self.assertEqual('no name', saved_university.name)
 
 class FacultyModelTest(TestCase):
@@ -107,7 +106,6 @@ class FacultyModelTest(TestCase):
 		saved_faculty = Faculty.objects.get()
 
 		# Assert test
-		self.assertEqual('no data initialized', saved_faculty.bio)
 		self.assertEqual('no name', saved_faculty.name)
 
 	def test_attach_faculty_to_given_university(self):
@@ -220,7 +218,6 @@ class DepartmentModelTest(TestCase):
 		saved_faculty = Faculty.objects.get()
 
 		# Assert test
-		self.assertEqual('no data initialized', saved_faculty.bio)
 		self.assertEqual('no name', saved_faculty.name)
 
 	def test_attach_faculty_to_given_university(self):

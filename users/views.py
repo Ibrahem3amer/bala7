@@ -165,38 +165,58 @@ def update_user_education_info(request):
 
 
 def display_signup(request):
-	universities 	= University.objects.all()
-	faculties 		= Faculty.objects.all()
-	departments		= Department.objects.all()
-	return render(request, 'registration/signup.html', {'stage_num': 1, 'universities': universities, 'faculties': faculties, 'departments': departments})
+	if not request.user.is_authenticated:
+		universities = University.objects.all()
+		faculties = Faculty.objects.all()
+		departments	= Department.objects.all()
+		return render(request,
+			'registration/signup.html',
+			{
+				'stage_num': 1,
+				'universities': universities,
+				'faculties': faculties,
+				'departments': departments
+			}
+		)
+		
+
+	return redirect('home_visitor')
 
 def signup_second_form(request):
 	first_form_data = {}
-	if request.method == 'POST': 
-		first_form_data = request.session.get('first_form_data')
-		signup_form 	= UserSignUpForm(request.POST)
-		if signup_form.is_valid():
-			user 			= signup_form.save()
-			form_department = get_object_or_404(Department, pk = first_form_data['department'])
-			form_faculty 	= get_object_or_404(Faculty, pk = first_form_data['faculty'])
-			form_university = get_object_or_404(University, pk = first_form_data['university'])
-			user_profile 	= UserProfile.make_form_new_profile(user, form_department, form_faculty, form_university)
-			return redirect('home_user')
+	if request.method == 'POST':
+		if not request.user.is_authenticated: 
+			# Request has no user attribute.
+			first_form_data = request.session.get('first_form_data')
+			signup_form 	= UserSignUpForm(request.POST)
+			if signup_form.is_valid():
+				user = signup_form.save()
+				form_department = get_object_or_404(Department, pk = first_form_data['department'])
+				form_faculty = get_object_or_404(Faculty, pk = first_form_data['faculty'])
+				form_university = get_object_or_404(University, pk = first_form_data['university'])
+				user_profile = UserProfile.make_form_new_profile(user, form_department, form_faculty, form_university)
+			
 	else:
-		university 	= request.GET.get('selected_university', None)
-		faculty 	= request.GET.get('selected_faculty', None)
-		department 	= request.GET.get('selected_department', None)
+		if not request.user.is_authenticated: 
+			university = request.GET.get('selected_university', 0)
+			faculty = request.GET.get('selected_faculty', 0)
+			department = request.GET.get('selected_department', 0)
 
-		# Redirect user to first form with error of he didn't entered data.
-		if university is None or faculty is None or department is None:
-			msg = 'Please select your university, faculty, and department.'
-			messages.add_message(request, messages.ERROR, msg)
-			return redirect('web_signup')
-		first_form_data 					= {'university':university, 'faculty':faculty, 'department':department}
-		request.session['first_form_data'] 	= first_form_data
-		signup_form 						= UserSignUpForm()
+			# Redirect user to first form with error of he didn't entered data.
+			if (not university) or (not faculty) or (not department):
+				msg = 'Please select your university, faculty, and department.'
+				messages.add_message(request, messages.ERROR, msg)
+				return redirect('web_signup')
+			first_form_data = {'university':university, 'faculty':faculty, 'department':department}
+			request.session['first_form_data'] = first_form_data
+			signup_form = UserSignUpForm()
+			return render(
+				request,
+				'registration/signup_second_form.html',
+				{
+					'stage_num':2,
+					'form': signup_form
+				}
+			)
 
-	return render(request, 'registration/signup_second_form.html', {'stage_num':2, 'form': signup_form})
-
-def signup_third_form(request):
-	return ('third_form')
+	return redirect('home_visitor')
