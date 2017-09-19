@@ -68,7 +68,8 @@
                                 {% for period in '123456' %}
                                     <td>
                                         {% for topic in table|dynamic_index:forloop.parentloop.counter0|dynamic_index:forloop.counter0 %}
-                                            {% if topic and topic|length > 2 %}
+                                            {% if topic and topic|length > 4 %}
+                                                <input type="checkbox" name="choices[]" value="{{ topic }}_{{ day|add:'-1' }}_{{ period|add:'-1' }}">
                                                 <p>{{ topic }}</p>
                                             {% endif %}
                                         {% endfor %}

@@ -9,6 +9,5 @@ urlpatterns = [
     url(r'^table/main/results$', views.query_table, name = 'web_query_table'),
     url(r'^table/main$', views.dep_table_main, name = 'web_dep_table'),
     url(r'^table/available_table$', views.available_table, name = 'web_available_table'),
-    url(r'^table/user_table$', views.user_table, name = 'web_user_table'),
     
 ]
