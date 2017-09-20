@@ -14,6 +14,7 @@ TABLE_PERIODS_LIST = [0, 1, 2, 3, 4, 5]
 TABLE_PERIODS = 6
 
 class Topic(models.Model):
+	
 	# Helper variables
 	term_choices 			= [(1, 'First term'), (2, 'Second term'), (3, 'Summer')]
 
@@ -26,6 +27,12 @@ class Topic(models.Model):
 	faculty 	= models.ForeignKey('users.Faculty', related_name = 'topics', on_delete = models.CASCADE, null = True)
 	professors 	= models.ManyToManyField('Professor', related_name = 'topics')
 	
+	# Model's methods
+	def increment_weeks(self):
+		""" Increments the weeks number by one."""
+		self.weeks += 1
+		self.save()
+
 	def __str__(self):
 		return self.name
 
@@ -157,7 +164,6 @@ class MaterialBase(models.Model):
 
 
 	# Material's methods
-
 	@classmethod
 	def get_user_materails(cls, user_obj, limit=None):
 		""" Returns the leastest materials with limit >= 3."""
@@ -216,19 +222,27 @@ class Material(MaterialBase):
 
 class Exam(MaterialBase):
 
+	# Helpers
+	current_year = datetime.datetime.now().year
+	def tuplify(x): return (x, x)
+	years = map(tuplify, range(current_year - 20, current_year + 1))
+
 	# Additional fields.
 	user = models.ForeignKey(User, related_name = 'exams', on_delete = models.CASCADE)
 	topic = models.ForeignKey('Topic', related_name = 'exams', on_delete = models.CASCADE)
 	professor = models.ManyToManyField('Professor', related_name='exams')
+	exam_year = models.PositiveIntegerField(choices=years, default=current_year)
 
 	# Model-level validation
 	def clean(self):
-		super(Exam, self).clean()
 
 		# Exams have no weeks, terms or type.
 		self.week_number = 0
 		self.term = 1
 		self.content_type = 1
+
+		super(Exam, self).clean()
+
 
 class Task(MaterialBase):
 
