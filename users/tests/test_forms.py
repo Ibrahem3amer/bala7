@@ -37,6 +37,33 @@ class signup_form_test(TestCase):
 		# Assert test
 		self.assertFalse(form.is_valid())
 
+	def test_users_submits_arabic_username(self):
+		# Setup test
+		u = User()
+		u.username = 'فارس'
+		u.email = 'ibrahem3amer@fff.com'
+		data = {'username':u.username, 'email':u.email, 'password':'12345678abc', 'password_confirm':'12345678abc'}
+
+		# Exercise test
+		form = UserSignUpForm(data=data)
+		
+		# Assert test
+		self.assertTrue(form.is_valid())
+
+	def test_users_submits_arabic_username_with_extended_letters(self):
+		# Setup test
+		u = User()
+		u.username = 'فارس_الإسلام'
+		u.email = 'ibrahem3amer@fff.com'
+		data = {'username':u.username, 'email':u.email, 'password':'12345678abc', 'password_confirm':'12345678abc'}
+
+		# Exercise test
+		form = UserSignUpForm(data=data)
+		
+		# Assert test
+		print(form.errors)
+		self.assertTrue(form.is_valid())
+
 	def test_users_submits_unmatched_password(self):
 		# Setup test
 		u = User()
