@@ -13,6 +13,23 @@ TABLE_DAYS = 7
 TABLE_PERIODS_LIST = [0, 1, 2, 3, 4, 5]
 TABLE_PERIODS = 6
 
+
+class Professor(models.Model):
+
+	# Attributes
+	name 	= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
+	faculty = models.ForeignKey('users.Faculty', related_name = 'professors', on_delete = models.CASCADE)
+	bio 	= models.TextField(null = True, blank = True)
+	picture = models.ImageField(default = 'doctor.jpg')
+	email 	= models.EmailField(null = True, blank = True)
+	website = models.URLField(null = True, blank = True)
+	linkedn = models.URLField(null = True, blank = True)
+
+
+	def __str__(self):
+		return self.name
+
+
 class Topic(models.Model):
 	
 	# Helper variables
@@ -21,11 +38,11 @@ class Topic(models.Model):
 	# Class attributes
 	name 		= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator])
 	desc 		= models.CharField(max_length = 400)
-	term 		= models.PositiveIntegerField(choices = term_choices)
-	weeks		= models.PositiveIntegerField(default = 0)
-	department 	= models.ForeignKey('users.Department', related_name = 'topics', on_delete = models.CASCADE)
-	faculty 	= models.ForeignKey('users.Faculty', related_name = 'topics', on_delete = models.CASCADE, null = True)
-	professors 	= models.ManyToManyField('Professor', related_name = 'topics')
+	term 		= models.PositiveIntegerField(choices=term_choices)
+	weeks		= models.PositiveIntegerField(default=0)
+	faculty 	= models.ForeignKey('users.Faculty', related_name='topics', on_delete=models.CASCADE, null=True)
+	department 	= models.ManyToManyField('users.Department', related_name='topics')
+	professors 	= models.ManyToManyField('cms.Professor', related_name='prof_topics')
 	
 	# Model's methods
 	def increment_weeks(self):
@@ -217,7 +234,7 @@ class Material(MaterialBase):
 
 	user = models.ForeignKey(User, related_name = 'primary_materials', on_delete = models.CASCADE)
 	topic = models.ForeignKey('Topic', related_name = 'primary_materials', on_delete = models.CASCADE)
-	professor = models.ManyToManyField('Professor', related_name='primary_materials')
+	professor = models.ManyToManyField('cms.Professor', related_name='primary_materials')
 
 
 class Exam(MaterialBase):
@@ -230,7 +247,7 @@ class Exam(MaterialBase):
 	# Additional fields.
 	user = models.ForeignKey(User, related_name = 'exams', on_delete = models.CASCADE)
 	topic = models.ForeignKey('Topic', related_name = 'exams', on_delete = models.CASCADE)
-	professor = models.ManyToManyField('Professor', related_name='exams')
+	professor = models.ManyToManyField('cms.Professor', related_name='exams')
 	exam_year = models.PositiveIntegerField(choices=years, default=current_year)
 
 	# Model-level validation
@@ -249,7 +266,7 @@ class Task(MaterialBase):
 	# Additional fields.
 	user = models.ForeignKey(User, related_name = 'primary_tasks', on_delete = models.CASCADE)
 	topic = models.ForeignKey('Topic', related_name = 'primary_tasks', on_delete = models.CASCADE)
-	professor = models.ManyToManyField('Professor', related_name='primary_tasks')
+	professor = models.ManyToManyField('cms.Professor', related_name='primary_tasks')
 	deadline = models.DateField(default=timezone.now)
 
 	# Model-level validation
@@ -359,7 +376,7 @@ class UserContribution(MaterialBase):
 	deadline = models.DateField(blank=True, default=timezone.now)
 	user = models.ForeignKey(User, related_name = 'secondary_materials', on_delete = models.CASCADE)
 	topic = models.ForeignKey('Topic', related_name = 'secondary_materials', on_delete = models.CASCADE)
-	professor = models.ManyToManyField('Professor', related_name='secondary_materials')
+	professor = models.ManyToManyField('cms.Professor', related_name='secondary_materials')
 
 
 	# Model-level validation.
@@ -409,22 +426,6 @@ class UserComment(models.Model):
 
 	def __str__(self):
 		return self.user.username + ' -> ' +self.post.title
-
-
-class Professor(models.Model):
-
-	# Attributes
-	name 	= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
-	faculty = models.ForeignKey('users.Faculty', related_name = 'professors', on_delete = models.CASCADE)
-	bio 	= models.TextField(null = True, blank = True)
-	picture = models.ImageField(default = 'doctor.jpg')
-	email 	= models.EmailField(null = True, blank = True)
-	website = models.URLField(null = True, blank = True)
-	linkedn = models.URLField(null = True, blank = True)
-
-
-	def __str__(self):
-		return self.name
 
 
 class Table(models.Model):
