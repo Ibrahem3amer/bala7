@@ -294,16 +294,18 @@ class UserProfile(models.Model):
 		False
 		"""
 		try:
-			new_univeristy 	= University.objects.get(id = info['new_university_id'])
-			new_faculty 	= Faculty.objects.get(id = info['new_faculty_id'])
-			new_dep 		= Department.objects.get(id = info['new_department_id'])
+			new_univeristy = University.objects.get(id = info['new_university_id'])
+			new_faculty = Faculty.objects.get(id = info['new_faculty_id'])
+			new_dep = Department.objects.get(id = info['new_department_id'])
 		except ObjectDoesNotExist:
 			return False
 
-		user_obj.profile.university = new_univeristy
-		user_obj.profile.faculty 	= new_faculty
-		user_obj.profile.department = new_dep
-		user_obj.save()
+		UserProfile.objects.filter(user=user_obj).update(
+			university=new_univeristy,
+			faculty=new_faculty,
+			department=new_dep
+		)
+		user_obj.profile.topics.all().delete()
 
 		return True
 	
