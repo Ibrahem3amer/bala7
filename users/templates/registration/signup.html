@@ -80,20 +80,21 @@
                 <img class="" src="{% static 'pic/n-sad2.png' %}"> 
             </div>
             <div class="col-sm-8 col-xs-12">
-                <div class="not-found1"><i class="fa fa-exclamation-triangle new-symbol" aria-hidden="true"></i> كليتك مش موجوده؟</div>
-                <div class="not-found2" >اضف بياناتك وهنتواصل معاك عند إضافة كليتك :)</div>
-                <form id="id_notify_form" action="{% url 'thankyou' %}">
+                <div class="not-found1"><i class="fa fa-exclamation-triangle new-symbol" aria-hidden="true"></i> كليتك مش موجودة؟</div>
+                <div class="not-found2" >أضف بياناتك وهنتواصل معاك عند إضافة كليتك :)</div>
+                <form id="id_notify_form" action="{% url 'thankyou' %}" method="POST">
+                    {% csrf_token %}
                     <div class="form-group">
-                        <label class="nj-label" for="id_future_university">الجامعه</label>
-                        <input type="text" class="form-control nj-input" name="future_notification_university" id="id_future_university" placeholder="الجامعه">
+                        <label class="nj-label" for="id_future_university">الجامعة</label>
+                        <input type="text" class="form-control nj-input" name="non_university" id="id_future_university" placeholder="الجامعه">
                     </div>
                     <div class="form-group">
-                        <label class="nj-label" for="id_future_faculty">الكليه</label>
-                        <input type="text" class="form-control nj-input" name="future_notification_faculty" id="id_future_faculty" placeholder="الكليه">
+                        <label class="nj-label" for="id_future_faculty">الكلية</label>
+                        <input type="text" class="form-control nj-input" name="non_faculty" id="id_future_faculty" placeholder="الكليه">
                     </div>
                     <div class="form-group">
-                        <label class="nj-label" for="id_future_notify">البريد الالكتروني</label>
-                        <input type="email" name="future_notification_email" id="id_future_notify" class="form-control nj-input" placeholder="البريد الإلكتروني">
+                        <label class="nj-label" for="id_future_notify">البريد الإلكتروني</label>
+                        <input type="email" name="non_user_mail" id="id_future_notify" class="form-control nj-input" placeholder="البريد الإلكتروني">
                     </div>
                     <input type="submit" name="future_notification_submit" id="id_future_form_submit" value="تم" class="nj-btn next-btn">
                 </form>

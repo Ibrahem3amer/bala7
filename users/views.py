@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
-from users.models import University, Faculty, Department, UserProfile 
+from users.models import University, Faculty, Department, UserProfile, ContactUs
 from users.forms import UserSignUpForm
 from cms.models import UserTopics, Task, Material, UserContribution, Event
 
@@ -220,3 +220,24 @@ def signup_second_form(request):
 			)
 
 	return redirect('home_visitor')
+
+
+def send_nonexisting_faculty(request):
+	""" Accepts message and store it to admin panel."""
+	if request.method == 'POST':
+		university_field = request.POST.get('non_university', None)
+		faculty_field = request.POST.get('non_faculty', None)
+		user_mail_field = request.POST.get('non_user_mail', None)
+
+		if not all([university_field, faculty_field, user_mail_field]):
+			messages.add_message(request, messages.ERROR, 'البيانات اللي انت دخلتها مش مظبوطة!')
+			return redirect('web_signup')
+
+		message = university_field + ' | ' + faculty_field + ' | ' + user_mail_field
+		ContactUs.objects.create(
+			message=message
+		)
+	return render(
+		request,
+		'registration/thanks.html'
+	)

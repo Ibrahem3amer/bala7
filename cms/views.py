@@ -285,3 +285,5 @@ def user_table(request):
 
     else:
         return redirect('home_user')
+
+

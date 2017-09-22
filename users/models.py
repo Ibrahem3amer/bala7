@@ -332,5 +332,12 @@ def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
 		pass
 
 
+class ContactUs(models.Model):
 
-		
+	# Attributes 
+	message = models.TextField()
+	date = models.DateTimeField(auto_now_add=True)
+
+
+	def __str__(self):
+		return self.message
