@@ -995,7 +995,7 @@ class DepartmentTableTest(TestCase):
 		dep2 = Department.objects.create(faculty = fac2)
 		topic3 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2)
 		topic3.department.add(dep2)
-		topic4 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2)
+		topic4 = Topic.objects.create(name = 'topiffc in user', desc = 'ddddd', term = 2)
 		topic4.department.add(dep2)
 		self.user.profile.topics.add(topic3, topic4)
 

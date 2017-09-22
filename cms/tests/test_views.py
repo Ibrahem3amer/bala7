@@ -117,10 +117,7 @@ class TableViews(TestCase):
         self.fac = Faculty.objects.create()
         self.dep = Department.objects.create(faculty=self.fac)
         self.profile = UserProfile.objects.create(user=self.user, department=self.dep, faculty=self.fac)
-        self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1)
-        self.topic.department.add(self.dep)
-        self.user.profile.topics.add(self.topic)
-    
+        
     def test_page_load_on_get(self):
         # Setup test
         url = reverse('web_dep_table')
