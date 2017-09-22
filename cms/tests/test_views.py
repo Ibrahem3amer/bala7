@@ -16,7 +16,8 @@ class AccessRestriction(TestCase):
         self.fac            = Faculty.objects.create(name = 'Test faculty')
         self.dep            = Department.objects.create(name = 'Test dep')
         self.profile        = UserProfile.objects.create(university = self.uni, faculty = self.fac, department = self.dep)
-        self.topic          = Topic.objects.create(name = 'cs', desc = "test test test", department = self.dep, faculty = self.fac, term = 1)
+        self.topic          = Topic.objects.create(name = 'cs', desc = "test test test", faculty = self.fac, term = 1)
+        self.topic.department.add(self.dep)
         self.user.profile   = self.profile
         self.profile.topics.add(self.topic)
     
@@ -69,14 +70,16 @@ class AccessRestriction(TestCase):
 
     def test_return_topic_that_outside_user_topics(self):
         # Setup test
-        another_topic   = Topic.objects.create(name = 'is', desc = "test test test", department = self.dep, faculty = self.fac, term = 1)
+        another_topic   = Topic.objects.create(name = 'is', desc = "test test test", faculty = self.fac, term = 1)
+        another_topic.department.add(self.dep)
         self.user.profile.topics.add(another_topic)        
         request         = RequestFactory()
         request         = request.get(reverse('get_topic', kwargs={'dep_id': self.dep.id, 'topic_id': self.topic.id}))
         request.user    = self.user
 
         # Exercise test
-        outsider_topic  = Topic.objects.create(name = 'ms', desc = "test test test", department = self.dep, faculty = self.fac, term = 1)
+        outsider_topic  = Topic.objects.create(name = 'ms', desc = "test test test", faculty = self.fac, term = 1)
+        outsider_topic.department.add(self.dep)
         try:
             response    = get_topic(request, self.dep.id, outsider_topic.id)
             flag        = False
@@ -89,14 +92,16 @@ class AccessRestriction(TestCase):
 
     def test_get_topic_with_no_parameters(self):
         # Setup test
-        another_topic   = Topic.objects.create(name = 'is', desc = "test test test", department = self.dep, faculty = self.fac, term = 1)
+        another_topic   = Topic.objects.create(name = 'is', desc = "test test test", faculty = self.fac, term = 1)
+        another_topic.department.add(self.dep)
         self.user.profile.topics.add(another_topic)        
         request         = RequestFactory()
         request         = request.get(reverse('get_topic', kwargs={'dep_id': self.dep.id, 'topic_id': self.topic.id}))
         request.user    = self.user
 
         # Exercise test
-        outsider_topic  = Topic.objects.create(name = 'ms', desc = "test test test", department = self.dep, faculty = self.fac, term = 1)
+        outsider_topic  = Topic.objects.create(name = 'ms', desc = "test test test", faculty = self.fac, term = 1)
+        outsider_topic.department.add(self.dep)
         try:
             response    = get_topic(request)
             flag        = False
@@ -108,11 +113,13 @@ class AccessRestriction(TestCase):
 
 class TableViews(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username = 'ssss', email = 'tesssst@test.com', password = 'secrettt23455')
+        self.user = User.objects.create_user(username='ssss', email='tesssst@test.com', password='secrettt23455')
         self.fac = Faculty.objects.create()
-        self.dep = Department.objects.create(faculty = self.fac)
-        UserProfile.objects.create(user=self.user, department = self.dep, faculty = self.fac)
-        self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
+        self.dep = Department.objects.create(faculty=self.fac)
+        self.profile = UserProfile.objects.create(user=self.user, department=self.dep, faculty=self.fac)
+        self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1)
+        self.topic.department.add(self.dep)
+        self.user.profile.topics.add(self.topic)
     
     def test_page_load_on_get(self):
         # Setup test
@@ -159,7 +166,8 @@ class UserTableViews(TestCase):
         self.fac = Faculty.objects.create()
         self.dep = Department.objects.create(faculty = self.fac)
         UserProfile.objects.create(user=self.user, department = self.dep, faculty = self.fac)
-        self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
+        self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1)
+        self.topic.department.add(self.dep)
 
     def test_page_load_on_get(self):
         # Setup test

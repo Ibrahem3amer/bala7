@@ -4,7 +4,6 @@ from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import validate_password
-from cms.models import Topic, Professor
 from cms.validators import GeneralCMSValidator
  
 import re
@@ -43,7 +42,7 @@ class Entity(models.Model):
 
 class University(Entity):
 	headmaster = models.ForeignKey(
-		Professor,
+		'cms.Professor',
 		related_name='managed_universities',
 		on_delete=models.CASCADE,
 		null=True
@@ -59,11 +58,12 @@ class Faculty(Entity):
 		null=True
 	)
 	headmaster = models.ForeignKey(
-		Professor,
+		'cms.Professor',
 		related_name='managed_faculties',
 		on_delete=models.CASCADE,
 		null=True
 	)
+
 
 	def __str__(self):
 		return self.university.name +' - '+ self.name
@@ -128,7 +128,7 @@ class UserProfile(models.Model):
 		null=True
 	)
 	topics = models.ManyToManyField(
-		Topic
+		'cms.Topic'
 	) 
 
 	@classmethod

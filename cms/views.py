@@ -82,7 +82,8 @@ def within_user_domain(user_obj, list_of_topics_ids):
 
     # Check if all topics in incoming request hold an accessible department id.
     for topic in true_topics:
-        if topic.department not in user_faculty_departments:
+        matches = (topic.department.all() & user_faculty_departments)
+        if not matches:
             return False
 
     return true_topics
@@ -102,7 +103,7 @@ def get_topic(request, dep_id=-1, topic_id=-1):
         raise Http404("Access denied.")
 
     # Validates that topic relates to department.
-    if topic.department.id != int(dep_id):
+    if int(dep_id) not in topic.department.all().values_list('id', flat=True):
         raise Http404("Incorrect department.")
 
     # Get dictionary of current size of weeks.

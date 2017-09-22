@@ -127,9 +127,9 @@ class DepartmentModelTest(TestCase):
 
 	def test_save_Department(self):
 		# Setup test
-		dep1 			= Department()
+		dep1 			= Department.objects.create()
 		dep1.name 		= 'first year'
-		dep2 			= Department()
+		dep2 			= Department.objects.create()
 		dep2.dep_type 	= 'public'
 		dep1.save()
 		dep2.save()
@@ -142,7 +142,7 @@ class DepartmentModelTest(TestCase):
 
 	def test_retreive_Department(self):
 		# Setup test
-		dep1 		= Department()
+		dep1 		= Department.objects.create()
 		dep1.name 	= 'software engineering'
 		dep1.save()
 
@@ -154,7 +154,7 @@ class DepartmentModelTest(TestCase):
 
 	def test_save_Department_with_no_values(self):
 		# Setup test
-		dep1 = Department()
+		dep1 = Department.objects.create()
 		dep1.save()
 
 		# Exercise test
@@ -168,7 +168,7 @@ class DepartmentModelTest(TestCase):
 		fac1 			= Faculty()
 		fac1.name 		= 'KFS'
 		fac1.save()
-		dep1 			= Department()
+		dep1 			= Department.objects.create()
 		dep1.name 		= 'second year'
 		dep1.dep_type 	= 'private'
 		dep1.faculty 	= fac1

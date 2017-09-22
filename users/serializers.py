@@ -13,10 +13,21 @@ class UserProfileSerialzer(serializers.ModelSerializer):
 		model 	= UserProfile
 		fields 	= ('university', 'faculty', 'department', 'level', 'gender', 'count_of_posts', 'count_of_replies', 'topics')
 
+
+class TeamSerializer(serializers.ModelSerializer):
+	
+	class Meta:
+		model = SVProfile
+		fields = ['__all__']
+
+
 class DepratmentSerializer(serializers.ModelSerializer):
+	
+	team = TeamSerializer(read_only=True)
+	
 	class Meta:
 		model 	= Department
-		fields 	= ('id', 'name', 'bio', 'headmaster')
+		fields 	= ('id', 'name', 'bio', 'team')
 
 
 class FacultySerializer(serializers.ModelSerializer):
