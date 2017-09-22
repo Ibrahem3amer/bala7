@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from cms.models import *
 from users.models import Faculty
+from users.serializers import DepratmentSerializer
 from django.contrib.auth.models import User
 
 class TopicTableSerializer(serializers.ModelSerializer):
@@ -25,7 +26,7 @@ class ProfessorSerializer(serializers.ModelSerializer):
 
 
 class TopicSerializer(serializers.ModelSerializer):
-    department = serializers.PrimaryKeyRelatedField(read_only=True)
+    department = DepratmentSerializer(many=True, read_only=True)
     faculty = serializers.PrimaryKeyRelatedField(read_only=True)
     table = TopicTableSerializer(read_only=True)
     professors = ProfessorSerializer(read_only=True, many=True)

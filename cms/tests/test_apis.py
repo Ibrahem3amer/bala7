@@ -9,12 +9,13 @@ from users.models import Department, Faculty, University, UserProfile
 
 class TopicAPITest(APITestCase):
     def setUp(self):
-        self.uni        = University.objects.create(name = 'Test university')
-        self.fac        = Faculty.objects.create(name = 'Test faculty')
-        self.dep        = Department.objects.create(name = 'Test dep')
-        self.topic      = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
-        self.user       = User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
-        self.profile    = UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
+        self.uni = University.objects.create(name = 'Test university')
+        self.fac = Faculty.objects.create(name = 'Test faculty')
+        self.dep = Department.objects.create(name = 'Test dep')
+        self.topic = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, weeks = 5)
+        self.topic.department.add(self.dep)
+        self.user = User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
+        self.profile = UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
 
     def test_return_list_of_topics(self):
         # Setup test
@@ -31,12 +32,13 @@ class TopicAPITest(APITestCase):
 
 class MaterialAPITest(APITestCase):
     def setUp(self):
-        self.uni        = University.objects.create(name = 'Test university')
-        self.fac        = Faculty.objects.create(name = 'Test faculty')
-        self.dep        = Department.objects.create(name = 'Test dep')
-        self.topic      = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
-        self.user       = User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
-        self.profile    = UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
+        self.uni = University.objects.create(name = 'Test university')
+        self.fac = Faculty.objects.create(name = 'Test faculty')
+        self.dep = Department.objects.create(name = 'Test dep')
+        self.topic = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, weeks = 5)
+        self.topic.department.add(self.dep)
+        self.user = User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
+        self.profile = UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
 
     def test_return_list_materials(self):
         # Setup test
@@ -76,7 +78,8 @@ class TaskAPITest(APITestCase):
         self.uni = University.objects.create(name = 'Test university')
         self.fac = Faculty.objects.create(name = 'Test faculty')
         self.dep = Department.objects.create(name = 'Test dep')
-        self.topic = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
+        self.topic = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, weeks = 5)
+        self.topic.department.add(self.dep)
         self.user = User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
         self.profile = UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
 
@@ -95,8 +98,10 @@ class QueryTableAPITest(APITestCase):
         self.uni = University.objects.create(name = 'Test university')
         self.fac = Faculty.objects.create(name = 'Test faculty')
         self.dep = Department.objects.create(name = 'Test dep')
-        self.topic = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
-        self.topic2 = Topic.objects.create(pk = 2, name = 'test topic2 with spaces', desc = 'ddddd', term = 2, department = self.dep, weeks = 5)
+        self.topic = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, weeks = 5)
+        self.topic.department.add(self.dep)
+        self.topic2 = Topic.objects.create(pk = 2, name = 'test topic2 with spaces', desc = 'ddddd', term = 2, weeks = 5)
+        self.topic2.department.add(self.dep)
         self.user = User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
         self.profile = UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
         self.profile.topics.add(self.topic)
@@ -186,8 +191,10 @@ class MainTableAPITest(APITestCase):
         self.uni = University.objects.create(name = 'Test university')
         self.fac = Faculty.objects.create(name = 'Test faculty')
         self.dep = Department.objects.create(name = 'Test dep')
-        self.topic = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
-        self.topic2 = Topic.objects.create(pk = 2, name = 'test topic2 with spaces', desc = 'ddddd', term = 2, department = self.dep, weeks = 5)
+        self.topic = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, weeks = 5)
+        self.topic.department.add(self.dep)
+        self.topic2 = Topic.objects.create(pk = 2, name = 'test topic2 with spaces', desc = 'ddddd', term = 2, weeks = 5)
+        self.topic2.department.add(self.dep)
         self.user = User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
         self.profile = UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
         self.profile.topics.add(self.topic)
