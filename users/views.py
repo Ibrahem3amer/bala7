@@ -178,9 +178,9 @@ def display_signup(request):
 				'departments': departments
 			}
 		)
-		
 
 	return redirect('home_visitor')
+
 
 def signup_second_form(request):
 	first_form_data = {}
