@@ -103,6 +103,7 @@ class UserProfile(models.Model):
 	count_of_replies = models.IntegerField(default = 0)
 	academic_stats = models.PositiveIntegerField(choices=status_choices, default=1)
 	last_active_device = models.CharField(max_length = 200)
+	section = models.PositiveIntegerField(default=0)
 	user = models.OneToOneField(
 		User,
 		related_name='profile',
@@ -129,7 +130,7 @@ class UserProfile(models.Model):
 	)
 	topics = models.ManyToManyField(
 		'cms.Topic'
-	) 
+	)
 
 	@classmethod
 	def make_form_new_profile(cls, user_obj, department=None, faculty=None, university=None):
@@ -303,7 +304,8 @@ class UserProfile(models.Model):
 		UserProfile.objects.filter(user=user_obj).update(
 			university=new_univeristy,
 			faculty=new_faculty,
-			department=new_dep
+			department=new_dep,
+			section=int(info['new_section_number'])
 		)
 		user_obj.profile.topics.all().delete()
 
