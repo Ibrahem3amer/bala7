@@ -13,19 +13,43 @@ TABLE_DAYS = 7
 TABLE_PERIODS_LIST = [0, 1, 2, 3, 4, 5]
 TABLE_PERIODS = 6
 
+
+class Professor(models.Model):
+
+	# Attributes
+	name = models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
+	faculty = models.ForeignKey('users.Faculty', related_name = 'professors', on_delete = models.CASCADE)
+	bio = models.TextField(null = True, blank = True)
+	picture = models.ImageField(default = 'doctor.jpg')
+	email = models.EmailField(null = True, blank = True)
+	website = models.URLField(null = True, blank = True)
+	linkedn = models.URLField(null = True, blank = True)
+
+
+	def __str__(self):
+		return self.name
+
+
 class Topic(models.Model):
+	
 	# Helper variables
-	term_choices 			= [(1, 'First term'), (2, 'Second term'), (3, 'Summer')]
+	term_choices = [(1, 'First term'), (2, 'Second term'), (3, 'Summer')]
 
 	# Class attributes
-	name 		= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator])
-	desc 		= models.CharField(max_length = 400)
-	term 		= models.PositiveIntegerField(choices = term_choices)
-	weeks		= models.PositiveIntegerField(default = 0)
-	department 	= models.ForeignKey('users.Department', related_name = 'topics', on_delete = models.CASCADE)
-	faculty 	= models.ForeignKey('users.Faculty', related_name = 'topics', on_delete = models.CASCADE, null = True)
-	professors 	= models.ManyToManyField('Professor', related_name = 'topics')
+	name = models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator])
+	desc = models.CharField(max_length = 400)
+	term = models.PositiveIntegerField(choices=term_choices)
+	weeks = models.PositiveIntegerField(default=0)
+	faculty = models.ForeignKey('users.Faculty', related_name='topics', on_delete=models.CASCADE, null=True)
+	department = models.ManyToManyField('users.Department', related_name='topics')
+	professors = models.ManyToManyField(Professor, related_name = 'topics')
 	
+	# Model's methods
+	def increment_weeks(self):
+		""" Increments the weeks number by one."""
+		self.weeks += 1
+		self.save()
+
 	def __str__(self):
 		return self.name
 
@@ -40,18 +64,16 @@ class TopicNav(object):
 	"""
 	def __init__(self, name, pk, dep_id):
 		super(TopicNav, self).__init__()
-		self.name 	= name
-		self.pk 	= pk
-		self.dep 	= dep_id
-		self.link 	= self.make_topic_link()
+		self.name = name
+		self.pk = pk
+		self.dep = dep_id
+		self.link = self.make_topic_link()
 
 	def __iter__(self):
 		return self
 
 	def make_topic_link(self):
-		"""
-		Creates topic link. Return visitable link. 
-		"""
+		""" Creates topic link. Return visitable link."""
 		return '/'+str(self.dep)+'/'+str(self.pk)
 
 
@@ -82,7 +104,8 @@ class UserTopics(object):
 		topics 	= cls.get_user_topics(user_obj)
 		if topics:
 			for topic in topics:
-				nav_topic = TopicNav(topic.name, topic.id, topic.department.id)
+				dep_id = topic.department.first().id or 0
+				nav_topic = TopicNav(topic.name, topic.id, dep_id)
 				nav_list.append(nav_topic)
 		return nav_list
 
@@ -98,7 +121,7 @@ class UserTopics(object):
 		# Grouping topics query by each department in user's faculty. 
 		for dep in user_obj.profile.faculty.departments.all().order_by('name'):
 			# Select from topics query topics that hold the same department id of current dep. 
-			results[dep.name] = [candidate_topic for candidate_topic in topics if candidate_topic.department_id == dep.id]
+			results[dep.name] = [candidate_topic for candidate_topic in topics if dep.id in candidate_topic.department.all().values_list('id', flat=True)]
 
 		return results
 
@@ -122,13 +145,13 @@ class MaterialBase(models.Model):
 	content_min_len_validator = MinLengthValidator(50, 'Material Description should be more than 50 characters.')
 
 	# Fields
-	name 			= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
-	content			= models.TextField(validators = [content_min_len_validator])
-	link 			= models.URLField(unique = True)
-	year 			= models.DateField(auto_now=True)
-	term 			= models.PositiveIntegerField(choices = term_choices)
-	content_type	= models.PositiveIntegerField(choices = type_choices)
-	week_number 	= models.PositiveIntegerField()
+	name = models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
+	content	= models.TextField(validators = [content_min_len_validator])
+	link = models.URLField(unique = True)
+	year = models.DateField(auto_now=True)
+	term = models.PositiveIntegerField(choices = term_choices)
+	content_type = models.PositiveIntegerField(choices = type_choices)
+	week_number = models.PositiveIntegerField()
 
 	class Meta:
 		abstract = True
@@ -157,7 +180,6 @@ class MaterialBase(models.Model):
 
 
 	# Material's methods
-
 	@classmethod
 	def get_user_materails(cls, user_obj, limit=None):
 		""" Returns the leastest materials with limit >= 3."""
@@ -210,32 +232,40 @@ class MaterialBase(models.Model):
 class Material(MaterialBase):
 
 	user = models.ForeignKey(User, related_name = 'primary_materials', on_delete = models.CASCADE)
-	topic = models.ForeignKey('Topic', related_name = 'primary_materials', on_delete = models.CASCADE)
-	professor = models.ManyToManyField('Professor', related_name='primary_materials')
+	topic = models.ForeignKey(Topic, related_name = 'primary_materials', on_delete = models.CASCADE)
+	professor = models.ManyToManyField(Professor, related_name='primary_materials')
 
 
 class Exam(MaterialBase):
 
+	# Helpers
+	current_year = datetime.datetime.now().year
+	def tuplify(x): return (x, x)
+	years = map(tuplify, range(current_year - 20, current_year + 1))
+
 	# Additional fields.
 	user = models.ForeignKey(User, related_name = 'exams', on_delete = models.CASCADE)
-	topic = models.ForeignKey('Topic', related_name = 'exams', on_delete = models.CASCADE)
-	professor = models.ManyToManyField('Professor', related_name='exams')
+	topic = models.ForeignKey(Topic, related_name = 'exams', on_delete = models.CASCADE)
+	professor = models.ManyToManyField(Professor, related_name='exams')
+	exam_year = models.PositiveIntegerField(choices=years, default=current_year)
 
 	# Model-level validation
 	def clean(self):
-		super(Exam, self).clean()
 
 		# Exams have no weeks, terms or type.
 		self.week_number = 0
 		self.term = 1
 		self.content_type = 1
 
+		super(Exam, self).clean()
+
+
 class Task(MaterialBase):
 
 	# Additional fields.
 	user = models.ForeignKey(User, related_name = 'primary_tasks', on_delete = models.CASCADE)
-	topic = models.ForeignKey('Topic', related_name = 'primary_tasks', on_delete = models.CASCADE)
-	professor = models.ManyToManyField('Professor', related_name='primary_tasks')
+	topic = models.ForeignKey(Topic, related_name = 'primary_tasks', on_delete = models.CASCADE)
+	professor = models.ManyToManyField(Professor, related_name='primary_tasks')
 	deadline = models.DateField(default=timezone.now)
 
 	# Model-level validation
@@ -344,8 +374,8 @@ class UserContribution(MaterialBase):
 	supervisior_id = models.PositiveIntegerField(blank=True, default=0)
 	deadline = models.DateField(blank=True, default=timezone.now)
 	user = models.ForeignKey(User, related_name = 'secondary_materials', on_delete = models.CASCADE)
-	topic = models.ForeignKey('Topic', related_name = 'secondary_materials', on_delete = models.CASCADE)
-	professor = models.ManyToManyField('Professor', related_name='secondary_materials')
+	topic = models.ForeignKey(Topic, related_name = 'secondary_materials', on_delete = models.CASCADE)
+	professor = models.ManyToManyField(Professor, related_name='secondary_materials')
 
 
 	# Model-level validation.
@@ -372,8 +402,8 @@ class UserPost(models.Model):
 	# Attributes
 	title = models.CharField(max_length=200, validators=[GeneralCMSValidator.name_validator], default="N/A")
 	content = models.TextField()
-	user = models.ForeignKey(User, related_name = 'posts', on_delete = models.CASCADE)
-	topic = models.ForeignKey('Topic', related_name = 'posts', on_delete = models.CASCADE)
+	user = models.ForeignKey(User, related_name='posts', on_delete = models.CASCADE)
+	topic = models.ForeignKey(Topic, related_name='posts', on_delete = models.CASCADE)
 	status = models.PositiveIntegerField(choices=post_status, default=1)
 	supervisior_id = models.PositiveIntegerField(blank=True, default=0)
 	last_modified = models.DateTimeField(auto_now=True)
@@ -395,22 +425,6 @@ class UserComment(models.Model):
 
 	def __str__(self):
 		return self.user.username + ' -> ' +self.post.title
-
-
-class Professor(models.Model):
-
-	# Attributes
-	name 	= models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
-	faculty = models.ForeignKey('users.Faculty', related_name = 'professors', on_delete = models.CASCADE)
-	bio 	= models.TextField(null = True, blank = True)
-	picture = models.ImageField(default = 'doctor.jpg')
-	email 	= models.EmailField(null = True, blank = True)
-	website = models.URLField(null = True, blank = True)
-	linkedn = models.URLField(null = True, blank = True)
-
-
-	def __str__(self):
-		return self.name
 
 
 class Table(models.Model):
@@ -450,7 +464,8 @@ class Table(models.Model):
 
 		for day in range(TABLE_DAYS):
 			for period in range(TABLE_PERIODS):
-				table[day][period] = topics[day][period] + ' @ ' + places[day][period]
+				if topics[day][period]:
+					table[day][period] = topics[day][period] + ' @ ' + places[day][period]
 		
 		self.json = table 
 		
@@ -499,15 +514,23 @@ class UserTable(Table):
 			# Split choice and populate user table.
 			choice_arr = choice.split('_')
 			if len(choice_arr) >= 3:
-				topic_id, day, period = int(choice_arr[0]), int(choice_arr[1]), int(choice_arr[2])
 				try:
-					topic = Topic.objects.get(pk=topic_id)
-					topic = get_object_or_404(Topic, pk=topic_id)
-					table = topic.table.set_final_table()
-					user_table_topics[day][period] += '@'+table[day][period]
-					user_table_places[day][period] += '@'+table[day][period]
+					topic_id, day, period = int(choice_arr[0]), int(choice_arr[1]), int(choice_arr[2])
+					try:
+						topic = Topic.objects.get(pk=topic_id)
+						topic = get_object_or_404(Topic, pk=topic_id)
+						table = topic.table.set_final_table()
+						if table[day][period]:
+							user_table_topics[day][period] += ' | '+table[day][period]
+							user_table_places[day][period] += ' | '+table[day][period]
+					except:
+						continue
 				except:
-					continue
+					# Topic_id isn't an int, sent from available_table.
+					topic_id, day, period = choice_arr[0], int(choice_arr[1]), int(choice_arr[2])
+					user_table_topics[day][period] += ' | '
+					user_table_topics[day][period] += topic_id
+					user_table_places[day][period] += ''
 
 		return [user_table_topics, user_table_places]
 

@@ -5,7 +5,10 @@ from django.contrib.auth import password_validation, hashers
 from django.core.exceptions import ValidationError
 from users.models import UserProfile
 
-username_validator 		= RegexValidator(r'^[a-zA-Z][a-zA-Z0-9]*[._-]?[a-zA-Z0-9]+$', 'Name cannot start with number, should consist of characters.')
+username_validator = RegexValidator(
+	r'^[\u0600-\u06FF\u0750-\u077f08A0—08FFa-zA-Z][\u0600-\u06FF\u0750-\u077f08A0—08FFa-zA-Z0-9]*[._-]?[\u0600-\u06FF\u0750-\u077f08A0—08FF0-9a-zA-Z]+$',
+	'الاسم مينفعش يبدأ برقم أو يبقى فيه مسافات أو تككر فيه الفواصل!'
+)
 
 class SignupForm(forms.Form):
 	user_name	 			= forms.CharField(

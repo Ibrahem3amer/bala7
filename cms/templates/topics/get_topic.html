@@ -42,111 +42,121 @@
 
                 <div class="elements-div">
                     {% for doctor in topic.professors.all %}
-                      <div class="right-ele doctor-name">
+                        <div class="right-ele doctor-name">
                           <a href="{% url 'display_doctor' doctor.id %}"><p>{{ doctor.name }}</p></a>
-                      </div>
+                        </div>
                     {% endfor %}
-                    <div class="right-ele">
-                        <div class="right-ele-head">
-                            <p>الامتحانات</p>
+                    {% if topic.exams.all|length > 0 %}
+                        <div class="right-ele">
+                            <div class="right-ele-head">
+                                <p>الامتحانات</p>
+                            </div>
+                            <div class="right-ele-body">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                          <th>السنه</th>
+                                          <th>الدكتور</th>
+                                          <th>الرابط</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for exam in topic.exams.all %}
+                                            <tr>
+                                              <td>{{ exam.exam_year }}</td>
+                                              {% for professor in exam.professor.all %}
+                                                <td>{{ professor.name }}</td>
+                                              {% endfor %}
+                                              <td><a href="{{ exam.link }}"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="right-ele-body">
-                            <table class="table table-hover">
-                              <thead>
-                                <tr>
-                                  <th>السنه</th>
-                                  <th>الدكتور</th>
-                                  <th>الرابط</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td>2016</td>
-                                  <td>محمد الدسوقى</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                
-                              </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {% endif %}
 
-                    <div class="right-ele">
-                        <div class="right-ele-head">
-                            <p>محتوى متعلق</p>
+                    {% if topic.related_content.all|length > 0 %}
+                        <div class="right-ele">
+                            <div class="right-ele-head">
+                                <p>محتوى متعلق</p>
+                            </div>
+                            <div class="right-ele-body">
+                                <table class="table table-hover ">
+                                  <thead>
+                                    <tr class="materials-table-h">
+                                      <th>العنوان</th>
+                                      <th>الرابط</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody class="materials-table-b">
+                                    <tr>
+                                      <td>محمد الدسوقى</td>
+                                      <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                      <td>حازم البكرى</td>
+                                      <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                      <td>شريف بركات</td>
+                                      <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                      <td>شريف بركات</td>
+                                      <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                      <td>شريف بركات</td>
+                                      <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="right-ele-body">
-                            <table class="table table-hover ">
-                              <thead>
-                                <tr class="materials-table-h">
-                                  <th>العنوان</th>
-                                  <th>الرابط</th>
-                                </tr>
-                              </thead>
-                              <tbody class="materials-table-b">
-                                <tr>
-                                  <td>محمد الدسوقى</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                <tr>
-                                  <td>حازم البكرى</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                <tr>
-                                  <td>شريف بركات</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                <tr>
-                                  <td>شريف بركات</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                <tr>
-                                  <td>شريف بركات</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                              </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {% endif %}
 
-                    <div class="right-ele">
-                        <div class="right-ele-head">
-                            <p>ارشيف الماده</p>
+                    {% if topic.related_content.all|length > 0 %}
+                        <div class="right-ele">
+                            <div class="right-ele-head">
+                                <p>ارشيف الماده</p>
+                            </div>
+                            <div class="right-ele-body">
+                                <table class="table table-hover">
+                                  <thead>
+                                    <tr>
+                                      <th>السنه</th>
+                                      <th>الترم</th>
+                                      <th>الرابط</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td>2016</td>
+                                      <td>الترم الاول</td>
+                                      <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                      <td>2016</td>
+                                      <td>الترم الثانى</td>
+                                      <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                      <td>2015</td>
+                                      <td>الترم الاول</td>
+                                      <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                      <td>2015</td>
+                                      <td>الترم الثانى</td>
+                                      <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="right-ele-body">
-                            <table class="table table-hover">
-                              <thead>
-                                <tr>
-                                  <th>السنه</th>
-                                  <th>الترم</th>
-                                  <th>الرابط</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td>2016</td>
-                                  <td>الترم الاول</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                <tr>
-                                  <td>2016</td>
-                                  <td>الترم الثانى</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                <tr>
-                                  <td>2015</td>
-                                  <td>الترم الاول</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                                <tr>
-                                  <td>2015</td>
-                                  <td>الترم الثانى</td>
-                                  <td><a href="#"><i class="fa fa-link" aria-hidden="true"></i></a></td>
-                                </tr>
-                              </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {% endif %}
+
                 </div>
 
             </div>
@@ -175,8 +185,14 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane fade in  active" id="content">
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                            
-                                
+                                {% if request.user.is_staff %}
+                                    <form action="{% url 'api_increment_weeks' %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="topic_id" value="{{ topic.pk }}">
+                                        <input type="submit" name="add_week" class="nj-btn" value="أضف أسبوع جديد" />
+                                    </form>
+                                {% endif %}
+
                                 {% if weeks_days %}
                                   {% for week_title in weeks_days %}
                                     <div class="panel panel-default">

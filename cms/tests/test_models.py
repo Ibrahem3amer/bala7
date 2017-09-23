@@ -16,19 +16,21 @@ class TopicTest(TestCase):
 	def test_add_valid_topic(self):
 		# Setup test
 		dep = Department.objects.create()
-		t 	= Topic.objects.create(name = 'test topic with spaces', desc = 'ddddd', term = 1, department = dep)
+		t 	= Topic.objects.create(name = 'test topic with spaces', desc = 'ddddd', term = 1)
+		t.department.add(dep)
 
 		# Exercise test
 		query = Topic.objects.get()
 
 		# Assert test
 		self.assertEqual('test topic with spaces', query.name)
-		self.assertEqual(dep, query.department)
+		self.assertEqual(dep, query.department.first())
 
 	def test_add_invalid_topic_name(self):
 		# Setup test
 		dep = Department.objects.create()
-		t 	= Topic.objects.create(name = '123', desc = 'ddddd', term = 1, department = dep)
+		t 	= Topic.objects.create(name = '123', desc = 'ddddd', term = 1)
+		t.department.add(dep)
 		
 		# Exercise test
 		# Assert test
@@ -37,8 +39,10 @@ class TopicTest(TestCase):
 	def test_add_repeated_topic_name(self):
 		# Setup test
 		dep = Department.objects.create()
-		t 	= Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = dep)
-		t2 	= Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = dep)
+		t 	= Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1)
+		t2 	= Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1)
+		t.department.add(dep)
+		t2.department.add(dep)
 		
 		# Exercise test
 		# Assert test
@@ -58,7 +62,8 @@ class UserTopicsTest(TestCase):
 		self.fac 			= Faculty.objects.create()
 		self.dep 			= Department.objects.create(faculty = self.fac)
 		self.user.profile 	= UserProfile.objects.create(department = self.dep, faculty = self.fac)
-		self.topic 			= Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
+		self.topic 			= Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1)
+		self.topic.department.add(self.dep)
 
 	def test_return_user_topics(self):
 		# Setup test	
@@ -90,7 +95,7 @@ class UserTopicsTest(TestCase):
 		topics 	= UserTopics.get_topics_choices(self.user)
 		
 		# Assert test
-		self.assertIn(self.topic.department.name, topics)
+		self.assertIn(self.topic.department.first().name, topics)
 		# Assure that results include all departments within same faculty.
 		self.assertIn(dep2.name, topics)
 
@@ -98,18 +103,21 @@ class UserTopicsTest(TestCase):
 		# Setup test	
 		self.user.profile.topics.add(self.topic)
 		new_topic 	= []
-		t1 			= Topic.objects.create(name = 'topic_new_2', desc = 'ddddd', term = 1, department = self.dep)
+		t1 = Topic.objects.create(name = 'topic_new_2', desc = 'ddddd', term = 1)
+		t1.department.add(self.dep)
 		new_topic.append(t1.id)
-		t2 			= Topic.objects.create(name = 'topic_new_3', desc = 'ddddd', term = 2, department = self.dep)
+		t2 = Topic.objects.create(name = 'topic_new_3', desc = 'ddddd', term = 2)
+		t2.department.add(self.dep)
 		new_topic.append(t2.id)
-		t3 			= Topic.objects.create(name = 'topic_new_4', desc = 'ddddd', term = 3, department = self.dep)
+		t3 = Topic.objects.create(name = 'topic_new_4', desc = 'ddddd', term = 3)
+		t3.department.add(self.dep)
 		new_topic.append(t3.id)
 
 
 		# Exercise test
-		request 		= RequestFactory()
-		request 		= request.post(reverse('update_user_topics'), data = {'chosen_list[]':new_topic})
-		request.user 	= self.user
+		request = RequestFactory()
+		request = request.post(reverse('update_user_topics'), data = {'chosen_list[]':new_topic})
+		request.user = self.user
 		
 		# Making messages available for request.
 		self.make_messages_available(request)
@@ -164,11 +172,14 @@ class UserTopicsTest(TestCase):
 		# Setup test	
 		self.user.profile.topics.add(self.topic)
 		new_topic 	= []
-		t1 			= Topic.objects.create(name = 'topic_new_2', desc = 'ddddd', term = 1, department = self.dep)
+		t1 			= Topic.objects.create(name = 'topic_new_2', desc = 'ddddd', term = 1)
+		t1.department.add(self.dep)
 		new_topic.append(t1.id)
-		t2 			= Topic.objects.create(name = 'topic_new_3', desc = 'ddddd', term = 2, department = self.dep)
+		t2 			= Topic.objects.create(name = 'topic_new_3', desc = 'ddddd', term = 2)
+		t2.department.add(self.dep)
 		new_topic.append(t2.id)
-		t3 			= Topic.objects.create(name = 'topic_new_4', desc = 'ddddd', term = 3, department = self.dep)
+		t3 			= Topic.objects.create(name = 'topic_new_4', desc = 'ddddd', term = 3)
+		t3.department.add(self.dep)
 		new_topic.append(t3.id)
 		new_topic.append(990)
 		new_topic.append(5300)
@@ -195,11 +206,14 @@ class UserTopicsTest(TestCase):
 		another_faculty = Faculty.objects.create()
 		another_dep_user_cannot_access = Department.objects.create(faculty = another_faculty)
 		new_topic = []
-		t1 = Topic.objects.create(name = 'topic_new_2', desc = 'ddddd', term = 1, department = another_dep_user_cannot_access)
+		t1 			= Topic.objects.create(name = 'topic_new_2', desc = 'ddddd', term = 1)
+		t1.department.add(another_dep_user_cannot_access)
 		new_topic.append(t1.id)
-		t2 = Topic.objects.create(name = 'topic_new_3', desc = 'ddddd', term = 2, department = another_dep_user_cannot_access)
+		t2 			= Topic.objects.create(name = 'topic_new_3', desc = 'ddddd', term = 2)
+		t2.department.add(another_dep_user_cannot_access)
 		new_topic.append(t2.id)
-		t3 = Topic.objects.create(name = 'topic_new_4', desc = 'ddddd', term = 3, department = another_dep_user_cannot_access)
+		t3 			= Topic.objects.create(name = 'topic_new_4', desc = 'ddddd', term = 3)
+		t3.department.add(another_dep_user_cannot_access)
 		new_topic.append(t3.id)
 
 
@@ -222,7 +236,8 @@ class MaterialTest(TestCase):
 		self.uni 			= University.objects.create(name = 'Test university')
 		self.fac 			= Faculty.objects.create(name = 'Test faculty')
 		self.dep 			= Department.objects.create(name = 'Test dep')
-		self.topic 			= Topic.objects.create(name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
+		self.topic 			= Topic.objects.create(name = 'test topic with spaces', desc = 'ddddd', term = 1, weeks = 5)
+		self.topic.department.add(self.dep)
 		self.user 			= User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f')
 		self.user.profile 	= UserProfile.objects.create(user=self.user, university = self.uni, faculty = self.fac, department = self.dep)
 		self.user.profile.topics.add(self.topic)
@@ -358,7 +373,8 @@ class MaterialTest(TestCase):
 	def test_user_add_material_in_topic_in_another_dep(self):
 		# Setup test
 		another_dep = Department.objects.create(name = 'Test dep2')
-		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, weeks = 5)
+		another_topic.department.add(another_dep)
 		self.user.profile.topics.add(another_topic)
 		material_test 	= Material.objects.create(
 				name 			= 'material',
@@ -383,7 +399,8 @@ class MaterialTest(TestCase):
 		""" Returns leatest 3 materials added."""
 		# Setup test
 		another_dep = Department.objects.create(name = 'Test dep2')
-		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, weeks = 5)
+		another_topic.department.add(another_dep)
 		self.user.profile.topics.add(another_topic)
 		for i in range(5):
 			Material.objects.create(
@@ -418,7 +435,8 @@ class MaterialTest(TestCase):
 		""" Returns leatest N materials added."""
 		# Setup test
 		another_dep = Department.objects.create(name = 'Test dep2')
-		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, weeks = 5)
+		another_topic.department.add(another_dep)
 		self.user.profile.topics.add(another_topic)
 		for i in range(10):
 			Material.objects.create(
@@ -500,7 +518,8 @@ class MaterialTest(TestCase):
 		""" Returns leatest 3 materials added."""
 		# Setup test
 		another_dep = Department.objects.create(name = 'Test dep2')
-		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, weeks = 5)
+		another_topic.department.add(another_dep)
 		self.user.profile.topics.add(another_topic)
 		for i in range(5):
 			UserContribution.objects.create(
@@ -551,7 +570,8 @@ class TaskTest(TestCase):
 		self.uni       	= University.objects.create(name = 'Test university')
 		self.fac        = Faculty.objects.create(name = 'Test faculty')
 		self.dep        = Department.objects.create(name = 'Test dep')
-		self.topic      = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
+		self.topic      = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, weeks = 5)
+		self.topic.department.add(self.dep)
 		self.user 		= User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
 		self.profile   	= UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
 		self.material 	= Material.objects.create(
@@ -675,11 +695,12 @@ class TaskTest(TestCase):
 
 class EventTest(TestCase):
 	def setUp(self):
-		self.uni       	= University.objects.create(name = 'Test university')
-		self.fac        = Faculty.objects.create(name = 'Test faculty', university=self.uni)
-		self.dep        = Department.objects.create(name = 'Test dep')
-		self.topic      = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
-		self.user 		= User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
+		self.uni = University.objects.create(name = 'Test university')
+		self.fac = Faculty.objects.create(name = 'Test faculty', university=self.uni)
+		self.dep = Department.objects.create(name = 'Test dep')
+		self.topic = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, weeks = 5)
+		self.topic.department.add(self.dep)
+		self.user = User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
 		self.profile = UserProfile.objects.create(
 			user=self.user,
 			department=self.dep,
@@ -844,7 +865,8 @@ class TopicTableTest(TestCase):
 		self.uni       	= University.objects.create(name = 'Test university')
 		self.fac        = Faculty.objects.create(name = 'Test faculty')
 		self.dep        = Department.objects.create(name = 'Test dep')
-		self.topic      = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
+		self.topic      = Topic.objects.create(pk = 1, name = 'test topic with spaces', desc = 'ddddd', term = 1, weeks = 5)
+		self.topic.department.add(self.dep)
 		self.user 		= User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f') 
 		self.profile   	= UserProfile.objects.create(user = self.user, department = self.dep, faculty = self.fac)
 
@@ -903,8 +925,10 @@ class DepartmentTableTest(TestCase):
 		self.fac = Faculty.objects.create()
 		self.dep = Department.objects.create(faculty = self.fac)
 		self.user.profile = UserProfile.objects.create(department = self.dep, faculty = self.fac)
-		self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
-		self.topic2 = Topic.objects.create(name = 'topic name2', desc = 'ddddd', term = 2, department = self.dep)
+		self.topic = Topic.objects.create(name = 'test topic with spaces', desc = 'ddddd', term = 1, weeks = 5)
+		self.topic.department.add(self.dep)
+		self.topic2 = Topic.objects.create(name = 'topic name2', desc = 'ddddd', term = 2)
+		self.topic2.department.add(self.dep)
 		self.topic.professors.add(Professor.objects.create(name="gamal", faculty=self.fac))
 		self.topic2.professors.add(Professor.objects.create(name="meshmesh", faculty=self.fac))
 
@@ -913,7 +937,8 @@ class DepartmentTableTest(TestCase):
 		# Setup test
 		fac2 = Faculty.objects.create()
 		dep2 = Department.objects.create(faculty = fac2)
-		topic3 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2, department = dep2)
+		topic3 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2)
+		topic3.department.add(self.dep)
 		self.user.profile.topics.add(topic3)
 
 		# Exercise test
@@ -928,7 +953,8 @@ class DepartmentTableTest(TestCase):
 		# Setup test
 		fac2 = Faculty.objects.create()
 		dep2 = Department.objects.create(faculty = fac2)
-		topic3 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2, department = dep2)
+		topic3 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2)
+		topic3.department.add(dep2)
 
 		# Exercise test
 		dep_table = DepartmentTable(self.user)
@@ -967,8 +993,10 @@ class DepartmentTableTest(TestCase):
 		# Setup test
 		fac2 = Faculty.objects.create()
 		dep2 = Department.objects.create(faculty = fac2)
-		topic3 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2, department = dep2)
-		topic4 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2, department = dep2)
+		topic3 = Topic.objects.create(name = 'topic in user', desc = 'ddddd', term = 2)
+		topic3.department.add(dep2)
+		topic4 = Topic.objects.create(name = 'topiffc in user', desc = 'ddddd', term = 2)
+		topic4.department.add(dep2)
 		self.user.profile.topics.add(topic3, topic4)
 
 		# Exercise test
@@ -984,8 +1012,10 @@ class UserTableTest(TestCase):
 		self.fac = Faculty.objects.create(university=self.uni)
 		self.dep = Department.objects.create(faculty = self.fac)
 		UserProfile.objects.create(user=self.user, department = self.dep, faculty = self.fac)
-		self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
-		self.topic2 = Topic.objects.create(name = 'topic name2', desc = 'ddddd', term = 2, department = self.dep)
+		self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1)
+		self.topic.department.add(self.dep)
+		self.topic2 = Topic.objects.create(name = 'topic name2', desc = 'ddddd', term = 2)
+		self.topic2.department.add(self.dep)
 		self.topic.professors.add(Professor.objects.create(name="gamal", faculty=self.fac))
 		self.topic2.professors.add(Professor.objects.create(name="meshmesh", faculty=self.fac))
 
@@ -1038,10 +1068,37 @@ class UserTableTest(TestCase):
 		data = {'choices[]': choices_list}
 		request = self.client.post(url, data=data)
 
+	def test_update_user_table_from_department_table(self):
+		"""updates user table for an existing table."""
+		
+		# Setup test
+		topics = [['']*6 for i in range(7)]
+		places = [['']*6 for i in range(7)]
+		topics[1][1] = 'topic test user'
+		topics[2][3] = 'another test'
+		topics[5][1] = 'existing table'
+		topics[4][3] = 'another cell'
+		topics[1][1] = 'same cell as previous'
+		index1 = topics[1][1]+'_'+'1'+'_'+'1'
+		index2 = topics[2][3]+'_'+'2'+'_'+'3'
+		data = {'choices[]': [index1, index2]}
+		url = reverse('web_user_table')
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
+
+		# Exercise test
+		choices_list = [
+			topics[5][1]+'_5'+'_1',
+			topics[1][1]+'_1'+'_1',
+			topics[4][3]+'_4'+'_3',
+		]
+		data = {'choices[]': choices_list}
+		request = self.client.post(url, data=data)
+
 
 		# Assert test
-		self.assertIn('existing_table', self.user.profile.table.topics)
-		self.assertIn('same_cell_as_previous', self.user.profile.table.topics)
+		self.assertIn('existing table', self.user.profile.table.topics)
+		self.assertIn('same cell as previous', self.user.profile.table.topics)
 
 	def test_assign_user_table_with_fake_topics(self):
 		"""updates user table for non-existing table (first time)."""
@@ -1076,9 +1133,12 @@ class QueryTableTest(TestCase):
 		self.fac = Faculty.objects.create(university=self.uni)
 		self.dep = Department.objects.create(faculty = self.fac)
 		UserProfile.objects.create(user=self.user, department = self.dep, faculty = self.fac)
-		self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1, department = self.dep)
-		self.topic2 = Topic.objects.create(name = 'topic name2', desc = 'ddddd', term = 2, department = self.dep)
-		self.topic3 = Topic.objects.create(name = 'topic name3', desc = 'ddddd', term = 3, department = self.dep)
+		self.topic = Topic.objects.create(name = 'topic name', desc = 'ddddd', term = 1)
+		self.topic.department.add(self.dep)
+		self.topic2 = Topic.objects.create(name = 'topic name2', desc = 'ddddd', term = 2)
+		self.topic2.department.add(self.dep)
+		self.topic3 = Topic.objects.create(name = 'topic name3', desc = 'ddddd', term = 3)
+		self.topic3.department.add(self.dep)
 		self.prof1 = Professor.objects.create(name="gamal", faculty=self.fac)
 		self.prof2 = Professor.objects.create(name="meshmesh", faculty=self.fac)
 		self.topic.professors.add(self.prof1)
@@ -1223,13 +1283,14 @@ class QueryTableTest(TestCase):
 
 class UserContributionTest(TestCase):
 	def setUp(self):
-		self.uni 			= University.objects.create(name = 'Test university')
-		self.fac 			= Faculty.objects.create(name = 'Test faculty')
-		self.dep 			= Department.objects.create(name = 'Test dep')
-		self.topic 			= Topic.objects.create(name = 'test topic with spaces', desc = 'ddddd', term = 1, department = self.dep, weeks = 5)
-		self.user 			= User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f')
-		self.user.profile 	= UserProfile.objects.create(university = self.uni, faculty = self.fac, department = self.dep)
-		self.material 		= UserContribution.objects.create(
+		self.uni = University.objects.create(name = 'Test university')
+		self.fac = Faculty.objects.create(name = 'Test faculty')
+		self.dep = Department.objects.create(name = 'Test dep')
+		self.topic = Topic.objects.create(name = 'test topic with spaces', desc = 'ddddd', term = 1, weeks = 5)
+		self.topic.department.add(self.dep)
+		self.user = User.objects.create_user(username = 'ibrahemmmmm', email = 'test_@test.com', password = '000000555555ddd5f5f')
+		self.user.profile = UserProfile.objects.create(university = self.uni, faculty = self.fac, department = self.dep)
+		self.material = UserContribution.objects.create(
 				name = 'test_material',
 				content = 'this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
 				link = 'http://www.docs.google.com',
@@ -1247,7 +1308,8 @@ class UserContributionTest(TestCase):
 	def test_user_add_material_in_topic_in_another_dep(self):
 		# Setup test
 		another_dep = Department.objects.create(name = 'Test dep2')
-		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, weeks = 5)
+		another_topic.department.add(another_dep)
 		self.user.profile.topics.add(another_topic)
 		material_test 	= UserContribution.objects.create(
 				name 			= 'material',
@@ -1273,7 +1335,8 @@ class UserContributionTest(TestCase):
 	def test_user_add_task_with_current_deadline(self):
 		# Setup test
 		another_dep = Department.objects.create(name = 'Test dep2')
-		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, department = another_dep, weeks = 5)
+		another_topic = Topic.objects.create(name = 'test with spaces', desc = 'ddddd', term = 1, weeks = 5)
+		another_topic.department.add(another_dep)
 		self.user.profile.topics.add(another_topic)
 		material_test 	= UserContribution.objects.create(
 				name 			= 'material',

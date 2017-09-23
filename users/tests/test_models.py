@@ -64,8 +64,7 @@ class UniversityModelTest(TestCase):
 		saved_university = University.objects.get()
 
 		# Assert test
-		self.assertEqual('no data initialized', saved_university.bio)
-		self.assertEqual('public', saved_university.uni_type)
+		self.assertEqual(1, saved_university.entity_type)
 		self.assertEqual('no name', saved_university.name)
 
 class FacultyModelTest(TestCase):
@@ -107,7 +106,6 @@ class FacultyModelTest(TestCase):
 		saved_faculty = Faculty.objects.get()
 
 		# Assert test
-		self.assertEqual('no data initialized', saved_faculty.bio)
 		self.assertEqual('no name', saved_faculty.name)
 
 	def test_attach_faculty_to_given_university(self):
@@ -129,9 +127,9 @@ class DepartmentModelTest(TestCase):
 
 	def test_save_Department(self):
 		# Setup test
-		dep1 			= Department()
+		dep1 			= Department.objects.create()
 		dep1.name 		= 'first year'
-		dep2 			= Department()
+		dep2 			= Department.objects.create()
 		dep2.dep_type 	= 'public'
 		dep1.save()
 		dep2.save()
@@ -144,7 +142,7 @@ class DepartmentModelTest(TestCase):
 
 	def test_retreive_Department(self):
 		# Setup test
-		dep1 		= Department()
+		dep1 		= Department.objects.create()
 		dep1.name 	= 'software engineering'
 		dep1.save()
 
@@ -156,7 +154,7 @@ class DepartmentModelTest(TestCase):
 
 	def test_save_Department_with_no_values(self):
 		# Setup test
-		dep1 = Department()
+		dep1 = Department.objects.create()
 		dep1.save()
 
 		# Exercise test
@@ -170,7 +168,7 @@ class DepartmentModelTest(TestCase):
 		fac1 			= Faculty()
 		fac1.name 		= 'KFS'
 		fac1.save()
-		dep1 			= Department()
+		dep1 			= Department.objects.create()
 		dep1.name 		= 'second year'
 		dep1.dep_type 	= 'private'
 		dep1.faculty 	= fac1
@@ -220,7 +218,6 @@ class DepartmentModelTest(TestCase):
 		saved_faculty = Faculty.objects.get()
 
 		# Assert test
-		self.assertEqual('no data initialized', saved_faculty.bio)
 		self.assertEqual('no name', saved_faculty.name)
 
 	def test_attach_faculty_to_given_university(self):
@@ -250,15 +247,11 @@ class UserProfileTest(TestCase):
 	def setUp(self):
 		self.user 		= User.objects.create_user(username = 'test_username', email = 'tesssst@test.com', password = 'secrettt23455')
 		self.uni 		= University.objects.create(name = 'Test university')
-		self.fac 		= Faculty.objects.create(name = 'Test faculty')
-		self.dep 		= Department.objects.create(name = 'Test dep')
-		self.old_uni	= University()
-		self.old_uni.save()
-		self.old_fac	= Faculty(university = self.old_uni)
-		self.old_fac.save()
-		self.old_dep 	= Department(faculty = self.old_fac)
-		self.old_dep.save()
-
+		self.fac 		= Faculty.objects.create(name = 'Test faculty', university = self.uni)
+		self.dep 		= Department.objects.create(name = 'Test dep', faculty = self.fac)
+		self.old_uni	= University.objects.create(name='wtf')
+		self.old_fac	= Faculty.objects.create(university = self.old_uni)
+		self.old_dep 	= Department.objects.create(faculty = self.old_fac)
 	
 	def test_insert_new_profile_with_user(self):
 		# Setup test
@@ -406,28 +399,25 @@ class UserProfileTest(TestCase):
 
 	def test_update_educational_info_with_valid(self):
 		# Setup test
-		user 				= User.objects.create(username='test', email='test_tt@test.com', password='00000111112222255555888ffff')
-		user.save()
-		user_profile 		= UserProfile(university = self.old_uni, faculty = self.old_fac, department = self.old_dep)
-		user_profile.user 	= user
-		user_profile.save()
-		request 			= RequestFactory()
-		request 			= request.post(reverse('web_change_info'), data={'universities-hidden':self.uni.id, 'faculties-hidden':self.fac.id, 'departments-hidden':self.dep.id, 'new_section_number': 5})
-		request.user 		= user
+		UserProfile.objects.create(user=self.user, department = self.old_dep, faculty = self.old_fac)
+		url = reverse('web_change_info')
+		data={
+			'universities-hidden':self.uni.id,
+			'faculties-hidden':self.fac.id,
+			'departments-hidden':self.dep.id,
+			'new_section_number': 5
+		}
+		request = self.client.login(username="test_username", password="secrettt23455")
+		request = self.client.post(url, data=data)
 
 
 		# Exercise test
-		user.profile.university = self.old_uni
-		user.profile.faculty 	= self.old_fac
-		user.profile.department = self.old_dep
 		
 		# Making messages available for request.
 		self.make_messages_available(request)
-		
-		update_user_education_info(request)
 
 		# Assert test
-		self.assertNotEqual(self.old_uni, user.profile.university)
+		self.assertNotEqual(self.old_uni, self.user.profile.university)
 
 	def test_update_educational_info_with_invalid_ids(self):
 		# Setup test

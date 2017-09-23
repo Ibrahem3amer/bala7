@@ -111,6 +111,27 @@ def materials_list(request, topic_id, format = None):
         materials_serialized    = MaterialSerializer(materials, many = True)
         return Response(materials_serialized.data)
 
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def add_week_to_topic(request, format = None):
+    """ Increments the topic by one week."""
+
+    topic_id = request.POST.get('topic_id', 0)
+    
+    # Validates that user has an access on this instance. 
+    if not restrict_access(request, topic_id):
+        return Response(status = status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'POST':
+        try:
+            topic = Topic.objects.get(pk=topic_id)
+            topic.increment_weeks()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status = status.HTTP_404_NOT_FOUND)
+
+
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def tasks_list(request, format = None):

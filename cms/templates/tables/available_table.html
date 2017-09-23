@@ -51,29 +51,34 @@
                 </ul>
                 {% endif %}
                 <table>
-                    <tr>
-                        <th></th>
-                        <th>الفتره الاولى</th>
-                        <th>الفتره الثانيه</th>
-                        <th>الفتره الثالثه</th>
-                        <th>الفتره الرابعه</th>
-                        <th>الفتره الخامسه</th>
-                        <th>الفتره السادسه</th>
-                    </tr>
-                    {% for day in '1234567' %}
+                    <form action="{% url 'web_user_table' %}" method="POST">
+                        {% csrf_token %}
                         <tr>
-                            <th>{{ forloop.counter0|num_to_day }}</th>
-                            {% for period in '123456' %}
-                                <td>
-                                    {% for topic_table in table %}
-                                        {% if topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0|length > 3 %}
-                                            <p>{{ topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}</p>
-                                        {% endif %}
-                                    {% endfor %}
-                                </td>
-                            {% endfor %}
+                            <th></th>
+                            <th>الفتره الاولى</th>
+                            <th>الفتره الثانيه</th>
+                            <th>الفتره الثالثه</th>
+                            <th>الفتره الرابعه</th>
+                            <th>الفتره الخامسه</th>
+                            <th>الفتره السادسه</th>
                         </tr>
-                    {% endfor %}
+                        {% for day in '1234567' %}
+                            <tr>
+                                <th>{{ forloop.counter0|num_to_day }}</th>
+                                {% for period in '123456' %}
+                                    <td>
+                                        {% for topic_table in table %}
+                                            {% if topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0|length > 3 %}
+                                                <input type="checkbox" name="choices[]" value="{{ topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}_{{ day|add:'-1' }}_{{ period|add:'-1' }}">
+                                                <p>{{ topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}</p>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        <input type="submit" name="update user table" />
+                    </form>
                 </table>
             </div>
         </div>

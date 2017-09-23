@@ -9,9 +9,9 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 SECURE_BROWSER_XSS_FILTER = True
 
-SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = False
 
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 
 CSRF_COOKIE_HTTPONLY = True
 
@@ -26,3 +26,5 @@ DATABASES = {
         'HOST': get_secret('PRODUCTION_DB_HOST'),
     }
 }
+
+SESSION_ENGIN = 'django.contrib.sessions.backends.cached_db'

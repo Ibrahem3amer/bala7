@@ -24,52 +24,64 @@
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
 	</head>
 	<body>
-        <!-- start navbar -->
-        {% include "public/navbar1.html" %}
-        <!-- end navbar -->
-        
+        {% if not request.user.is_authenticated%}
+            <!-- start navbar -->
+            {% include "public/navbar1.html" %}
+            <!-- end navbar -->
+        {% else %}
+            <!-- start navbar -->
+            {% include "public/navbar-user.html" %}
+            <!-- end navbar -->
+        {% endif %}
+            
         
         <div class="container">
             <div class="row log">
                 <div class="col-sm-4 col-xs-12 wel-pic">
-                    <img src="{% static 'pic/n%20-%20welcome1.png' %}" onmouseover="this.src='{% static 'pic/n%20-%20welcome2.png' %}'" onmouseout="this.src='{% static 'pic/n%20-%20welcome1.png' %}'">
+                    <img src="{% static 'pic/n-welcome1.png' %}" onmouseover="this.src='{% static 'pic/n-welcome2.png' %}'" onmouseout="this.src='{% static 'pic/n-welcome1.png' %}'">
 
                 </div>
-                <div class="col-sm-8 col-xs-12">
-                    <div class="title"><i class="fa fa-user" aria-hidden="true"></i> تسجيل الدخول</div>
-                    <form action="{% url 'login' %}?next={% url 'home_user' %}" method="post" >
-                        {% csrf_token %}
-                            {% if form.errors %}
-                                <p class="form-error-p">اسمك أو كلمة المرور مش صح. حاول تاني</p>
-                            {% endif %}
-                        <div class="form-group">
-                            <label class="nj-label" for="{{ form.username.id_for_label }}">اسم المستخدم</label>
-                            {{ form.username }}
-                        </div>
-                        <div class="form-group">
-                            <label class="nj-label" for="{{ form.password.id_for_label }}">كلمة السر</label>
-                            {{ form.password }}
-                        </div>
-                        <div id="remember-check">
-                            <input class="inline" type="checkbox"> تذكرني 
-                        </div>
-                         <a href="{% url 'password_reset' %}" id="id_signin_side" class="pass-forget-link"> نسيت كلمة السر؟</a>
-                        <input type="submit" name="login" value="دخول"  class="nj-btn log-btn" />
-
-                        <div class="log-option">
-                            <div class="title-2">أو دخول بواسطة</div>
-                            <div class="social-log">    
-                                <a href="{% url 'social:begin' 'facebook' %}?next={% url 'home_user'%}"><i class="fa fa-facebook-square fb" aria-hidden="true"></i></a>
-                                <a href="{% url 'social:begin' 'twitter' %}?next={% url 'home_user'%}"><i class="fa fa-twitter-square tw" aria-hidden="true"></i></a>
+                {% if not request.user.is_authenticated %}
+                    <div class="col-sm-8 col-xs-12">
+                        <div class="title"><i class="fa fa-user" aria-hidden="true"></i> تسجيل الدخول</div>
+                        <form action="{% url 'login' %}?next={% url 'home_user' %}" method="post" >
+                            {% csrf_token %}
+                                {% if form.errors %}
+                                    <p class="form-error-p">اسمك أو كلمة المرور مش صح. حاول تاني</p>
+                                {% endif %}
+                            <div class="form-group">
+                                <label class="nj-label" for="{{ form.username.id_for_label }}">اسم المستخدم</label>
+                                {{ form.username }}
                             </div>
-                        </div>
+                            <div class="form-group">
+                                <label class="nj-label" for="{{ form.password.id_for_label }}">كلمة السر</label>
+                                {{ form.password }}
+                            </div>
+                            <div id="remember-check">
+                                <input class="inline" type="checkbox"> تذكرني 
+                            </div>
+                             <a href="{% url 'password_reset' %}" id="id_signin_side" class="pass-forget-link"> نسيت كلمة السر؟</a>
+                            <input type="submit" name="login" value="دخول"  class="nj-btn log-btn" />
+
+                            <div class="log-option">
+                                <div class="title-2">أو دخول بواسطة</div>
+                                <div class="social-log">    
+                                    <a href="{% url 'social:begin' 'facebook' %}?next={% url 'home_user'%}"><i class="fa fa-facebook-square fb" aria-hidden="true"></i></a>
+                                    <a href="{% url 'social:begin' 'twitter' %}?next={% url 'home_user'%}"><i class="fa fa-twitter-square tw" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
 
 
-                       
+                           
 
 
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                {% else %}
+                    <p style="font-size: 30px;">أهلاً بيك يا {{ request.user.username }}! 
+                    تقدر تدخل على <a href="{% url 'web_user_profile' %}">بروفايلك</a> وتختار المواد بتاعتك، أو ممكن تروح على <a href="{% url 'home_user' %}">الصفحة الرئيسية</a> وتشوف الحاجات الجديدة!
+                    </p>
+                {% endif %}
             </div>
         </div>
         

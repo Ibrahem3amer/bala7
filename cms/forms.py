@@ -40,7 +40,7 @@ class UserContributionForm(forms.ModelForm):
     content_type = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control select nj-select'}), choices=UserContribution.type_choices)
     week_number = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control nj-input'}))
     deadline = forms.DateField(widget=forms.SelectDateWidget(attrs={'class': 'form-control nj-input'}))
-    professor = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control select nj-select'}), queryset=Professor.objects.all(), required=False)
+    professor = forms.ModelMultipleChoiceField(queryset=Professor.objects.all(), required=False)
     topic = forms.CharField(widget=forms.HiddenInput())
     user = forms.CharField(widget=forms.HiddenInput())
 

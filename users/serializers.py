@@ -13,10 +13,21 @@ class UserProfileSerialzer(serializers.ModelSerializer):
 		model 	= UserProfile
 		fields 	= ('university', 'faculty', 'department', 'level', 'gender', 'count_of_posts', 'count_of_replies', 'topics')
 
+
+class TeamSerializer(serializers.ModelSerializer):
+	
+	class Meta:
+		model = SVProfile
+		fields = ['__all__']
+
+
 class DepratmentSerializer(serializers.ModelSerializer):
+	
+	team = TeamSerializer(read_only=True)
+	
 	class Meta:
 		model 	= Department
-		fields 	= ('id', 'name', 'bio', 'headmaster', 'dep_type')
+		fields 	= ('id', 'name', 'bio', 'team')
 
 
 class FacultySerializer(serializers.ModelSerializer):
@@ -30,12 +41,12 @@ class UniversitySerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model 	= University
-		fields 	= ('id', 'name', 'bio', 'headmaster', 'uni_type')
+		fields 	= ('id', 'name', 'bio', 'headmaster')
 
 class DepratmentLinkedSerializer(serializers.ModelSerializer):
 	class Meta:
 		model 	= Department
-		fields 	= ('id', 'name', 'bio', 'headmaster', 'dep_type')
+		fields 	= ('id', 'name', 'bio', 'headmaster')
 
 
 class FacultyLinkedSerializer(serializers.ModelSerializer):
@@ -53,7 +64,7 @@ class UniversityLinkedSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model 	= University
-		fields 	= ('name', 'bio', 'headmaster', 'uni_type', 'faculties')
+		fields 	= ('name', 'bio', 'headmaster', 'faculties')
 
 class CommentSerializer(serializers.ModelSerializer):
 

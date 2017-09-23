@@ -25,6 +25,14 @@ def add_weeks_to_range(topic_weeks_range):
         'الأسبوع العاشر',
         'الأسبوع الحادي عشر',
         'الأسبوع الثاني عشر',
+        'الأسبوع الثالث عشر',
+        'الأسبوع الرابع عشر',
+        'الأسبوع الخامس عشر',
+        'الأسبوع السادس عشر',
+        'الأسبوع السابع عشر',
+        'الأسبوع الثامن عشر',
+        'الأسبوع التاسع عشر',
+        'الأسبوع العشرون',
     ]
 
 
@@ -74,7 +82,8 @@ def within_user_domain(user_obj, list_of_topics_ids):
 
     # Check if all topics in incoming request hold an accessible department id.
     for topic in true_topics:
-        if topic.department not in user_faculty_departments:
+        matches = (topic.department.all() & user_faculty_departments)
+        if not matches:
             return False
 
     return true_topics
@@ -94,7 +103,7 @@ def get_topic(request, dep_id=-1, topic_id=-1):
         raise Http404("Access denied.")
 
     # Validates that topic relates to department.
-    if topic.department.id != int(dep_id):
+    if int(dep_id) not in topic.department.all().values_list('id', flat=True):
         raise Http404("Incorrect department.")
 
     # Get dictionary of current size of weeks.
@@ -253,25 +262,28 @@ def user_table(request):
     elif request.method == 'POST':
         # Checking for table existence. 
         choices = request.POST.getlist('choices[]', None) or request.session.get('choices', None)
-        if len(choices) > 0:
-            # Initiate a user table.
-            user_table = UserTable.initiate_user_table(choices)
-            # Create new Instance of user table.
-            try:
-                UserTable.objects.update_or_create(
-                    user_profile=request.user.profile,
-                    defaults={
-                        'topics': user_table[0],
-                        'places': user_table[1]
-                    }
-                )
-            except ObjectDoesNotExist:
-                messages.add_message(request, messages.ERROR, 'Please update your profile.')
-                return redirect('web_user_profile')
-        else:
+        try:
+            if choices and len(choices) > 0:
+                # Initiate a user table.
+                user_table = UserTable.initiate_user_table(choices)
+                # Create new Instance of user table.
+                try:
+                    UserTable.objects.update_or_create(
+                        user_profile=request.user.profile,
+                        defaults={
+                            'topics': user_table[0],
+                            'places': user_table[1]
+                        }
+                    )
+                except ObjectDoesNotExist:
+                    messages.add_message(request, messages.ERROR, 'Please update your profile.')
+                    return redirect('web_user_profile')
+        except:
             messages.add_message(request, messages.ERROR, 'You did not choose any topics.')
         
         return redirect('web_user_table')
 
     else:
         return redirect('home_user')
+
+
