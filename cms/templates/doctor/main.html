@@ -59,7 +59,7 @@
                         {% if doctor.topics %}
                             {% for topic in doctor.topics.all %}
                             <div class="col-md-6 col-xs-12 topic">
-                                <b class="col-xs-4 r-float"><a href="{% url 'get_topic' topic.department.id topic.id %}">{{ topic.name }}</a></b>
+                                <b class="col-xs-4 r-float"><a href="{% url 'get_topic' topic.department.first.id topic.id %}">{{ topic.name }}</a></b>
                                 <span class="label label-default col-xs-2 r-float fname">{{ topic.faculty.name }}</span>                         <span class="label label-default col-xs-2 r-float fname">تيرم {{ topic.term }}</span>
                                 <a href="#" class="col-xs-4 r-float">امتحانات </a>
                             </div>

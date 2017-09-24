@@ -62,7 +62,7 @@
                             {% for topic in table.available_topics %}
                                 <div class="form-group">
                                     <label for="topics{{ topic.id }}" class="checkLable"><input type="checkbox" name="topics" value="{{ topic.id }}" id="topics{{ topic.id }}">{{ topic.name }}</label>
-                                    <!-- <a href="{% url 'get_topic' topic.department.id topic.id %}">{{ topic.name }}</a> -->
+                                    
                                 </div>
                             {% endfor %}
                         </div>
