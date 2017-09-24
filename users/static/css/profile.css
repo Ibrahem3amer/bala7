@@ -105,6 +105,8 @@
         min-width: 100%;
         max-width: 100%;
         margin: auto;
+        font-size: 14px !important;
+        height: 40px;
     }
     .small-ele-content select{
         display: block;
@@ -218,7 +220,7 @@
 }
 .modal-header p{
     font-weight: bold;
-    font-size: 28px;
+    font-size: 22px;
     margin: 0px;
 }
 .modal-header button{
@@ -234,6 +236,7 @@
 }
 .modal-body{
     text-align: center;
+    padding-bottom: 0px;
 }
 .modal-body label{
     width:100%;

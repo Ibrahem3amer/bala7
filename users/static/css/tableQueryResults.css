@@ -25,25 +25,28 @@
 .content-section > form > .nj-btn{
     margin-top: 15px;
 }
+form > .nj-btn{
+    margin-top: 15px;
+}
 /*-- start table style --*/
 .userTable-div{
     text-align: center;
     overflow: auto;
 }
-.userTable-div > table{
+.userTable-div table{
     min-width: 760px;
     margin: auto;
     background-color: #fff;
     border-left: 2px solid #ccc;
 }
-.userTable-div > table tr{
+.userTable-div table tr{
     border-bottom: 2px solid #ccc;
     border-top: 2px solid #ccc;
 }
-.userTable-div > table  tr:hover {
+.userTable-div table  tr:hover {
     background-color: #F5F5F5;
 }
-.userTable-div > table  tr > th {
+.userTable-div table  tr > th {
     background-color: #333;
     border: 2px solid #333;
     color: #fff;
@@ -51,30 +54,48 @@
     width: 65px;
     text-align: center;
 }
-.userTable-div > table  tr:hover > th {
+.userTable-div table  tr:hover > th {
     background-color: #444;
     border: 2px solid #444;
 }
-.userTable-div > table  tr:first-of-type > th{
+.userTable-div table  tr:first-of-type > th{
     background-color: #333;
     border: 2px solid #333;
 }
-.userTable-div > table  tr > td{
+.userTable-div table  tr > td{
     border-left: 1px solid #DDD;
     width: 200px;
     height: 100px;
-    padding: 0px 5px;
+    padding: 0px;
 }
-.userTable-div > table  tr > td > p{
-    border-top: 1px dashed #ddd;
+.userTable-div table  tr > td > p{
+    border-top: 1px dashed #666;
     margin: 0px;
-    padding: 5px 0px;
+    padding: 0px;
     line-height: 20px;
     font-size: 14px;
     font-weight: bold;
+    user-select: none;
 }
-.userTable-div > table  tr > td > p:first-of-type{
+.userTable-div table  tr > td > p label{
+    padding: 5px;
+    margin: 0px;
+    height: 100%;
+}
+.userTable-div table  tr > td > p label:hover{
+    cursor: pointer;
+    background-color: #a6bfcc;
+}
+.userTable-div table  tr > td > p input{
+    width: 15px;
+    height: 15px;
+    display: none;
+}
+.userTable-div table  tr > td > p:first-of-type{
     border-top: 0px dashed #ddd;
+}
+.active-table-check{
+    background-color: #a6bfcc!important;
 }
 /*-- end table style --*/
 

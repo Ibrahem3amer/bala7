@@ -55,16 +55,16 @@
 									<p>{{ request.user.profile.department.team.desc }}</p>
 								</div>
 							{% else %}
-								<div class="team-head">
+								<div style="height:76px;">
 									المحتوى ده بيتقدم ليك من ناس جدعان!
 								</div>
 							{% endif %}
 						</div>
 						<div class="col-md-8 col-xs-12 tasks">
-							<div class="owl-carousel">
-								{% if not tasks and not events %}
+                                {% if not tasks and not events %}
 									<p>مفيش عندك أي تاسكات أو ايفنتات الفترة الجاية، عيش يا معلم :)</p>
 								{% endif %}
+							<div class="owl-carousel">
 								{% if tasks %}
 									{% for task in tasks %}          
 										<div class="carousel-element">
@@ -129,8 +129,8 @@
 									<div class="content">
 										<div class="row">
 											<div class="col-xs-2 col-sm-4"><a class="link_icon" href="{{ material.link }}" target="_blank"><i class="fa fa-link" aria-hidden="true"></i></a></div>
-											<div class="col-xs-10 col-sm-4"><p>{{ material.name }}</p></div>
 											<div class="col-sm-4 hidden-xs"><p>{{ material.user.username }}</p></div>
+                                            <div class="col-xs-10 col-sm-4"><p>{{ material.name }}</p></div>
 										</div>
 
 									</div>

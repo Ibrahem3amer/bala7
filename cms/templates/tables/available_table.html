@@ -50,9 +50,10 @@
                     {% endfor %}
                 </ul>
                 {% endif %}
-                <table>
-                    <form action="{% url 'web_user_table' %}" method="POST">
-                        {% csrf_token %}
+                
+                <form action="{% url 'web_user_table' %}" method="POST">
+                    {% csrf_token %}
+                    <table>
                         <tr>
                             <th></th>
                             <th>الفتره الاولى</th>
@@ -69,20 +70,39 @@
                                     <td>
                                         {% for topic_table in table %}
                                             {% if topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0|length > 3 %}
-                                                <input type="checkbox" name="choices[]" value="{{ topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}_{{ day|add:'-1' }}_{{ period|add:'-1' }}">
-                                                <p>{{ topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}</p>
+                                                
+                                                <p>
+                                                    <input type="checkbox" id="{{ topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}_{{ day|add:'-1' }}_{{ period|add:'-1' }}" name="choices[]" value="{{ topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}_{{ day|add:'-1' }}_{{ period|add:'-1' }}">
+                                                    <label for="{{ topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}_{{ day|add:'-1' }}_{{ period|add:'-1' }}">
+                                                        {{ topic_table|dynamic_index:forloop.parentloop.parentloop.counter0|dynamic_index:forloop.parentloop.counter0 }}
+                                                    </label>
+                                                    
+                                                </p>
                                             {% endif %}
                                         {% endfor %}
                                     </td>
                                 {% endfor %}
                             </tr>
                         {% endfor %}
-                        <input type="submit" name="update user table" />
-                    </form>
-                </table>
+                    </table>
+                    
+                    <input type="submit" name="update user table" class="nj-btn" value="حفظ" />
+                </form>
+                
             </div>
         </div>
     </section>
     
+    <script>
+        $('.userTable-div table  tr > td > p label').click(function(){
+            console.log($(this).hasClass('active-table-check'));
+            if($(this).hasClass('active-table-check')){
+                $(this).removeClass('active-table-check');
+            }else{
+                $(this).addClass('active-table-check');
+            }
+            
+        });
+    </script>
 </body>
 </html>
