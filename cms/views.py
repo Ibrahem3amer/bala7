@@ -139,6 +139,7 @@ def get_topic(request, dep_id=-1, topic_id=-1):
             'posts': posts,
             'post_request':post_request,
             'pending_posts':pending_posts,
+            'content_types': {1: 'محاضرة', 2: 'تلخيص/شرح', 3: 'تاسك'}
         }
     )
 

@@ -68,6 +68,8 @@ class UniversityLinkedSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
 
+	user = UserSerializer(read_only=True)
+
 	class Meta:
 		model = UserComment
 		fields = ('__all__')

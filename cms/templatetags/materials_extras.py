@@ -16,3 +16,13 @@ def get_table_list(user_table):
         return user_table.to_list(user_table.topics)
     except:
         return []
+
+@register.filter(name='dynamic_index')
+def dynamic_index(list_instance, index):
+    """
+    Accepts a list of weeks materials and return a specific index according to week_number value.
+    """
+    try:
+        return list_instance[index]
+    except:
+        return ''
