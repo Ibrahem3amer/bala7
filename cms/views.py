@@ -96,15 +96,15 @@ def get_topic(request, dep_id=-1, topic_id=-1):
     try:
         topic = Topic.objects.get(pk = topic_id)
     except Topic.DoesNotExist:
-        raise Http404("It doesn't exist!")
+        raise Http404("المادة دي مش موجودة!")
 
     # User has no access to this topic.
     if not restrict_access(request, topic_id):
-        raise Http404("Access denied.")
+        raise Http404("مادة مش متاحة بالنسبالك!")
 
     # Validates that topic relates to department.
     if int(dep_id) not in topic.department.all().values_list('id', flat=True):
-        raise Http404("Incorrect department.")
+        raise Http404("القسم مش صحيح.")
 
     # Get dictionary of current size of weeks.
     weeks = add_weeks_to_range(topic.weeks)
@@ -152,18 +152,18 @@ def update_user_topics(request):
         user_topics = request.POST.getlist('chosen_list[]', None)
         # Validates that user has an access to these topics.
         if (not user_topics):
-            messages.add_message(request, messages.ERROR, 'You chose empty topics')
+            messages.add_message(request, messages.ERROR, 'مينفعش المواد تبقى فاضية.')
             return redirect(reverse('web_user_profile'))
 
         validated_topics = within_user_domain(request.user, user_topics)
         if not validated_topics:
-            messages.add_message(request, messages.ERROR, 'You chose unavailabe topics')
+            messages.add_message(request, messages.ERROR, 'في مشكلة في المواد اللي تم اختيارها!')
             return redirect(reverse('web_user_profile'))
 
         if(UserTopics.update_topics(request, validated_topics)):
-            messages.add_message(request, messages.SUCCESS, 'Topics updated successfully')
+            messages.add_message(request, messages.SUCCESS, 'تم تحديث المواد بتاعتك!')
         else:
-            messages.add_message(request, messages.ERROR, 'Select valid topics')
+            messages.add_message(request, messages.ERROR, 'في مشكلة في المواد اللي تم اختيارها!')
 
         return redirect(reverse('web_user_profile'))
 
@@ -206,7 +206,7 @@ def dep_table_main(request):
                 dep_table = DepartmentTable(request.user)
             return render(request, 'tables/table_main.html', {'table': dep_table})
         except ObjectDoesNotExist:
-            messages.add_message(request, messages.ERROR, 'Please update your profile.')
+            messages.add_message(request, messages.ERROR, 'لازم يكون في مواد تتابعها عشان تقدر تكمل!')
             return redirect('web_user_profile')
     else:
         return redirect('home_user')
@@ -241,7 +241,7 @@ def available_table(request):
                 except:
                     continue
         except ObjectDoesNotExist:
-            messages.add_message(request, messages.ERROR, 'Please update your profile.')
+            messages.add_message(request, messages.ERROR, 'لازم يكون في مواد تتابعها عشان تقدر تكمل!')
             return redirect('web_user_profile')
 
         return render(request, 'tables/available_table.html', {'table': topics})
@@ -277,7 +277,7 @@ def user_table(request):
                         }
                     )
                 except ObjectDoesNotExist:
-                    messages.add_message(request, messages.ERROR, 'Please update your profile.')
+                    messages.add_message(request, messages.ERROR, 'لازم يكون في مواد تتابعها عشان تقدر تكمل!')
                     return redirect('web_user_profile')
         except:
             messages.add_message(request, messages.ERROR, 'You did not choose any topics.')
