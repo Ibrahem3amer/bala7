@@ -421,7 +421,12 @@ class UserComment(models.Model):
 	user = models.ForeignKey(User, related_name = 'comments', on_delete = models.CASCADE)
 	post = models.ForeignKey('UserPost', related_name = 'comments', on_delete = models.CASCADE)
 	status = models.PositiveIntegerField(choices=comment_status, default=1)
-	last_modified = models.DateTimeField(auto_now=True)
+	last_modified = models.DateTimeField(auto_now_add=True)
+
+	
+	# Methods
+	def get_formatted_date(self):
+		return self.last_modified.day
 
 	def __str__(self):
 		return self.user.username + ' -> ' +self.post.title
