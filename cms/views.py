@@ -50,8 +50,11 @@ def add_weeks_to_materials(topic, secondary_materials=False):
         for i in range(1, topic_weeks_range):
             materials_list[i] = topic.secondary_materials.filter(week_number=i, status=3).all()
     else:
+        from itertools import chain
         for i in range(1, topic_weeks_range):
-            materials_list[i] = topic.primary_materials.filter(week_number=i).all()
+            materials = topic.primary_materials.filter(week_number=i).all()
+            tasks = topic.primary_tasks.filter(week_number=i).all()
+            materials_list[i] = list(chain(materials, tasks))
 
     return materials_list
 
