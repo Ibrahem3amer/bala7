@@ -12,10 +12,10 @@ username_validator = RegexValidator(
 
 class SignupForm(forms.Form):
 	user_name	 			= forms.CharField(
-		widget = forms.TextInput(attrs={'placeholder':'Enter your Name'}),
+		widget = forms.TextInput(attrs={'placeholder':'اسم المستخدم'}),
 		)
 	user_mail				= forms.EmailField(widget = forms.TextInput(attrs={
-			'placeholder':'Enter your E-mail'
+			'placeholder':'ايميلك الشخصي'
 		}))
 	user_password			= forms.CharField(widget = forms.PasswordInput)
 	user_password_confirm	= forms.CharField(widget = forms.PasswordInput)
@@ -47,7 +47,7 @@ class UserSignUpForm(forms.ModelForm):
 			return cleaned_data
 
 		if original_password != confirm_password:
-			raise forms.ValidationError('The two passwords are not matched')
+			raise forms.ValidationError('الباسورد مش متطابق.')
 		return cleaned_data
 
 	def clean_password(self):
@@ -76,7 +76,7 @@ class UserSignUpForm(forms.ModelForm):
 			return email
 
 		if email and User.objects.filter(email=email).exclude(username=username).exists():
-		    raise forms.ValidationError("Email address must be unique.")
+		    raise forms.ValidationError("الإيميل مستخدم قبل كده!")
 		return email
 
 	def save(self):

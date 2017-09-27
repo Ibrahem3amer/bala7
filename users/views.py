@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
-from users.models import University, Faculty, Department, UserProfile 
+from users.models import University, Faculty, Department, UserProfile, ContactUs
 from users.forms import UserSignUpForm
 from cms.models import UserTopics, Task, Material, UserContribution, Event
 
@@ -28,7 +28,7 @@ def home_user(request):
 		new_profile.user 	= user
 		new_profile.topics 	= None 
 		new_profile.save()
-		messages.add_message(request, messages.INFO, 'Please complete your profile')
+		messages.add_message(request, messages.INFO, 'الصفحة الشخصية لسه ناقصها بيانات!')
 
 	# Getting user tasks deadlines. 
 	tasks = Task.get_closest_tasks(request)
@@ -85,7 +85,7 @@ def update_user_username(request):
 				messages.add_message(request, messages.SUCCESS, 'Username successfully changed')
 				return user_profile(request)
 			else:
-				msg = 'Username is not valid or already exists. Try another one.'
+				msg = 'اسم العضوية دي موجود قبل كده.'
 				messages.add_message(request, messages.ERROR, msg)
 				return render(request, 'profile/profile.html')
 		else:
@@ -98,16 +98,16 @@ def update_user_email(request):
 
 		"""
 		if not request.POST['new_usermail']:
-			msg = 'Email cannot be empty.'
+			msg = 'مينفعش الإيميل يبقى فاضي.'
 			messages.add_message(request, messages.ERROR, msg)
 			return render(request, 'profile/profile.html')
 		if UserProfile.validate_mail(request.POST['new_usermail'], request.POST['new_usermail_confirmation']):
 			UserProfile.change_mail(request.POST['new_usermail'], request.user)
-			msg = 'Email successfully changed.'
+			msg = 'تم تغيير الإيميل.'
 			messages.add_message(request, messages.SUCCESS, msg)
 			return render(request, 'profile/profile.html')
 		else:
-			msg = 'Email is not valid or does not match.'
+			msg = 'الإيميل مش صحيح أو فيه مشكلة.'
 			messages.add_message(request, messages.ERROR, msg)
 			return render(request, 'profile/profile.html')
 		
@@ -120,18 +120,18 @@ def update_user_password(request):
 		"""
 		# Check for emptiness
 		if not request.POST['old_password'] or not request.POST['new_password'] or not request.POST['new_password_confirm']:
-			msg = 'password fields cannot be empty.'
+			msg = 'الباسورد مينفعش يبقى فاضي.'
 			messages.add_message(request, messages.ERROR, msg)
 			return render(request, 'profile/profile.html')
 
 		# Check if password is valid
 		if UserProfile.validate_new_password(request.POST['old_password'], request.POST['new_password'], request.POST['new_password_confirm'], request.user):
 			UserProfile.change_password(request.POST['new_password'], request.user)
-			msg = 'Password successfully changed.'
+			msg = 'تم تغيير الباسورد.'
 			messages.add_message(request, messages.SUCCESS, msg)
 			return render(request, 'profile/profile.html')
 		else:
-			msg = 'Password is not valid. It must be at least 8 characters length, mix of letters and numbers.'
+			msg = 'الباسورد مش مناسب. لازم يكون على الأقل 8 حروف ومزيج من الحروف والأرقام.'
 			messages.add_message(request, messages.ERROR, msg)
 			return render(request, 'profile/profile.html')
 		
@@ -150,16 +150,16 @@ def update_user_education_info(request):
 			new_info['new_department_id'] 	= request.POST['departments-hidden']
 			new_info['new_section_number'] 	= request.POST['new_section_number']
 		except AttributeError:
-			msg = 'University, faculty and department cannot be empty.'
+			msg = 'الجامعة والكلية والقسم مينفعش يبقوا فاضيين.'
 			messages.add_message(request, messages.ERROR, msg)
 			return render(request, 'profile/profile.html')
 
 		if UserProfile.update_education_info(new_info, request.user):
-			msg = 'Your educational info updated successfully.'
+			msg = 'تم تحديث بياناتك الدراسية.'
 			messages.add_message(request, messages.SUCCESS, msg)
 			return render(request, 'profile/profile.html')
 		else:
-			msg = 'Invalid educational info. Try again.'
+			msg = 'البيانات الدراسية مش صح.'
 			messages.add_message(request, messages.ERROR, msg)
 			return render(request, 'profile/profile.html')
 
@@ -178,9 +178,9 @@ def display_signup(request):
 				'departments': departments
 			}
 		)
-		
 
 	return redirect('home_visitor')
+
 
 def signup_second_form(request):
 	first_form_data = {}
@@ -204,7 +204,7 @@ def signup_second_form(request):
 
 			# Redirect user to first form with error of he didn't entered data.
 			if (not university) or (not faculty) or (not department):
-				msg = 'Please select your university, faculty, and department.'
+				msg = 'الجامعة والكلية والقسم مينفعش يبقوا فاضيين.'
 				messages.add_message(request, messages.ERROR, msg)
 				return redirect('web_signup')
 			first_form_data = {'university':university, 'faculty':faculty, 'department':department}
@@ -220,3 +220,24 @@ def signup_second_form(request):
 			)
 
 	return redirect('home_visitor')
+
+
+def send_nonexisting_faculty(request):
+	""" Accepts message and store it to admin panel."""
+	if request.method == 'POST':
+		university_field = request.POST.get('non_university', None)
+		faculty_field = request.POST.get('non_faculty', None)
+		user_mail_field = request.POST.get('non_user_mail', None)
+
+		if not all([university_field, faculty_field, user_mail_field]):
+			messages.add_message(request, messages.ERROR, 'البيانات اللي انت دخلتها مش مظبوطة!')
+			return redirect('web_signup')
+
+		message = university_field + ' | ' + faculty_field + ' | ' + user_mail_field
+		ContactUs.objects.create(
+			message=message
+		)
+	return render(
+		request,
+		'registration/thanks.html'
+	)

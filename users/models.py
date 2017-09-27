@@ -103,6 +103,7 @@ class UserProfile(models.Model):
 	count_of_replies = models.IntegerField(default = 0)
 	academic_stats = models.PositiveIntegerField(choices=status_choices, default=1)
 	last_active_device = models.CharField(max_length = 200)
+	section = models.PositiveIntegerField(default=0)
 	user = models.OneToOneField(
 		User,
 		related_name='profile',
@@ -129,7 +130,7 @@ class UserProfile(models.Model):
 	)
 	topics = models.ManyToManyField(
 		'cms.Topic'
-	) 
+	)
 
 	@classmethod
 	def make_form_new_profile(cls, user_obj, department=None, faculty=None, university=None):
@@ -294,16 +295,19 @@ class UserProfile(models.Model):
 		False
 		"""
 		try:
-			new_univeristy 	= University.objects.get(id = info['new_university_id'])
-			new_faculty 	= Faculty.objects.get(id = info['new_faculty_id'])
-			new_dep 		= Department.objects.get(id = info['new_department_id'])
+			new_univeristy = University.objects.get(id = info['new_university_id'])
+			new_faculty = Faculty.objects.get(id = info['new_faculty_id'])
+			new_dep = Department.objects.get(id = info['new_department_id'])
 		except ObjectDoesNotExist:
 			return False
 
-		user_obj.profile.university = new_univeristy
-		user_obj.profile.faculty 	= new_faculty
-		user_obj.profile.department = new_dep
-		user_obj.save()
+		UserProfile.objects.filter(user=user_obj).update(
+			university=new_univeristy,
+			faculty=new_faculty,
+			department=new_dep,
+			section=int(info['new_section_number'])
+		)
+		user_obj.profile.topics.all().delete()
 
 		return True
 	
@@ -325,12 +329,19 @@ def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
 				faculty 	= Faculty.objects.get(pk = first_form_data['faculty'])
 				university = University.objects.get(pk = first_form_data['university'])
 			except ObjectDoesNotExist as e:
-				raise Http404("An Error encounterd. Please select proper University, Facutly, and Department.")
+				raise Http404("في مشكلة في الجامعة أو الكلية أو القسم اللي تم اختيارهم.")
 
 			UserProfile.objects.create(user=user, department=department, faculty=faculty, university=university)
 	except AttributeError:
 		pass
 
 
+class ContactUs(models.Model):
 
-		
+	# Attributes 
+	message = models.TextField()
+	date = models.DateTimeField(auto_now_add=True)
+
+
+	def __str__(self):
+		return self.message

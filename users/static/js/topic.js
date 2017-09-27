@@ -172,7 +172,7 @@ $(document).ready(function(){
                     $(form_id).parent().nextAll('.post-comments').html('');
                     //add each comment to comments section 
                     for(var i= result.length ; i > 0 ; i--){
-                        var comment = '<div class="comment"><form action="/api/comments/delete" method="post" id="delete-comment-form' + result[i-1].id + '"><input type="hidden" name="comment_id" value="' + result[i-1].id + '" class="comment_id_holder"><p class="publisher-name"> ' + result[i-1].user + '</p><p class="comment-content"> ' + result[i-1].content + '</p><span class="comment-time">' + result[i-1].last_modified + '</span><i class="fa fa-trash comment-delet" aria-hidden="true"></i></form></div>';
+                        var comment = '<div class="comment"><form action="/api/comments/delete" method="post" id="delete-comment-form' + result[i-1].id + '"><input type="hidden" name="comment_id" value="' + result[i-1].id + '" class="comment_id_holder"><p class="publisher-name"> ' + result[i-1].user.username + '</p><p class="comment-content"> ' + result[i-1].content + '</p><span class="comment-time">' + result[i-1].last_modified + '</span><i class="fa fa-trash comment-delet" aria-hidden="true"></i></form></div>';
                         $(form_id).parent().nextAll('.post-comments').append(comment);
                     }
                     //change button text

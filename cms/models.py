@@ -56,7 +56,7 @@ class Topic(models.Model):
 	def clean(self):
 		super(Topic, self).clean()
 		if Topic.objects.filter(name = self.name).exclude(pk = self.pk).exists():
-			raise ValidationError('Topic already exists.')
+			raise ValidationError('المادة دي موجودة قبل كده.')
 
 class TopicNav(object):
 	"""
@@ -142,7 +142,7 @@ class MaterialBase(models.Model):
 	type_choices = [(1, 'Lecture'), (2, 'Asset'), (3, 'Task')]
 
 	# Model Validator
-	content_min_len_validator = MinLengthValidator(50, 'Material Description should be more than 50 characters.')
+	content_min_len_validator = MinLengthValidator(10, 'الوصف لازم يبقى 10 حروف على الأقل.')
 
 	# Fields
 	name = models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
@@ -165,7 +165,7 @@ class MaterialBase(models.Model):
 		# Validates that week number associated with materials is real week number.
 		try:
 			if self.week_number not in range(self.topic.weeks+1):
-				raise ValidationError('Week number is not found.')
+				raise ValidationError('الأسبوع ده مش موجود في المادة.')
 		except ObjectDoesNotExist:
 			# RelatedObject handler.
 			self.week_number = 0
@@ -173,9 +173,9 @@ class MaterialBase(models.Model):
         # Validate that user has an access to add material to topic.
 		try:
 			if self.topic not in self.user.profile.topics.all():
-				raise ValidationError("Access denied.")
+				raise ValidationError("المادة دي مش متاحة بالنسبالك.")
 		except (AttributeError, ObjectDoesNotExist):
-			raise ValidationError("Invalid User or Topic.")
+			raise ValidationError("في مشكلة في المادة أو في عضويتك.")
 
 
 
@@ -276,7 +276,7 @@ class Task(MaterialBase):
 		now = datetime.date.today()
 		date_difference = self.deadline - now
 		if date_difference.days <= 3:
-			raise ValidationError('Deadline date should be 3 days ahead at least.')
+			raise ValidationError('ميعاد التسليم لازم يبقى بعد 3 أيام على الأقل.')
 
 	# Methods.
 	@classmethod
@@ -293,7 +293,7 @@ class Task(MaterialBase):
 class Event(models.Model):
 
 	# Model Validator
-	content_max_len_validator = MaxLengthValidator(200, 'Event description should not be more than 300 characters.')
+	content_max_len_validator = MaxLengthValidator(200, 'الوصف مينفعش يزيد عن 200 حرف!')
 
 	# Additional feilds.
 	name = models.CharField(max_length = 200, validators = [GeneralCMSValidator.name_validator], default = "N/A")
@@ -326,11 +326,11 @@ class Event(models.Model):
 
 		# Validate that deadline is not a passed date. 
 		if not self.deadline:
-			raise ValidationError('Enter valid deadline.')
+			raise ValidationError('لازم تاريخ التسليم يكون تاريخ صحيح.')
 		now = datetime.date.today()
 		date_difference = self.deadline - now
 		if date_difference.days <= 3:
-			raise ValidationError('Deadline date should be 3 days ahead at least.')
+			raise ValidationError('ميعاد التسليم لازم يبقى بعد 3 أيام على الأقل.')
 
 	# Methods.
 	@classmethod
@@ -387,7 +387,7 @@ class UserContribution(MaterialBase):
 			now = datetime.date.today()
 			date_difference = self.deadline - now
 			if date_difference.days <= 3:
-				raise ValidationError('Deadline date should be 3 days ahead at least.')
+				raise ValidationError('ميعاد التسليم لازم يبقى بعد 3 أيام على الأقل.')
 
 	def __str__(self):
 		return self.user.username + ' ' +self.name
@@ -421,7 +421,12 @@ class UserComment(models.Model):
 	user = models.ForeignKey(User, related_name = 'comments', on_delete = models.CASCADE)
 	post = models.ForeignKey('UserPost', related_name = 'comments', on_delete = models.CASCADE)
 	status = models.PositiveIntegerField(choices=comment_status, default=1)
-	last_modified = models.DateTimeField(auto_now=True)
+	last_modified = models.DateTimeField(auto_now_add=True)
+
+	
+	# Methods
+	def get_formatted_date(self):
+		return self.last_modified.day
 
 	def __str__(self):
 		return self.user.username + ' -> ' +self.post.title

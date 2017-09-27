@@ -7,7 +7,7 @@ class GeneralCMSValidator(object):
     """Contains general validators that can be applied in multiple situations."""
     name_validator = RegexValidator(
         r'^[\u0621-\u064Aa-zA-Z][\u0621-\u064Aa-zA-Z0-9]*([ ]?[\u0621-\u064Aa-zA-Z0-9]+)+$',
-        'Name cannot start with number, should consist of characters.'
+        'الاسم مينفعش يبدأ بأرقام، مينفعش يبقى فيه مسافات أو حروف غريبة.'
     ) 
 
 

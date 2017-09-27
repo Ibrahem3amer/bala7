@@ -13,5 +13,5 @@ urlpatterns = [
     url(r'^signup/user_details', views.signup_second_form, name = 'web_signup_second_form'),
     url(r'^signup/user_finish', views.signup_second_form, name = 'web_signup_third_form'),
     url(r'^signup', views.display_signup, name = 'web_signup'),
-    url(r'^thankyou', views.display_signup, name = 'thankyou'),
+    url(r'^thankyou', views.send_nonexisting_faculty, name = 'thankyou'),
 ]
