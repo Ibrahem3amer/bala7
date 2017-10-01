@@ -167,10 +167,7 @@
     text-align: right;
     padding-right: 20px;
 }
-.content-section .content-part .content-element .content > .row > div:first-of-type > a{
-    float: left;
-    margin-left: 20px;
-}
+.content-section .content-part .content-element .content > .row > div:first-of-type > a{}
 .link_icon{
     color: #000;
 }

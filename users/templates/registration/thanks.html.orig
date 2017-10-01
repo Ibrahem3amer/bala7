@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
+<<<<<<< HEAD
+=======
     {% include "public/GoogleAnalytics.html" %}
+>>>>>>> 133513e669b57822512c05aae105450e48e06012
     {% load staticfiles %}
     
 	<meta charset="utf-8">
