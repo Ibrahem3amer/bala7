@@ -329,7 +329,7 @@ def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
 				faculty 	= Faculty.objects.get(pk = first_form_data['faculty'])
 				university = University.objects.get(pk = first_form_data['university'])
 			except ObjectDoesNotExist as e:
-				raise Http404("An Error encounterd. Please select proper University, Facutly, and Department.")
+				raise Http404("في مشكلة في الجامعة أو الكلية أو القسم اللي تم اختيارهم.")
 
 			UserProfile.objects.create(user=user, department=department, faculty=faculty, university=university)
 	except AttributeError:

@@ -289,7 +289,7 @@ class MaterialTest(TestCase):
 
 		# Exercise test
 		# Assert test
-		with self.assertRaisesRegexp(ValidationError, 'Name cannot start with number, should consist of characters.'):
+		with self.assertRaisesRegexp(ValidationError, 'الاسم مينفعش يبدأ بأرقام، مينفعش يبقى فيه مسافات أو حروف غريبة.'):
 			material_test.full_clean()
 
 	def test_add_material_with_empty_content(self):
@@ -327,7 +327,7 @@ class MaterialTest(TestCase):
 
 		# Exercise test
 		# Assert test
-		with self.assertRaisesRegexp(ValidationError, 'Material Description should be more than 50 characters.'):
+		with self.assertRaisesRegexp(ValidationError, 'الوصف لازم يبقى 10 حروف على الأقل.'):
 			material_test.full_clean()
 
 	def test_add_material_with_week_number_that_doesnot_exist(self):
@@ -346,7 +346,7 @@ class MaterialTest(TestCase):
 
 		# Exercise test
 		# Assert test
-		with self.assertRaisesRegexp(ValidationError, 'Week number is not found.'):
+		with self.assertRaisesRegexp(ValidationError, 'الأسبوع ده مش موجود في المادة.'):
 			material_test.full_clean()
 
 	def test_material_topic_lays_outside_user_scope(self):
@@ -367,7 +367,7 @@ class MaterialTest(TestCase):
 
 		# Exercise test
 		# Assert test
-		with self.assertRaisesRegexp(ValidationError, 'Access denied.'):
+		with self.assertRaisesRegexp(ValidationError, 'المادة دي مش متاحة بالنسبالك.'):
 			material_test.full_clean()
 
 	def test_user_add_material_in_topic_in_another_dep(self):
@@ -1356,7 +1356,7 @@ class UserContributionTest(TestCase):
 		topic_materials = another_topic.secondary_materials.all()
 		
 		# Assert test
-		with self.assertRaisesRegexp(ValidationError, 'Deadline date should be 3 days ahead at least.'):
+		with self.assertRaisesRegexp(ValidationError, 'ميعاد التسليم لازم يبقى بعد 3 أيام على الأقل.'):
 			material_test.full_clean()
 		self.assertRaises(ValidationError, lambda: material_test.full_clean())
 

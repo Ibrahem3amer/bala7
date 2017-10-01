@@ -413,9 +413,9 @@
                                                 <span>{{ request.year }}</span>
                                             </div>
                                             <div class="share-body">
-                                                <p><span>نوع المحتوى <span class="colon">:</span></span> <span>{{ request.content_type }}</span></p>
+                                                <p><span>نوع المحتوى <span class="colon">:</span></span> <span>{{ content_types|dynamic_index:request.content_type }}</span></p>
                                                 <p><span>عنوان المحتوى <span class="colon">:</span></span> <span>{{ request.name }}</span></p>
-                                                <p><span>الاسبوع <span class="colon">:</span></span> <span>{{ request.week_number }}</span></p>
+                                                <p><span>رقم الأسبوع <span class="colon">:</span></span> <span>{{ request.week_number }}</span></p>
                                                 <p><span> رابط التحميل <span class="colon">:</span></span> <span><a href="{{ request.link }}" class="assets-link" target="_blank"><i class="fa fa-link" aria-hidden="true"></i></a></span></p>
                                             </div>
                                             <div class="share-footer">
