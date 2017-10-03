@@ -45,7 +45,8 @@ class University(Entity):
 		'cms.Professor',
 		related_name='managed_universities',
 		on_delete=models.CASCADE,
-		null=True
+		null=True,
+		blank=True
 	)
 
 class Faculty(Entity):
@@ -61,7 +62,8 @@ class Faculty(Entity):
 		'cms.Professor',
 		related_name='managed_faculties',
 		on_delete=models.CASCADE,
-		null=True
+		null=True,
+		blank=True
 	)
 
 
@@ -76,7 +78,7 @@ class Department(Entity):
 		Faculty,
 		related_name='departments',
 		on_delete=models.CASCADE,
-		null=True
+		null=True,
 	)
 	team = models.ForeignKey(
 		SVProfile,
