@@ -78,6 +78,8 @@ a:hover, a:active, a:open, a:visited{
 }
 #nj-nav > ul > li >a:first-of-type{
     padding-right: 20px;
+    width: 100%;
+    text-align: right;
 }
 @media (max-width:992px){
     #nj-nav > ul > li >a{
@@ -252,7 +254,6 @@ input{
     display: block;
     width: 100%;
     height: 50px;
-    border-radius: 3px;
     border: 1px solid #aebdc1;
     transition: border-color 0.2s ease-in-out;
     line-height: 22px;

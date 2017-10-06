@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
+    
+    {% include "public/GoogleAnalytics.html" %}
+    
     {% load staticfiles %}
     
 	<meta charset="utf-8">
@@ -38,15 +41,16 @@
         <!--<p>Welcome, new user. Please log in.</p>-->
     <div id="banner">
         <div id="content">
-            <b>سلوجان. حلو. وجميل.</b>
-            <p>كلام حلو وجميل خالص</p>
-            <p>كلام حلو وجميل بس</p>
+            <b>نجيبة</b>
+            <p>خدمة هتساعدك توفر وقتك في الجامعة، وتفضل متابع كل جديد.</p>
+            <p>خدمة عملها الطلبة، عشان الطلبة!</p>
             <a href="{% url 'web_signup' %}" id="id_sign_up" class="nj-btn">انشاء حساب جديد</a>
             <a href="{% url 'login' %}" id="id_sign_in" class="nj-btn nj-btn-log">تسجيل دخول</a>
         </div>
     </div>
     <h1 id="time-title" class="center">نجيبه بتعمل إيه؟</h1>
-    <div id="time_line">   
+    <div id="time_line"> 
+
         <div class="row left_pic">
             <div class="col-sm-5 col-xs-12  center">
                 <img class="time_pic" src="{% static 'pic/n-welcome1.png' %}"> 
@@ -58,20 +62,60 @@
                 </div>
             </div>
             <div class="col-sm-5 col-xs-12 item ">
+                <h1>موادك</h1>
+                <p>
+                    هتلاقي في نجيبة كل المحتوى بتاع المواد بتاعتك في الكلية، أول بأول، بيقدمه أشطر الطلبة!
+                </p>
+            </div>
+        </div>
+        <div class="row right_pic">
+            <div class="col-sm-5 col-xs-12 item hidden-xs">
+                <h1>وقتك</h1>
+                <p>
+                    نجيبة هتساعدك ترتب وتنظم وتختار جدولك من مواعيد المواد بتاعتك، عشان تضمن انك دايماً هتحضر الحاجة اللي انت محتاجها!
+                </p>
+            </div>
+            <div class="col-sm-5 col-xs-12  center show-xs">
+                <img class="time_pic" src="{% static 'pic/n-welcome1.png' %}">
+            </div>
+            <div class="col-sm-2 xs-hidden ">
+                <div class="line center">
+                    <div class="circle"></div>
+                    <div class="line_inner"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="col-sm-5 col-xs-12  center hidden-xs">
+                <img class="time_pic" src="{% static 'pic/n-welcome1.png' %}">
+            </div>
+            <div class="col-sm-5 col-xs-12 item show-xs">
                 <h1>تُنبهك</h1>
                 <p>
                     تُنبهك نجيبة دوماً بمواعيد تسليم تساكاتك ومواعيد امتحاناتك
                 </p>
             </div>
         </div>
-        
-        
-        
+        <div class="row left_pic">
+            <div class="col-sm-5 col-xs-12  center">
+                <img class="time_pic" src="{% static 'pic/n-welcome1.png' %}"> 
+            </div>
+            <div class="col-sm-2 xs-hidden ">
+                <div class="line center">
+                    <div class="line_inner"></div>
+                </div>
+            </div>
+            <div class="col-sm-5 col-xs-12 item ">
+                <h1>مواعيد التسليم</h1>
+                <p>
+                    معدتش هتفوت ميعاد تسليم تاسك أي تاسك في الكلية، نجيبة دايماً هتفكرك وراك ايه والمفروض تسلمه امتى.
+                </p>
+            </div>
+        </div>
         <div class="row right_pic">
             <div class="col-sm-5 col-xs-12 item hidden-xs">
-                <h1>تُنبهك</h1>
+                <h1>زمايلك معاك</h1>
                 <p>
-                    تُنبهك نجيبة دوماً بمواعيد تسليم تساكاتك ومواعيد امتحاناتك
+                    هتلاقي في نجيبة مجمتع يساعدك انك تسأل عن أي حاجة ليها علاقة بالمواد بتاعتك، وكمان تقدر تبعت تليخصاتك ومساهماتك!
                 </p>
             </div>
             <div class="col-sm-5 col-xs-12  center show-xs">

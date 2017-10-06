@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
+    {% include "public/GoogleAnalytics.html" %}
     <title>Table</title>
     {% load admin_interface_extras %}
     {% load dates %}
@@ -69,8 +70,12 @@
                                     <td>
                                         {% for topic in table|dynamic_index:forloop.parentloop.counter0|dynamic_index:forloop.counter0 %}
                                             {% if topic and topic|length > 4 %}
-                                                <input type="checkbox" name="choices[]" value="{{ topic }}_{{ day|add:'-1' }}_{{ period|add:'-1' }}">
-                                                <p>{{ topic }}</p>
+                                                
+                                                <p>
+                                                    <input type="checkbox" id="{{ topic }}_{{ day|add:'-1' }}_{{ period|add:'-1' }}" name="choices[]" value="{{ topic }}_{{ day|add:'-1' }}_{{ period|add:'-1' }}">
+                                                    <label for="{{ topic }}_{{ day|add:'-1' }}_{{ period|add:'-1' }}">{{ topic }}</label>
+                                                    
+                                                </p>
                                             {% endif %}
                                         {% endfor %}
                                     </td>
@@ -84,6 +89,16 @@
             {% endif %}
         </div>
     </section>
-    
+    <script>
+        $('.userTable-div table  tr > td > p label').click(function(){
+            console.log($(this).hasClass('active-table-check'));
+            if($(this).hasClass('active-table-check')){
+                $(this).removeClass('active-table-check');
+            }else{
+                $(this).addClass('active-table-check');
+            }
+            
+        });
+    </script>
 </body>
 </html>
