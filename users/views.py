@@ -19,14 +19,12 @@ def home_user(request):
 	Displays logged-in user homepage, creates default profile in case of not. 
 	"""
 	user = request.user
-	profile_error = ''
 	try:
 		user_profile = user.profile
-	except AttributeError:
+	except:
 		# Create default profile. 
-		new_profile = UserProfile()
-		new_profile.user 	= user
-		new_profile.topics 	= None 
+		new_profile = UserProfile.objects.create(user=request.user)
+		new_profile.topics = None 
 		new_profile.save()
 		messages.add_message(request, messages.INFO, 'الصفحة الشخصية لسه ناقصها بيانات!')
 
