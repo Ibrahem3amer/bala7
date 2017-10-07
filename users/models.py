@@ -327,7 +327,7 @@ def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
 		department = Department.objects.get(pk = int(first_form_data['department']))
 		faculty = Faculty.objects.get(pk = int(first_form_data['faculty']))
 		university = University.objects.get(pk = int(first_form_data['university']))
-	except ObjectDoesNotExist as e:
+	except ObjectDoesNotExist:
 		UserProfile.objects.create(user=user)
 
 	# create complete profile, default behaviour that adds all department's topics.
@@ -339,7 +339,7 @@ def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
 	)
 	try:
 		from cms.models import Topic
-		user_profile.topics=Topic.objects.filter(department__in=department).all()
+		user_profile.topics=Topic.objects.filter(department__in=[department]).all()
 		user_profile.save()
 	except:
 		# Import error.
