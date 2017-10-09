@@ -119,9 +119,13 @@ class UserTopics(object):
 		# Returns topics that matches user faculty. 
 		topics 	= Topic.objects.filter(faculty = user_obj.profile.faculty).all()
 		# Grouping topics query by each department in user's faculty. 
-		for dep in user_obj.profile.faculty.departments.all().order_by('name'):
-			# Select from topics query topics that hold the same department id of current dep. 
-			results[dep.name] = [candidate_topic for candidate_topic in topics if dep.id in candidate_topic.department.all().values_list('id', flat=True)]
+		try:
+			for dep in user_obj.profile.faculty.departments.all().order_by('name'):
+				# Select from topics query topics that hold the same department id of current dep. 
+				results[dep.name] = [candidate_topic for candidate_topic in topics if dep.id in candidate_topic.department.all().values_list('id', flat=True)]
+		except:
+			# Faculty has no departments yet.
+			pass
 
 		return results
 
