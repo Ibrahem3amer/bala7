@@ -32,6 +32,25 @@ $(document).ready(function(){
         });
     });
     
+    //--------------------------- add new week
+    $("#add-week-btn").click(function(e){
+        e.preventDefault();
+        var form_id = "#add-week-form";
+        var type = $(form_id).attr('method');
+        var url = $(form_id).attr('action');
+        $.ajax({
+            type: type,
+            url: url,
+            data: $(form_id).serialize(),
+            success: function(result){
+                location.reload();
+            },
+            error: function(){
+                alert("please try again later");
+            }
+        });//end ajax 
+    });
+    
     //-------------------------------------- start submit contribute-form
     $('#contribution_form').ajaxForm({
         success: function(responseText) { 
