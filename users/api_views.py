@@ -158,11 +158,11 @@ def departments_faculty_list(request, fac_pk, format = None):
 	Returns a list of departments that associates to specific faculty if GET, 400-bad-request otherwise.
 	"""
 	try:
-		faculty = Faculty.objects.get(pk = fac_pk)
+		faculty = Faculty.objects.get(pk=fac_pk)
 	except Faculty.DoesNotExist:
 		return Response(status = status.HTTP_400_BAD_REQUEST)
 
-	if request.method == 'GET':
+	if request.method=='GET':
 		departments 			= Department.objects.filter(faculty = faculty)
 		departments_serialized 	= DepratmentSerializer(departments, many = True)
 		return Response(departments_serialized.data)

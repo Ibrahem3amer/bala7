@@ -19,14 +19,12 @@ def home_user(request):
 	Displays logged-in user homepage, creates default profile in case of not. 
 	"""
 	user = request.user
-	profile_error = ''
 	try:
 		user_profile = user.profile
-	except AttributeError:
+	except:
 		# Create default profile. 
-		new_profile = UserProfile()
-		new_profile.user 	= user
-		new_profile.topics 	= None 
+		new_profile = UserProfile.objects.create(user=request.user)
+		new_profile.topics = None 
 		new_profile.save()
 		messages.add_message(request, messages.INFO, 'الصفحة الشخصية لسه ناقصها بيانات!')
 
@@ -188,15 +186,16 @@ def signup_second_form(request):
 		if not request.user.is_authenticated: 
 			# Request has no user attribute.
 			first_form_data = request.session.get('first_form_data')
-			signup_form 	= UserSignUpForm(request.POST)
+			signup_form = UserSignUpForm(request.POST)
 			if signup_form.is_valid():
 				user = signup_form.save()
 				form_department = get_object_or_404(Department, pk = first_form_data['department'])
 				form_faculty = get_object_or_404(Faculty, pk = first_form_data['faculty'])
 				form_university = get_object_or_404(University, pk = first_form_data['university'])
 				user_profile = UserProfile.make_form_new_profile(user, form_department, form_faculty, form_university)
-			
-	else:
+				return redirect('login')
+	
+	if request.method == 'GET':		
 		if not request.user.is_authenticated: 
 			university = request.GET.get('selected_university', 0)
 			faculty = request.GET.get('selected_faculty', 0)
@@ -209,17 +208,16 @@ def signup_second_form(request):
 				return redirect('web_signup')
 			first_form_data = {'university':university, 'faculty':faculty, 'department':department}
 			request.session['first_form_data'] = first_form_data
-			signup_form = UserSignUpForm()
-			return render(
-				request,
-				'registration/signup_second_form.html',
-				{
-					'stage_num':2,
-					'form': signup_form
-				}
-			)
+		signup_form = UserSignUpForm()
 
-	return redirect('home_visitor')
+	return render(
+		request,
+		'registration/signup_second_form.html',
+		{
+			'stage_num':2,
+			'form': signup_form
+		}
+	)
 
 
 def send_nonexisting_faculty(request):

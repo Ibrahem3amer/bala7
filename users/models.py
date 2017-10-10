@@ -45,7 +45,8 @@ class University(Entity):
 		'cms.Professor',
 		related_name='managed_universities',
 		on_delete=models.CASCADE,
-		null=True
+		null=True,
+		blank=True
 	)
 
 class Faculty(Entity):
@@ -61,7 +62,8 @@ class Faculty(Entity):
 		'cms.Professor',
 		related_name='managed_faculties',
 		on_delete=models.CASCADE,
-		null=True
+		null=True,
+		blank=True
 	)
 
 
@@ -76,7 +78,7 @@ class Department(Entity):
 		Faculty,
 		related_name='departments',
 		on_delete=models.CASCADE,
-		null=True
+		null=True,
 	)
 	team = models.ForeignKey(
 		SVProfile,
@@ -318,21 +320,29 @@ class UserProfile(models.Model):
 # Pipeline customization method to complete user profile. 
 # I mdae it oustide of class so that it can be valid package path --> users.models."Function_name" not "class_name"
 def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
-	"""
-	Customize the python_social_auth pipeline flow by saving user profile.
-	"""
+	""" Customize the python_social_auth pipeline flow by saving user profile."""
+	
+	first_form_data = strategy.session_get('first_form_data')
 	try:
-		if not user.profile:
-			first_form_data = strategy.session_get('first_form_data')
-			try:
-				department = Department.objects.get(pk = first_form_data['department'])
-				faculty 	= Faculty.objects.get(pk = first_form_data['faculty'])
-				university = University.objects.get(pk = first_form_data['university'])
-			except ObjectDoesNotExist as e:
-				raise Http404("في مشكلة في الجامعة أو الكلية أو القسم اللي تم اختيارهم.")
+		department = Department.objects.get(pk = int(first_form_data['department']))
+		faculty = Faculty.objects.get(pk = int(first_form_data['faculty']))
+		university = University.objects.get(pk = int(first_form_data['university']))
+	except ObjectDoesNotExist:
+		UserProfile.objects.create(user=user)
 
-			UserProfile.objects.create(user=user, department=department, faculty=faculty, university=university)
-	except AttributeError:
+	# create complete profile, default behaviour that adds all department's topics.
+	user_profile = UserProfile.objects.create(
+			user=user,
+			department=department,
+			faculty=faculty,
+			university=university,
+	)
+	try:
+		from cms.models import Topic
+		user_profile.topics=Topic.objects.filter(department__in=[department]).all()
+		user_profile.save()
+	except:
+		# Import error.
 		pass
 
 

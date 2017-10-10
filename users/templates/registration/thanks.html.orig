@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
+<<<<<<< HEAD
+=======
     {% include "public/GoogleAnalytics.html" %}
+>>>>>>> 133513e669b57822512c05aae105450e48e06012
     {% load staticfiles %}
     
 	<meta charset="utf-8">
@@ -35,7 +38,7 @@
                 <img class="" src="{% static 'pic/n-welcome1.png' %}"> 
             </div>
         <p style="font-size: 30px; line-height: 70px;"> شكراً ليك على اهتمامك لوجود نجيبة في الجامعة بتاعتك! بنوعدك اننا هنكون عندك في أقرب فرصة عشان نساعدك أكتر.
-        متنساش تتابعنا على <a href="https://www.facebook.com/Najiba-1664443970272284/">فيس بوك</a> عشان تعرف اخر الأخبار.
+        متنساش تتابعنا على <a href="#">فيس بوك</a> عشان تعرف اخر الأخبار.
         </p>
         </div>
     </div>

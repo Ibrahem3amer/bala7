@@ -186,10 +186,10 @@
                         <div role="tabpanel" class="tab-pane fade in  active" id="content">
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                 {% if request.user.is_staff %}
-                                    <form action="{% url 'api_increment_weeks' %}" method="POST">
+                                    <form id="add-week-form" action="{% url 'api_increment_weeks' %}" method="POST">
                                         {% csrf_token %}
                                         <input type="hidden" name="topic_id" value="{{ topic.pk }}">
-                                        <input type="submit" name="add_week" class="nj-btn" value="أضف أسبوع جديد" />
+                                        <input id="add-week-btn" type="submit" name="add_week" class="nj-btn" value="أضف أسبوع جديد" />
                                     </form>
                                 {% endif %}
 

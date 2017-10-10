@@ -11,8 +11,10 @@
                     <span class="icon-bar"></span>
                 </button>
                 <div id="logo" class="visible-xs">
+                   <a href="{% url 'home_user' %}">
                         <img src="{% static 'pic/logo.png' %}" onmouseover="this.src='{% static 'pic/logohover.png' %}'" onmouseout="this.src='{% static 'pic/logo.png' %}'">
-                    </div>
+                    </a>
+                </div>
 
                 <!--START xs icons -->
                 <ul class="xs-nav-icons">
@@ -27,8 +29,6 @@
                             </li>
                         </ul>
                     </li>
-
-                    <li class=" visible-xs"><a href="#"><i class="fa fa-bell nav-fa" aria-hidden="true"></i></a></li>
                 </ul>
             </div>
                 <!--END xs icons -->

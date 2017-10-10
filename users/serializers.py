@@ -18,7 +18,7 @@ class TeamSerializer(serializers.ModelSerializer):
 	
 	class Meta:
 		model = SVProfile
-		fields = ['__all__']
+		fields = ('__all__')
 
 
 class DepratmentSerializer(serializers.ModelSerializer):
