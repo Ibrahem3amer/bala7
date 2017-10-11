@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from users.models import Department, Faculty, University
 from cms.models import Topic, Material, Task, Professor, TopicTable, Exam, UserPost, UserComment, Event
+from cms.custom_admin_forms import SupervisiorMaterialForm, SupervisiorTaskForm
 
 
 class TopicAdmin(admin.ModelAdmin):
@@ -19,10 +20,10 @@ class TopicAdmin(admin.ModelAdmin):
 
 class MaterialAdmin(admin.ModelAdmin):
 
+    form = SupervisiorMaterialForm
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        """
-        Assigns default value for User field. limits Topics field to user's topics. 
-        """
+        """ Assigns default value for User field. limits Topics field to user's topics."""
         if db_field.name == "user":
             kwargs["queryset"]  = User.objects.filter(id = request.user.id)
             kwargs["initial"]   = request.user.id
@@ -33,6 +34,7 @@ class MaterialAdmin(admin.ModelAdmin):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         """Limits the choices of professors for the limit of user."""
+
         if db_field.name == "professor" and not request.user.is_superuser:
             kwargs["queryset"]  = Professor.objects.filter(faculty_id=request.user.profile.faculty.id)
         
@@ -81,6 +83,19 @@ class ExamAdmin(admin.ModelAdmin):
 
 
 class TaskAdmin(admin.ModelAdmin):
+
+    form = SupervisiorTaskForm
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """ Assigns default value for User field. limits Topics field to user's topics."""
+        if db_field.name == "user":
+            kwargs["queryset"]  = User.objects.filter(id = request.user.id)
+            kwargs["initial"]   = request.user.id
+        elif db_field.name == "topic" and not request.user.is_superuser:
+            kwargs["queryset"]  = Topic.objects.filter(id__in = request.user.profile.topics.all())
+
+        return super(TaskAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         """Limits the choices of professors for the limit of user."""
