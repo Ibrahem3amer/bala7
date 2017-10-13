@@ -136,14 +136,14 @@ a:hover, a:active, a:open, a:visited{
     .navbar-nav{
         margin-top: 0px;
     }
-#nj-nav > ul.nav.navbar-nav.navbar-right > li.dropdown,
-#nj-nav > ul.nav.navbar-nav.navbar-right > li.dropdown:hover,
-#nj-nav > ul.nav.navbar-nav.navbar-right > li.dropdown:active,
-#nj-nav > ul.nav.navbar-nav.navbar-right > li.dropdown:focus{
-    background-color: #fff;
-    color: #46c9b6;
+    #nj-nav > ul.nav.navbar-nav.navbar-right > li.dropdown,
+    #nj-nav > ul.nav.navbar-nav.navbar-right > li.dropdown:hover,
+    #nj-nav > ul.nav.navbar-nav.navbar-right > li.dropdown:active,
+    #nj-nav > ul.nav.navbar-nav.navbar-right > li.dropdown:focus{
+        background-color: #fff;
+        color: #46c9b6;
 
-}
+    }
     #nj-nav > ul{
         padding: 0px;
         background-color: #fff;
@@ -208,6 +208,11 @@ a:hover, a:active, a:open, a:visited{
     }
     .navbar-default .navbar-toggle{
         margin: 10px;
+        border: none;
+    }
+    .navbar-default .navbar-toggle:hover, 
+    .navbar-default .navbar-toggle:focus{
+        background-color: transparent;
     }
    #nj-nav > ul.nav.navbar-nav.navbar-right > li{
         width: 100%;
