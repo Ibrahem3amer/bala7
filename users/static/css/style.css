@@ -173,14 +173,25 @@ a:hover, a:active, a:open, a:visited{
         color: #fff;
     }
     .xs-nav-icons > li > a > i{
-        color: #fff;
+        color: #000;
+        font-size: 24px;
+        margin-top: 4px;
+        margin-left: 4px;
     }
-    .dropdown-menu > li{
+    .xs-nav-icons .dropdown-menu{
+        width: 195px;
+    }
+    .xs-nav-icons .dropdown-menu > li{
         float: right;
         margin: 0px;
-        padding: 0px;
-        padding-top: 5px;
+        padding: 5px 0px;
         width: 100%;
+    }
+    .xs-nav-icons .dropdown-menu > li > a{
+        font-size: 18px;
+    }
+    .xs-nav-icons .dropdown-menu > li > a > i{
+        padding-top: 5px;
     }
     .navbar-default .navbar-nav .open .dropdown-menu > li{
         padding-right: 25px;
