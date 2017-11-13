@@ -89,7 +89,7 @@ class Department(Entity):
 	)
 
 	def __str__(self):
-		return self.faculty.name +' - '+ self.name
+		return self.faculty.university.name + ' - ' + self.faculty.name +' - '+ self.name
 
 
 class UserProfile(models.Model):

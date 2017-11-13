@@ -28,14 +28,14 @@
 
     
     <!-- start navbar -->
-        {% include "public/navbar1.html" %}
+        {% include "public/navbar-user.html" %}
     <!-- end navbar -->
     
     <div class="container">
         <div class="content">
             <img class="error-img" src="{% static 'pic/error-img.png' %}">
             <h1><span>Ohh.....</span>You Requested the page that is no longer There</h1>
-            <a href="#" class="nj-btn">الرجوع الى الرئيسية</a>
+            <a href="{% url 'home_user'%}" class="nj-btn">الرجوع الى الرئيسية</a>
         </div>
         
         
