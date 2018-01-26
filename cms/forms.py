@@ -55,7 +55,6 @@ class UserContributionForm(forms.ModelForm):
             self.instance.topic = get_object_or_404(Topic, pk=initial_arguments.get('topic', -1))
             self.instance.user = get_object_or_404(User, pk=initial_arguments.get('user', -1))
             self.instance.year = datetime.datetime.now()
-            self.instance.supervisior_id = -1
 
         # Filtering professors to the ones who lays in same user topics.
         try:
