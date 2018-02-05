@@ -31,6 +31,19 @@
 
 		<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
 		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+        <script>
+          var OneSignal = window.OneSignal || [];
+          OneSignal.push(function() {
+            OneSignal.init({
+              appId: "895c028d-2df9-4e48-8ba4-e3ed08a4ea8c",
+              autoRegister: false,
+              notifyButton: {
+                enable: true,
+              },
+            });
+          });
+        </script>
 	</head>
 	<body>
 		

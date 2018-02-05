@@ -15,20 +15,19 @@ class TopicAdmin(admin.ModelAdmin):
         qs = super(TopicAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(id__in = request.user.profile.topics.all())
+        return qs.filter(id__in=request.user.profile.topics.all())
 
 
 class MaterialAdmin(admin.ModelAdmin):
-
     form = SupervisiorMaterialForm
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """ Assigns default value for User field. limits Topics field to user's topics."""
         if db_field.name == "user":
-            kwargs["queryset"]  = User.objects.filter(id = request.user.id)
-            kwargs["initial"]   = request.user.id
+            kwargs["queryset"] = User.objects.filter(id=request.user.id)
+            kwargs["initial"] = request.user.id
         elif db_field.name == "topic" and not request.user.is_superuser:
-            kwargs["queryset"]  = Topic.objects.filter(id__in = request.user.profile.topics.all())
+            kwargs["queryset"] = Topic.objects.filter(id__in=request.user.profile.topics.all())
 
         return super(MaterialAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
@@ -36,21 +35,21 @@ class MaterialAdmin(admin.ModelAdmin):
         """Limits the choices of professors for the limit of user."""
 
         if db_field.name == "professor" and not request.user.is_superuser:
-            kwargs["queryset"]  = Professor.objects.filter(faculty_id=request.user.profile.faculty.id)
-        
-        return super(MaterialAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)      
-    
+            kwargs["queryset"] = Professor.objects.filter(faculty_id=request.user.profile.faculty.id)
+
+        return super(MaterialAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+
     def get_queryset(self, request):
         """
         Returns materials that lays in SV scope in case of staff, returns all materials otherwise. 
         """
         qs = super(MaterialAdmin, self).get_queryset(request)
         if request.user.is_superuser:
-            return qs.filter(content_type__lt = 3)
-        return qs.filter(topic_id__in = request.user.profile.topics.all(), content_type__lt = 3)
+            return qs.filter(content_type__lt=3)
+        return qs.filter(topic_id__in=request.user.profile.topics.all(), content_type__lt=3)
+
 
 class ExamAdmin(admin.ModelAdmin):
-
     exclude = ('content_type', 'term', 'week_number')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -58,19 +57,19 @@ class ExamAdmin(admin.ModelAdmin):
         Assigns default value for User field. limits Topics field to user's topics. 
         """
         if db_field.name == "user":
-            kwargs["queryset"]  = User.objects.filter(id = request.user.id)
-            kwargs["initial"]   = request.user.id
+            kwargs["queryset"] = User.objects.filter(id=request.user.id)
+            kwargs["initial"] = request.user.id
         elif db_field.name == "topic" and not request.user.is_superuser:
-            kwargs["queryset"]  = Topic.objects.filter(id__in = request.user.profile.topics.all())
+            kwargs["queryset"] = Topic.objects.filter(id__in=request.user.profile.topics.all())
 
         return super(ExamAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         """Limits the choices of professors for the limit of user."""
         if db_field.name == "professor" and not request.user.is_superuser:
-            kwargs["queryset"]  = Professor.objects.filter(faculty_id=request.user.profile.faculty.id)
-        
-        return super(ExamAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)        
+            kwargs["queryset"] = Professor.objects.filter(faculty_id=request.user.profile.faculty.id)
+
+        return super(ExamAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
     def get_queryset(self, request):
         """
@@ -78,31 +77,29 @@ class ExamAdmin(admin.ModelAdmin):
         """
         qs = super(ExamAdmin, self).get_queryset(request)
         if request.user.is_superuser:
-            return qs.filter(content_type__lt = 3)
-        return qs.filter(topic_id__in = request.user.profile.topics.all(), content_type__lt = 3)
+            return qs.filter(content_type__lt=3)
+        return qs.filter(topic_id__in=request.user.profile.topics.all(), content_type__lt=3)
 
 
 class TaskAdmin(admin.ModelAdmin):
-
     form = SupervisiorTaskForm
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """ Assigns default value for User field. limits Topics field to user's topics."""
         if db_field.name == "user":
-            kwargs["queryset"]  = User.objects.filter(id = request.user.id)
-            kwargs["initial"]   = request.user.id
+            kwargs["queryset"] = User.objects.filter(id=request.user.id)
+            kwargs["initial"] = request.user.id
         elif db_field.name == "topic" and not request.user.is_superuser:
-            kwargs["queryset"]  = Topic.objects.filter(id__in = request.user.profile.topics.all())
+            kwargs["queryset"] = Topic.objects.filter(id__in=request.user.profile.topics.all())
 
         return super(TaskAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         """Limits the choices of professors for the limit of user."""
         if db_field.name == "professor" and not request.user.is_superuser:
-            kwargs["queryset"]  = Professor.objects.filter(faculty_id=request.user.profile.faculty.id)
-        
-        return super(TaskAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)       
+            kwargs["queryset"] = Professor.objects.filter(faculty_id=request.user.profile.faculty.id)
+
+        return super(TaskAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
     def get_queryset(self, request):
         """
@@ -111,7 +108,7 @@ class TaskAdmin(admin.ModelAdmin):
         qs = super(TaskAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs.filter()
-        return qs.filter(topic_id__in = request.user.profile.topics.all())
+        return qs.filter(topic_id__in=request.user.profile.topics.all())
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -127,7 +124,7 @@ class EventAdmin(admin.ModelAdmin):
             kwargs["queryset"] = Faculty.objects.all()
         elif db_field.name == 'university' and request.user.is_superuser:
             kwargs["queryset"] = University.objects.all()
-        
+
         return super(EventAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_queryset(self, request):
@@ -149,24 +146,23 @@ class ProfessorAdmin(admin.ModelAdmin):
 
 
 class TopicTableAdmin(admin.ModelAdmin):
-    
     fields = ['topic']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """limits Topics field to user's topics."""
         if db_field.name == "topic" and not request.user.is_superuser:
-            kwargs["queryset"]  = Topic.objects.filter(id__in = request.user.profile.topics.all())
+            kwargs["queryset"] = Topic.objects.filter(id__in=request.user.profile.topics.all())
 
         return super(TopicTableAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         """Overrides the change view that displays change_form.html"""
-        
+
         # Grapping table that matches topic_id.
         topic = TopicTable.objects.get(id=object_id)
 
         # Generating off-days list on-fly for template.
-        off_days = [ day for day in topic.off_days ]
+        off_days = [day for day in topic.off_days]
 
         # Attaching table topics and places as extra context. 
         extra_context = extra_context or {}
@@ -182,16 +178,16 @@ class TopicTableAdmin(admin.ModelAdmin):
         """Adds sv inputs to table instance."""
 
         # Populating data from request input.
-        request_topics =  [[0]*6 for i in range(7)]
-        request_places =  [[0]*6 for i in range(7)]
+        request_topics = [[0] * 6 for i in range(7)]
+        request_places = [[0] * 6 for i in range(7)]
         for day in range(7):
-            day_index = '_'+str(day)
+            day_index = '_' + str(day)
             for peroid in range(6):
-                period_index = '_'+str(peroid)
-                request_topics[day][peroid] = request.POST['topic'+day_index+period_index]
-                request_places[day][peroid] = request.POST['place'+day_index+period_index]
+                period_index = '_' + str(peroid)
+                request_topics[day][peroid] = request.POST['topic' + day_index + period_index]
+                request_places[day][peroid] = request.POST['place' + day_index + period_index]
         off_days = request.POST.getlist('off_days[]', None)
-        
+
         # Save data to table instance.
         obj.topics = request_topics
         obj.places = request_places
@@ -206,6 +202,7 @@ class UserPostAdmin(admin.ModelAdmin):
 
 class UserCommentAdmin(admin.ModelAdmin):
     pass
+
 
 admin.site.register(Topic, TopicAdmin)
 admin.site.register(TopicTable, TopicTableAdmin)
