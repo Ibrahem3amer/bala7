@@ -31,6 +31,7 @@ class Entity(models.Model):
     rank = models.PositiveIntegerField(default=0)
     entity_type = models.PositiveIntegerField(choices=type_choices, default=1)
     study_type = models.PositiveIntegerField(choices=study_choices, default=1)
+    slug = models.CharField(max_length=10, default='')
 
     class Meta:
         abstract = True
