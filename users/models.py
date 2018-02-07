@@ -163,9 +163,16 @@ class UserProfile(models.Model):
         :param user_profile: A UserProfile instance.
         :return: Void.
         """
-        topics = user_profile.department.topics.all()
-        for topic in topics:
-            user_profile.topics.add(topic)
+        try:
+            topics = user_profile.department.topics.all()
+            for topic in topics:
+                user_profile.topics.add(topic)
+        except Department.DoesNotExist:
+            # No UserProfile was added.
+            pass
+        except AttributeError:
+            pass
+
 
 
     @classmethod
