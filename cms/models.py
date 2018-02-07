@@ -53,7 +53,7 @@ class Topic(models.Model):
 
     def clean(self):
         super(Topic, self).clean()
-        if Topic.objects.filter(name=self.name).exclude(pk=self.pk).exists():
+        if Topic.objects.filter(name=self.name, department=self.department).exists():
             raise ValidationError('المادة دي موجودة قبل كده.')
 
 
