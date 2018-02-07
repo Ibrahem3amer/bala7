@@ -34,7 +34,8 @@ class TopicTest(TestCase):
 
         # Exercise test
         # Assert test
-        self.assertRaises(ValidationError, t.clean())
+        with self.assertRaisesRegexp(ValidationError, 'الاسم مينفعش يبدأ بأرقام، مينفعش يبقى فيه مسافات أو حروف غريبة.'):
+            t.full_clean()
 
     def test_add_repeated_topic_name(self):
         # Setup test
@@ -46,7 +47,8 @@ class TopicTest(TestCase):
 
         # Exercise test
         # Assert test
-        self.assertRaises(ValidationError, t2.clean)
+        with self.assertRaisesRegexp(ValidationError, 'المادة دي موجودة قبل كده.'):
+            t2.full_clean()
 
 
 class UserTopicsTest(TestCase):
