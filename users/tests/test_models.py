@@ -1,14 +1,12 @@
-from django.core.urlresolvers import resolve
 from django.urls import reverse
-from django.template.loader import render_to_string
 from django.test import TestCase, RequestFactory
-from django.http import HttpRequest
 from django.contrib.messages.storage.fallback import FallbackStorage
-from unittest import skip
+from django.contrib.auth.models import User
+
 from users.views import *
 from users.models import University, Faculty, Department, UserProfile
-from users.forms import SignupForm, UserSignUpForm
-from django.contrib.auth.models import User
+from cms.models import Topic
+
 
 
 class UniversityModelTest(TestCase):
@@ -253,6 +251,16 @@ class UserProfileTest(TestCase):
         self.old_uni = University.objects.create(name='wtf')
         self.old_fac = Faculty.objects.create(university=self.old_uni)
         self.old_dep = Department.objects.create(faculty=self.old_fac)
+        self.topic = Topic.objects.create(name='test', desc='ddddd', term=1)
+        self.another_topic = Topic.objects.create(name='test', desc='ddddd', term=1)
+        self.topic.department.add(self.old_dep)
+        self.another_topic.department.add(self.old_dep)
+        self.user_profile = UserProfile.make_form_new_profile(
+            user_obj=self.user,
+            university=self.old_uni,
+            faculty=self.old_fac,
+            department=self.old_dep
+        )
 
     def test_insert_new_profile_with_user(self):
         # Setup test
@@ -292,9 +300,6 @@ class UserProfileTest(TestCase):
         # Setup test
         request = RequestFactory()
         request = request.post(reverse('web_change_username'), data={'new_username': 'Ibraheeeeeeem'})
-        user_profile = UserProfile(university=self.old_uni, faculty=self.old_fac, department=self.old_dep)
-        user_profile.user = self.user
-        user_profile.save()
 
         # Making messages available for request.
         from django.contrib.messages.storage.fallback import FallbackStorage
@@ -398,7 +403,12 @@ class UserProfileTest(TestCase):
 
     def test_update_educational_info_with_valid(self):
         # Setup test
-        UserProfile.objects.create(user=self.user, department=self.old_dep, faculty=self.old_fac)
+        another_user = User.objects.create_user(
+            username='test_usernamesss',
+            email='tesssst@test.com',
+            password='secrettt23455'
+        )
+        UserProfile.objects.create(user=another_user, department=self.old_dep, faculty=self.old_fac)
         url = reverse('web_change_info')
         data = {
             'universities-hidden': self.uni.id,
@@ -406,7 +416,7 @@ class UserProfileTest(TestCase):
             'departments-hidden': self.dep.id,
             'new_section_number': 5
         }
-        request = self.client.login(username="test_username", password="secrettt23455")
+        request = self.client.login(username="test_usernamesss", password="secrettt23455")
         request = self.client.post(url, data=data)
 
         # Exercise test
@@ -415,14 +425,18 @@ class UserProfileTest(TestCase):
         self.make_messages_available(request)
 
         # Assert test
-        self.assertNotEqual(self.old_uni, self.user.profile.university)
+        self.assertNotEqual(self.old_uni, another_user.profile.university)
 
     def test_update_educational_info_with_invalid_ids(self):
         # Setup test
         self.user = User.objects.create(username='test', email='test_tt@test.com',
                                         password='00000111112222255555888ffff')
         self.user.save()
-        self.user_profile = UserProfile(university=self.old_uni, faculty=self.old_fac, department=self.old_dep)
+        self.user_profile = UserProfile.objects.create(
+            university=self.old_uni,
+            faculty=self.old_fac,
+            department=self.old_dep
+        )
         self.user_profile.user = self.user
         self.user_profile.save()
         request = RequestFactory()
@@ -443,3 +457,8 @@ class UserProfileTest(TestCase):
 
         # Assert test
         self.assertEqual(self.old_uni, self.user.profile.university)
+
+    def test_default_topics_after_sign_up(self):
+        """Asserts that user will have a list of topics = his department's topics by default."""
+        self.assertIn(self.topic, self.user.profile.topics.all())
+        self.assertIn(self.another_topic, self.user.profile.topics.all())

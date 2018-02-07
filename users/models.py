@@ -147,13 +147,26 @@ class UserProfile(models.Model):
         >>>make_form_new_profile(existing_user)
         Error: Existing profile
         """
-        user_profile = UserProfile(department=department, faculty=faculty, university=university)
+        user_profile = UserProfile.objects.create(department=department, faculty=faculty, university=university)
         if not UserProfile.link_profile_to_user(user_obj, user_profile):
             # Existing profile.
             user_profile = user_obj.profile
         user_profile.save()
-
+        # Update user's default topics.
+        cls.set_default_topics(user_profile)
         return user_profile
+
+    @classmethod
+    def set_default_topics(cls, user_profile):
+        """
+        Assigns all of profile's department topics to user.
+        :param user_profile: A UserProfile instance.
+        :return: Void.
+        """
+        topics = user_profile.department.topics.all()
+        for topic in topics:
+            user_profile.topics.add(topic)
+
 
     @classmethod
     def link_profile_to_user(cls, user_obj, profile_obj):
