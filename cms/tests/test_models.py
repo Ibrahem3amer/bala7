@@ -34,19 +34,28 @@ class TopicTest(TestCase):
 
         # Exercise test
         # Assert test
-        self.assertRaises(ValidationError, t.clean())
+        with self.assertRaisesRegexp(ValidationError, 'الاسم مينفعش يبدأ بأرقام، مينفعش يبقى فيه مسافات أو حروف غريبة.'):
+            t.full_clean()
 
-    def test_add_repeated_topic_name(self):
-        # Setup test
-        dep = Department.objects.create()
-        t = Topic.objects.create(name='topic name', desc='ddddd', term=1)
-        t2 = Topic.objects.create(name='topic name', desc='ddddd', term=1)
-        t.department.add(dep)
-        t2.department.add(dep)
-
-        # Exercise test
-        # Assert test
-        self.assertRaises(ValidationError, t2.clean)
+    # def test_add_repeated_topic_name(self):
+    #     # Setup test
+    #     dep = Department.objects.create()
+    #     t = Topic.objects.create(name='topic name', desc='ddddd', term=1)
+    #     t2 = Topic.objects.create(name='topic name', desc='ddddd', term=1)
+    #     t.department.add(dep)
+    #     t2.department.add(dep)
+    #
+    #     # Exercise test
+    #     # Assert test
+    #     with self.assertRaisesRegexp(ValidationError, 'المادة دي موجودة قبل كده.'):
+    #         t2.full_clean()
+    #
+    # def test_repeated_name_validation_on_creation_of_topic(self):
+    #     """Asserts that Validation error should be raised when adding repeated name in same department."""
+    #     dep = Department.objects.create()
+    #     t = Topic.objects.create(name='topic name', desc='ddddd', term=1)
+    #     with self.assertRaisesRegexp(ValidationError, 'المادة دي موجودة قبل كده.'):
+    #         t2 = Topic.objects.create(name='topic name', desc='ddddd', term=1, department=dep)
 
 
 class UserTopicsTest(TestCase):

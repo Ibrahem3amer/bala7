@@ -53,8 +53,6 @@ class Topic(models.Model):
 
     def clean(self):
         super(Topic, self).clean()
-        if Topic.objects.filter(name=self.name, department=self.department).exists():
-            raise ValidationError('المادة دي موجودة قبل كده.')
 
 
 class TopicNav(object):
@@ -104,9 +102,12 @@ class UserTopics(object):
         topics = cls.get_user_topics(user_obj)
         if topics:
             for topic in topics:
-                dep_id = topic.department.first().id or 0
-                nav_topic = TopicNav(topic.name, topic.id, dep_id)
-                nav_list.append(nav_topic)
+                try:
+                    dep_id = topic.department.first().id or 0
+                    nav_topic = TopicNav(topic.name, topic.id, dep_id)
+                    nav_list.append(nav_topic)
+                except AttributeError:
+                    pass
         return nav_list
 
     @classmethod

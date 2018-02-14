@@ -33,14 +33,42 @@ class AddMaterialForm(forms.ModelForm):
 class UserContributionForm(forms.ModelForm):
 
     # Fields 
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control nj-input'}))
-    content = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control nj-textarea'}))
-    link = forms.URLField(widget=forms.URLInput(attrs={'class': 'form-control nj-input'}))
-    term = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control select nj-select'}), choices=UserContribution.term_choices)
-    content_type = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control select nj-select'}), choices=UserContribution.type_choices)
-    week_number = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control nj-input'}))
-    deadline = forms.DateField(widget=forms.SelectDateWidget(attrs={'class': 'form-control nj-input'}))
-    professor = forms.ModelMultipleChoiceField(queryset=Professor.objects.all(), required=False)
+    name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control nj-input'}),
+        label='اسم الفايل'
+
+    )
+    content = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control nj-textarea'}),
+        label='وصف الفايل'
+    )
+    link = forms.URLField(
+        widget=forms.URLInput(attrs={'class': 'form-control nj-input'}),
+        label='رابط الفايل'
+    )
+    term = forms.ChoiceField(
+        widget=forms.Select(attrs={'class': 'form-control select nj-select'}),
+        label='التيرم',
+        choices=UserContribution.term_choices
+    )
+    content_type = forms.ChoiceField(
+        widget=forms.Select(attrs={'class': 'form-control select nj-select'}),
+        choices=UserContribution.type_choices,
+        label='نوع المحتوى'
+    )
+    week_number = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control nj-input'}),
+        label='رقم الأسبوع'
+    )
+    deadline = forms.DateField(
+        widget=forms.SelectDateWidget(attrs={'class': 'form-control nj-input'}),
+        label='ميعاد التسليم'
+    )
+    professor = forms.ModelMultipleChoiceField(
+        queryset=Professor.objects.all(),
+        required=False,
+        label='هيئة التدريس'
+    )
     topic = forms.CharField(widget=forms.HiddenInput())
     user = forms.CharField(widget=forms.HiddenInput())
 
@@ -66,8 +94,14 @@ class UserContributionForm(forms.ModelForm):
 class UserPostForm(forms.ModelForm):
     
     # Fields
-    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control nj-input'}))
-    content = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control nj-textarea'}))
+    title = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control nj-input'}),
+        label='عنوان الاستفسار'
+    )
+    content = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control nj-textarea'}),
+        label='محتوى الاستفسار'
+    )
     topic = forms.CharField(widget=forms.HiddenInput())
     user = forms.CharField(widget=forms.HiddenInput())
 
