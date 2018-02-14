@@ -1,18 +1,24 @@
-import datetime
+from unittest import skip
 from django.urls import reverse
 from django.test import TestCase, RequestFactory
 from django.http import HttpRequest
-from django.core.urlresolvers import resolve
-from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
-from unittest import skip
+
 from cms.models import *
 from cms.views import update_user_topics
 from users.models import Department, UserProfile, Faculty, University
 
 
 class TopicTest(TestCase):
+
+    def make_messages_available(self, request):
+        """
+        Takes request and make django's messages available for it.
+        """
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+
     def test_add_valid_topic(self):
         # Setup test
         dep = Department.objects.create()
@@ -37,25 +43,67 @@ class TopicTest(TestCase):
         with self.assertRaisesRegexp(ValidationError, 'الاسم مينفعش يبدأ بأرقام، مينفعش يبقى فيه مسافات أو حروف غريبة.'):
             t.full_clean()
 
-    # def test_add_repeated_topic_name(self):
-    #     # Setup test
-    #     dep = Department.objects.create()
-    #     t = Topic.objects.create(name='topic name', desc='ddddd', term=1)
-    #     t2 = Topic.objects.create(name='topic name', desc='ddddd', term=1)
-    #     t.department.add(dep)
-    #     t2.department.add(dep)
-    #
-    #     # Exercise test
-    #     # Assert test
-    #     with self.assertRaisesRegexp(ValidationError, 'المادة دي موجودة قبل كده.'):
-    #         t2.full_clean()
-    #
-    # def test_repeated_name_validation_on_creation_of_topic(self):
-    #     """Asserts that Validation error should be raised when adding repeated name in same department."""
-    #     dep = Department.objects.create()
-    #     t = Topic.objects.create(name='topic name', desc='ddddd', term=1)
-    #     with self.assertRaisesRegexp(ValidationError, 'المادة دي موجودة قبل كده.'):
-    #         t2 = Topic.objects.create(name='topic name', desc='ddddd', term=1, department=dep)
+    def test_update_educational_info_and_track_user_topics(self):
+        """Asserts that topics objects remain the same after user updates his info."""
+        # Setup test
+        another_user = User.objects.create_user(
+            username='test_usernamesss',
+            email='tesssst@test.com',
+            password='secrettt23455'
+        )
+        self.uni = University.objects.create(name='Test university')
+        self.fac = Faculty.objects.create(name='Test faculty', university=self.uni)
+        self.dep = Department.objects.create(name='Test dep', faculty=self.fac)
+        self.old_uni = University.objects.create(name='wtf')
+        self.old_fac = Faculty.objects.create(university=self.old_uni)
+        self.old_dep = Department.objects.create(faculty=self.old_fac)
+        self.topic = Topic.objects.create(name='test', desc='ddddd', term=1)
+        self.another_topic = Topic.objects.create(name='test', desc='ddddd', term=1)
+        self.topic.department.add(self.old_dep)
+        self.another_topic.department.add(self.old_dep)
+        self.profile = UserProfile.objects.create(user=another_user, department=self.old_dep, faculty=self.old_fac)
+        self.profile.topics.add(self.topic)
+        self.profile.topics.add(self.another_topic)
+        url = reverse('web_change_info')
+        data = {
+            'universities-hidden': self.uni.id,
+            'faculties-hidden': self.fac.id,
+            'departments-hidden': self.dep.id,
+            'new_section_number': 5
+        }
+        request = self.client.login(username="test_usernamesss", password="secrettt23455")
+        request = self.client.post(url, data=data)
+
+        # Exercise test
+
+        # Making messages available for request.
+        self.make_messages_available(request)
+
+        # Assert test
+        self.assertNotEqual(self.old_uni, another_user.profile.university)
+        self.assertEqual(2, self.old_dep.topics.all().count())
+
+    @skip
+    def test_add_repeated_topic_name(self):
+        # Setup test
+        dep = Department.objects.create()
+        t = Topic.objects.create(name='topic name', desc='ddddd', term=1)
+        t2 = Topic.objects.create(name='topic name', desc='ddddd', term=1)
+        t.department.add(dep)
+        t2.department.add(dep)
+
+        # Exercise test
+        # Assert test
+        with self.assertRaisesRegexp(ValidationError, 'المادة دي موجودة قبل كده.'):
+            t2.full_clean()
+
+    @skip
+    def test_repeated_name_validation_on_creation_of_topic(self):
+        """Asserts that Validation error should be raised when adding repeated name in same department."""
+        dep = Department.objects.create()
+        t = Topic.objects.create(name='topic name', desc='ddddd', term=1)
+        with self.assertRaisesRegexp(ValidationError, 'المادة دي موجودة قبل كده.'):
+            t2 = Topic.objects.create(name='topic name', desc='ddddd', term=1, department=dep)
 
 
 class UserTopicsTest(TestCase):

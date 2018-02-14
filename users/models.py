@@ -305,7 +305,7 @@ class UserProfile(models.Model):
     @classmethod
     def update_education_info(cls, info, user_obj):
         """
-        Takes a dict that contains new universiy, faculty and department ids. validates them and change them in user.
+        Takes a dict that contains new university, faculty and department ids. validates them and change them in user.
 
         >>>update_education_info(info, user)
         True
@@ -325,7 +325,9 @@ class UserProfile(models.Model):
             department=new_dep,
             section=int(info['new_section_number'])
         )
-        user_obj.profile.topics.all().delete()
+        user_obj.profile.topics.clear()
+        for topic in new_dep.topics.all():
+            user_obj.profile.topics.add(topic)
 
         return True
 
