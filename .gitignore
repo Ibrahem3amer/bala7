@@ -105,4 +105,5 @@ db.sqlite3
 .DS_Store
 .DS_STORE
 keys.bashrc
-secrets.json
+*secrets.json
+bala7/settings/secrets.json
