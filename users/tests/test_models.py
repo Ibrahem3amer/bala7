@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from django.urls import reverse
 from django.test import TestCase, RequestFactory
 from django.contrib.messages.storage.fallback import FallbackStorage
