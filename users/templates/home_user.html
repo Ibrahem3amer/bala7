@@ -32,7 +32,11 @@
 		<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
 		<script src="{% static 'js/bootstrap.min.js' %}"></script>
         <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
         <script>
+          var department_slug = document.getElementById('user-department')
+          var faculty_slug = document.getElementById('user-faculty')
+          var university_slug = document.getElementById('user-university')
           var OneSignal = window.OneSignal || [];
           OneSignal.push(function() {
             OneSignal.init({
@@ -42,13 +46,21 @@
                 enable: true,
               },
             });
+            // Getting user department so that it can be segmented.
+            OneSignal.sendTags({
+                department: department_slug,
+                faculty: faculty_slug,
+                university: university_slug
+            });
           });
         </script>
 	</head>
 	<body>
 		
 		{% if user.is_authenticated %}
-		
+            <input type="hidden" id="user-department" value="CSFEMU" />
+		    <input type="hidden" id="user-faculty" value="FEMU" />
+            <input type="hidden" id="user-university" value="MU" />
 			{% if profile_error %}
 				<h1>{{ profile_error }}</h1>
 			{% endif%}
