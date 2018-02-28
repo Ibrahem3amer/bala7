@@ -465,3 +465,10 @@ class UserProfileTest(TestCase):
         """Asserts that user will have a list of topics = his department's topics by default."""
         self.assertIn(self.topic, self.user.profile.topics.all())
         self.assertIn(self.another_topic, self.user.profile.topics.all())
+
+
+class AuthPipeLineTest(TestCase):
+
+    def test_create_profile_when_session_loaded(self):
+        """Asserts that user profile is created successfully when session data is loaded."""
+        pass

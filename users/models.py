@@ -339,9 +339,14 @@ class UserProfile(models.Model):
 
 
 # Pipeline customization method to complete user profile. 
-# I mdae it oustide of class so that it can be valid package path --> users.models."Function_name" not "class_name"
+# I mdae it oustide of class so that it can be valid package path --> users.models."Function_name"
+# not "class_name"
 def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
     """ Customize the python_social_auth pipeline flow by saving user profile."""
+
+    # Already existing user.
+    if User.objects.get(pk=user.pk).exist():
+        return
 
     first_form_data = strategy.session_get('first_form_data')
     try:
