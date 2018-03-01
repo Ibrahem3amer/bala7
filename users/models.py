@@ -345,7 +345,7 @@ def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
     """ Customize the python_social_auth pipeline flow by saving user profile."""
 
     # Already existing user.
-    if User.objects.get(pk=user.pk).exist():
+    if UserProfile.objects.filter(user=user).exists():
         return
 
     first_form_data = strategy.session_get('first_form_data')
@@ -353,8 +353,9 @@ def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
         department = Department.objects.get(pk=int(first_form_data['department']))
         faculty = Faculty.objects.get(pk=int(first_form_data['faculty']))
         university = University.objects.get(pk=int(first_form_data['university']))
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, KeyError):
         UserProfile.objects.create(user=user)
+        return
 
     # create complete profile, default behaviour that adds all department's topics.
     user_profile = UserProfile.objects.create(
@@ -365,10 +366,9 @@ def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
     )
     try:
         from cms.models import Topic
-        user_profile.topics = Topic.objects.filter(department__in=[department]).all()
+        user_profile.topics = Topic.objects.filter(department=department).all()
         user_profile.save()
-    except:
-        # Import error.
+    except ImportError:
         pass
 
 

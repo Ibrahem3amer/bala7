@@ -7,7 +7,8 @@ from django.contrib.messages.storage.fallback import FallbackStorage
 from django.contrib.auth.models import User
 
 from users.views import *
-from users.models import University, Faculty, Department, UserProfile
+from users.models import University, Faculty, Department, UserProfile, make_social_new_profile
+from users.tests.mocks import AuthPipeLineMock
 from cms.models import Topic
 
 
@@ -469,6 +470,79 @@ class UserProfileTest(TestCase):
 
 class AuthPipeLineTest(TestCase):
 
+    def setUp(self):
+        self.pipeline = AuthPipeLineMock.Pipline_mock()
+
     def test_create_profile_when_session_loaded(self):
         """Asserts that user profile is created successfully when session data is loaded."""
-        pass
+        # Test setup
+        make_social_new_profile(
+            strategy=self.pipeline.strategy,
+            backend=self.pipeline.backend,
+            user=self.pipeline.user,
+            response=None
+        )
+        last_profile = UserProfile.objects.last()
+
+        # Test assertion
+        self.assertEqual(last_profile.user, self.pipeline.user)
+        self.assertIsNotNone(self.pipeline.user.profile.university)
+        self.assertIsNotNone(self.pipeline.user.profile.faculty)
+        self.assertIsNotNone(self.pipeline.user.profile.department)
+
+    def test_create_profile_when_no_data_in_session(self):
+        """Assert that pipeline will handle the absence of session data."""
+        # Test setup
+        self.pipeline.strategy.session_get_dict = {}
+        make_social_new_profile(
+            strategy=self.pipeline.strategy,
+            backend=self.pipeline.backend,
+            user=self.pipeline.user,
+            response=None
+        )
+        last_profile = UserProfile.objects.last()
+
+        # Test assertion
+        self.assertEqual(last_profile.user, self.pipeline.user)
+        self.assertIsNone(self.pipeline.user.profile.university)
+        self.assertIsNone(self.pipeline.user.profile.faculty)
+        self.assertIsNone(self.pipeline.user.profile.department)
+
+    def test_create_profile_when_existing_profile(self):
+        """Assert that pipeline will duplicate of profiles."""
+        # Test setup
+        UserProfile.objects.create(user=self.pipeline.user)
+        make_social_new_profile(
+            strategy=self.pipeline.strategy,
+            backend=self.pipeline.backend,
+            user=self.pipeline.user,
+            response=None
+        )
+        last_profile = UserProfile.objects.last()
+
+        # Test assertion
+        self.assertEqual(last_profile.user, self.pipeline.user)
+        self.assertIsNone(self.pipeline.user.profile.university)
+        self.assertIsNone(self.pipeline.user.profile.faculty)
+        self.assertIsNone(self.pipeline.user.profile.department)
+        self.assertEqual(UserProfile.objects.count(), 1)
+
+    def test_default_topics_are_added(self):
+        """Assert that pipeline will add depratment's topics to user."""
+        # Test setup
+        topic = Topic.objects.create(name='test', desc='ddddd', term=1)
+        topic.department.add(self.pipeline.strategy.department)
+        make_social_new_profile(
+            strategy=self.pipeline.strategy,
+            backend=self.pipeline.backend,
+            user=self.pipeline.user,
+            response=None
+        )
+        last_profile = UserProfile.objects.last()
+
+        # Test assertion
+        self.assertEqual(last_profile.user, self.pipeline.user)
+        self.assertIsNotNone(self.pipeline.user.profile.university)
+        self.assertIsNotNone(self.pipeline.user.profile.faculty)
+        self.assertIsNotNone(self.pipeline.user.profile.department)
+        self.assertIn(topic, self.pipeline.user.profile.topics.all())
