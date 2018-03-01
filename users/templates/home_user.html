@@ -32,35 +32,36 @@
 		<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
 		<script src="{% static 'js/bootstrap.min.js' %}"></script>
         <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
         <script>
-          var department_slug = document.getElementById('user-department')
-          var faculty_slug = document.getElementById('user-faculty')
-          var university_slug = document.getElementById('user-university')
-          var OneSignal = window.OneSignal || [];
-          OneSignal.push(function() {
-            OneSignal.init({
-              appId: "895c028d-2df9-4e48-8ba4-e3ed08a4ea8c",
-              autoRegister: false,
-              notifyButton: {
-                enable: true,
-              },
-            });
-            // Getting user department so that it can be segmented.
-            OneSignal.sendTags({
-                department: department_slug,
-                faculty: faculty_slug,
-                university: university_slug
-            });
+          $(document).ready(function() {
+              var department_slug = document.getElementById('user-department').value
+              var faculty_slug = document.getElementById('user-faculty').value
+              var university_slug = document.getElementById('user-university').value
+              var OneSignal = window.OneSignal || [];
+              OneSignal.push(function () {
+                  OneSignal.init({
+                      appId: "895c028d-2df9-4e48-8ba4-e3ed08a4ea8c",
+                      autoRegister: false,
+                      notifyButton: {
+                          enable: true,
+                      },
+                  });
+                  // Getting user department so that it can be segmented.
+                  OneSignal.sendTags({
+                      department: department_slug,
+                      faculty: faculty_slug,
+                      university: university_slug
+                  });
+              });
           });
         </script>
 	</head>
 	<body>
 		
 		{% if user.is_authenticated %}
-            <input type="hidden" id="user-department" value="CSFEMU" />
-		    <input type="hidden" id="user-faculty" value="FEMU" />
-            <input type="hidden" id="user-university" value="MU" />
+            <input type="hidden" id="user-department" value="{{ user.profile.department.slug }}" />
+		    <input type="hidden" id="user-faculty" value="{{ user.profile.faculty.slug }}" />
+            <input type="hidden" id="user-university" value="{{ user.profile.university.slug }}" />
 			{% if profile_error %}
 				<h1>{{ profile_error }}</h1>
 			{% endif%}
