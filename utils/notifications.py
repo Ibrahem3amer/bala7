@@ -39,10 +39,33 @@ class NotificationDevices(object):
 
 class BaseNotification(object):
 
-    def __init__(self, segment_names, segment_tags=None):
-        self.segment_names = segment_names
-        self.segment_tags = segment_tags
+    def __init__(self, segment_names=None, segment_tags=None, messages=None):
+        """
+        Defines new instance of BaseNotification.
+        :param segment_names: A list of strings that indicates the segments names.
+        :param segment_tags: A dict of tags that indicates the key->value tags.
+        :param messages: A dict of language->content that defines the message's content.
+        """
+        self.segment_names = segment_names or None
+        self.segment_tags = [] or self.set_user_filters(segment_tags)
+        self.messages = messages
 
+    def set_user_filters(self, filters):
+        """
+        Formulates a dict of key->value to required format needed in OneSignal.
+        :param filters: A dict of key->value that indicates filters to be applied.
+        :return: Dict if filters has values, otherwise list.
+        """
+        try:
+            for tag_key, tag_value in filters.items():
+                self.segment_tags.append({
+                    "field": "tag",
+                    "key": tag_key,
+                    "relation": "=",
+                    "value": tag_value
+                })
+        except AttributeError:
+            return []
 
     def get_notification_headers(self):
         """
@@ -53,44 +76,32 @@ class BaseNotification(object):
             "Content-Type": "application/json; charset=utf-8",
             "Authorization": "Basic "+secrets['onesignal_api_key']
         }
+        return headers
 
-    def get_notification_details(self, en_message=None, ar_message=None):
+    def get_notification_details(self):
         """
         Formulates the segments needed to send new notification.
         :return: Dict
         """
-        en_message = en_message or "Hello, World!"
-        ar_message = ar_message or "Hello, World!"
+        messages = self.messages or {"en": "No content defined."}
         payload = {
             "app_id": secrets['onesignal_app_id'],
-            "contents": {
-                "en": en_message,
-                "ar": ar_message
-            },
-            "included_segments": self.segment_names
+            "contents": messages,
+            "included_segments": self.segment_names,
+            "filters": self.segment_tags,
         }
-
+        return payload
 
     def create_notification(self):
         """
-        Captures the saved instance and formulates it to be sent.
+        Formulate the notification to be sent to OneSignal API.
         :return: Dict
         """
         headers = self.get_notification_headers()
         payload = self.get_notification_details()
-
-    def send_notification(self):
-        """
-        Launches a POST request to OneSignal API to send the notification.
-        :return: Dict of status and errors.
-        """
-
-        headers = self.get_notification_headers()
-
-        payload = {"app_id": "895c028d-2df9-4e48-8ba4-e3ed08a4ea8c",
-                   "included_segments": ["All"],
-                   "contents": {"en": "وسع وصلي ع النبي"}}
-
-        req = requests.post("https://onesignal.com/api/v1/notifications", headers=headers, data=json.dumps(payload))
-
-        print(req.status_code, req.reason)
+        request = requests.post(
+            "https://onesignal.com/api/v1/notifications",
+            headers=headers,
+            data=json.dumps(payload)
+        )
+        return request
