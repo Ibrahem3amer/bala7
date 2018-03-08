@@ -43,7 +43,7 @@
                 <div class="elements-div">
                     {% for doctor in topic.professors.all %}
                         <div class="right-ele doctor-name">
-                          <a href="{% url 'display_doctor' doctor.id %}"><p>{{ doctor.name }}</p></a>
+                          <a href="{% url 'display_doctor' doctor.id %}"><p> د.{{ doctor.name }}</p></a>
                         </div>
                     {% endfor %}
                     {% if topic.exams.all|length > 0 %}
