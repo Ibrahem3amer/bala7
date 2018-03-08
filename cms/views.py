@@ -7,6 +7,7 @@ from django.http import HttpResponse, Http404
 from django.urls import reverse
 from cms.models import Topic, UserTopics, Professor, DepartmentTable, UserTable, UserContribution, UserPost
 from cms.forms import AddMaterialForm, UserContributionForm, UserPostForm
+from users.models import Department
 
 def add_weeks_to_range(topic_weeks_range):
     """
@@ -129,6 +130,8 @@ def get_topic(request, dep_id=-1, topic_id=-1):
     pending_posts = UserPost.objects.filter(status=1, topic=topic)
     posts = UserPost.objects.filter(topic=topic, status=3)
 
+    department = Department.objects.get(id=dep_id)
+
     return render(
         request,
         'topics/get_topic.html',
@@ -142,7 +145,8 @@ def get_topic(request, dep_id=-1, topic_id=-1):
             'posts': posts,
             'post_request':post_request,
             'pending_posts':pending_posts,
-            'content_types': {1: 'محاضرة', 2: 'تلخيص/شرح', 3: 'تاسك'}
+            'content_types': {1: 'محاضرة', 2: 'تلخيص/شرح', 3: 'تاسك'},
+            'department': department
         }
     )
 

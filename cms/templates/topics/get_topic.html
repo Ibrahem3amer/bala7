@@ -221,7 +221,11 @@
                                                               {% for material in sec_materials|week_number:forloop.counter %}
                                                                 <div class="row">
                                                                     <div class="col-xs-10 col-sm-5 assest-name"><p>{{ material.name }}</p></div>
-                                                                    <div class="col-sm-5 hidden-xs"><p class="assets-time">{{ material.user.username }} | {{ material.year }}</p></div>
+                                                                    {% if material.user.is_staff %}
+                                                                        <div class="col-sm-5 hidden-xs"><p class="assets-time">{{ department.team.name }} | {{ material.year }}</p></div>
+                                                                    {% else %}
+                                                                        <div class="col-sm-5 hidden-xs"><p class="assets-time">{{ material.user.username }} | {{ material.year }}</p></div>
+                                                                    {% endif %}
                                                                     <div class="col-xs-2 col-sm-2"><a href="{{ material.link }}" class="assets-link"><i class="fa fa-link" aria-hidden="true"></i></a></div>
                                                                 </div>
                                                               {% endfor %}
