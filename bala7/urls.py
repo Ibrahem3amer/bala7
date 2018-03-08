@@ -20,6 +20,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from users import views
 
+admin.site.site_header = 'Najiba Admins'
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home_visitor, name = 'home_visitor'),
