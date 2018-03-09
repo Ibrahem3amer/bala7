@@ -1457,3 +1457,63 @@ class UserContributionTest(TestCase):
 
         # Assert test
         self.assertEqual(5, len(Task.get_closest_tasks(request)))
+
+
+class MaterialNotificationsTest(TestCase):
+
+    def setUp(self):
+        self.uni = University.objects.create(name='Test university')
+        self.fac = Faculty.objects.create(name='Test faculty')
+        self.dep = Department.objects.create(name='Test dep')
+        self.topic = Topic.objects.create(
+            pk=1,
+            name='test topic with spaces',
+            desc='ddddd',
+            term=1,
+            weeks=5
+        )
+        self.topic.department.add(self.dep)
+        self.user = User.objects.create_user(
+            username='ibrahemmmmm',
+            email='test_@test.com',
+            password='000000555555ddd5f5f'
+        )
+        self.profile = UserProfile.objects.create(
+            user=self.user,
+            department=self.dep,
+            faculty=self.fac
+        )
+
+    def test_new_notification_is_created_on_material_creation(self):
+        """Assert that Notification is fired on material creation."""
+        # Test setup
+        old_number_of_materials = Material.objects.all().count()
+        material = Material.objects.create(
+            name='notification_test_material',
+            content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+            link='http://www.docs.google.com',
+            year='2018-1-5',
+            term=1,
+            content_type=1,
+            week_number=1,
+            user=self.user,
+            topic=self.topic
+        )
+        # Test body
+        new_number_of_materials = Material.objects.all().count()
+        # Test assertion
+        self.assertGreater(new_number_of_materials, old_number_of_materials)
+
+    def test_notification_detials_matches_user_detials(self):
+        """Assert that new Notifiaction will be saved with correct user data."""
+        # Test setup
+        # Test body
+        # Test assertion
+        raise NotImplementedError()
+
+    def test_notification_with_missing_user_details(self):
+        """Assert that Notification creation will handle the absence of some user details."""
+        # Test setup
+        # Test body
+        # Test assertion
+        raise NotImplementedError()

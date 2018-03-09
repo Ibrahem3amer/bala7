@@ -21,6 +21,21 @@ class TestAPIIntegeration(TestCase):
         self.assertEqual(result.reason, 'OK')
         self.assertIn(result.status_code, [200, 201, 202])
 
+    def test_live_api_integeration_with_segments_and_tags(self):
+        """Assert that API will connect to OneSignal and return 200"""
+        # Test setup
+        tags = {'department': 'FCIMU'}
+        notifiaction_with_tags = BaseNotification(
+            segment_names=self.segments,
+            segment_tags=tags,
+            messages=self.messages
+        )
+        # Test body
+        result = notifiaction_with_tags.create_notification()
+        # Test assertion
+        self.assertEqual(result.reason, 'OK')
+        self.assertIn(result.status_code, [200, 201, 202])
+
     def test_live_api_integeration_with_customized_message(self):
         """Assert that API will connect to OneSignal and return 200"""
         # Test setup

@@ -11,6 +11,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import User
 from cms.validators import GeneralCMSValidator
+from utils.notifications import BaseNotification
 
 TABLE_DAYS_LIST = [0, 1, 2, 3, 4, 5, 6]
 TABLE_DAYS = 7
@@ -234,13 +235,33 @@ class Material(MaterialBase):
     topic = models.ForeignKey(Topic, related_name='primary_materials', on_delete=models.CASCADE)
     professor = models.ManyToManyField(Professor, related_name='primary_materials')
 
+    def save(self, *args, **kwargs):
+        # Notifiy interested sgements.
+        try:
+            segment = self.user.profile.faculty.slug
+            tags = {
+                'department': self.user.profile.department.slug
+            }
+            messages = {
+                'en': 'New lecture was added to {0}'.format(self.topic.name),
+                'ar': 'محاضرة جديدة انضافت لمادة {0}'.format(self.topic.name)
+            }
+            notification = BaseNotification(
+                segment_names=segment,
+                segment_tags=tags,
+                messages=messages
+            )
+            response = notification.create_notification()
+        except AttributeError:
+            pass
+        return super(Material, self).save(*args, **kwargs)
+
+
 
 class Exam(MaterialBase):
     # Helpers
     current_year = datetime.datetime.now().year
-
     def tuplify(x): return (x, x)
-
     years = map(tuplify, range(current_year - 20, current_year + 1))
 
     # Additional fields.
