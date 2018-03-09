@@ -6,4 +6,5 @@ social-auth-app-django==1.2.0
 social-auth-app-django-mongoengine==1.0.0
 social-auth-core==1.3.0
 social-auth-storage-mongoengine==1.0.1
-Celery
+Celery==4.1.0
+mock==2.0.0

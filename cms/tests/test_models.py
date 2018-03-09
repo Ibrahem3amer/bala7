@@ -1,3 +1,4 @@
+import mock
 from unittest import skip
 from django.urls import reverse
 from django.test import TestCase, RequestFactory
@@ -292,6 +293,10 @@ class MaterialTest(TestCase):
         self.user.profile = UserProfile.objects.create(user=self.user, university=self.uni, faculty=self.fac,
                                                        department=self.dep)
         self.user.profile.topics.add(self.topic)
+        notification_patch = mock.patch.object(BaseNotification, 'create_notification')
+        self.notification_mock = notification_patch.start()
+        self.addCleanup(notification_patch.stop)
+        self.notification_mock.return_value = {'status_code': 200}
         self.material = Material.objects.create(
             name='test_material',
             content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
@@ -627,6 +632,10 @@ class TaskTest(TestCase):
         self.user = User.objects.create_user(username='ibrahemmmmm', email='test_@test.com',
                                              password='000000555555ddd5f5f')
         self.profile = UserProfile.objects.create(user=self.user, department=self.dep, faculty=self.fac)
+        notification_patch = mock.patch.object(BaseNotification, 'create_notification')
+        self.notification_mock = notification_patch.start()
+        self.addCleanup(notification_patch.stop)
+        self.notification_mock.return_value = {'status_code': 200}
         self.material = Material.objects.create(
             name='test_material',
             content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
@@ -1463,8 +1472,8 @@ class MaterialNotificationsTest(TestCase):
 
     def setUp(self):
         self.uni = University.objects.create(name='Test university')
-        self.fac = Faculty.objects.create(name='Test faculty')
-        self.dep = Department.objects.create(name='Test dep')
+        self.fac = Faculty.objects.create(name='Test faculty',slug='FCIMU')
+        self.dep = Department.objects.create(name='Test dep', slug='CSFCIMU')
         self.topic = Topic.objects.create(
             pk=1,
             name='test topic with spaces',
@@ -1483,10 +1492,14 @@ class MaterialNotificationsTest(TestCase):
             department=self.dep,
             faculty=self.fac
         )
+        notification_patch = mock.patch.object(BaseNotification, 'create_notification')
+        self.notification_mock = notification_patch.start()
+        self.addCleanup(notification_patch.stop)
 
     def test_new_notification_is_created_on_material_creation(self):
         """Assert that Notification is fired on material creation."""
         # Test setup
+        self.notification_mock.return_value = {'status_code': 200}
         old_number_of_materials = Material.objects.all().count()
         material = Material.objects.create(
             name='notification_test_material',
@@ -1504,6 +1517,7 @@ class MaterialNotificationsTest(TestCase):
         # Test assertion
         self.assertGreater(new_number_of_materials, old_number_of_materials)
 
+    @skip
     def test_notification_detials_matches_user_detials(self):
         """Assert that new Notifiaction will be saved with correct user data."""
         # Test setup
@@ -1514,6 +1528,20 @@ class MaterialNotificationsTest(TestCase):
     def test_notification_with_missing_user_details(self):
         """Assert that Notification creation will handle the absence of some user details."""
         # Test setup
+        self.notification_mock.return_value = AttributeError()
+        old_number_of_materials = Material.objects.all().count()
+        material = Material.objects.create(
+            name='notification_test_material',
+            content='this is loooooooooooooooooooooong connnnnnnnnnteeeeeent',
+            link='http://www.docs.google.com',
+            year='2018-1-5',
+            term=1,
+            content_type=1,
+            week_number=1,
+            user=self.user,
+            topic=self.topic
+        )
         # Test body
+        new_number_of_materials = Material.objects.all().count()
         # Test assertion
-        raise NotImplementedError()
+        self.assertGreater(new_number_of_materials, old_number_of_materials)
