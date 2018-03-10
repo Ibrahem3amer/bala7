@@ -18,6 +18,7 @@ from django.conf.urls import url, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from rest_framework.documentation import include_docs_urls
 from users import views
 
 admin.site.site_header = 'Najiba Admins'
@@ -31,6 +32,7 @@ urlpatterns = [
     url(r'^topics/', include('cms.urls')),
     url(r'^api/', include('cms.api_urls')),
     url(r'', include('social_django.urls', namespace='social')),
+    url(r'^api_docs/', include_docs_urls(title='Najiba APIs'))
 ]
 
 

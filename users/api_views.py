@@ -12,7 +12,7 @@ from cms.forms import UserContributionForm, UserPostForm
 from django.contrib.auth.models import User
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def users_list(request, format=None):
     """
     Return a list of users if GET, creates a new one if POST
