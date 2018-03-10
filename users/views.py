@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from users.models import University, Faculty, Department, UserProfile, ContactUs
 from users.forms import UserSignUpForm
 from cms.models import UserTopics, Task, Material, UserContribution, Event
@@ -159,16 +159,20 @@ def update_user_education_info(request):
         except AttributeError:
             msg = 'الجامعة والكلية والقسم مينفعش يبقوا فاضيين.'
             messages.add_message(request, messages.ERROR, msg)
-            return render(request, 'profile/profile.html')
+            return HttpResponseRedirect(
+                request.META.get('HTTP_REFERER', reverse('web_user_profile'))
+            )
 
         if UserProfile.update_education_info(new_info, request.user):
             msg = 'تم تحديث بياناتك الدراسية.'
             messages.add_message(request, messages.SUCCESS, msg)
-            return render(request, 'profile/profile.html')
         else:
             msg = 'البيانات الدراسية مش صح.'
             messages.add_message(request, messages.ERROR, msg)
-            return render(request, 'profile/profile.html')
+
+        return HttpResponseRedirect(
+            request.META.get('HTTP_REFERER', reverse('web_user_profile'))
+        )
 
 
 def display_signup(request):
