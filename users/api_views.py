@@ -63,6 +63,7 @@ def create_new_user(request, format=None):
         status=status.HTTP_400_BAD_REQUEST
     )
 
+
 @api_view(['POST'])
 def check_user_instance(request, format=None):
     """Checks if user is signed in, returns user.id if found, 0 otherwise."""

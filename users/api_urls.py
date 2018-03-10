@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^users/tasks$', cms_views.tasks_list, name = 'api_user_tasks'),
     url(r'^users/(?P<pk>[0-9]+)$', api_views.user_instance, name = 'api_user'),
     url(r'^users/check$', api_views.check_user_instance, name = 'api_user_check'),
+    url(r'^users/create$', api_views.create_new_user, name = 'api_user_create'),
     url(r'^universities/$', api_views.universities_list, name = 'api_univs_list'),
     url(r'^universities/(?P<pk>[0-9]+)$', api_views.univerisity_instance, name = 'api_univ'),
     url(r'^universities/linked/(?P<pk>[0-9]+)$', api_views.universities_linked_instance, name = 'api_univ_link'),

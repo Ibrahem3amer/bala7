@@ -20,7 +20,7 @@ class UsersAPITest(APITestCase):
 
     def test_add_new_user(self):
         # Setup test
-        url = reverse('api_users_list')
+        url = reverse('api_user_create')
         data = {'username': 'waelll', 'email': 'teststest@hhhh.com', 'password': '22222222255555hhem',
                 'password_confirmation': '22222222255555hhem'}
 
@@ -34,7 +34,7 @@ class UsersAPITest(APITestCase):
 
     def test_add_new_user_with_invalid_username(self):
         # Setup test
-        url = reverse('api_users_list')
+        url = reverse('api_user_create')
         data = {'username': '123wael', 'email': 'teststest@hhhh.com', 'password': '22222222255555hhem',
                 'password_confirmation': '22222222255555hhem'}
 
@@ -48,7 +48,7 @@ class UsersAPITest(APITestCase):
 
     def test_add_new_user_with_invalid_email(self):
         # Setup test
-        url = reverse('api_users_list')
+        url = reverse('api_user_create')
         data = {'username': 'wwwweee', 'email': 'teststest@hcom', 'password': '22222222255555hhem',
                 'password_confirmation': '22222222255555hhem'}
 
