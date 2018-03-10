@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^topics/', include('cms.urls')),
     url(r'^api/', include('cms.api_urls')),
     url(r'', include('social_django.urls', namespace='social')),
-    url(r'^api_docs/', include_docs_urls(title='Najiba APIs'))
+    #url(r'^api_docs/', include_docs_urls(title='Najiba APIs'))
 ]
 
 
