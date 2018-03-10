@@ -60,7 +60,7 @@ class MaterialAPITest(APITestCase):
         response = self.client.get(url)
         
         # Assert test
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_return_list_materials_with_unaccessed_topic(self):
         # Setup test
@@ -91,7 +91,7 @@ class TaskAPITest(APITestCase):
         response = self.client.get(url)
         
         # Assert test
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 class QueryTableAPITest(APITestCase):
     def setUp(self):
@@ -170,7 +170,7 @@ class QueryTableAPITest(APITestCase):
         request = self.client.post(url, data=data)
 
         # Assert test
-        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(request.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_user_with_no_profile_query_table(self):
         # Setup test
