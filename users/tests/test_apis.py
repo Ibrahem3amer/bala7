@@ -31,6 +31,7 @@ class UsersAPITest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(User.objects.last().username, 'waelll')
+        self.assertIsNotNone(User.objects.last().auth_token)
 
     def test_add_new_user_with_invalid_username(self):
         # Setup test
