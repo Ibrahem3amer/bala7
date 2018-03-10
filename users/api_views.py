@@ -21,22 +21,6 @@ def users_list(request, format=None):
         users = User.objects.all()
         users_serialized = UserSerializer(users, many=True)
         return Response(users_serialized.data)
-    elif request.method == 'POST':
-        new_instance = UserSerializer(data=request.data)
-        if not UserProfile.validate_name(request.data['username']):
-            return Response(
-                data={'error': 'اسم المستخدم مش مناسب.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        if not UserProfile.validate_mail(request.data['email'], 'api', True):
-            return Response(
-                data={'error': 'البريد الالكتروني مش صح.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        if new_instance.is_valid():
-            new_instance.save()
-            return Response(new_instance.data, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
