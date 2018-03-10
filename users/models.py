@@ -2,11 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.conf import settings
+from django.dispatch import receiver
 from django.contrib.auth.models import User
-from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import validate_password
+from django.db.models.signals import post_save
+from rest_framework.authtoken.models import Token
 from cms.validators import GeneralCMSValidator
 
 import re
@@ -338,6 +341,14 @@ class UserProfile(models.Model):
         return self.user.username
 
 
+class ContactUs(models.Model):
+    # Attributes
+    message = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.message
+
 # Pipeline customization method to complete user profile. 
 # I mdae it oustide of class so that it can be valid package path --> users.models."Function_name"
 # not "class_name"
@@ -372,10 +383,8 @@ def make_social_new_profile(strategy, backend, user, response, *args, **kwargs):
         pass
 
 
-class ContactUs(models.Model):
-    # Attributes
-    message = models.TextField()
-    date = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.message
+# Creating authtication tokens for users.
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)

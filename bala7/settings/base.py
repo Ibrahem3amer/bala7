@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'cms',
     'social_django',
     'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -162,3 +163,12 @@ SOCIAL_AUTH_TWITTER_SECRET = get_secret('TWITTER_SECRET')
 
 # Celery configuration
 CELERY_BROKER_URL = 'amqp://localhost'
+
+# DRF Authentication configuration.
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}

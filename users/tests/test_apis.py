@@ -71,6 +71,47 @@ class UsersAPITest(APITestCase):
         # Assert test
         self.assertEqual(response.data['username'], user.username)
 
+    def test_check_user_successfully(self):
+        """Assert that API will authenticate the user and return the token."""
+        # Test setup
+        user = User.objects.create_user(username="teeest", password="sdfsd56f4sd8fs8df4sd")
+        data = {'username': user.username, 'password': 'sdfsd56f4sd8fs8df4sd'}
+        url = reverse('api_user_check')
+
+        # Test body
+        response = self.client.post(url, data=data)
+
+        # Test assertion
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNotNone(response.data['token'])
+        self.assertEqual(response.data['token'], user.auth_token.key)
+
+    def test_check_non_existing_user(self):
+        """Assert that API will handle the case of non-existing user."""
+        # Test setup
+        data = {'username': 'dfdfff', 'password': 'sdfsd56f4sd8fs8df4sd'}
+        url = reverse('api_user_check')
+
+        # Test body
+        response = self.client.post(url, data=data)
+
+        # Test assertion
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['error'], 'الاسم أو الباسورد مش صح!')
+
+    def test_check_missing_user_details(self):
+        """Assert that API will handle the case of missing parameter in request."""
+        # Test setup
+        data = {'username': 'dfdfff'}
+        url = reverse('api_user_check')
+
+        # Test body
+        response = self.client.post(url, data=data)
+
+        # Test assertion
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['error'], 'الاسم أو الباسورد مش صح!')
+
     def test_get_list_of_univs(self):
         # Setup test
         url = reverse('api_univs_list')

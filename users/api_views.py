@@ -1,15 +1,13 @@
 import json
-import datetime
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login
 from users.serializers import *
 from cms.serializers import UserTableSerializer
 from users.models import *
-from cms.models import DepartmentTable, Topic, UserContribution, UserPost, UserComment
+from cms.models import DepartmentTable, UserContribution, UserPost, UserComment
 from cms.forms import UserContributionForm, UserPostForm
 from django.contrib.auth.models import User
 
@@ -42,6 +40,30 @@ def users_list(request, format=None):
 
 
 @api_view(['POST'])
+def create_new_user(request, format=None):
+    """Creates new user and return its token in response."""
+    new_instance = UserSerializer(data=request.data)
+    if not UserProfile.validate_name(request.data['username']):
+        return Response(
+            data={'error': 'اسم المستخدم مش مناسب.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    if not UserProfile.validate_mail(request.data['email'], 'api', True):
+        return Response(
+            data={'error': 'البريد الالكتروني مش صح.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    if new_instance.is_valid():
+        new_instance.save()
+        return Response(
+            data=new_instance.data,
+            status=status.HTTP_201_CREATED)
+    return Response(
+        data={'error': new_instance.errors},
+        status=status.HTTP_400_BAD_REQUEST
+    )
+
+@api_view(['POST'])
 def check_user_instance(request, format=None):
     """Checks if user is signed in, returns user.id if found, 0 otherwise."""
     username = request.POST.get('username', None)
@@ -50,9 +72,14 @@ def check_user_instance(request, format=None):
     if username and userpassword:
         user = authenticate(username=username, password=userpassword)
         if user:
-            login(request, user)
-            return Response(request.user.id)
-    return 0
+            return Response(
+                data={'token': user.auth_token.key},
+                status=status.HTTP_200_OK
+            )
+    return Response(
+        data={'error': 'الاسم أو الباسورد مش صح!'},
+        status=status.HTTP_400_BAD_REQUEST
+    )
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
