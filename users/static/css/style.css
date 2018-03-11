@@ -364,13 +364,23 @@ select{
     margin-top: 0px;
     margin-bottom: 20px;
 }
-@media (max-width:1199px){
-.Horizontal-adv{
-    display: block;
+@media (max-width:1199px) {
+    .Horizontal-adv {
+        display: block;
+    }
+
+    .Horizontal-adv img {
+        width: 100%;
+        height: 100%;
+    }
 }
-.Horizontal-adv img{
-    width: 100%;
-    height: 100%;
+@media (max-width: 767px){
+    .xs-nav-icons > li > a > i {
+        color: #000;
+    }
+    .dropdown-menu > li > a {
+        font-size: 14px;
+    }
 }
 
 /*- end adv-xs -*/
