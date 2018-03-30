@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+	<head>
+
+        {% include "public/GoogleAnalytics.html" %}
+
+		{% load static %}
+		{% load staticfiles %}
+		{% load dates %}
+
+		<meta charset="utf-8">
+		<title>Najiba | نجيبه</title>
+		<!-- Internet Explorer meta -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!-- First Mobile meta -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- Bootstrap -->
+		<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+		<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+		<link href="{% static 'css/style.css' %}" rel="stylesheet">
+		<link href="{% static 'css/home.css' %}" rel="stylesheet">
+		<link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
+		<!-- owl-carousel -->
+		<link href="{% static 'OwlCarousel/owl.carousel.css' %}" rel="stylesheet">
+		<link href="{% static 'OwlCarousel/owl.carousel.min.css' %}" rel="stylesheet">
+		<link href="{% static 'OwlCarousel/owl.theme.default.min.css' %}" rel="stylesheet">
+		<!--[if lt IE 9]>
+			<script src="js/html5shiv.min.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+
+		<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async="async"></script>
+        <script>
+          $(document).ready(function() {
+              var department_slug = document.getElementById('user-department').value
+              var faculty_slug = document.getElementById('user-faculty').value
+              var university_slug = document.getElementById('user-university').value
+              var OneSignal = window.OneSignal || [];
+              OneSignal.push(function () {
+                  OneSignal.init({
+                      appId: "895c028d-2df9-4e48-8ba4-e3ed08a4ea8c",
+                      autoRegister: true, /* Set to true for HTTP Slide Prompt */
+                      httpPermissionRequest: {
+                        enable: true
+                      },
+                      notifyButton: {
+                          enable: true /* Set to false to hide */
+                      },
+                      welcomeNotification: {
+                        "title": "أهلاً بيك في نجيبة!",
+                        "message": "شكراً على اشتراكك في تنبيهات نجيبة، هنبعتلك أي حاجة جديدة دايماً!",
+                        // "url": "" /* Leave commented for the notification to not open a window on Chrome and Firefox (on Safari, it opens to your webpage) */
+                      },
+                      promptOptions: {
+                        /* actionMessage limited to 90 characters */
+                        actionMessage: "عايزين نبعتلك التحديثات اللي بتحصل في الكلية عندك يوم بيوم!",
+                        /* acceptButtonText limited to 15 characters */
+                        acceptButtonText: "قشطة",
+                        /* cancelButtonText limited to 15 characters */
+                        cancelButtonText: "فاكس"
+                      }
+                  });
+                  // Getting user department so that it can be segmented.
+                  OneSignal.sendTags({
+                      department: department_slug,
+                      faculty: faculty_slug,
+                      university: university_slug
+                  });
+              });
+          });
+        </script>
+	</head>
+	<body>
+        <!-- start navbar -->
+        {% include "public/navbar-user.html" %}
+        <!-- end navbar -->
+        <!-- start page content -->
+        <section class="">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="big-box">
+                            <p class="h-txt">Amount Of Work</p>
+                            <div>
+                                <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                                <div id="chart_div" style="width: 100%; height: 500px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="flex-div">
+                                    <div class="tall-box p5">
+                                        <div>
+                                            <p><i class="fa fa-clock-o" aria-hidden="true"></i></p>
+                                            <p>500</p>
+                                            <p>Hour Of Work</p>
+                                        </div>
+                                    </div>
+                                    <div class="tall-box p6">
+                                        <div>
+                                            <p><i class="fa fa-code" aria-hidden="true"></i></p>
+                                            <p>7500</p>
+                                            <p>Line Of Code</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="flex-div">
+                                    <div class="mini-box p10">
+                                        <i class="fa fa-university" aria-hidden="true"></i>
+                                        <div>
+                                            <span>2</span>
+                                            <p>University</p>
+                                        </div>
+                                    </div>
+                                    <div class="mini-box p11">
+                                        <i class="fa fa-university" aria-hidden="true"></i>
+                                        <div>
+                                            <span>7</span>
+                                            <p>Faculty</p>
+                                        </div>
+                                    </div>
+                                    <div class="mini-box p12">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                        <div>
+                                            <span>350</span>
+                                            <p>User</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="small-block p8">
+                                    <div>
+                                        <p>We Have</p>
+                                        <i class="fa fa-mobile" aria-hidden="true"></i>
+                                        <p>Mobile App</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="small-block p9">
+                                    <div>
+                                        <p>We Have</p>
+                                        <i class="fa fa-desktop" aria-hidden="true"></i>
+                                        <p>Website</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p class="h-txt">Technologies</p>
+                        <div class="flex-div">
+                            <div class="tech-box">
+                                <div>
+                                    <p>HTML</p>
+                                </div>
+                            </div>
+                            <div class="tech-box">
+                                <div>
+                                    <p>CSS</p>
+                                </div>
+                            </div>
+                            <div class="tech-box">
+                                <div>
+                                    <p>Bootstrap</p>
+                                </div>
+                            </div>
+                            <div class="tech-box">
+                                <div>
+                                    <p>Javascript</p>
+                                </div>
+                            </div>
+                            <div class="tech-box">
+                                <div>
+                                    <p>Jquery</p>
+                                </div>
+                            </div>
+                            <div class="tech-box">
+                                <div>
+                                    <p>Django</p>
+                                </div>
+                            </div>
+                            <div class="tech-box">
+                                <div>
+                                    <p>Django</p>
+                                </div>
+                            </div>
+                            <div class="tech-box">
+                                <div>
+                                    <p>Django</p>
+                                </div>
+                            </div>
+                            <div class="tech-box">
+                                <div>
+                                    <p>Django</p>
+                                </div>
+                            </div>
+                            <div class="tech-box">
+                                <div>
+                                    <p>Django</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </section>
+        <!-- end page content -->
+    <script src="{% static 'js/home.js' %}"></script>
+    <!-- owl-carousel -->
+    <script src="{% static 'OwlCarousel/owl.carousel.min.js' %}"></script>
+	</body>
+</html>
