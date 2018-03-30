@@ -31,46 +31,6 @@
 
 		<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
 		<script src="{% static 'js/bootstrap.min.js' %}"></script>
-        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async="async"></script>
-        <script>
-          $(document).ready(function() {
-              var department_slug = document.getElementById('user-department').value
-              var faculty_slug = document.getElementById('user-faculty').value
-              var university_slug = document.getElementById('user-university').value
-              var OneSignal = window.OneSignal || [];
-              OneSignal.push(function () {
-                  OneSignal.init({
-                      appId: "895c028d-2df9-4e48-8ba4-e3ed08a4ea8c",
-                      autoRegister: true, /* Set to true for HTTP Slide Prompt */
-                      httpPermissionRequest: {
-                        enable: true
-                      },
-                      notifyButton: {
-                          enable: true /* Set to false to hide */
-                      },
-                      welcomeNotification: {
-                        "title": "أهلاً بيك في نجيبة!",
-                        "message": "شكراً على اشتراكك في تنبيهات نجيبة، هنبعتلك أي حاجة جديدة دايماً!",
-                        // "url": "" /* Leave commented for the notification to not open a window on Chrome and Firefox (on Safari, it opens to your webpage) */
-                      },
-                      promptOptions: {
-                        /* actionMessage limited to 90 characters */
-                        actionMessage: "عايزين نبعتلك التحديثات اللي بتحصل في الكلية عندك يوم بيوم!",
-                        /* acceptButtonText limited to 15 characters */
-                        acceptButtonText: "قشطة",
-                        /* cancelButtonText limited to 15 characters */
-                        cancelButtonText: "فاكس"
-                      }
-                  });
-                  // Getting user department so that it can be segmented.
-                  OneSignal.sendTags({
-                      department: department_slug,
-                      faculty: faculty_slug,
-                      university: university_slug
-                  });
-              });
-          });
-        </script>
 	</head>
 	<body>
         <!-- start navbar -->

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+	<head>
+        {% load static %}
+        {% include "public/GoogleAnalytics.html" %}
+
+		{% load static %}
+		{% load staticfiles %}
+		{% load dates %}
+
+		<meta charset="utf-8">
+		<title>Najiba | نجيبه</title>
+		<!-- Internet Explorer meta -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!-- First Mobile meta -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- Bootstrap -->
+		<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+		<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+		<link href="{% static 'css/style.css' %}" rel="stylesheet">
+		<link href="{% static 'css/home.css' %}" rel="stylesheet">
+		<link href="{% static 'fonts/Scheherazade-Regular.ttf' %}" rel="stylesheet">
+		<!-- owl-carousel -->
+		<link href="{% static 'OwlCarousel/owl.carousel.css' %}" rel="stylesheet">
+		<link href="{% static 'OwlCarousel/owl.carousel.min.css' %}" rel="stylesheet">
+		<link href="{% static 'OwlCarousel/owl.theme.default.min.css' %}" rel="stylesheet">
+		<!--[if lt IE 9]>
+			<script src="js/html5shiv.min.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+
+		<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	</head>
+	<body>
+        <!-- start navbar -->
+        {% include "public/navbar-user.html" %}
+        <!-- end navbar -->
+
+        <!-- start page content -->
+        <div class="container" style="background-color: inherit;">
+            <h2 class="about_title">فريق العمل</h2>
+            <div class="developers">
+                <div class="item">
+                    <div class="img_out">
+                        <img class="img-responsive" src="{% static 'pic/Ibra.png' %}" onmouseover="this.src='{% static 'pic/ibra_hover.gif' %}'" onmouseout="this.src='{% static 'pic/Ibra.png' %}'">
+                    </div>
+                    <div class="details">
+                        <h3>ابراهيم عامر</h3>
+                        <p>Back-End Developer</p>
+                        <ul>
+                            <li><a href="https://www.facebook.com/ibrahem3amer"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://twitter.com/Ibrahem3aamer"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://www.linkedin.com/in/ibrahem-a-mer-8964215b/"><i class="fa fa-linkedin"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="img_out">
+                        <img class="img-responsive" src="{% static 'pic/hesham.png' %}" onmouseover="this.src='{% static 'pic/hesham_hover.gif' %}'" onmouseout="this.src='{% static 'pic/hesham.png' %}'">
+                    </div>
+                    <div class="details">
+                        <h3>هشام عبداللطيف</h3>
+                        <p>Front-End Developer</p>
+                        <ul>
+                            <li><a href="https://www.facebook.com/hesham.elganainy.9"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://twitter.com/H_abd_el_latif"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://www.linkedin.com/in/hesham-abd-el-latif-aa750a115/"><i class="fa fa-linkedin"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="img_out">
+                        <img class="img-responsive" src="{% static 'pic/banna.png' %}" onmouseover="this.src='{% static 'pic/banna_hover.gif' %}'" onmouseout="this.src='{% static 'pic/banna.png' %}'">
+                    </div>
+                    <div class="details">
+                        <h3>احمد البنا</h3>
+                        <p>Front-End Developer</p>
+                        <ul>
+                            <li><a href="https://www.facebook.com/ahmed.elpna.1"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://twitter.com/_ahmed_elBana"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://www.linkedin.com/in/ahmed-el-bana-69b6bbb4/"><i class="fa fa-linkedin"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="partners">
+                <h2 class="about_title">شركاؤنا</h2>
+                <div class="row">
+                   <div class="col-sm-12 col-xs-12">
+                       <div class="univ">
+                           <table class="table table-hover">
+                               <thead>
+                                   <tr>
+                                       <th>الجامعة</th>
+                                       <th>الكلية</th>
+                                       <th>التيم</th>
+                                   </tr>
+                               </thead>
+                               <tbody>
+                                   <tr>
+                                       <td>كفر الشيخ</td>
+                                       <td>هندسة</td>
+                                       <td><a href="#">ركّز</a></td>
+                                   </tr>
+                                   <tr>
+                                       <td>المنصورة</td>
+                                       <td>هندسة</td>
+                                       <td><a href="#">بدايتنا</a></td>
+                                   </tr>
+                                   <tr>
+                                       <td>المنصورة</td>
+                                       <td>حاسبات ومعلومات</td>
+                                       <td><a href="#">انتر تيم</a></td>
+                                   </tr>
+                               </tbody>
+                           </table>
+                       </div>
+                   </div>
+                </div>
+                <a class="nj-btn">انضم الينا</a>
+            </div>
+        </div>
+
+        <script src="{% static 'js/home.js' %}"></script>
+        <script src="{% static 'js/script.js' %}"></script>
+        <!-- owl-carousel -->
+        <script src="{% static 'OwlCarousel/owl.carousel.min.js' %}"></script>
+	</body>
+</html>
