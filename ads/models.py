@@ -63,6 +63,9 @@ class BasicAd(models.Model):
         self.termination_date = self.start_date + timedelta(new_lifetime)
         self.save()
 
+    def __str__(self):
+        return self.name + ' of ' + self.advertiser.name
+
 
 class Advertiser(models.Model):
     """
@@ -73,5 +76,7 @@ class Advertiser(models.Model):
     name = models.CharField(max_length=220)
     website = models.URLField(null=True, blank=True)
 
-
+    # Methods
+    def __str__(self):
+        return self.name
 

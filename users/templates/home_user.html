@@ -155,9 +155,11 @@
 				
 				<div class="nj-container">                
 					<div class="left">
-						<div class="ad-block">
-							<a href="#"><img src="{% static 'pic/adv300x250.jpg' %}"></a> 
-						</div>
+                        {% for ad in basic_ads %}
+                            <div class="ad-block">
+                                <a href="{{ ad.linked_url }}"><img src="{{ ad.image.url }}" width="300px" height="250px"></a>
+                            </div>
+                        {% endfor %}
 					</div>
 
 					<div class="content-part">
