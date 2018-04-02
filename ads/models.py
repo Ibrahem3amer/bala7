@@ -63,6 +63,7 @@ class BasicAd(models.Model):
         self.termination_date = self.start_date + timedelta(new_lifetime)
         self.save()
 
+
 class Advertiser(models.Model):
     """
     A model that represents the advertiser info.
