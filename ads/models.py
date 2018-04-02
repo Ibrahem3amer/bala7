@@ -18,7 +18,7 @@ class BasicAd(models.Model):
     section = models.PositiveSmallIntegerField(null=True, blank=True)
     life_time = models.PositiveSmallIntegerField(
         verbose_name='Ad Lifetime',
-        help_text='Indicates the time ad should live before being disabled.'
+        help_text='Indicates the time (in days) ad should live before being disabled.'
     )
     start_date = models.DateTimeField()
     creation_date = models.DateTimeField(auto_now_add=True)
