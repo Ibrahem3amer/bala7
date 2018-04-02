@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'users',
     'cms',
+    'ads',
     'social_django',
     'rest_framework',
     'rest_framework.authtoken',
+
 ]
 
 MIDDLEWARE = [
