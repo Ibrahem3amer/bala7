@@ -9,6 +9,7 @@ class BasicAd(models.Model):
     # Attributes
     name = models.CharField(max_length=220)
     image = models.ImageField(upload_to='ads/basic_ads')
+    linked_url = models.URLField(null=True, blank=True)
     department = models.ForeignKey(
         to='users.Department',
         related_name='basic_ads',
@@ -22,8 +23,21 @@ class BasicAd(models.Model):
     start_date = models.DateTimeField()
     creation_date = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=False)
-    # advertiser = models.ForeignKey(
-    #     to='ads.Advertiser',
-    #     related_name='basic_ads',
-    #     on_delete=models.CASCADE
-    # )
+    advertiser = models.ForeignKey(
+        to='ads.Advertiser',
+        related_name='basic_ads',
+        on_delete=models.CASCADE
+    )
+
+
+class Advertiser(models.Model):
+    """
+    A model that represents the advertiser info.
+    """
+
+    # Attributes
+    name = models.CharField(max_length=220)
+    website = models.URLField(null=True, blank=True)
+
+
+
